@@ -1,12 +1,15 @@
 import numpy as np
-from qp_with_riccati import QP, QP_solver, iterate
+from RiccatiQP import QP
+from RiccatiQPSolver import QP_solver
+from QpAcadosOcp import QpAcadosOcp
+from acados_template import AcadosOcpSolver
 
 N = 5
 #dynamics
 A = np.array([[1.0, 0.0],
               [0.0, 2.0]])
-B = np.array([[1.0, 0.0],
-              [0.0, 1.0]])
+B = np.array([[1.0],
+              [1.0]])
 b = np.array([0.0, 0.0])
 nx = A.shape[0]
 nu = B.shape[1]
@@ -20,20 +23,35 @@ r = np.zeros((nu,))
 Q_e = Q
 q_e = np.zeros((nx,))
 
-qp = QP(N, Q, R, S, q, r, A, B, b, Q_e, q_e)
-
 x0 = np.array([10.0, 10.0])
-x_guess = np.vstack([x0 for _ in range(N+1)])
-u_guess = np.zeros((N, nu))
-v_guess = np.zeros_like(u_guess)
-sol_init = iterate(x=x_guess, u=u_guess, v=v_guess)
 
+### Solve with Riccati QP solver
+qp = QP(N, Q, R, S, q, r, A, B, b, Q_e, q_e)
 qp_solver = QP_solver(qp, regulatorR=2)
-sol_next = qp_solver.solve(sol_init)
-cost = qp_solver.get_cost()
+sol = qp_solver.solve(x0)
+cost_qp = qp_solver.get_cost()
 
-print(f"\n=== Predicted cost ===\n{cost}")
+### Solve with Acados OCP solver
+qp_acados = QpAcadosOcp(qp, x0)
+ocp_solver = AcadosOcpSolver(qp_acados.ocp, verbose=False)
+ocp_solver.solve()
+cost_acados = ocp_solver.get_cost()
+
+## Print results
+print(f"\n=== Predicted cost acados ===\n{cost_acados}")
 print("\n=== Predicted next state sequence (x) ===")
-print(sol_next.x)
+x_sol = np.zeros((ocp_solver.N + 1, qp_acados.ocp.model.x.size()[0]))
+for i in range(ocp_solver.N + 1):
+    x_sol[i, :] = ocp_solver.get(i, "x")
+print(x_sol)
 print("\n=== Predicted control sequence (u) ===")
-print(sol_next.u)
+u_sol = np.zeros((ocp_solver.N, qp_acados.ocp.model.u.size()[0]))
+for i in range(ocp_solver.N):
+    u_sol[i, :] = ocp_solver.get(i, "u")
+print(u_sol)
+
+print(f"\n=== Predicted cost qp ===\n{cost_qp}")
+print("\n=== Predicted next state sequence (x) ===")
+print(sol.x)
+print("\n=== Predicted control sequence (u) ===")
+print(sol.u)
