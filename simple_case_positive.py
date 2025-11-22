@@ -23,11 +23,11 @@ r = np.zeros((nu,))
 Q_e = Q
 q_e = np.zeros((nx,))
 
-x0 = np.array([10.0, 10.0])
+x0 = np.array([3.0, 3.0])
 
 ### Solve with Riccati QP solver
 qp = QP(N, Q, R, S, q, r, A, B, b, Q_e, q_e)
-qp_solver = QP_solver(qp, regulatorR=2)
+qp_solver = QP_solver(qp)
 sol = qp_solver.solve(x0)
 cost_qp = qp_solver.get_cost()
 

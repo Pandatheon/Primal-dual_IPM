@@ -22,11 +22,10 @@ class Feedback:
 
 class QP_solver:
 
-    def __init__(self, qp:QP,regulatorR:float=1e-6):
+    def __init__(self, qp:QP):
         self.qp = qp
         self.feedback = None
         self.solution = None
-        self.regulatorR = regulatorR
         self.sol_init = iterate(
             x = np.zeros((qp.N + 1, qp.nx)),
             u =  np.zeros((qp.N, qp.nu))
@@ -65,21 +64,15 @@ class QP_solver:
         self.feedback.p[-1] = self.qp.terminal.q_e
         for i in reversed(range(horizon)):
             self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self.riccati_recursion(
-               self.qp.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.regulatorR
+               self.qp.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1])
             )
 
     def riccati_recursion(self,
-        qp_stage:QP_stage, qp_terminal:Feedback, regulatorR:float
+        qp_stage:QP_stage, qp_terminal:Feedback
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
         Q, R, S, q, r, A, B, b = qp_stage
         P, p = qp_terminal
-
-        try:
-            np.linalg.cholesky(R)
-        except np.linalg.LinAlgError:
-            print("Regularizing R matrix in QP solver.")
-            R = R + regulatorR * np.eye(R.shape[0])
 
         K = -np.linalg.solve((R + B.T@P@B), (S + B.T@P@A))
         k = -np.linalg.solve((R + B.T@P@B), (r + B.T@(P@b + p)))
