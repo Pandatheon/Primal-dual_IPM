@@ -81,6 +81,15 @@ class QP_solver:
         return new_P, new_p, K, k
 
     def get_cost(self):
-        cost = 0.5 * (self.solution.x[0].T @ self.feedback.P[0] @ self.solution.x[0] 
-                      + 2 * self.feedback.p[0].T @ self.solution.x[0])
+        cost = 0.0
+        for i in range(len(self.qp.stages)):
+            Q, R, S, q, r, A, B, b = self.qp.stages[i]
+            x_i = self.solution.x[i]
+            u_i = self.solution.u[i]
+            cost += 0.5 * x_i.T @ Q @ x_i + 0.5 * u_i.T @ R @ u_i + x_i.T @ S.T @ u_i + q.T @ x_i + r.T @ u_i
+        # terminal cost
+        Q_e = self.qp.terminal.Q_e
+        q_e = self.qp.terminal.q_e
+        x_N = self.solution.x[-1]
+        cost += 0.5 * x_N.T @ Q_e @ x_N + q_e.T @ x_N
         return cost
