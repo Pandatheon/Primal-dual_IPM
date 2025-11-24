@@ -93,3 +93,18 @@ class QP_solver:
         x_N = self.solution.x[-1]
         cost += 0.5 * x_N.T @ Q_e @ x_N + q_e.T @ x_N
         return cost
+
+    def recover_lambda(self)-> np.ndarray:
+        '''Recover the multipliers for the dynamics constraints.'''
+        horizon = len(self.qp.stages)
+        nx = self.qp.nx
+        lam = np.empty((horizon, nx), dtype=float)
+        P, p = self.feedback.P, self.feedback.p
+        x, u = self.solution.x, self.solution.u
+
+        lam[-1] = P[-1] @ x[-1] + p[-1]
+        for i in reversed(range(horizon-1)):
+            Q, R, S, q, r, A, B, b = self.qp.stages[i]
+            lam[i] = Q @ x[i+1] + S.T @ u[i+1] + q + A.T @ lam[i+1]
+
+        return lam
