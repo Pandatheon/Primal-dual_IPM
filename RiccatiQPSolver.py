@@ -100,11 +100,8 @@ class QP_solver:
         nx = self.qp.nx
         lam = np.empty((horizon, nx), dtype=float)
         P, p = self.feedback.P, self.feedback.p
-        x, u = self.solution.x, self.solution.u
+        x = self.solution.x
 
-        lam[-1] = P[-1] @ x[-1] + p[-1]
-        for i in reversed(range(horizon-1)):
-            Q, R, S, q, r, A, B, b = self.qp.stages[i]
-            lam[i] = Q @ x[i+1] + S.T @ u[i+1] + q + A.T @ lam[i+1]
-
+        for i in range(horizon):
+            lam[i] = P[i+1] @ x[i+1] + p[i+1]
         return lam
