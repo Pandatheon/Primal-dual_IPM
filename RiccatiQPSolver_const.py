@@ -43,7 +43,8 @@ class QP_solver_const:
             'res_stat': [],
             'res_eq': [],
             'res_ineq': [],
-            'res_comp': []
+            'res_comp': [],
+            'barrier': [],
         }
 
     def solve(self, x0:np.ndarray=None, max_iter:int=100, tol:float=1e-5)-> iterate:
@@ -52,10 +53,9 @@ class QP_solver_const:
         '''
         if x0 is not None:
             self.sol_init.x = np.vstack([x0 for _ in range(self.qp.N+1)])
-            if self.Const_mat is not None:
-                init_s = self.uh - self.Const_mat @ np.concatenate((x0, np.zeros((self.qp.nu,))))
-                self.sol_init.s = np.vstack([init_s for _ in range(self.qp.N)])
-                self.sol_init.lam = self.tau / (self.sol_init.s + 1e-10)
+            init_s = self.uh - self.Const_mat @ np.concatenate((x0, np.zeros((self.qp.nu,))))
+            self.sol_init.s = np.vstack([init_s for _ in range(self.qp.N)])
+            self.sol_init.lam = self.tau / (self.sol_init.s + 1e-10)
 
         prev_sol = copy.deepcopy(self.sol_init)
         for i in range(max_iter):
@@ -117,6 +117,7 @@ class QP_solver_const:
         self.res_dict['res_ineq'].append(res_ineq_norm)
         res_comp_norm = np.linalg.norm(res_comp, ord='fro')
         self.res_dict['res_comp'].append(res_comp_norm)
+        self.res_dict['barrier'].append(self.tau)
         total_res = res_stat_norm + res_eq_norm + res_ineq_norm + res_comp_norm
         return total_res
 
@@ -129,19 +130,21 @@ class QP_solver_const:
         param = copy.deepcopy(this_iter.p)
         alpha = 1
 
+        # Solve for the affine step
         x_aff, u_aff, pi_aff, lam_aff, slack_aff = self._solve_KKT_system(x_old, u_old, pi_old, lam_old, slack_old)
+
+        # Line search to ensure positivity of slack and multipliers
         delta_x = x_aff - x_old
         delta_u = u_aff - u_old
         delta_pi = pi_aff - pi_old
         delta_lam = lam_aff - lam_old
         delta_s = slack_aff - slack_old
-
-        # Line search to ensure positivity of slack and multipliers
         while np.any(slack_old + alpha * delta_s < 0) or np.any(lam_old + alpha * delta_lam < 0):
             alpha *= 0.9
             if alpha < 1e-6:
                 break
 
+        # Update the solution with the step size alpha
         x_aff = x_old + alpha * delta_x
         u_aff = u_old + alpha * delta_u
         pi_aff = pi_old + alpha * delta_pi
@@ -164,7 +167,7 @@ class QP_solver_const:
             slack = slack_old[i] + 1e-10
 
             slack_aff[i] = self.uh - self.Const_mat @ np.concatenate((x_aff[i], u_aff[i]))
-            lam_aff[i] = (np.linalg.inv(np.diag(slack)) @ ((lam_mat@slack) + self.tau * e - (lam_mat @ slack_aff[i]))).flatten()
+            lam_aff[i] = (np.linalg.inv(np.diag(slack)) @ ((lam_mat@slack) + self.tau * e - (lam_mat @ slack_aff[i]))).flatten() #####
             x_aff[i+1] = b + A@x_aff[i] + B@u_aff[i]
             pi_aff[i] =  self.feedback.P[i+1] @ x_aff[i+1] + self.feedback.p[i+1]
 
@@ -198,7 +201,7 @@ class QP_solver_const:
             T_mat = np.diag(slack[i]+1e-10)
             Lam_mat = np.diag(lam[i])
 
-            Schur = self.Const_mat.T @ np.linalg.inv(T_mat) @ Lam_mat @ self.Const_mat
+            Schur = self.Const_mat.T @ np.linalg.inv(T_mat) @ Lam_mat @ self.Const_mat #####
 
             Q_tilt = Schur[:self.qp.nx, :self.qp.nx]
             R_tilt = Schur[self.qp.nx:, self.qp.nx:]
@@ -254,10 +257,11 @@ class QP_solver_const:
 
     def print_statistics(self):
         # print residual table
-        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp')
+        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier')
         for i in range(len(self.res_dict['res_stat'])):
             res_stat_norm = self.res_dict['res_stat'][i]
             res_eq_norm = self.res_dict['res_eq'][i]
             res_ineq_norm = self.res_dict['res_ineq'][i]
             res_comp_norm = self.res_dict['res_comp'][i]
-            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}")
+            barrier = self.res_dict['barrier'][i]
+            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}")
