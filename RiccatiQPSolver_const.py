@@ -1,7 +1,6 @@
 from typing import Tuple, TypeVar
 from dataclasses import dataclass
 
-from sympy import Line
 from RiccatiQP_const import QP, QP_stage, iterate
 
 import casadi as ca
@@ -32,6 +31,7 @@ class QP_solver_const:
         self.feedback = None
         self.solution = None
         self.tau = 2 if Const_mat is not None else 0.0
+        self.alpha_list = []
         self.sol_init = iterate(
             x = np.zeros((qp.N + 1, qp.nx)),
             u =  np.zeros((qp.N, qp.nu)),
@@ -52,7 +52,11 @@ class QP_solver_const:
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
         if x0 is not None:
-            self.sol_init.x = np.vstack([x0 for _ in range(self.qp.N+1)])
+            x_simulation = np.zeros((self.qp.N + 1, self.qp.nx))
+            x_simulation[0] = x0
+            for i in range(self.qp.N):
+                x_simulation[i+1] = self.qp.stages[i].A @ x_simulation[i] + self.qp.stages[i].B @ self.sol_init.u[i] + self.qp.stages[i].b
+            self.sol_init.x = x_simulation
             init_s = self.uh - self.Const_mat @ np.concatenate((x0, np.zeros((self.qp.nu,))))
             self.sol_init.s = np.vstack([init_s for _ in range(self.qp.N)])
             self.sol_init.lam = self.tau / (self.sol_init.s + 1e-10)
@@ -60,17 +64,16 @@ class QP_solver_const:
         prev_sol = copy.deepcopy(self.sol_init)
         for i in range(max_iter):
             res = self._calculate_KKT_res(prev_sol)
+            self.tau = max(self.tau*0.1, 1e-8)
             if res < tol:
-                if self.tau < tol:
-                    print(f"Converged at iteration {i} with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
-                    return self.solution
-                else:
-                    self.tau *= 0.1
+                print(f"\033[32mConverged!\033[0m after {i} with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
+                return self.solution
+
             self._backward_sweep(prev_sol)
             self._forward_sweep(prev_sol)
             prev_sol = copy.deepcopy(self.solution)
 
-        print(f"Finished after {i} iterations with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
+        print(f"\033[31mNot Converged!\033[0m after {i} iterations with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
         return self.solution
 
 
@@ -130,19 +133,22 @@ class QP_solver_const:
         param = copy.deepcopy(this_iter.p)
         alpha = 1
 
-        # Solve for the affine step
+        # Solve for the next iterate
         x_aff, u_aff, pi_aff, lam_aff, slack_aff = self._solve_KKT_system(x_old, u_old, pi_old, lam_old, slack_old)
 
-        # Line search to ensure positivity of slack and multipliers
+        # Line search to ensure positivity of slack and inequality multipliers
         delta_x = x_aff - x_old
         delta_u = u_aff - u_old
         delta_pi = pi_aff - pi_old
         delta_lam = lam_aff - lam_old
         delta_s = slack_aff - slack_old
+
+        # do fraction to the boundary
         while np.any(slack_old + alpha * delta_s < 0) or np.any(lam_old + alpha * delta_lam < 0):
-            alpha *= 0.9
-            if alpha < 1e-6:
+            alpha *= 0.8
+            if alpha < 1e-8:
                 break
+        self.alpha_list.append(alpha)
 
         # Update the solution with the step size alpha
         x_aff = x_old + alpha * delta_x
@@ -167,7 +173,7 @@ class QP_solver_const:
             slack = slack_old[i] + 1e-10
 
             slack_aff[i] = self.uh - self.Const_mat @ np.concatenate((x_aff[i], u_aff[i]))
-            lam_aff[i] = (np.linalg.inv(np.diag(slack)) @ ((lam_mat@slack) + self.tau * e - (lam_mat @ slack_aff[i]))).flatten() #####
+            lam_aff[i] = (np.linalg.solve(np.diag(slack), ((lam_mat@slack) + self.tau * e - (lam_mat @ slack_aff[i])))).flatten() #####
             x_aff[i+1] = b + A@x_aff[i] + B@u_aff[i]
             pi_aff[i] =  self.feedback.P[i+1] @ x_aff[i+1] + self.feedback.p[i+1]
 
@@ -243,25 +249,14 @@ class QP_solver_const:
         cost += 0.5 * x_N.T @ Q_e @ x_N + q_e.T @ x_N
         return cost
 
-    def recover_lambda(self)-> np.ndarray:
-        '''Recover the multipliers for the dynamics constraints.'''
-        horizon = len(self.qp.stages)
-        nx = self.qp.nx
-        lam = np.empty((horizon, nx), dtype=float)
-        P, p = self.feedback.P, self.feedback.p
-        x, u = self.solution.x, self.solution.u
-
-        for i in range(horizon):
-            lam[i] = P[i+1] @ x[i+1] + p[i+1]
-        return lam
-
     def print_statistics(self):
         # print residual table
-        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier')
+        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier\t\talpha')
         for i in range(len(self.res_dict['res_stat'])):
             res_stat_norm = self.res_dict['res_stat'][i]
             res_eq_norm = self.res_dict['res_eq'][i]
             res_ineq_norm = self.res_dict['res_ineq'][i]
             res_comp_norm = self.res_dict['res_comp'][i]
             barrier = self.res_dict['barrier'][i]
-            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}")
+            alpha = self.alpha_list[i] if i < len(self.alpha_list) else 0.0
+            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}\t{alpha:.2e}")
