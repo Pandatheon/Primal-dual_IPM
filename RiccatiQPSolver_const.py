@@ -31,7 +31,8 @@ class QP_solver_const:
         self.feedback = None
         self.solution = None
         self.tau = 2 if Const_mat is not None else 0.0
-        self.alpha_list = []
+        self.alpha_pri_list = []
+        self.alpha_dual_list = []
         self.sol_init = iterate(
             x = np.zeros((qp.N + 1, qp.nx)),
             u =  np.zeros((qp.N, qp.nu)),
@@ -131,7 +132,6 @@ class QP_solver_const:
         lam_old = copy.deepcopy(this_iter.lam)
         slack_old = copy.deepcopy(this_iter.s)
         param = copy.deepcopy(this_iter.p)
-        alpha = 1
 
         # Solve for the next iterate
         x_aff, u_aff, pi_aff, lam_aff, slack_aff = self._solve_KKT_system(x_old, u_old, pi_old, lam_old, slack_old)
@@ -144,18 +144,23 @@ class QP_solver_const:
         delta_s = slack_aff - slack_old
 
         # do fraction to the boundary
-        while np.any(slack_old + alpha * delta_s < 0) or np.any(lam_old + alpha * delta_lam < 0):
-            alpha *= 0.8
-            if alpha < 1e-8:
-                break
-        self.alpha_list.append(alpha)
+        frac_pri = - slack_old/delta_s
+        frac_dual = - lam_old/delta_lam
+        # take the minimum positive step size
+        alpha_pri_max = np.min(frac_pri[frac_pri > 0])
+        alpha_dual_max = np.min(frac_dual[frac_dual > 0])
+        # take 0.99 of the maximum step size
+        alpha_pri = min(0.99 * alpha_pri_max, 1.0)
+        alpha_dual = min(0.99 * alpha_dual_max, 1.0)
+        self.alpha_pri_list.append(alpha_pri)
+        self.alpha_dual_list.append(alpha_dual)
 
         # Update the solution with the step size alpha
-        x_aff = x_old + alpha * delta_x
-        u_aff = u_old + alpha * delta_u
-        pi_aff = pi_old + alpha * delta_pi
-        lam_aff = lam_old + alpha * delta_lam
-        slack_aff = slack_old + alpha * delta_s
+        x_aff = x_old + alpha_pri * delta_x
+        u_aff = u_old + alpha_pri * delta_u
+        pi_aff = pi_old + alpha_dual * delta_pi
+        lam_aff = lam_old + alpha_dual * delta_lam
+        slack_aff = slack_old + alpha_pri * delta_s
 
         self.solution = iterate(x_aff, u_aff, pi_aff, lam_aff, slack_aff, param)
 
@@ -251,12 +256,13 @@ class QP_solver_const:
 
     def print_statistics(self):
         # print residual table
-        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier\t\talpha')
+        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier\t\talpha_pri\talpha_dual')
         for i in range(len(self.res_dict['res_stat'])):
             res_stat_norm = self.res_dict['res_stat'][i]
             res_eq_norm = self.res_dict['res_eq'][i]
             res_ineq_norm = self.res_dict['res_ineq'][i]
             res_comp_norm = self.res_dict['res_comp'][i]
             barrier = self.res_dict['barrier'][i]
-            alpha = self.alpha_list[i] if i < len(self.alpha_list) else 0.0
-            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}\t{alpha:.2e}")
+            alpha_pri = self.alpha_pri_list[i] if i < len(self.alpha_pri_list) else 0.0
+            alpha_dual = self.alpha_dual_list[i] if i < len(self.alpha_dual_list) else 0.0
+            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}\t{alpha_pri:.2e}\t{alpha_dual:.2e}")
