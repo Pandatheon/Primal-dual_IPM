@@ -29,11 +29,10 @@ class QP_solver_const:
         self.Const_mat = Const_mat if Const_mat is not None else np.zeros((1, qp.nx + qp.nu))
         self.uh = uh if uh is not None else np.zeros((self.Const_mat.shape[0],))
         self.feedback = None
-        self.solution = None
         self.tau = 2 if Const_mat is not None else 0.0
         self.alpha_pri_list = []
         self.alpha_dual_list = []
-        self.sol_init = iterate(
+        self.solution = iterate(
             x = np.zeros((qp.N + 1, qp.nx)),
             u =  np.zeros((qp.N, qp.nu)),
             pi = np.zeros((qp.N+1, qp.nx)),
@@ -53,35 +52,33 @@ class QP_solver_const:
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
         if x0 is not None:
-            x_simulation = np.zeros((self.qp.N + 1, self.qp.nx))
-            x_simulation[0] = x0
-            for i in range(self.qp.N):
-                x_simulation[i+1] = self.qp.stages[i].A @ x_simulation[i] + self.qp.stages[i].B @ self.sol_init.u[i] + self.qp.stages[i].b
-            self.sol_init.x = x_simulation
-            init_s = self.uh - self.Const_mat @ np.concatenate((x0, np.zeros((self.qp.nu,))))
-            self.sol_init.s = np.vstack([init_s for _ in range(self.qp.N)])
-            self.sol_init.lam = self.tau / (self.sol_init.s + 1e-10)
-            self._backward_sweep(self.sol_init)
-            for i in range(self.qp.N):
-                self.sol_init.pi[i] = self.feedback.P[i] @ x_simulation[i] + self.feedback.p[i]
-            self.sol_init.pi[-1] = self.feedback.P[-1] @ x_simulation[-1] + self.feedback.p[-1]
+            self._initilize_solution(x0)
 
-        self.solution = copy.deepcopy(self.sol_init)
-        prev_sol = copy.deepcopy(self.sol_init)
         for i in range(max_iter):
+            prev_sol = copy.deepcopy(self.solution)
             res = self._calculate_KKT_res(prev_sol)
             self.tau = max(self.tau*0.1, 1e-8)
             if res < tol:
                 print(f"\033[32mConverged!\033[0m after {i} with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
                 return self.solution
-
             self._backward_sweep(prev_sol)
             self._forward_sweep(prev_sol)
-            prev_sol = copy.deepcopy(self.solution)
-
         print(f"\033[31mNot Converged!\033[0m after {i} iterations with KKT residual {res:.2e} and barrier parameter {self.tau:.2e}")
         return self.solution
 
+    def _initilize_solution(self, x0:np.ndarray)-> iterate:
+        x_simulation = np.zeros((self.qp.N + 1, self.qp.nx))
+        x_simulation[0] = x0
+        for i in range(self.qp.N):
+            x_simulation[i+1] = self.qp.stages[i].A @ x_simulation[i] + self.qp.stages[i].B @ self.solution.u[i] + self.qp.stages[i].b
+        self.solution.x = x_simulation
+        init_s = self.uh - self.Const_mat @ np.concatenate((x0, np.zeros((self.qp.nu,))))
+        self.solution.s = np.vstack([init_s for _ in range(self.qp.N)])
+        self.solution.lam = self.tau / (self.solution.s + 1e-10)
+        self._backward_sweep(self.solution)
+        for i in range(self.qp.N):
+            self.solution.pi[i] = self.feedback.P[i] @ x_simulation[i] + self.feedback.p[i]
+        self.solution.pi[-1] = self.feedback.P[-1] @ x_simulation[-1] + self.feedback.p[-1]
 
     def _calculate_KKT_res(self, this_iter:iterate)-> np.ndarray:
         N_horizon = len(self.qp.stages)
@@ -106,19 +103,6 @@ class QP_solver_const:
             # stationarity residual
             res_stat[i][:nx] = Q @ x_i + q + C_x.T @ lam_i + A.T @ this_iter.pi[i+1] - this_iter.pi[i]
             res_stat[i][nx:] = R @ u_i + r + C_u.T @ lam_i + B.T @ this_iter.pi[i+1]
-
-            # # without inequality constraints
-            # if i == self.qp.N - 1:
-            #     print("IGNORING INEQUALITY CONSTRAINTS IN RESIDUAL CALCULATION")
-            # res_stat[i][:nx] = Q @ x_i + q + A.T @ this_iter.pi[i+1] - this_iter.pi[i]
-            # res_stat[i][nx:] = R @ u_i + r + B.T @ this_iter.pi[i+1]
-
-            # # only inequality constraints
-            # if i == self.qp.N - 1:
-            #     print("ONLY INEQUALITY CONSTRAINTS IN RESIDUAL CALCULATION")
-            # res_stat[i][:nx] = C_x.T @ lam_i
-            # res_stat[i][nx:] = C_u.T @ lam_i
-
             #equality residual
             res_eq[i] = A @ x_i + B @ u_i + b - this_iter.x[i+1]
             #inequality residual
@@ -186,14 +170,15 @@ class QP_solver_const:
         slack_aff = copy.deepcopy(slack_old)
         e = np.ones((self.Const_mat.shape[0],))
         for i in range(len(self.qp.stages)):
-            u_aff[i] = self.feedback.compute_control(i, x_aff[i])
             Q, R, S, q, r, A, B, b = self.qp.stages[i]
             lam_mat = np.diag(lam_old[i])
             slack = slack_old[i] + 1e-10
 
-            slack_aff[i] = self.uh - self.Const_mat @ np.concatenate((x_aff[i], u_aff[i]))
-            lam_aff[i] = (np.linalg.solve(np.diag(slack), ((lam_mat@slack) + self.tau * e - (lam_mat @ slack_aff[i])))).flatten() #####
+            u_aff[i] = self.feedback.compute_control(i, x_aff[i])
             x_aff[i+1] = b + A@x_aff[i] + B@u_aff[i]
+            slack_aff[i] = self.uh - self.Const_mat @ np.concatenate((x_aff[i], u_aff[i]))
+            rhs_lam = (self.tau * e + (lam_mat @ slack)) - (lam_mat @ slack_aff[i])
+            lam_aff[i] = (np.linalg.solve(np.diag(slack_old[i]), rhs_lam)).flatten() #####
             pi_aff[i] =  self.feedback.P[i] @ x_aff[i] + self.feedback.p[i]
         pi_aff[-1] = self.feedback.P[-1] @ x_aff[-1] + self.feedback.p[-1]
 
@@ -214,18 +199,16 @@ class QP_solver_const:
         self.feedback.P[-1] = modified_QP.terminal.Q_e
         self.feedback.p[-1] = modified_QP.terminal.q_e
         for i in reversed(range(horizon)):
-            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self.riccati_recursion(
+            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion(
                modified_QP.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1])
             )
 
     def _modify_qp_with_constraints(self, this_iter:iterate):
-        lam = this_iter.lam
-        slack = this_iter.s
         modified_QP = copy.deepcopy(self.qp)
 
         for i in range(len(self.qp.stages)):
-            T_mat = np.diag(slack[i]+1e-10)
-            Lam_mat = np.diag(lam[i])
+            T_mat = np.diag(self.solution.s[i] + 1e-10)
+            Lam_mat = np.diag(self.solution.lam[i])
 
             Schur = self.Const_mat.T @ np.linalg.inv(T_mat) @ Lam_mat @ self.Const_mat #####
 
@@ -242,7 +225,7 @@ class QP_solver_const:
             )
         return modified_QP
 
-    def riccati_recursion(self,
+    def _riccati_recursion(self,
         qp_stage:QP_stage, qp_terminal:Feedback
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
