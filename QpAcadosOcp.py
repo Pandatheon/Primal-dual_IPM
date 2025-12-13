@@ -1,5 +1,5 @@
 from acados_template import AcadosOcp
-from RiccatiQPSolver import QP
+from OCP_QP import QP
 import numpy as np
 import casadi as ca
 

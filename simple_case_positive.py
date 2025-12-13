@@ -1,6 +1,6 @@
 import numpy as np
-from RiccatiQP import QP
-from RiccatiQPSolver import QP_solver
+from OCP_QP import QP
+from RiccatiQPSolver_unconstrained import QP_solver
 from QpAcadosOcp import QpAcadosOcp
 from acados_template import AcadosOcpSolver
 
@@ -24,9 +24,12 @@ Q_e = Q
 q_e = np.zeros((nx,))
 
 x0 = np.array([3.0, 3.0])
+C = np.zeros((2, nx))
+D = np.zeros((2, nu))
+d = np.array([0.0, 0.0])
 
 ### Solve with Riccati QP solver
-qp = QP(N, Q, R, S, q, r, A, B, b, Q_e, q_e)
+qp = QP(N, Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e)
 qp_solver = QP_solver(qp)
 sol = qp_solver.solve(x0)
 cost_qp = qp_solver.get_cost()

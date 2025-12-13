@@ -43,7 +43,7 @@ class QP_Terminal(NamedTuple):
     Q_e: np.ndarray
     q_e: np.ndarray
 
-class QP():
+class OCP_QP():
     '''
     -------------------------------------------------------------
     stage-wise OCP QP formulation
@@ -51,19 +51,12 @@ class QP():
     -------------------------------------------------------------
     '''
     def __init__(self, N, Q:np.ndarray, R:np.ndarray, S:np.ndarray, q:np.ndarray, r:np.ndarray, 
-                 A:np.ndarray, B:np.ndarray, b:np.ndarray, 
-                 C:np.ndarray, D:np.ndarray, d:np.ndarray, 
+                 A:np.ndarray, B:np.ndarray, b:np.ndarray,
+                 C:np.ndarray, D:np.ndarray, d:np.ndarray,
                  Q_e:np.ndarray, q_e:np.ndarray):
-        self.stages = []
-        for _ in range(N):
-            self.stages.append(QP_stage(Q, R, S, q, r, A, B, b, C, D, d))
-        self.terminal = QP_Terminal(Q_e, q_e)
 
-        self.N = N
-        self.nx = Q.shape[0]
-        self.nu = R.shape[0]
-        self.nh = C.shape[0]
-
+        nx = Q.shape[0]
+        nu = R.shape[0]
         self.Q = Q
         self.R = R
         self.S = S
@@ -77,6 +70,20 @@ class QP():
         self.d = d
         self.Q_e = Q_e
         self.q_e = q_e
+        self.C0 = np.vstack((-np.eye(nx), np.eye(nx), self.C))
+        self.D0 = np.vstack((np.zeros((2*nx, nu)), self.D))
+
+        self.N = N
+        self.nx = Q.shape[0]
+        self.nu = R.shape[0]
+        self.nh = C.shape[0]
+        self.nh0 = self.C0.shape[0]
+
+        self.stages = []
+        self.stages.append(QP_stage(Q, R, S, q, r, A, B, b, self.C0, self.D0, d))
+        for _ in range(N-1):
+            self.stages.append(QP_stage(Q, R, S, q, r, A, B, b, C, D, d))
+        self.terminal = QP_Terminal(Q_e, q_e)
 
     def __call__(self):
         return(
