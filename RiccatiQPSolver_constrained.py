@@ -1,9 +1,7 @@
-from typing import Tuple, TypeVar
+from typing import Tuple
 from dataclasses import dataclass
 
-from OCP_QP import QP, QP_stage, iterate
-
-import casadi as ca
+from QP_formulation import OCP_QP, QP_stage, iterate
 import numpy as np
 import copy
 
@@ -21,16 +19,16 @@ class Feedback:
 
 class QP_solver:
 
-    def __init__(self, qp:QP):
+    def __init__(self, qp:OCP_QP):
         self.qp = qp
         self.feedback = None
         self.tau = 2.0
         self.rhs_dict = {
             'rg' : np.zeros((qp.N+1, qp.nx+qp.nu)),
             'rb' : np.zeros((qp.N, qp.nx)),
-            'rd0' : np.zeros((qp.nh, )),
+            'rd0' : np.zeros((qp.nh0, )),
             'rd' : np.zeros((qp.N-1, qp.nh)),
-            'rm0' : np.zeros((qp.nh, )),
+            'rm0' : np.zeros((qp.nh0, )),
             'rm' : np.zeros((qp.N-1, qp.nh)),
         }
         self.statistics_dict = {
@@ -48,9 +46,9 @@ class QP_solver:
             x = np.zeros((qp.N + 1, qp.nx)),
             u =  np.zeros((qp.N, qp.nu)),
             pi = np.zeros((qp.N, self.qp.nx)),
-            lam0= np.zeros((qp.nh, )),
+            lam0= np.zeros((qp.nh0, )),
             lam = np.zeros((qp.N-1, self.qp.nh)),
-            s0 = np.zeros((self.qp.nh, )),
+            s0 = np.zeros((self.qp.nh0, )),
             s = np.zeros((qp.N-1, self.qp.nh)),
         )
 
@@ -62,10 +60,8 @@ class QP_solver:
         self.solution.lam = self.tau / self.solution.s
         self.solution.pi = np.zeros((self.qp.N, self.qp.nx))
 
-        C0 = np.vstack((-np.eye(self.qp.nx), np.eye(self.qp.nx), self.qp.stages[0].C))
-        D0 = np.vstack((0*np.zeros((self.qp.nx, self.qp.nu)), 0*np.zeros((self.qp.nx, self.qp.nu)), self.qp.stages[0].D))
         init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.stages[0].d))
-        init_s0 = init_d0 - C0 @ self.solution.x[0] - D0 @ self.solution.u[0]
+        init_s0 = init_d0 -  self.qp.C0 @ self.solution.x[0] - self.qp.D0 @ self.solution.u[0]
         d0 = np.hstack(( -(x0)*np.ones((self.qp.nx,)), (x0)*np.ones((self.qp.nx,)), self.qp.stages[0].d))
         self.qp.stages[0] = QP_stage(
             Q = self.qp.Q,
@@ -76,8 +72,8 @@ class QP_solver:
             A = self.qp.A,
             B = self.qp.B,
             b = self.qp.b,
-            C = C0,
-            D = D0,
+            C = self.qp.C0,
+            D = self.qp.D0,
             d = d0,
         )
         self.solution.s0 = init_s0
@@ -87,8 +83,8 @@ class QP_solver:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
-        if x0 is not None:
-            self._initilize_solution(x0)
+        assert x0 is not None, "Please provide a non-zero initial state x0 to solve the QP."
+        self._initilize_solution(x0)
         for i in range(max_iter):
             prev_sol = copy.deepcopy(self.solution)
             res = self._update_rhs(prev_sol)
