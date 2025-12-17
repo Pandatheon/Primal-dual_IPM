@@ -100,23 +100,26 @@ class OCP_QP_varying():
     supports time-variant dynamics and cost
     -------------------------------------------------------------
     '''
-    def __init__(self, N, Q:list[np.ndarray], R:list[np.ndarray], S:list[np.ndarray], q:list[np.ndarray], r:list[np.ndarray], 
-                 A:list[np.ndarray], B:list[np.ndarray], b:list[np.ndarray],
-                 C:list[np.ndarray], D:list[np.ndarray], d:list[np.ndarray],
+    def __init__(self, N, 
+                 Q_list:list[np.ndarray], R_list:list[np.ndarray], S_list:list[np.ndarray],
+                 q_list:list[np.ndarray], r_list:list[np.ndarray], 
+                 A_list:list[np.ndarray], B_list:list[np.ndarray], b_list:list[np.ndarray],
+                 C_list:list[np.ndarray], D_list:list[np.ndarray], d_list:list[np.ndarray],
                  Q_e:np.ndarray, q_e:np.ndarray):
 
-        C0 = np.vstack((-np.eye(self.nx), np.eye(self.nx), C[0]))
-        D0 = np.vstack((np.zeros((2*self.nx, self.nu)), D[0]))
         self.N = N
-        self.nx = Q[0].shape[0]
-        self.nu = R[0].shape[0]
-        self.nh = C[0].shape[0]
+        self.nx = Q_list[0].shape[0]
+        self.nu = R_list[0].shape[0]
+        self.nh = C_list[0].shape[0]
+
+        C0 = np.vstack((-np.eye(self.nx), np.eye(self.nx), C_list[0]))
+        D0 = np.vstack((np.zeros((2*self.nx, self.nu)), D_list[0]))
         self.nh0 = C0.shape[0]
 
         self.stages = []
-        self.stages.append(QP_stage(Q[0], R[0], S[0], q[0], r[0], A[0], B[0], b[0], C0, D0, d[0]))
+        self.stages.append(QP_stage(Q_list[0], R_list[0], S_list[0], q_list[0], r_list[0], A_list[0], B_list[0], b_list[0], C0, D0, d_list[0]))
         for i in range(1, N):
-            self.stages.append(QP_stage(Q[i], R[i], S[i], q[i], r[i], A[i], B[i], b[i], C[i], D[i], d[i]))
+            self.stages.append(QP_stage(Q_list[i], R_list[i], S_list[i], q_list[i], r_list[i], A_list[i], B_list[i], b_list[i], C_list[i], D_list[i], d_list[i]))
         self.terminal = QP_Terminal(Q_e, q_e)
 
 class Dense_QP():
