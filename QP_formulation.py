@@ -93,6 +93,31 @@ class OCP_QP():
             self.Q_e, self.q_e
         )
 
+class OCP_QP_varying():
+    '''
+    -------------------------------------------------------------
+    stage-wise OCP QP formulation
+    supports time-variant dynamics and cost
+    -------------------------------------------------------------
+    '''
+    def __init__(self, N, Q:list[np.ndarray], R:list[np.ndarray], S:list[np.ndarray], q:list[np.ndarray], r:list[np.ndarray], 
+                 A:list[np.ndarray], B:list[np.ndarray], b:list[np.ndarray],
+                 C:list[np.ndarray], D:list[np.ndarray], d:list[np.ndarray],
+                 Q_e:np.ndarray, q_e:np.ndarray):
+
+        C0 = np.vstack((-np.eye(self.nx), np.eye(self.nx), C[0]))
+        D0 = np.vstack((np.zeros((2*self.nx, self.nu)), D[0]))
+        self.N = N
+        self.nx = Q[0].shape[0]
+        self.nu = R[0].shape[0]
+        self.nh = C[0].shape[0]
+        self.nh0 = C0.shape[0]
+
+        self.stages = []
+        self.stages.append(QP_stage(Q[0], R[0], S[0], q[0], r[0], A[0], B[0], b[0], C0, D0, d[0]))
+        for i in range(1, N):
+            self.stages.append(QP_stage(Q[i], R[i], S[i], q[i], r[i], A[i], B[i], b[i], C[i], D[i], d[i]))
+        self.terminal = QP_Terminal(Q_e, q_e)
 
 class Dense_QP():
     '''
