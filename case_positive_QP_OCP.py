@@ -1,35 +1,17 @@
 import numpy as np
 from QP_formulation import OCP_QP
 from RiccatiQPSolver_constrained import QP_solver
+from case_positive_mats import QP_mat
 
-N = 5
-#dynamics
-A = np.array([[1.0, 0.0],
-              [0.0, 2.0]])
-B = np.array([[1.0],
-              [2.0]])
-b = np.array([0.0, 0.0])
-nx = A.shape[0]
-nu = B.shape[1]
-#cost
-Q = np.diag(np.array([1.0, 1.0]))
-R = np.diag(np.array([1.0]))
-S = np.zeros((nu, nx))
-q = np.zeros((nx,))
-r = np.zeros((nu,))
-#terminal cost
-Q_e = Q
-q_e = np.zeros((nx,))
+mats = QP_mat()
 
 x0 = np.array([3.0, 3.0])
-uh = 2.0
-lh = -2.0
-# inequality constraintsL: h(x,u) = Cx + Du <= d
-C = np.zeros((2, nx))
-D = np.array([[-1.0],[1.0]])
-d = np.array([-lh, uh])
 
-qp = OCP_QP(N, Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e)
+qp = OCP_QP(mats.N, 
+            mats.Q, mats.R, mats.S, mats.q, mats.r,
+            mats.A, mats.B, mats.b, 
+            mats.C, mats.D, mats.d, 
+            mats.Q_e, mats.q_e)
 qp_solver = QP_solver(qp)
 sol = qp_solver.solve(x0)
 cost_qp = qp_solver.get_cost()

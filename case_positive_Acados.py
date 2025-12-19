@@ -1,8 +1,11 @@
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosModel
 import casadi as ca
 import numpy as np
+from case_positive_mats import QP_mat
 
-N = 5
+mats = QP_mat()
+
+N = mats.N
 
 def formulate_OCP(regularize_method='NO_REGULARIZE'):
     model = AcadosModel()
@@ -17,11 +20,9 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     nu = u.shape[0]
 
     # dynamics
-    A = np.array([[1.0, 0.0],
-                  [0.0, 2.0]])
-    B = np.array([[1.0],
-                  [2.0]])
-    b = np.array([0.0, 0.0])
+    A = mats.A
+    B = mats.B
+    b = mats.b
 
     f_expl = ca.mtimes(A, x) + ca.mtimes(B, u) + b
     model.disc_dyn_expr = f_expl
@@ -29,15 +30,15 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp = AcadosOcp()
     ocp.model = model
 
+    # get matrices
+    Q = mats.Q
+    R = mats.R
+    S = mats.S
+    q = mats.q
+    r = mats.r
+    Q_e = mats.Q_e
+    q_e = mats.q_e
     # set up cost
-    Q = np.diag(np.array([1.0, 1.0]))
-    R = np.diag(np.array([-1.0]))
-    S = np.zeros((1, 2))
-    q = np.zeros((2,))
-    r = np.zeros((1,))
-    # terminal cost
-    Q_e = Q
-    q_e = np.zeros((2,))
     ocp.cost.cost_type = 'NONLINEAR_LS'
     ocp.cost.W = ca.diagcat(Q, R).full()
     ocp.model.cost_y_expr = ca.vertcat(ocp.model.x, ocp.model.u)
@@ -49,15 +50,16 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
 
     x0 = np.array([3.0, 3.0])
     ocp.constraints.x0 = x0
-    uh = 2.0
-    lh = -2.0
+
+    uh = mats.d[1]
+    lh = -mats.d[0]
     # inequality constraintsL: h(x,u) = Cx + Du <= d
-    C = np.zeros((1, nx))
-    D = np.array([[1.0]])
+    C = mats.C[1:2, :]
+    D = mats.D[1:2, :]
     ocp.constraints.C = C
     ocp.constraints.D = D
+    ocp.constraints.ug = np.array([uh])
     ocp.constraints.lg = np.array([lh])
-    ocp.constraints.ug = np.array([uh]) 
 
     # set options
     ocp.solver_options.tf = 1.0*N
