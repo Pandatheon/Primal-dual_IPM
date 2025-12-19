@@ -23,10 +23,11 @@ q_e = np.zeros((nx,))
 
 x0 = np.array([3.0, 3.0])
 uh = 2.0
+lh = -2.0
 # inequality constraintsL: h(x,u) = Cx + Du <= d
 C = np.zeros((2, nx))
 D = np.array([[-1.0],[1.0]])
-d = np.array([uh, uh])
+d = np.array([-lh, uh])
 
 qp = OCP_QP(N, Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e)
 qp_solver = QP_solver(qp)

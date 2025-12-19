@@ -31,7 +31,7 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
 
     # set up cost
     Q = np.diag(np.array([1.0, 1.0]))
-    R = np.diag(np.array([1.0]))
+    R = np.diag(np.array([-1.0]))
     S = np.zeros((1, 2))
     q = np.zeros((2,))
     r = np.zeros((1,))
@@ -50,10 +50,14 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     x0 = np.array([3.0, 3.0])
     ocp.constraints.x0 = x0
     uh = 2.0
+    lh = -2.0
     # inequality constraintsL: h(x,u) = Cx + Du <= d
-    ocp.constraints.lbu = np.array([-uh])
-    ocp.constraints.ubu = np.array([uh])
-    ocp.constraints.idxbu = np.array([0])
+    C = np.zeros((1, nx))
+    D = np.array([[1.0]])
+    ocp.constraints.C = C
+    ocp.constraints.D = D
+    ocp.constraints.lg = np.array([lh])
+    ocp.constraints.ug = np.array([uh]) 
 
     # set options
     ocp.solver_options.tf = 1.0*N
@@ -62,6 +66,8 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp.solver_options.nlp_solver_tol_stat = 1e-6
     ocp.solver_options.qp_solver = 'PARTIAL_CONDENSING_HPIPM' # FULL_CONDENSING_QPOASES, PARTIAL_CONDENSING_HPIPM, FULL_CONDENSING_HPIPM
     ocp.solver_options.hessian_approx = 'EXACT' # 'GAUSS_NEWTON', 'EXACT'
+    # ocp.solver_options.regularize_method = 'NO_REGULARIZE'  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
+    ocp.solver_options.qp_solver_ric_alg = 1
     ocp.solver_options.integrator_type = 'DISCRETE'
     ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
 
@@ -71,6 +77,7 @@ def main():
     ocp = formulate_OCP()
     ocp_solver = AcadosOcpSolver(ocp, verbose=False)
     status = ocp_solver.solve()
+    ocp_solver.dump_last_qp_to_json("acados_ocp_qp.json")
 
     if status != 0:
         raise Exception(f"Acados returned status {status}.")
