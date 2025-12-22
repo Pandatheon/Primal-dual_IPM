@@ -1,9 +1,9 @@
 import numpy as np
 from QP_formulation import OCP_QP
 from RiccatiQPSolver_constrained import QP_solver
-from case_positive_mats import QP_mat
+from case_positive_mats import QP_mats
 
-mats = QP_mat()
+mats = QP_mats()
 
 x0 = np.array([3.0, 3.0])
 

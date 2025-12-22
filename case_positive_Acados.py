@@ -1,9 +1,9 @@
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosModel
 import casadi as ca
 import numpy as np
-from case_positive_mats import QP_mat
+from case_positive_mats import QP_mats
 
-mats = QP_mat()
+mats = QP_mats()
 
 N = mats.N
 

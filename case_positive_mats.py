@@ -1,6 +1,6 @@
 import numpy as np
 
-class QP_mat:
+class QP_mats:
     def __init__(self):
         self.N = 5
         #dynamics
@@ -29,7 +29,7 @@ class QP_mat:
         self.d = np.array([-self.lh, self.uh])
 
 if __name__ == "__main__":
-    mats = QP_mat()
+    mats = QP_mats()
     print("N:", mats.N)
     print("A:\n", mats.A)
     print("B:\n", mats.B)
