@@ -254,12 +254,15 @@ class QP_solver:
         self.statistics_dict['alpha_list'].append(alpha)
         return alpha_pri, alpha_dual, alpha
 
-    def _backward_sweep(self, prev_sol:iterate):
+    def _backward_sweep(self, prev_sol:iterate, reg:str ='NO_REGULARIZE'):
         horizon = len(self.qp.stages)
         nu, nx = self.qp.stages[0].S.shape
 
-        regularized_QP = self._regularize_QP(self.qp)
-        modified_QP = self._modify_QP(regularized_QP ,prev_sol)
+        if reg != None:
+            regularized_QP = self._regularize_QP(self.qp)
+            modified_QP = self._modify_QP(regularized_QP ,prev_sol)
+        else:
+            modified_QP = self._modify_QP(self.qp ,prev_sol)
 
         self.feedback = Feedback(
             P = np.empty((horizon+1, nx, nx), dtype=float),
@@ -384,7 +387,7 @@ class QP_solver:
 
         elif hessian == 'reduced':
             self._initilize_solution(sol_x)
-            self._backward_sweep(self.solution)
+            self._backward_sweep(self.solution, reg=None)
             # check R + B'PB
             for i in range(len(self.qp.stages)):
                 stage = self.qp.stages[i]
