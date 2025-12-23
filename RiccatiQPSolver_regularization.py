@@ -110,7 +110,19 @@ class QP_solver:
         res_ineq = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
         res_comp0 = np.zeros((1, stage0.C.shape[0]))
         res_comp = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
-        Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e = self.qp()
+        Q = self.qp.stages[0].Q
+        R = self.qp.stages[0].R
+        S = self.qp.stages[0].S
+        q = self.qp.stages[0].q
+        r = self.qp.stages[0].r
+        A = self.qp.stages[0].A
+        B = self.qp.stages[0].B
+        b = self.qp.stages[0].b
+        C = self.qp.stages[1].C
+        D = self.qp.stages[1].D
+        d = self.qp.stages[1].d
+        Q_e = self.qp.terminal.Q_e
+        q_e = self.qp.terminal.q_e
         C0 = self.qp.stages[0].C
         D0 = self.qp.stages[0].D
 
@@ -300,9 +312,9 @@ class QP_solver:
             lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
             rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
 
-            Q_tilt = lhs_modification[:self.qp.nx, :self.qp.nx]
-            R_tilt = lhs_modification[self.qp.nx:, self.qp.nx:]
-            S_tilt = lhs_modification[:self.qp.nu, self.qp.nx:]
+            Q_tilt = lhs_modification[:qp.nx, :qp.nx]
+            R_tilt = lhs_modification[qp.nx:, qp.nx:]
+            S_tilt = lhs_modification[qp.nx:, :qp.nx]
             modified_QP.stages[i] = QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
                 R = qp.stages[i].R + R_tilt,
@@ -328,9 +340,9 @@ class QP_solver:
             eigvals_reg = self._do_regularization(eigvals, method)
             H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
 
-            Q_reg = H_reg[:self.qp.nx, :self.qp.nx]
-            R_reg = H_reg[self.qp.nx:, self.qp.nx:]
-            S_reg = H_reg[:self.qp.nu, self.qp.nx:]
+            Q_reg = H_reg[:qp.nx, :qp.nx]
+            R_reg = H_reg[qp.nx:, qp.nx:]
+            S_reg = H_reg[qp.nx:, :qp.nx]
             regularized_QP.stages[i] = QP_stage(
                 Q = Q_reg,
                 R = R_reg,
@@ -345,7 +357,7 @@ class QP_solver:
                 d = stage.d,
             )
         Q_e = qp.terminal.Q_e
-        eigvals_e, eigvecs_e = np.linalg.eigh(Q_e)
+        eigvals_e, eigvecs_e = np.linalg.eig(Q_e)
         eigvals_e_reg = self._do_regularization(eigvals_e, method)
         Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.T
         regularized_QP.terminal = QP_Terminal(
