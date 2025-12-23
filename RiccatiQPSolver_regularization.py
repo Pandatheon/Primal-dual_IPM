@@ -79,7 +79,7 @@ class QP_solver:
         self.solution.s0 = init_s0
         self.solution.lam0 = self.tau / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=50, tol:float=1e-6)-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=50, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
@@ -91,7 +91,7 @@ class QP_solver:
             if res < tol:
                 print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['barrier_list'][-1]:.2e}")
                 return self.solution
-            self._backward_sweep(prev_sol)
+            self._backward_sweep(prev_sol, reg=reg)
             self._forward_sweep(prev_sol)
             self.tau = max(self.tau*0.1, 1e-8)
             self.statistics_dict['iter_count'] += 1
@@ -258,11 +258,8 @@ class QP_solver:
         horizon = len(self.qp.stages)
         nu, nx = self.qp.stages[0].S.shape
 
-        if reg != None:
-            regularized_QP = self._regularize_QP(self.qp)
-            modified_QP = self._modify_QP(regularized_QP ,prev_sol)
-        else:
-            modified_QP = self._modify_QP(self.qp ,prev_sol)
+        regularized_QP = self._regularize_QP(self.qp, reg)
+        modified_QP = self._modify_QP(regularized_QP ,prev_sol)
 
         self.feedback = Feedback(
             P = np.empty((horizon+1, nx, nx), dtype=float),
@@ -319,17 +316,18 @@ class QP_solver:
             self.rhs_dict['rg'][i][self.qp.nx:] += rhs_modification[self.qp.nx:]
         return modified_QP
 
-    def _regularize_QP(self, modified_QP:OCP_QP)-> OCP_QP:
+    def _regularize_QP(self, qp:OCP_QP, method: str = 'PROJECT')-> OCP_QP:
         '''Regularize the modified QP to ensure positive definiteness of the reduced Hessian.'''
-        # As investgated, acados will turn every negative eigenvalue to zero.
-        regularized_QP = copy.deepcopy(modified_QP)
+        regularized_QP = copy.deepcopy(qp)
         for i in range(self.qp.N):
-            stage = modified_QP.stages[i]
+            stage = qp.stages[i]
             H = np.block([[stage.Q, stage.S.T],
                           [stage.S, stage.R]])
-            eigvals, eigvecs = np.linalg.eigh(H)
-            eigvals_reg = np.array([max(eigval, 0) for eigval in eigvals])
+
+            eigvals, eigvecs = np.linalg.eig(H)
+            eigvals_reg = self._do_regularization(eigvals, method)
             H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
+
             Q_reg = H_reg[:self.qp.nx, :self.qp.nx]
             R_reg = H_reg[self.qp.nx:, self.qp.nx:]
             S_reg = H_reg[:self.qp.nu, self.qp.nx:]
@@ -346,15 +344,31 @@ class QP_solver:
                 D = stage.D,
                 d = stage.d,
             )
-        Q_e = modified_QP.terminal.Q_e
+        Q_e = qp.terminal.Q_e
         eigvals_e, eigvecs_e = np.linalg.eigh(Q_e)
-        eigvals_e_reg = np.array([max(eigval, 0) for eigval in eigvals_e])
+        eigvals_e_reg = self._do_regularization(eigvals_e, method)
         Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.T
         regularized_QP.terminal = QP_Terminal(
             Q_e = Q_e_reg,
-            q_e = modified_QP.terminal.q_e,
+            q_e = qp.terminal.q_e,
         )
         return regularized_QP
+
+    def _do_regularization(self, eigvals: np.ndarray, method: str)-> np.ndarray:
+            if method == 'PROJECT':
+                eigvals_reg = np.array([max(eigval, 1e-4) for eigval in eigvals])
+            elif method == 'MIRROR':
+                eigvals_reg = np.array([abs(eigval) for eigval in eigvals])
+            elif method == 'stage_LM':
+                term = -min(eigvals) if min(eigvals) < 0 else 0
+                eigvals_reg = eigvals + term * np.ones_like(eigvals)
+            elif method == 'R_block_LM':
+                term = -min(eigvals) if min(eigvals) < 0 else 0
+                eigvals_reg = np.array(eigvals)
+                eigvals_reg[self.qp.nx:] = eigvals[self.qp.nx:] + term * np.ones_like(eigvals[self.qp.nx:])
+            else:
+                eigvals_reg = eigvals
+            return eigvals_reg
 
     def _riccati_recursion(self,
         qp_stage:QP_stage, qp_terminal:Feedback, rg, rb
@@ -365,9 +379,11 @@ class QP_solver:
         q = rg[:self.qp.nx]
         r = rg[self.qp.nx:]
         b = rb
-
-        K = -np.linalg.solve((R + B.T@P@B), (S + B.T@P@A))
-        k = -np.linalg.solve((R + B.T@P@B), (r + B.T@(P@b + p)))
+        try:
+            K = -np.linalg.solve((R + B.T@P@B), (S + B.T@P@A))
+            k = -np.linalg.solve((R + B.T@P@B), (r + B.T@(P@b + p)))
+        except np.linalg.LinAlgError:
+            raise np.linalg.LinAlgError("singular matrix encountered in Riccati recursion. Try regularizing the QP.")
         new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
         new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
 
@@ -387,7 +403,7 @@ class QP_solver:
 
         elif hessian == 'reduced':
             self._initilize_solution(sol_x)
-            self._backward_sweep(self.solution, reg=None)
+            self._backward_sweep(self.solution, reg='NO_REGULARIZE')
             # check R + B'PB
             for i in range(len(self.qp.stages)):
                 stage = self.qp.stages[i]
