@@ -270,7 +270,10 @@ class QP_solver:
         horizon = len(self.qp.stages)
         nu, nx = self.qp.stages[0].S.shape
 
-        regularized_QP = self._regularize_QP(self.qp, reg)
+        if reg == 'PROJECT' or reg == 'MIRROR':
+            regularized_QP = self._regularize_QP(self.qp, method=reg)
+        else: 
+            regularized_QP = copy.deepcopy(self.qp)
         modified_QP = self._modify_QP(regularized_QP ,prev_sol)
 
         self.feedback = Feedback(
@@ -283,8 +286,8 @@ class QP_solver:
         self.feedback.P[-1] = modified_QP.terminal.Q_e
         self.feedback.p[-1] = self.rhs_dict['rg'][-1][:nx]
         for i in reversed(range(horizon)):
-            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion(
-               modified_QP.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg'][i], self.rhs_dict['rb'][i]
+            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_regularization(
+               modified_QP.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg'][i], self.rhs_dict['rb'][i], reg=reg
             )
 
     def _modify_QP(self, qp, prev_sol:iterate):
@@ -371,19 +374,10 @@ class QP_solver:
                 eigvals_reg = np.array([max(eigval, 1e-4) for eigval in eigvals])
             elif method == 'MIRROR':
                 eigvals_reg = np.array([max(abs(eigval), 1e-4) for eigval in eigvals])
-            elif method == 'stage_LM':
-                term = -min(eigvals) if min(eigvals) < 0 else 0
-                eigvals_reg = eigvals + term * np.ones_like(eigvals)
-            elif method == 'R_block_LM':
-                term = -min(eigvals) if min(eigvals) < 0 else 0
-                eigvals_reg = np.array(eigvals)
-                eigvals_reg[self.qp.nx:] = eigvals[self.qp.nx:] + term * np.ones_like(eigvals[self.qp.nx:])
-            else:
-                eigvals_reg = eigvals
             return eigvals_reg
 
-    def _riccati_recursion(self,
-        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb
+    def _riccati_recursion_with_regularization(self,
+        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, reg:str='NO_REGULARIZE'
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
         Q, R, S, q, r, A, B, b, C, D, d = qp_stage
@@ -391,11 +385,28 @@ class QP_solver:
         q = rg[:self.qp.nx]
         r = rg[self.qp.nx:]
         b = rb
-        # do cholesky factorization to solve for K, k
+
         try:
-            R_chol = np.linalg.cholesky(R + B.T@P@B) 
+            R_chol = np.linalg.cholesky(R + B.T@P@B)
         except np.linalg.LinAlgError:
-            raise np.linalg.LinAlgError("singular matrix encountered in Riccati recursion. Try regularizing the QP.")
+            if reg == 'NO_REGULARIZE':
+                raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
+            elif reg == 'R_BLOCK_STAGE_LM':
+                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals)
+                adjustment = -min_eig + 1.0
+                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
+                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
+            elif reg == 'STAGE_LM':
+                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals)
+                adjustment = -min_eig + 1.0
+                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
+                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
+                Q += adjustment * np.eye(Q.shape[0])
+            else:
+                raise ValueError("Invalid regularization method specified.")
+
         y1 = np.linalg.solve(R_chol, S + B.T@P@A)
         y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
         K = -np.linalg.solve(R_chol.T, y1)
