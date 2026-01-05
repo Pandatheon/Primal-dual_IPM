@@ -394,13 +394,13 @@ class QP_solver:
             elif reg == 'R_BLOCK_STAGE_LM':
                 eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1.0
+                adjustment = -min_eig + 10.0
                 reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
                 R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
             elif reg == 'STAGE_LM':
                 eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1.0
+                adjustment = -min_eig + 10.0
                 reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
                 R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
                 Q += adjustment * np.eye(Q.shape[0])
