@@ -370,7 +370,7 @@ class QP_solver:
             if method == 'PROJECT':
                 eigvals_reg = np.array([max(eigval, 1e-4) for eigval in eigvals])
             elif method == 'MIRROR':
-                eigvals_reg = np.array([abs(eigval) for eigval in eigvals])
+                eigvals_reg = np.array([max(abs(eigval), 1e-4) for eigval in eigvals])
             elif method == 'stage_LM':
                 term = -min(eigvals) if min(eigvals) < 0 else 0
                 eigvals_reg = eigvals + term * np.ones_like(eigvals)
@@ -391,11 +391,15 @@ class QP_solver:
         q = rg[:self.qp.nx]
         r = rg[self.qp.nx:]
         b = rb
+        # do cholesky factorization to solve for K, k
         try:
-            K = -np.linalg.solve((R + B.T@P@B), (S + B.T@P@A))
-            k = -np.linalg.solve((R + B.T@P@B), (r + B.T@(P@b + p)))
+            R_chol = np.linalg.cholesky(R + B.T@P@B) 
         except np.linalg.LinAlgError:
             raise np.linalg.LinAlgError("singular matrix encountered in Riccati recursion. Try regularizing the QP.")
+        y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+        y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+        K = -np.linalg.solve(R_chol.T, y1)
+        k = -np.linalg.solve(R_chol.T, y2)
         new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
         new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
 
