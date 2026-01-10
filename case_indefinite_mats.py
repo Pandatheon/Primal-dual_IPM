@@ -12,9 +12,9 @@ class QP_mats:
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         #cost
-        self.Q = np.diag(np.array([1.0, 1.0]))
-        self.R = np.diag(np.array([-2.0]))
-        self.S = np.zeros((self.nu, self.nx))
+        self.Q = np.diag(np.array([-2.0, 1.0]))
+        self.R = np.diag(np.array([1.0]))
+        self.S = np.array([[0.0, 0.0]])
         self.q = np.zeros((self.nx,))
         self.r = np.zeros((self.nu,))
         #terminal cost
@@ -29,20 +29,35 @@ class QP_mats:
         self.d = np.array([-self.lh, self.uh])
 
 if __name__ == "__main__":
-    from QP_formulation import OCP_QP
-    from RiccatiQPSolver_regularization import QP_solver
-    import numpy as np
-
     mats = QP_mats()
-    qp = OCP_QP(mats.N,
-                mats.Q, mats.R, mats.S, mats.q, mats.r,
-                mats.A, mats.B, mats.b,
-                mats.C, mats.D, mats.d,
-                mats.Q_e, mats.q_e)
-
-    x0 = np.array([3.0, 3.0])
-    qp_solver = QP_solver(qp)
-    eiglist = qp_solver.check_QP_definiteness(hessian='full')
-    print("Eigenvalues of Q matrix:", eiglist)
-    reduced_eiglist = qp_solver.check_QP_definiteness(x0, hessian='reduced')
-    print("Eigenvalues of reduced QP cost matrices:", reduced_eiglist)
+    print("N:", mats.N)
+    print("A:\n", mats.A)
+    print("B:\n", mats.B)
+    print("b:\n", mats.b)
+    print("Q:\n", mats.Q)
+    print("R:\n", mats.R)
+    print("S:\n", mats.S)
+    print("q:\n", mats.q)
+    print("r:\n", mats.r)
+    print("C:\n", mats.C)
+    print("D:\n", mats.D)
+    print("d:\n", mats.d)
+    print("Q_e:\n", mats.Q_e)
+    print("q_e:\n", mats.q_e)
+    H = np.block([[mats.Q, mats.S.T],
+                  [mats.S, mats.R]])
+    print("Hessian matrix H:\n", H)
+    eigvals = np.linalg.eigvals(H)
+    print("Eigenvalues of H:\n", eigvals)
+    # get R+B'PB for N horizon
+    P = mats.Q_e
+    reduced_eigenvals_list = []
+    for _ in range(mats.N):
+        reduced_hessian = mats.R + mats.B.T @ P @ mats.B
+        reduced_eigenvals = np.linalg.eigvals(reduced_hessian)
+        reduced_eigenvals_list.append(reduced_eigenvals)
+        K = -np.linalg.solve(reduced_hessian, (mats.S + mats.B.T @ P @ mats.A))
+        P = mats.Q + mats.A.T @ P @ mats.A - (mats.S.T + mats.A.T @ P @ mats.B) @ (-K)
+    print("Eigenvalues of reduced Hessians R + B'PB over horizon:")
+    for i, eigs in enumerate(reduced_eigenvals_list):
+        print(f" Step {mats.N - i}: {eigs}")

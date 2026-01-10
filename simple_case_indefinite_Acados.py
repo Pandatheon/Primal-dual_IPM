@@ -63,16 +63,14 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     # set options
     ocp.solver_options.tf = 1.0*N
     ocp.solver_options.N_horizon = N
-    ocp.solver_options.nlp_solver_tol_stat = 1e-5
+    ocp.solver_options.nlp_solver_tol_stat = 1e-6
     ocp.solver_options.qp_solver = 'PARTIAL_CONDENSING_HPIPM' # FULL_CONDENSING_QPOASES, PARTIAL_CONDENSING_HPIPM, FULL_CONDENSING_HPIPM
     ocp.solver_options.hessian_approx = 'EXACT' # 'GAUSS_NEWTON', 'EXACT'
     ocp.solver_options.regularize_method = 'PROJECT'  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
-    ocp.solver_options.qp_solver_ric_alg = 0
+    ocp.solver_options.reg_epsilon = 1e-4
+    ocp.solver_options.qp_solver_ric_alg = 1
     ocp.solver_options.integrator_type = 'DISCRETE'
     ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
-    # ocp.solver_options.nlp_solver_max_iter = 2
-    # ocp.solver_options.qp_solver_iter_max = 0
-    # ocp.solver_options.print_level = 5
     return ocp
 
 def main():
