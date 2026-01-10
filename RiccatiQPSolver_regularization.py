@@ -1,7 +1,7 @@
 from typing import Tuple
 from dataclasses import dataclass
 
-from QP_formulation import OCP_QP, QP_stage, QP_Terminal, iterate
+from QP_formulation import OCP_QP_varying, QP_stage, QP_Terminal, iterate
 import numpy as np
 import copy
 
@@ -19,7 +19,7 @@ class Feedback:
 
 class QP_solver:
 
-    def __init__(self, qp:OCP_QP):
+    def __init__(self, qp:OCP_QP_varying):
         self.qp = qp
         self.feedback = None
         self.tau = 2.0
@@ -61,19 +61,19 @@ class QP_solver:
         self.solution.pi = np.zeros((self.qp.N, self.qp.nx))
 
         init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.stages[0].d))
-        init_s0 = init_d0 -  self.qp.C0 @ self.solution.x[0] - self.qp.D0 @ self.solution.u[0]
+        init_s0 = init_d0 -  self.qp.stages[0].C @ self.solution.x[0] - self.qp.stages[0].D @ self.solution.u[0]
         d0 = np.hstack(( -(x0)*np.ones((self.qp.nx,)), (x0)*np.ones((self.qp.nx,)), self.qp.stages[0].d))
         self.qp.stages[0] = QP_stage(
-            Q = self.qp.Q,
-            R = self.qp.R,
-            S = self.qp.S,
-            q = self.qp.q,
-            r = self.qp.r,
-            A = self.qp.A,
-            B = self.qp.B,
-            b = self.qp.b,
-            C = self.qp.C0,
-            D = self.qp.D0,
+            Q = self.qp.stages[0].Q,
+            R = self.qp.stages[0].R,
+            S = self.qp.stages[0].S,
+            q = self.qp.stages[0].q,
+            r = self.qp.stages[0].r,
+            A = self.qp.stages[0].A,
+            B = self.qp.stages[0].B,
+            b = self.qp.stages[0].b,
+            C = self.qp.stages[0].C,
+            D = self.qp.stages[0].D,
             d = d0,
         )
         self.solution.s0 = init_s0
@@ -191,10 +191,6 @@ class QP_solver:
         delta_lam = copy.deepcopy(prev_sol.lam)
         delta_s0 = copy.deepcopy(prev_sol.s0)
         delta_s = copy.deepcopy(prev_sol.s)
-        Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e = self.qp()
-        C0 = self.qp.stages[0].C
-        D0 = self.qp.stages[0].D
-        d0 = self.qp.stages[0].d
 
         # recover delta_x and delta_u, delta_pi first with modified KKT system
         # then recover delta_s and delta_lam with original KKT system
@@ -203,15 +199,15 @@ class QP_solver:
             # recover x and u
             rhs_b = self.rhs_dict['rb'][i]
             delta_u[i] = self.feedback.compute_control(i, delta_x[i])
-            delta_x[i+1] = A@delta_x[i] + B@delta_u[i] + rhs_b
+            delta_x[i+1] = self.qp.stages[i].A@delta_x[i] + self.qp.stages[i].B@delta_u[i] + rhs_b
 
             # recover s
             if i == 0:
-                rhs_d =  C0 @ prev_sol.x[i] + D0 @ prev_sol.u[i] + prev_sol.s0 - d0
-                delta_s0 = -(C0 @delta_x[0] + D0 @delta_u[0]) - rhs_d
+                rhs_d =  self.qp.stages[0].C @ prev_sol.x[i] + self.qp.stages[0].D @ prev_sol.u[i] + prev_sol.s0 - self.qp.stages[0].d
+                delta_s0 = -(self.qp.stages[0].C @delta_x[0] + self.qp.stages[0].D @delta_u[0]) - rhs_d
             else:
-                rhs_d = C @ prev_sol.x[i] + D @ prev_sol.u[i] + prev_sol.s[i-1] - d
-                delta_s[i-1] = -(C @delta_x[i] + D @delta_u[i]) - rhs_d
+                rhs_d = self.qp.stages[i].C @ prev_sol.x[i] + self.qp.stages[i].D @ prev_sol.u[i] + prev_sol.s[i-1] - self.qp.stages[i].d
+                delta_s[i-1] = -(self.qp.stages[i].C @delta_x[i] + self.qp.stages[i].D @delta_u[i]) - rhs_d
             # recover lam
             if i == 0:
                 rhs_m = (prev_sol.lam0 * prev_sol.s0 - self.tau * np.ones(len(prev_sol.lam0)))
@@ -274,7 +270,7 @@ class QP_solver:
             regularized_QP = self._regularize_QP(self.qp, method=reg)
         else: 
             regularized_QP = copy.deepcopy(self.qp)
-        modified_QP = self._modify_QP(regularized_QP ,prev_sol)
+        modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
 
         self.feedback = Feedback(
             P = np.empty((horizon+1, nx, nx), dtype=float),
@@ -283,29 +279,25 @@ class QP_solver:
             k = np.empty((horizon, nu), dtype=float)
         )
 
-        self.feedback.P[-1] = modified_QP.terminal.Q_e
+        self.feedback.P[-1] = modified_QP_stages[-1].Q_e
         self.feedback.p[-1] = self.rhs_dict['rg'][-1][:nx]
         for i in reversed(range(horizon)):
             self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_regularization(
-               modified_QP.stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg'][i], self.rhs_dict['rb'][i], reg=reg
+            modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg'][i], self.rhs_dict['rb'][i], reg=reg
             )
 
-    def _modify_QP(self, qp, prev_sol:iterate):
-        modified_QP = copy.deepcopy(qp)
-        Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e = qp()
-        C0 = qp.stages[0].C
-        D0 = qp.stages[0].D
-        d0 = qp.stages[0].d
+    def _modify_QP(self, qp:OCP_QP_varying, prev_sol:iterate):
+        modified_QP_stages = []
 
         for i in range(len(self.qp.stages)):
             if i == 0:
-                C_full = np.concatenate((C0, D0), axis=1)
+                C_full = np.concatenate((qp.stages[0].C, qp.stages[0].D), axis=1)
                 T_mat = np.diag(prev_sol.s0)
                 Lam_mat = np.diag(prev_sol.lam0)
                 rd = self.rhs_dict['rd0']
                 rm = self.rhs_dict['rm0']
             else:
-                C_full = np.concatenate((C, D), axis=1)
+                C_full = np.concatenate((qp.stages[i].C, qp.stages[i].D), axis=1)
                 T_mat = np.diag(prev_sol.s[i-1])
                 Lam_mat = np.diag(prev_sol.lam[i-1])
                 rd = self.rhs_dict['rd'][i-1]
@@ -317,21 +309,21 @@ class QP_solver:
 
             Q_tilt = lhs_modification[:qp.nx, :qp.nx]
             R_tilt = lhs_modification[qp.nx:, qp.nx:]
-            S_tilt = lhs_modification[qp.nx:, :qp.nx]
-            modified_QP.stages[i] = QP_stage(
+            S_tilt = lhs_modification[:qp.nu, qp.nx:]
+            modified_QP_stages.append(QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
                 R = qp.stages[i].R + R_tilt,
                 S = qp.stages[i].S + S_tilt,
                 q = qp.stages[i].q, r = qp.stages[i].r,
                 A = qp.stages[i].A, B = qp.stages[i].B, b = qp.stages[i].b,
                 C = qp.stages[i].C, D = qp.stages[i].D, d = qp.stages[i].d,
-            )
+            ))
+            self.rhs_dict['rg'][i][:qp.nx] += rhs_modification[:qp.nx]
+            self.rhs_dict['rg'][i][qp.nx:] += rhs_modification[qp.nx:]
+        modified_QP_stages.append(qp.terminal)
+        return modified_QP_stages
 
-            self.rhs_dict['rg'][i][:self.qp.nx] += rhs_modification[:self.qp.nx]
-            self.rhs_dict['rg'][i][self.qp.nx:] += rhs_modification[self.qp.nx:]
-        return modified_QP
-
-    def _regularize_QP(self, qp:OCP_QP, method: str = 'PROJECT')-> OCP_QP:
+    def _regularize_QP(self, qp : OCP_QP_varying, method: str = 'PROJECT')-> OCP_QP_varying:
         '''Regularize the modified QP to ensure positive definiteness of the reduced Hessian.'''
         regularized_QP = copy.deepcopy(qp)
         for i in range(self.qp.N):
@@ -394,18 +386,20 @@ class QP_solver:
             elif reg == 'R_BLOCK_STAGE_LM':
                 eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals)
-                adjustment = -min_eig + 10.0
+                adjustment = -min_eig + 1e2
                 reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
                 R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
             elif reg == 'STAGE_LM':
                 eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals)
-                adjustment = -min_eig + 10.0
+                adjustment = -min_eig + 1e2
                 reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
                 R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
                 Q += adjustment * np.eye(Q.shape[0])
-            else:
+            elif reg not in ['PROJECT', 'MIRROR']:
                 raise ValueError("Invalid regularization method specified.")
+            else:
+                raise np.linalg.LinAlgError("R + B'PB is not positive definite even after regularization.")
 
         y1 = np.linalg.solve(R_chol, S + B.T@P@A)
         y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
@@ -450,14 +444,13 @@ class QP_solver:
 
     def get_cost(self):
         cost = 0.0
-        Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e = self.qp()
         for i in range(len(self.qp.stages)):
             x_i = self.solution.x[i]
             u_i = self.solution.u[i]
-            cost += 0.5 * x_i.T @ Q @ x_i + 0.5 * u_i.T @ R @ u_i + x_i.T @ S.T @ u_i + q.T @ x_i + r.T @ u_i
+            cost += 0.5 * x_i.T @ self.qp.stages[i].Q @ x_i + 0.5 * u_i.T @ self.qp.stages[i].R @ u_i + x_i.T @ self.qp.stages[i].S.T @ u_i + self.qp.stages[i].q.T @ x_i + self.qp.stages[i].r.T @ u_i
         # terminal cost
         x_N = self.solution.x[-1]
-        cost += 0.5 * x_N.T @ Q_e @ x_N + q_e.T @ x_N
+        cost += 0.5 * x_N.T @ self.qp.terminal.Q_e @ x_N + self.qp.terminal.q_e.T @ x_N
         return cost
 
     def print_statistics(self):
