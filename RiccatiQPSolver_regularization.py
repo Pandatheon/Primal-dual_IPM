@@ -22,7 +22,8 @@ class QP_solver:
     def __init__(self, qp:OCP_QP_varying):
         self.qp = qp
         self.feedback = None
-        self.tau = 2.0
+        self.duality_measure = 2.0
+        self.centering_param = 1.0
         self.rhs_dict = {
             'rg' : np.zeros((qp.N+1, qp.nx+qp.nu)),
             'rb' : np.zeros((qp.N, qp.nx)),
@@ -39,7 +40,7 @@ class QP_solver:
             'alpha_pri_list' : [],
             'alpha_dual_list' : [],
             'alpha_list' : [],
-            'barrier_list' : [],
+            'duality_measure_list' : [],
             'iter_count' : 0,
         }
         self.solution = iterate(
@@ -51,13 +52,14 @@ class QP_solver:
             s0 = np.zeros((self.qp.nh0, )),
             s = np.zeros((qp.N-1, self.qp.nh)),
         )
+        self.ineq_num = self.solution.lam0.size + self.solution.lam.size
 
     def _initilize_solution(self, x0:np.ndarray)-> iterate:
         self.solution.x = np.vstack([x0 for i in range(self.qp.N+1)])
         self.solution.u = np.zeros((self.qp.N, self.qp.nu))
         init_s = self.qp.stages[1].d - self.qp.stages[1].C @ self.solution.x[1] - self.qp.stages[1].D @ self.solution.u[1]
         self.solution.s = np.vstack([init_s for _ in range(self.qp.N-1)])
-        self.solution.lam = self.tau / self.solution.s
+        self.solution.lam = self.duality_measure / self.solution.s
         self.solution.pi = np.zeros((self.qp.N, self.qp.nx))
 
         init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.stages[0].d))
@@ -77,7 +79,7 @@ class QP_solver:
             d = d0,
         )
         self.solution.s0 = init_s0
-        self.solution.lam0 = self.tau / init_s0
+        self.solution.lam0 = self.duality_measure / init_s0
 
     def solve(self, x0:np.ndarray=None, max_iter:int=50, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
         '''
@@ -89,13 +91,12 @@ class QP_solver:
             prev_sol = copy.deepcopy(self.solution)
             res = self._update_rhs(prev_sol)
             if res < tol:
-                print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['barrier_list'][-1]:.2e}")
+                print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
                 return self.solution
             self._backward_sweep(prev_sol, reg=reg)
             self._forward_sweep(prev_sol)
-            self.tau = max(self.tau*0.1, 1e-8)
             self.statistics_dict['iter_count'] += 1
-        print(f"\033[31mNot Converged!\033[0m after {max_iter} iterations with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['barrier_list'][-1]:.2e}")
+        print(f"\033[31mNot Converged!\033[0m after {max_iter} iterations with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
         return self.solution
 
     def _update_rhs(self, prev_sol:iterate)-> np.ndarray:
@@ -125,11 +126,12 @@ class QP_solver:
         q_e = self.qp.terminal.q_e
         C0 = self.qp.stages[0].C
         D0 = self.qp.stages[0].D
+        duality_gap = 0.0
 
         for i in range(len(self.qp.stages)):
             # stationarity residual
             if i == 0:
-                res_stat[i][nx:] = R @ prev_sol.u[0] + S @ prev_sol.x[0] + r + B.T @ prev_sol.pi[0] + D0.T @ prev_sol.lam0
+                res_stat[i][nx:] = R @ prev_sol.u[0] + B.T @ prev_sol.pi[0] + D0.T @ prev_sol.lam0
             else:
                 res_stat[i][:nx] = Q @ prev_sol.x[i] + S.T @ prev_sol.u[i] + q +  A.T @ prev_sol.pi[i] + C.T @ prev_sol.lam[i-1] - prev_sol.pi[i-1]
                 res_stat[i][nx:] = R @ prev_sol.u[i] + S @ prev_sol.x[i] + r + B.T @ prev_sol.pi[i] + D.T @ prev_sol.lam[i-1]
@@ -145,9 +147,11 @@ class QP_solver:
 
             #complementarity residual
             if i == 0:
-                res_comp0 = prev_sol.lam0 * prev_sol.s0 - self.tau * np.ones((len(prev_sol.lam0), ))
+                res_comp0 = prev_sol.lam0 * prev_sol.s0
+                duality_gap += np.sum(prev_sol.lam0 * prev_sol.s0)
             else:
-                res_comp[i-1] = (np.diag(prev_sol.lam[i-1]) @ prev_sol.s[i-1] - self.tau * np.ones((len(prev_sol.lam[i-1]), ))).flatten()
+                res_comp[i-1] = (np.diag(prev_sol.lam[i-1]) @ prev_sol.s[i-1]).flatten()
+                duality_gap += np.sum(prev_sol.lam[i-1] * prev_sol.s[i-1])
 
         # terminal residual
             res_stat[N][:nx] = Q_e @ prev_sol.x[N] + q_e - prev_sol.pi[N-1]
@@ -159,19 +163,33 @@ class QP_solver:
         self.rhs_dict['rm0'] = res_comp0
         self.rhs_dict['rm'] = res_comp
 
+        self.duality_measure = max(duality_gap/self.ineq_num, 1e-8)
+
         self.statistics_dict['res_stat_list'].append(np.linalg.norm(res_stat.flatten()))
         self.statistics_dict['res_eq_list'].append(np.linalg.norm(res_eq.flatten()))
         self.statistics_dict['res_ineq_list'].append(np.linalg.norm(res_ineq.flatten()))
         self.statistics_dict['res_comp_list'].append(np.linalg.norm(res_comp.flatten()))
-        self.statistics_dict['barrier_list'].append(self.tau)
+        self.statistics_dict['duality_measure_list'].append(self.duality_measure)
         res = np.linalg.norm(np.hstack((res_stat.flatten(), res_eq.flatten(), res_ineq0.flatten(), res_ineq.flatten(), res_comp0.flatten(), res_comp.flatten())))
         return res
 
     def _forward_sweep(self, prev_sol:iterate)-> 'iterate':
         # Solve for the next iterate
-        delta_dict = self._solve_KKT_system(prev_sol)
+        delta_aff_dict = self._solve_predictor_step(prev_sol)
         # Compute the step size using fraction to the boundary rule
+        alpha_pri_max, alpha_dual_max = self._no_fraction_to_boundary(prev_sol, delta_aff_dict)
+
+       # adapt centering parameter
+        s0_aff = prev_sol.s0 + alpha_pri_max * delta_aff_dict['delta_s0']
+        s_aff = prev_sol.s + alpha_pri_max * delta_aff_dict['delta_s']
+        lam0_aff = prev_sol.lam0 + alpha_dual_max * delta_aff_dict['delta_lam0']
+        lam_aff = prev_sol.lam + alpha_dual_max * delta_aff_dict['delta_lam']
+        mu_aff = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
+        self.centering_param = (mu_aff/self.duality_measure)**3
+
+        delta_dict = self._solve_corrector_step(prev_sol, delta_aff_dict)
         alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, delta_dict)
+
         # Update the solution with the step size alpha
         x_aff = prev_sol.x + alpha_pri * delta_dict['delta_x']
         u_aff = prev_sol.u + alpha_pri * delta_dict['delta_u']
@@ -183,7 +201,7 @@ class QP_solver:
 
         self.solution = iterate(x_aff, u_aff, pi_aff, lam0_aff, lam_aff, s0_aff, s_aff)
 
-    def _solve_KKT_system(self, prev_sol:iterate)-> iterate:
+    def _solve_predictor_step(self, prev_sol:iterate)-> iterate:
         delta_x = copy.deepcopy(prev_sol.x)
         delta_u = copy.deepcopy(prev_sol.u)
         delta_pi = copy.deepcopy(prev_sol.pi)
@@ -210,11 +228,11 @@ class QP_solver:
                 delta_s[i-1] = -(self.qp.stages[i].C @delta_x[i] + self.qp.stages[i].D @delta_u[i]) - rhs_d
             # recover lam
             if i == 0:
-                rhs_m = (prev_sol.lam0 * prev_sol.s0 - self.tau * np.ones(len(prev_sol.lam0)))
+                rhs_m = (prev_sol.lam0 * prev_sol.s0)
                 rhs_m_modified = -rhs_m - (prev_sol.lam0 * delta_s0) 
                 delta_lam0 = (np.linalg.solve(np.diag(prev_sol.s0), rhs_m_modified)).flatten()
             else:
-                rhs_m = (prev_sol.lam[i-1] * prev_sol.s[i-1] - self.tau * np.ones(len(prev_sol.lam[i-1])))
+                rhs_m = (prev_sol.lam[i-1] * prev_sol.s[i-1])
                 rhs_lam = -rhs_m - (prev_sol.lam[i-1] * delta_s[i-1])
                 delta_lam[i-1] = (np.linalg.solve(np.diag(prev_sol.s[i-1]), rhs_lam)).flatten()
             # recover pi
@@ -232,7 +250,61 @@ class QP_solver:
 
         return delta_dict
 
-    def _fraction_to_boundary(self, prev_sol: iterate, delta_dict) -> iterate:
+    def _solve_corrector_step(self, prev_sol:iterate, delta_aff_dict:dict)-> iterate:
+        delta_x = copy.deepcopy(prev_sol.x)
+        delta_u = copy.deepcopy(prev_sol.u)
+        delta_pi = copy.deepcopy(prev_sol.pi)
+        delta_lam0 = copy.deepcopy(prev_sol.lam0)
+        delta_lam = copy.deepcopy(prev_sol.lam)
+        delta_s0 = copy.deepcopy(prev_sol.s0)
+        delta_s = copy.deepcopy(prev_sol.s)
+
+        delta_s0_aff = delta_aff_dict['delta_s0']
+        delta_s_aff = delta_aff_dict['delta_s']
+        delta_lam0_aff = delta_aff_dict['delta_lam0']
+        delta_lam_aff = delta_aff_dict['delta_lam']
+
+        # recover delta_x and delta_u, delta_pi first with modified KKT system
+        # then recover delta_s and delta_lam with original KKT system
+        delta_x[0] = 0
+        for i in range(len(self.qp.stages)):
+            # recover x and u
+            rhs_b = self.rhs_dict['rb'][i]
+            delta_u[i] = self.feedback.compute_control(i, delta_x[i])
+            delta_x[i+1] = self.qp.stages[i].A@delta_x[i] + self.qp.stages[i].B@delta_u[i] + rhs_b
+
+            # recover s
+            if i == 0:
+                rhs_d =  self.qp.stages[0].C @ prev_sol.x[i] + self.qp.stages[0].D @ prev_sol.u[i] + prev_sol.s0 - self.qp.stages[0].d
+                delta_s0 = -(self.qp.stages[0].C @delta_x[0] + self.qp.stages[0].D @delta_u[0]) - rhs_d
+            else:
+                rhs_d = self.qp.stages[i].C @ prev_sol.x[i] + self.qp.stages[i].D @ prev_sol.u[i] + prev_sol.s[i-1] - self.qp.stages[i].d
+                delta_s[i-1] = -(self.qp.stages[i].C @delta_x[i] + self.qp.stages[i].D @delta_u[i]) - rhs_d
+            # recover lam
+            if i == 0:
+                rhs_m = ((prev_sol.lam0 * prev_sol.s0 + delta_lam0_aff * delta_s0_aff) - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0)))
+                rhs_m_modified = -rhs_m - (prev_sol.lam0 * delta_s0)
+                delta_lam0 = (np.linalg.solve(np.diag(prev_sol.s0), rhs_m_modified)).flatten()
+            else:
+                rhs_m = ((prev_sol.lam[i-1] * prev_sol.s[i-1] + delta_lam_aff[i-1] * delta_s_aff[i-1]) - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1])))
+                rhs_lam = -rhs_m - (prev_sol.lam[i-1] * delta_s[i-1])
+                delta_lam[i-1] = (np.linalg.solve(np.diag(prev_sol.s[i-1]), rhs_lam)).flatten()
+            # recover pi
+            delta_pi[i] =  self.feedback.P[i+1] @ delta_x[i+1] + self.feedback.p[i+1]
+
+        delta_dict = {
+            'delta_x': delta_x,
+            'delta_u': delta_u,
+            'delta_pi': delta_pi,
+            'delta_lam0': delta_lam0,
+            'delta_lam': delta_lam,
+            'delta_s0': delta_s0,
+            'delta_s': delta_s,
+        }
+
+        return delta_dict
+
+    def _no_fraction_to_boundary(self, prev_sol: iterate, delta_dict) -> iterate:
         s0_old = prev_sol.s0
         s_old = prev_sol.s
         lam0_old = prev_sol.lam0
@@ -252,6 +324,29 @@ class QP_solver:
         # take the minimum positive step size
         alpha_pri_max = np.min([1, np.min(frac_pri[frac_pri > 0])])
         alpha_dual_max = np.min([1, np.min(frac_dual[frac_dual > 0])])
+
+        return alpha_pri_max, alpha_dual_max
+
+    def _fraction_to_boundary(self, prev_sol: iterate, delta_dict) -> iterate:
+        s0_old = prev_sol.s0
+        s_old = prev_sol.s
+        lam0_old = prev_sol.lam0
+        lam_old = prev_sol.lam
+        delta_s0 = delta_dict['delta_s0']
+        delta_s = delta_dict['delta_s']
+        delta_lam0 = delta_dict['delta_lam0']
+        delta_lam = delta_dict['delta_lam']
+
+        # do fraction to the boundary
+        frac_pri0 = - s0_old/delta_s0
+        frac_dual0 = - lam0_old/delta_lam0
+        frac_pri = - s_old.flatten()/delta_s.flatten()
+        frac_dual = - lam_old.flatten()/delta_lam.flatten()
+        frac_pri = np.hstack((frac_pri0, frac_pri))
+        frac_dual = np.hstack((frac_dual0, frac_dual))
+        # take the minimum positive step size
+        alpha_pri_max = np.min(frac_pri[frac_pri > 0])
+        alpha_dual_max = np.min(frac_dual[frac_dual > 0])
         # take 0.99 of the maximum step size
         alpha_pri = min(0.99 * alpha_pri_max, 1.0)
         alpha_dual = min(0.99 * alpha_dual_max, 1.0)
@@ -309,7 +404,7 @@ class QP_solver:
 
             Q_tilt = lhs_modification[:qp.nx, :qp.nx]
             R_tilt = lhs_modification[qp.nx:, qp.nx:]
-            S_tilt = lhs_modification[:qp.nu, qp.nx:]
+            S_tilt = lhs_modification[qp.nx:, :qp.nx]
             modified_QP_stages.append(QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
                 R = qp.stages[i].R + R_tilt,
@@ -334,6 +429,13 @@ class QP_solver:
             eigvals, eigvecs = np.linalg.eig(H)
             eigvals_reg = self._do_regularization(eigvals, method)
             H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
+
+            # # check H_reg and H are simlarly or not
+            # similarity = np.allclose(H_reg, H)
+            # if not similarity:
+            #     print(f"----stage {i} differs significantly.----")
+            #     print(f"Original Hessian eigenvalues: {eigvals}")
+            #     print(f"Regularized Hessian eigenvalues: {eigvals_reg}")
 
             Q_reg = H_reg[:qp.nx, :qp.nx]
             R_reg = H_reg[qp.nx:, qp.nx:]
@@ -410,38 +512,6 @@ class QP_solver:
 
         return new_P, new_p, K, k
 
-    def check_QP_definiteness(self, sol_x=None, hessian: str = 'full')-> np.ndarray:
-        """check definiteness of full hessian or reduced hessian with modified QP in QP problem"""
-        eigval_list = []
-        if hessian == 'full':
-            for i, stage in enumerate(self.qp.stages):
-                H = np.block([[stage.Q, stage.S.T],
-                            [stage.S, stage.R]])
-                eigvals = np.linalg.eigvals(H)
-                eigval_list.extend(eigvals.tolist())
-            eigval_term = np.linalg.eigvals(self.qp.terminal.Q_e)
-            eigval_list.extend(eigval_term.tolist())
-
-        elif hessian == 'reduced':
-            self._initilize_solution(sol_x)
-            self._backward_sweep(self.solution, reg='NO_REGULARIZE')
-            # check R + B'PB
-            for i in range(len(self.qp.stages)):
-                stage = self.qp.stages[i]
-                P_next = self.feedback.P[i+1]
-                modified_R = stage.R + stage.B.T @ P_next @ stage.B
-                eigvals = np.linalg.eigvalsh(modified_R)
-                eigval_list.extend(eigvals.tolist())
-
-        if all(np.all(eigvals > 0) for eigvals in eigval_list):
-            print(f"{hessian.capitalize()} Hessian in QP is positive definite.")
-        elif any(np.any(eigvals == 0) for eigvals in eigval_list):
-            print(f"{hessian.capitalize()} Hessian in QP is positive semi-definite.")
-        elif any(np.any(eigvals < 0) for eigvals in eigval_list):
-            print(f"{hessian.capitalize()} Hessian in QP is indefinite.")
-
-        return eigval_list
-
     def get_cost(self):
         cost = 0.0
         for i in range(len(self.qp.stages)):
@@ -454,13 +524,13 @@ class QP_solver:
         return cost
 
     def print_statistics(self):
-        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tbarrier\t\talpha_pri\talpha_dual')
+        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')
         for i in range(self.statistics_dict['iter_count']):
             res_stat_norm = self.statistics_dict['res_stat_list'][i]
             res_eq_norm = self.statistics_dict['res_eq_list'][i]
             res_ineq_norm = self.statistics_dict['res_ineq_list'][i]
             res_comp_norm = self.statistics_dict['res_comp_list'][i]
-            barrier = self.statistics_dict['barrier_list'][i]
+            duality_measure = self.statistics_dict['duality_measure_list'][i]
             alpha_pri = self.statistics_dict['alpha_pri_list'][i] if i < len(self.statistics_dict['alpha_pri_list']) else 0.0
             alpha_dual = self.statistics_dict['alpha_dual_list'][i] if i < len(self.statistics_dict['alpha_dual_list']) else 0.0
-            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{barrier:.2e}\t{alpha_pri:.2e}\t{alpha_dual:.2e}")
+            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{duality_measure:.2e}\t{alpha_pri:.2e}\t{alpha_dual:.2e}")
