@@ -25,6 +25,7 @@ class QP_solver:
         self.tau = 2.0
         self.rhs_dict = {
             'rg' : np.zeros((qp.N+1, qp.nx+qp.nu)),
+            'rg_': np.zeros((qp.N+1, qp.nx+qp.nu)),
             'rb' : np.zeros((qp.N, qp.nx)),
             'rd0' : np.zeros((qp.nh0, )),
             'rd' : np.zeros((qp.N-1, qp.nh)),
@@ -283,7 +284,7 @@ class QP_solver:
         self.feedback.p[-1] = self.rhs_dict['rg'][-1][:nx]
         for i in reversed(range(horizon)):
             self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_regularization(
-            modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg'][i], self.rhs_dict['rb'][i], reg=reg
+            modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
             )
 
     def _modify_QP(self, qp:OCP_QP_varying, prev_sol:iterate):
@@ -318,9 +319,10 @@ class QP_solver:
                 A = qp.stages[i].A, B = qp.stages[i].B, b = qp.stages[i].b,
                 C = qp.stages[i].C, D = qp.stages[i].D, d = qp.stages[i].d,
             ))
-            self.rhs_dict['rg'][i][:qp.nx] += rhs_modification[:qp.nx]
-            self.rhs_dict['rg'][i][qp.nx:] += rhs_modification[qp.nx:]
+            self.rhs_dict['rg_'][i][:qp.nx] = self.rhs_dict['rg'][i][:qp.nx] + rhs_modification[:qp.nx]
+            self.rhs_dict['rg_'][i][qp.nx:] = self.rhs_dict['rg'][i][qp.nx:] + rhs_modification[qp.nx:]
         modified_QP_stages.append(qp.terminal)
+        self.rhs_dict['rg_'][-1] = self.rhs_dict['rg'][-1]
         return modified_QP_stages
 
     def _regularize_QP(self, qp : OCP_QP_varying, method: str = 'PROJECT')-> OCP_QP_varying:
