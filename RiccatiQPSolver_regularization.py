@@ -80,7 +80,7 @@ class QP_solver:
         self.solution.s0 = init_s0
         self.solution.lam0 = self.tau / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=50, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=100, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
