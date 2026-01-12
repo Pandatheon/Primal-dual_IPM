@@ -161,39 +161,24 @@ class QP_solver:
         res_ineq = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
         res_comp0 = np.zeros((1, stage0.C.shape[0]))
         res_comp = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
-        Q = self.qp.stages[0].Q
-        R = self.qp.stages[0].R
-        S = self.qp.stages[0].S
-        q = self.qp.stages[0].q
-        r = self.qp.stages[0].r
-        A = self.qp.stages[0].A
-        B = self.qp.stages[0].B
-        b = self.qp.stages[0].b
-        C = self.qp.stages[1].C
-        D = self.qp.stages[1].D
-        d = self.qp.stages[1].d
-        Q_e = self.qp.terminal.Q_e
-        q_e = self.qp.terminal.q_e
-        C0 = self.qp.stages[0].C
-        D0 = self.qp.stages[0].D
         duality_measure = 0.0
 
         for i in range(len(self.qp.stages)):
             # stationarity residual
             if i == 0:
-                res_stat[i][nx:] = R @ prev_sol.u[0] + B.T @ prev_sol.pi[0] + D0.T @ prev_sol.lam0
+                res_stat[i][nx:] = self.qp.stages[0].R @ prev_sol.u[0] + self.qp.stages[0].B.T @ prev_sol.pi[0] + self.qp.stages[0].D.T @ prev_sol.lam0
             else:
-                res_stat[i][:nx] = Q @ prev_sol.x[i] + S.T @ prev_sol.u[i] + q +  A.T @ prev_sol.pi[i] + C.T @ prev_sol.lam[i-1] - prev_sol.pi[i-1]
-                res_stat[i][nx:] = R @ prev_sol.u[i] + S @ prev_sol.x[i] + r + B.T @ prev_sol.pi[i] + D.T @ prev_sol.lam[i-1]
+                res_stat[i][:nx] = self.qp.stages[i].Q @ prev_sol.x[i] + self.qp.stages[i].S.T @ prev_sol.u[i] + self.qp.stages[i].q +  self.qp.stages[i].A.T @ prev_sol.pi[i] + self.qp.stages[i].C.T @ prev_sol.lam[i-1] - prev_sol.pi[i-1]
+                res_stat[i][nx:] = self.qp.stages[i].R @ prev_sol.u[i] + self.qp.stages[i].S @ prev_sol.x[i] + self.qp.stages[i].r + self.qp.stages[i].B.T @ prev_sol.pi[i] + self.qp.stages[i].D.T @ prev_sol.lam[i-1]
 
             #equality residual
-            res_eq[i] = A @ prev_sol.x[i] + B @ prev_sol.u[i] - prev_sol.x[i+1] - b
+            res_eq[i] = self.qp.stages[i].A @ prev_sol.x[i] + self.qp.stages[i].B @ prev_sol.u[i] - prev_sol.x[i+1] - self.qp.stages[i].b
 
             #inequality residual
             if i == 0:
-                res_ineq0 =  C0 @ prev_sol.x[0] + D0 @ prev_sol.u[0] + prev_sol.s0 - stage0.d
+                res_ineq0 =  self.qp.stages[0].C @ prev_sol.x[0] + self.qp.stages[0].D @ prev_sol.u[0] + prev_sol.s0 - self.qp.stages[0].d
             else:
-                res_ineq[i-1] = (C @ prev_sol.x[i] + D @ prev_sol.u[i] + prev_sol.s[i-1]) - d
+                res_ineq[i-1] = (self.qp.stages[i].C @ prev_sol.x[i] + self.qp.stages[i].D @ prev_sol.u[i] + prev_sol.s[i-1]) - self.qp.stages[i].d
 
             #complementarity residual
             if i == 0:
@@ -210,7 +195,7 @@ class QP_solver:
                     res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() + (delta_aff_dict['delta_lam'][i-1] * delta_aff_dict['delta_s'][i-1]) - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1]))
 
         # terminal residual
-            res_stat[N][:nx] = Q_e @ prev_sol.x[N] + q_e - prev_sol.pi[N-1]
+            res_stat[N][:nx] = self.qp.terminal.Q_e @ prev_sol.x[N] + self.qp.terminal.q_e - prev_sol.pi[N-1]
 
         self.rhs_dict['rg'] = res_stat
         self.rhs_dict['rb'] = res_eq
