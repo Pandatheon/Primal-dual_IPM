@@ -305,8 +305,8 @@ class QP_solver:
             alpha_pri_max = 0.0
             alpha_dual_max = 0.0
         # take 0.99 of the maximum step size
-        alpha_pri = min(0.95 * alpha_pri_max, 1.0)
-        alpha_dual = min(0.95 * alpha_dual_max, 1.0)
+        alpha_pri = min(0.99 * alpha_pri_max, 1.0)
+        alpha_dual = min(0.99 * alpha_dual_max, 1.0)
         alpha = min(alpha_pri, alpha_dual)
 
         self.statistics_dict['alpha_pri_list'].append(alpha_pri)
