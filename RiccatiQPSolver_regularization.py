@@ -84,7 +84,7 @@ class QP_solver:
         self.solution.s0 = init_s0
         self.solution.lam0 = self.duality_measure / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=50, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=100, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
@@ -113,7 +113,7 @@ class QP_solver:
         self.delta_aff_dict = self._solve_KKT_system(prev_sol)
 
         # compute duality measure
-        alpha_pri_max, alpha_dual_max, alpha_max = self._no_fraction_to_boundary(prev_sol, self.delta_aff_dict)
+        alpha_pri_max, alpha_dual_max, alpha_max = self._fraction_to_boundary(prev_sol, self.delta_aff_dict, boundary=False)
         s0_aff = prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0']
         s_aff = prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s']
         lam0_aff = prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0']
@@ -122,23 +122,13 @@ class QP_solver:
         self.centering_param = (mu_aff/self.duality_measure)**3
         # self.centering_param = 0.01
 
-        if np.all(self.delta_aff_dict['delta_s0'] > 0) and np.all(self.delta_aff_dict['delta_s'] > 0):
-            print("Wrong predictor step! all delta_s positive")
-        if np.all(self.delta_aff_dict['delta_lam0'] > 0) and np.all(self.delta_aff_dict['delta_lam'] > 0):
-            print("Wrong predictor step! all delta_lam positive")
-
         # predictor-corrector step
         self._update_rhs(prev_sol, self.delta_aff_dict) # get rhs for predictor-corrector step
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_dict = self._solve_KKT_system(prev_sol)
 
-        if np.all(self.delta_dict['delta_s0'] > 0) and np.all(self.delta_dict['delta_s'] > 0):
-            print("Wrong predictor-corrector step!, all delta_s positive")
-        if np.all(self.delta_dict['delta_lam0'] > 0) and np.all(self.delta_dict['delta_lam'] > 0):
-            print("Wrong predictor-corrector step!, all delta_lam positive")
-
         # compute step size
-        alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict)
+        alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
         # update solution
         x_delta = prev_sol.x + alpha_pri * self.delta_dict['delta_x']
         u_delta = prev_sol.u + alpha_pri * self.delta_dict['delta_u']
@@ -256,31 +246,7 @@ class QP_solver:
         }
         return delta_dict
 
-    def _no_fraction_to_boundary(self, prev_sol: iterate, delta_dict) -> iterate:
-        s0_old = prev_sol.s0
-        s_old = prev_sol.s
-        lam0_old = prev_sol.lam0
-        lam_old = prev_sol.lam
-        delta_s0 = delta_dict['delta_s0']
-        delta_s = delta_dict['delta_s']
-        delta_lam0 = delta_dict['delta_lam0']
-        delta_lam = delta_dict['delta_lam']
-
-        # do fraction to the boundary
-        frac_pri0 = - s0_old/delta_s0
-        frac_dual0 = - lam0_old/delta_lam0
-        frac_pri = - s_old.flatten()/delta_s.flatten()
-        frac_dual = - lam_old.flatten()/delta_lam.flatten()
-        frac_pri = np.hstack((frac_pri0, frac_pri))
-        frac_dual = np.hstack((frac_dual0, frac_dual))
-        # take the minimum positive step size
-        alpha_pri_max = np.min([1, np.min(frac_pri[frac_pri > 0])])
-        alpha_dual_max = np.min([1, np.min(frac_dual[frac_dual > 0])])
-        alpha_max = min(alpha_pri_max, alpha_dual_max)
-
-        return alpha_pri_max, alpha_dual_max, alpha_max
-
-    def _fraction_to_boundary(self, prev_sol: iterate, delta_dict) -> iterate:
+    def _fraction_to_boundary(self, prev_sol: iterate, delta_dict, boundary:bool=True) -> iterate:
         s0_old = prev_sol.s0
         s_old = prev_sol.s
         lam0_old = prev_sol.lam0
@@ -300,19 +266,25 @@ class QP_solver:
         # take the minimum positive step size
         try:
             alpha_pri_max = np.min(frac_pri[frac_pri > 0])
-            alpha_dual_max = np.min(frac_dual[frac_dual > 0])
         except ValueError:
             alpha_pri_max = 0.0
+        try:
+            alpha_dual_max = np.min(frac_dual[frac_dual > 0])
+        except ValueError:
             alpha_dual_max = 0.0
-        # take 0.99 of the maximum step size
-        alpha_pri = min(0.99 * alpha_pri_max, 1.0)
-        alpha_dual = min(0.99 * alpha_dual_max, 1.0)
-        alpha = min(alpha_pri, alpha_dual)
 
-        self.statistics_dict['alpha_pri_list'].append(alpha_pri)
-        self.statistics_dict['alpha_dual_list'].append(alpha_dual)
-        self.statistics_dict['alpha_list'].append(alpha)
-        return alpha_pri, alpha_dual, alpha
+        if boundary:
+            # take 0.99 of the maximum step size
+            alpha_pri = min(0.99 * alpha_pri_max, 1.0)
+            alpha_dual = min(0.99 * alpha_dual_max, 1.0)
+            alpha = min(alpha_pri, alpha_dual)
+
+            self.statistics_dict['alpha_pri_list'].append(alpha_pri)
+            self.statistics_dict['alpha_dual_list'].append(alpha_dual)
+            self.statistics_dict['alpha_list'].append(alpha)
+            return alpha_pri, alpha_dual, alpha
+        else:
+            return alpha_pri_max, alpha_dual_max, min(alpha_pri_max, alpha_dual_max)
 
     def _backward_sweep(self, prev_sol:iterate, reg:str ='NO_REGULARIZE'):
         horizon = len(self.qp.stages)
