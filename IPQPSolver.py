@@ -136,7 +136,7 @@ class QP_solver:
             self.qp.C0 @ this_iter.x[0] + self.qp.D0 @ this_iter.u[0] + this_iter.s0 - self.qp.d0
         )
         for i in range(1, N):
-            res_ineq[self.qp.nh0+(i-1)*nx:self.qp.nh0+i*nx] = (
+            res_ineq[self.qp.nh0+(i-1)*self.qp.nh:self.qp.nh0+i*self.qp.nh] = (
                 self.qp.C @ this_iter.x[i] + self.qp.D @ this_iter.u[i] + this_iter.s[i-1] - self.qp.d
             )
 
@@ -145,8 +145,8 @@ class QP_solver:
             this_iter.lam0 * this_iter.s0 - self.tau * np.ones((len(this_iter.lam0), ))
         )
         for i in range(1, N):
-            res_comp[self.qp.nh0+(i-1)*nx:self.qp.nh0+i*nx] = (
-                this_iter.lam[i-1] * this_iter.s[i-1] - self.tau * np.ones((nx, ))
+            res_comp[self.qp.nh0+(i-1)*self.qp.nh:self.qp.nh0+i*self.qp.nh] = (
+                this_iter.lam[i-1] * this_iter.s[i-1] - self.tau * np.ones((self.qp.nh, ))
             )
 
         # combine all residuals
@@ -218,15 +218,15 @@ class QP_solver:
 
         index_after_pi = index_after_xu + (self.qp.N)*self.qp.nx
         delta_lam0 =  delta_z[index_after_pi:index_after_pi + len(self.qp.d0)]
-        delta_lam = delta_z[index_after_pi + len(self.qp.d0):index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx]
-        delta_lam = delta_lam.reshape((self.qp.N-1, self.qp.nx))
+        delta_lam = delta_z[index_after_pi + len(self.qp.d0):index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh]
+        delta_lam = delta_lam.reshape((self.qp.N-1, self.qp.nh))
         delta_dict['delta_lam0'] = delta_lam0
         delta_dict['delta_lam'] = delta_lam
 
-        index_after_lam = index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx
+        index_after_lam = index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh
         delta_s0 = delta_z[index_after_lam:index_after_lam + len(self.qp.d0)]
-        delta_s = delta_z[index_after_lam + len(self.qp.d0):index_after_lam + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx]
-        delta_s = delta_s.reshape((self.qp.N-1, self.qp.nx))
+        delta_s = delta_z[index_after_lam + len(self.qp.d0):index_after_lam + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh]
+        delta_s = delta_s.reshape((self.qp.N-1, self.qp.nh))
         delta_dict['delta_s0'] = delta_s0
         delta_dict['delta_s'] = delta_s
         return delta_dict
