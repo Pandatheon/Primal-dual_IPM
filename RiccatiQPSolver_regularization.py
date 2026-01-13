@@ -111,21 +111,6 @@ class QP_solver:
         res_ineq = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
         res_comp0 = np.zeros((1, stage0.C.shape[0]))
         res_comp = np.zeros((N-1, self.qp.stages[1].C.shape[0]))
-        # Q = self.qp.stages[0].Q
-        # R = self.qp.stages[0].R
-        # S = self.qp.stages[0].S
-        # q = self.qp.stages[0].q
-        # r = self.qp.stages[0].r
-        # A = self.qp.stages[0].A
-        # B = self.qp.stages[0].B
-        # b = self.qp.stages[0].b
-        # C = self.qp.stages[1].C
-        # D = self.qp.stages[1].D
-        # d = self.qp.stages[1].d
-        # Q_e = self.qp.terminal.Q_e
-        # q_e = self.qp.terminal.q_e
-        # C0 = self.qp.stages[0].C
-        # D0 = self.qp.stages[0].D
 
         for i in range(len(self.qp.stages)):
             # stationarity residual
@@ -280,7 +265,7 @@ class QP_solver:
         )
 
         self.feedback.P[-1] = modified_QP_stages[-1].Q_e
-        self.feedback.p[-1] = self.rhs_dict['rg'][-1][:nx]
+        self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
         for i in reversed(range(horizon)):
             self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_regularization(
             modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
@@ -384,19 +369,28 @@ class QP_solver:
         except np.linalg.LinAlgError:
             if reg == 'NO_REGULARIZE':
                 raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
-            elif reg == 'R_BLOCK_STAGE_LM':
-                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1e2
-                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
-                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
-            elif reg == 'STAGE_LM':
-                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1e2
-                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
-                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
-                Q += adjustment * np.eye(Q.shape[0])
+            elif reg == 'M_STAGE_LM':
+                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals_M)
+                if min_eig < 0:
+                    adjustment = -min_eig + 1e-4
+                    R_reg = R + adjustment * np.eye(R.shape[0])
+                else:
+                    R_reg = R
+                reduced_hessian_reg = R_reg + B.T@P@B
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
+            elif reg == 'P_STAGE_LM':
+                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals_M)
+                if min_eig < 0:
+                    adjustment = -min_eig + 1e-4
+                    # regulaize P and R+B'PB simultaneously
+                    R_reg = R + adjustment * np.eye(R.shape[0])
+                    P_reg = P + adjustment * np.eye(P.shape[0])
+                    reduced_hessian_reg = R_reg + B.T@P_reg@B
+                else:
+                    reduced_hessian_reg = R + B.T@P@B
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
             elif reg not in ['PROJECT', 'MIRROR']:
                 raise ValueError("Invalid regularization method specified.")
             else:
