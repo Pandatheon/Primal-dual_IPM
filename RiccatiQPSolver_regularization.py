@@ -408,19 +408,28 @@ class QP_solver:
         except np.linalg.LinAlgError:
             if reg == 'NO_REGULARIZE':
                 raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
-            elif reg == 'R_BLOCK_STAGE_LM':
-                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1e2
-                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
-                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
-            elif reg == 'STAGE_LM':
-                eigvals, eigvecs = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals)
-                adjustment = -min_eig + 1e2
-                reduced_hessian_reg = eigvecs @ np.diag(eigvals + adjustment * np.eye(len(eigvals))) @ eigvecs.T
-                R_chol = np.linalg.cholesky(reduced_hessian_reg.reshape(R.shape))
-                Q += adjustment * np.eye(Q.shape[0])
+            elif reg == 'M_STAGE_LM':
+                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals_M)
+                if min_eig < 0:
+                    adjustment = -min_eig + 1e-4
+                    R_reg = R + adjustment * np.eye(R.shape[0])
+                else:
+                    R_reg = R
+                reduced_hessian_reg = R_reg + B.T@P@B
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
+            elif reg == 'P_STAGE_LM':
+                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
+                min_eig = np.min(eigvals_M)
+                if min_eig < 0:
+                    adjustment = -min_eig + 1e-4
+                    # regulaize P and R+B'PB simultaneously
+                    R_reg = R + adjustment * np.eye(R.shape[0])
+                    P_reg = P + adjustment * np.eye(P.shape[0])
+                    reduced_hessian_reg = R_reg + B.T@P_reg@B
+                else:
+                    reduced_hessian_reg = R + B.T@P@B
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
             elif reg not in ['PROJECT', 'MIRROR']:
                 raise ValueError("Invalid regularization method specified.")
             else:

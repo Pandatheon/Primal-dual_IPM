@@ -28,8 +28,10 @@ qp = OCP_QP_varying(mats.N,
                     Q_e, q_e)
 reg_method = [
     'NO_REGULARIZE',
-    'PROJECT', 'MIRROR',
-    'R_BLOCK_STAGE_LM', 'STAGE_LM',
+    'PROJECT', 
+    'MIRROR',
+    'M_STAGE_LM', 
+    'P_STAGE_LM',
 ]
 for method in reg_method:
     print(f"\n\n=== Testing regularization method: {method} ===")
