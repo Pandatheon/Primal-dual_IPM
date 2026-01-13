@@ -12,11 +12,8 @@ class QP_mats:
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         ## cost
-        # self.Q = np.diag(np.array([-2.0, 1.0]))
-        # self.R = np.diag(np.array([1.0]))
-        ## another
-        self.Q = np.diag(np.array([1.0, 1.0]))
-        self.R = np.diag(np.array([-2.0]))
+        self.Q = np.diag(np.array([-2.0, 1.0]))
+        self.R = np.diag(np.array([1.0]))
         self.S = np.array([[0.0, 0.0]])
         self.q = np.zeros((self.nx,))
         self.r = np.zeros((self.nu,))
