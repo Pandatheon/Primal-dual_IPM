@@ -247,29 +247,22 @@ class QP_solver:
         return delta_dict
 
     def _fraction_to_boundary(self, prev_sol: iterate, delta_dict, boundary:bool=True) -> iterate:
-        s0_old = prev_sol.s0
-        s_old = prev_sol.s
-        lam0_old = prev_sol.lam0
-        lam_old = prev_sol.lam
-        delta_s0 = delta_dict['delta_s0']
-        delta_s = delta_dict['delta_s']
-        delta_lam0 = delta_dict['delta_lam0']
-        delta_lam = delta_dict['delta_lam']
+        s_old = np.hstack((prev_sol.s0, prev_sol.s.flatten()))
+        lam_old = np.hstack((prev_sol.lam0, prev_sol.lam.flatten()))
+        delta_s = np.hstack((delta_dict['delta_s0'], delta_dict['delta_s'].flatten()))
+        delta_lam =  np.hstack((delta_dict['delta_lam0'], delta_dict['delta_lam'].flatten()))
 
-        # do fraction to the boundary
-        frac_pri0 = - s0_old/delta_s0
-        frac_dual0 = - lam0_old/delta_lam0
-        frac_pri = - s_old.flatten()/delta_s.flatten()
-        frac_dual = - lam_old.flatten()/delta_lam.flatten()
-        frac_pri = np.hstack((frac_pri0, frac_pri))
-        frac_dual = np.hstack((frac_dual0, frac_dual))
+        mask_lam = delta_lam < 0
+        mask_s = delta_s < 0
+        frac_pri = s_old[mask_s] / (-delta_s[mask_s])
+        frac_dual = lam_old[mask_lam] / (-delta_lam[mask_lam])
         # take the minimum positive step size
         try:
-            alpha_pri_max = np.min(frac_pri[frac_pri > 0])
+            alpha_pri_max = np.min(frac_pri)
         except ValueError:
             alpha_pri_max = 0.0
         try:
-            alpha_dual_max = np.min(frac_dual[frac_dual > 0])
+            alpha_dual_max = np.min(frac_dual)
         except ValueError:
             alpha_dual_max = 0.0
 
