@@ -398,10 +398,17 @@ class QP_solver:
 
         try:
             R_chol = np.linalg.cholesky(R + B.T@P@B)
+            y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+            y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+            K = -np.linalg.solve(R_chol.T, y1)
+            k = -np.linalg.solve(R_chol.T, y2)
+            new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
+            new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         except np.linalg.LinAlgError:
             if reg == 'NO_REGULARIZE':
                 raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
-            elif reg == 'M_STAGE_LM':
+
+            elif reg == 'R_STAGE_LM':
                 eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals_M)
                 if min_eig < 0:
@@ -411,6 +418,13 @@ class QP_solver:
                     R_reg = R
                 reduced_hessian_reg = R_reg + B.T@P@B
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+                y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+                K = -np.linalg.solve(R_chol.T, y1)
+                k = -np.linalg.solve(R_chol.T, y2)
+                new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
+                new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
+
             elif reg == 'P_STAGE_LM':
                 eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals_M)
@@ -423,18 +437,17 @@ class QP_solver:
                 else:
                     reduced_hessian_reg = R + B.T@P@B
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                y1 = np.linalg.solve(R_chol, S + B.T@P_reg@A)
+                y2 = np.linalg.solve(R_chol, r + B.T@(P_reg@b + p))
+                K = -np.linalg.solve(R_chol.T, y1)
+                k = -np.linalg.solve(R_chol.T, y2)
+                new_P = Q + A.T@P_reg@A - (S.T + A.T@P_reg@B)@(-K)
+                new_p = q + A.T@(P_reg@b + p) - (S.T + A.T@P_reg@B)@(-k)
+
             elif reg not in ['PROJECT', 'MIRROR']:
                 raise ValueError("Invalid regularization method specified.")
             else:
                 raise np.linalg.LinAlgError("R + B'PB is not positive definite even after regularization.")
-
-        y1 = np.linalg.solve(R_chol, S + B.T@P@A)
-        y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
-        K = -np.linalg.solve(R_chol.T, y1)
-        k = -np.linalg.solve(R_chol.T, y2)
-        new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
-        new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
-
         return new_P, new_p, K, k
 
     def get_cost(self):
