@@ -30,7 +30,7 @@ reg_method = [
     'NO_REGULARIZE',
     'PROJECT', 
     'MIRROR',
-    'M_STAGE_LM', 
+    'R_STAGE_LM', 
     'P_STAGE_LM',
 ]
 for method in reg_method:
