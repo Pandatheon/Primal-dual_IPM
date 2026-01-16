@@ -185,7 +185,7 @@ class QP_solver:
                     res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() + (delta_aff_dict['delta_lam'][i-1] * delta_aff_dict['delta_s'][i-1]) - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1]))
 
         # terminal residual
-            res_stat[N][:nx] = self.qp.terminal.Q_e @ prev_sol.x[N] + self.qp.terminal.q_e - prev_sol.pi[N-1]
+        res_stat[N][:nx] = self.qp.terminal.Q_e @ prev_sol.x[N] + self.qp.terminal.q_e - prev_sol.pi[N-1]
 
         self.rhs_dict['rg'] = res_stat
         self.rhs_dict['rb'] = res_eq
