@@ -32,6 +32,8 @@ reg_method = [
     'MIRROR',
     'R_STAGE_LM', 
     'P_STAGE_LM',
+    'R_GLOBAL_LM',
+    'P_GLOBAL_LM',
 ]
 for method in reg_method:
     print(f"\n\n=== Testing regularization method: {method} ===")
