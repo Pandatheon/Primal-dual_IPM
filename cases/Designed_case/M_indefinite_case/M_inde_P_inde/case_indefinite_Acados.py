@@ -1,3 +1,8 @@
+import os
+import sys
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..'))
+sys.path.append(parent_dir)
+
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosModel
 import casadi as ca
 import numpy as np
@@ -93,10 +98,6 @@ def main():
         print(u_i)
 
     ocp_solver.print_statistics()
-
-    for i in range(N+1):
-        H_i = ocp_solver.get_hessian_block(i)
-        print(f"\n=== Hessian block at stage {i} ===\n{H_i}")
 
 if __name__ == "__main__":
     main()
