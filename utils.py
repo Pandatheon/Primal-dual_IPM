@@ -23,7 +23,7 @@ def read_matrix_from_npz(npz_path):
     """
     data = np.load(npz_path)
     N = int(data['N'])
-    nx = data['nx']
+    nx = int(data['nx'])
     Q_list = [copy.deepcopy(data['Q']) for _ in range(N)]
     R_list = [copy.deepcopy(data['R']) for _ in range(N)]
     S_list = [copy.deepcopy(data['S']) for _ in range(N)]
