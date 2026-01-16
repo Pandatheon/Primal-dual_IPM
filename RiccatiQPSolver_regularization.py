@@ -289,19 +289,58 @@ class QP_solver:
             regularized_QP = copy.deepcopy(self.qp)
         modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
 
-        self.feedback = Feedback(
-            P = np.empty((horizon+1, nx, nx), dtype=float),
-            p = np.empty((horizon+1, nx), dtype=float), 
-            K = np.empty((horizon, nu, nx), dtype=float), 
-            k = np.empty((horizon, nu), dtype=float)
-        )
-
-        self.feedback.P[-1] = modified_QP_stages[-1].Q_e
-        self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
-        for i in reversed(range(horizon)):
-            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_regularization(
-            modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
+        if reg in ['NO_REGULARIZE','PROJECT', 'MIRROR']:
+            self.feedback = Feedback(
+                P = np.empty((horizon+1, nx, nx), dtype=float),
+                p = np.empty((horizon+1, nx), dtype=float), 
+                K = np.empty((horizon, nu, nx), dtype=float), 
+                k = np.empty((horizon, nu), dtype=float)
             )
+            self.feedback.P[-1] = modified_QP_stages[-1].Q_e
+            self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
+            for i in reversed(range(horizon)):
+                self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion(
+                modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
+                )
+        elif reg in ['R_STAGE_LM', 'P_STAGE_LM']:
+            self.feedback = Feedback(
+                P = np.empty((horizon+1, nx, nx), dtype=float),
+                p = np.empty((horizon+1, nx), dtype=float), 
+                K = np.empty((horizon, nu, nx), dtype=float), 
+                k = np.empty((horizon, nu), dtype=float)
+            )
+            self.feedback.P[-1] = modified_QP_stages[-1].Q_e
+            self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
+            for i in reversed(range(horizon)):
+                self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_stage_regularization(
+                modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
+                )
+        elif reg in ['R_GLOBAL_LM', 'P_GLOBAL_LM']:
+            restart = True
+            adjustment = 0.0
+            while restart:
+                self.feedback = Feedback(
+                    P = np.empty((horizon+1, nx, nx), dtype=float),
+                    p = np.empty((horizon+1, nx), dtype=float), 
+                    K = np.empty((horizon, nu, nx), dtype=float), 
+                    k = np.empty((horizon, nu), dtype=float)
+                )
+                self.feedback.P[-1] = modified_QP_stages[-1].Q_e
+                self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
+                for i in reversed(range(horizon)):
+                    try:
+                        self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_global_regularization(
+                        modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i],
+                        adjustment = adjustment, reg=reg
+                        )
+                        restart = False
+                    except np.linalg.LinAlgError:
+                        M = modified_QP_stages[i].R + modified_QP_stages[i].B.T @ self.feedback.P[i+1] @ modified_QP_stages[i].B
+                        eigvals_M, eigvecs_M = np.linalg.eig(M)
+                        min_eig = np.min(eigvals_M)
+                        adjustment += -min_eig + 1e-4
+                        restart = True
+                        break
 
     def _modify_QP(self, qp:OCP_QP_varying, prev_sol:iterate):
         modified_QP_stages = []
@@ -343,6 +382,14 @@ class QP_solver:
 
     def _regularize_QP(self, qp : OCP_QP_varying, method: str = 'PROJECT')-> OCP_QP_varying:
         '''Regularize the modified QP to ensure positive definiteness of the reduced Hessian.'''
+
+        def _do_regularization(eigvals: np.ndarray, method: str)-> np.ndarray:
+            if method == 'PROJECT':
+                eigvals_reg = np.array([max(eigval, 1e-4) for eigval in eigvals])
+            elif method == 'MIRROR':
+                eigvals_reg = np.array([max(abs(eigval), 1e-4) for eigval in eigvals])
+            return eigvals_reg
+
         regularized_QP = copy.deepcopy(qp)
         for i in range(self.qp.N):
             stage = qp.stages[i]
@@ -350,7 +397,7 @@ class QP_solver:
                           [stage.S, stage.R]])
 
             eigvals, eigvecs = np.linalg.eig(H)
-            eigvals_reg = self._do_regularization(eigvals, method)
+            eigvals_reg = _do_regularization(eigvals, method)
             H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
 
             Q_reg = H_reg[:qp.nx, :qp.nx]
@@ -371,7 +418,7 @@ class QP_solver:
             )
         Q_e = qp.terminal.Q_e
         eigvals_e, eigvecs_e = np.linalg.eig(Q_e)
-        eigvals_e_reg = self._do_regularization(eigvals_e, method)
+        eigvals_e_reg = _do_regularization(eigvals_e, method)
         Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.T
         regularized_QP.terminal = QP_Terminal(
             Q_e = Q_e_reg,
@@ -379,14 +426,30 @@ class QP_solver:
         )
         return regularized_QP
 
-    def _do_regularization(self, eigvals: np.ndarray, method: str)-> np.ndarray:
-            if method == 'PROJECT':
-                eigvals_reg = np.array([max(eigval, 1e-4) for eigval in eigvals])
-            elif method == 'MIRROR':
-                eigvals_reg = np.array([max(abs(eigval), 1e-4) for eigval in eigvals])
-            return eigvals_reg
+    def _riccati_recursion(self,
+        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, adjustment:float=0.0, reg:str='NO_REGULARIZE'
+    )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        '''The core step of Riccati recursion.'''
+        Q, R, S, q, r, A, B, b, C, D, d = qp_stage
+        P, p = qp_terminal
+        q = rg[:self.qp.nx]
+        r = rg[self.qp.nx:]
+        b = rb
 
-    def _riccati_recursion_with_regularization(self,
+        try:
+            R_chol = np.linalg.cholesky(R + B.T@P@B)
+        except np.linalg.LinAlgError:
+            if reg == 'NO_REGULARIZE':
+                raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
+        y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+        y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+        K = -np.linalg.solve(R_chol.T, y1)
+        k = -np.linalg.solve(R_chol.T, y2)
+        new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
+        new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
+        return new_P, new_p, K, k
+
+    def _riccati_recursion_with_stage_regularization(self,
         qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, reg:str='NO_REGULARIZE'
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
@@ -405,17 +468,12 @@ class QP_solver:
             new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
             new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         except np.linalg.LinAlgError:
-            if reg == 'NO_REGULARIZE':
-                raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 
-            elif reg == 'R_STAGE_LM':
+            if reg == 'R_STAGE_LM':
                 eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals_M)
-                if min_eig < 0:
-                    adjustment = -min_eig + 1e-4
-                    R_reg = R + adjustment * np.eye(R.shape[0])
-                else:
-                    R_reg = R
+                adjustment = -min_eig + 1e-4
+                R_reg = R + adjustment * np.eye(R.shape[0])
                 reduced_hessian_reg = R_reg + B.T@P@B
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
                 y1 = np.linalg.solve(R_chol, S + B.T@P@A)
@@ -428,14 +486,11 @@ class QP_solver:
             elif reg == 'P_STAGE_LM':
                 eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
                 min_eig = np.min(eigvals_M)
-                if min_eig < 0:
-                    adjustment = -min_eig + 1e-4
-                    # regulaize P and R+B'PB simultaneously
-                    R_reg = R + adjustment * np.eye(R.shape[0])
-                    P_reg = P + adjustment * np.eye(P.shape[0])
-                    reduced_hessian_reg = R_reg + B.T@P_reg@B
-                else:
-                    reduced_hessian_reg = R + B.T@P@B
+                adjustment = -min_eig + 1e-4
+                # regulaize P and R+B'PB simultaneously
+                R_reg = R + adjustment * np.eye(R.shape[0])
+                P_reg = P + adjustment * np.eye(P.shape[0])
+                reduced_hessian_reg = R_reg + B.T@P_reg@B
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
                 y1 = np.linalg.solve(R_chol, S + B.T@P_reg@A)
                 y2 = np.linalg.solve(R_chol, r + B.T@(P_reg@b + p))
@@ -444,10 +499,31 @@ class QP_solver:
                 new_P = Q + A.T@P_reg@A - (S.T + A.T@P_reg@B)@(-K)
                 new_p = q + A.T@(P_reg@b + p) - (S.T + A.T@P_reg@B)@(-k)
 
-            elif reg not in ['PROJECT', 'MIRROR']:
-                raise ValueError("Invalid regularization method specified.")
-            else:
-                raise np.linalg.LinAlgError("R + B'PB is not positive definite even after regularization.")
+        return new_P, new_p, K, k
+
+    def _riccati_recursion_with_global_regularization(self,
+        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, adjustment:float=0.0, reg:str='NO_REGULARIZE'
+    )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        '''The core step of Riccati recursion.'''
+        Q, R, S, q, r, A, B, b, C, D, d = qp_stage
+        P, p = qp_terminal
+        q = rg[:self.qp.nx]
+        r = rg[self.qp.nx:]
+        b = rb
+
+        if reg == 'R_GLOBAL_LM':
+            R += adjustment * np.eye(R.shape[0])
+        elif reg == 'P_GLOBAL_LM':
+            R += adjustment * np.eye(R.shape[0])
+            P += adjustment * np.eye(P.shape[0])
+
+        R_chol = np.linalg.cholesky(R + B.T@P@B)
+        y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+        y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+        K = -np.linalg.solve(R_chol.T, y1)
+        k = -np.linalg.solve(R_chol.T, y2)
+        new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
+        new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         return new_P, new_p, K, k
 
     def get_cost(self):
