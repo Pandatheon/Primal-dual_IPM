@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager
 import casadi as ca
 import numpy as np
@@ -5,7 +8,7 @@ from utils import read_matrix_list
 
 
 N = 100
-json_path = "pendulum_caseF_qp_N=100.json"
+json_path = "cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json"
 
 def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp = AcadosOcp()
