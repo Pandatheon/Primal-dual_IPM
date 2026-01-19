@@ -1,41 +1,11 @@
-Problem       , Regularization, Iterations
 
-M_pos_P_pos   , NO_REGULARIZE , 8
-M_pos_P_pos   , PROJECT       , 48
-M_pos_P_pos   , MIRROR        , 84
-M_pos_P_pos   , R_STAGE_LM    , 8
-M_pos_P_pos   , P_STAGE_LM    , 8
-M_pos_P_pos   , R_GLOBAL_LM   , 8
-M_pos_P_pos   , P_GLOBAL_LM   , 8
+### Iteration table for different regularization methods and matrix cases.
 
-M_pos_P_inde  , NO_REGULARIZE , 6
-M_pos_P_inde  , PROJECT       , 16
-M_pos_P_inde  , MIRROR        , 31
-M_pos_P_inde  , R_STAGE_LM    , 6
-M_pos_P_inde  , P_STAGE_LM    , 6
-M_pos_P_inde  , R_GLOBAL_LM   , 6
-M_pos_P_inde  , P_GLOBAL_LM   , 6
-
-M_inde_P_pos  , NO_REGULARIZE , --
-M_inde_P_pos  , PROJECT       , 49
-M_inde_P_pos  , MIRROR        , 35
-M_inde_P_pos  , R_STAGE_LM    , --
-M_inde_P_pos  , P_STAGE_LM    , 10
-M_inde_P_pos  , R_GLOBAL_LM   , 51
-M_inde_P_pos  , P_GLOBAL_LM   , 49
-
-M_inde_P_inde , NO_REGULARIZE , --
-M_inde_P_inde , PROJECT       , 31
-M_inde_P_inde , MIRROR        , 52
-M_inde_P_inde , R_STAGE_LM    , --
-M_inde_P_inde , P_STAGE_LM    , 12
-M_inde_P_inde , R_GLOBAL_LM   , 21
-M_inde_P_inde , P_GLOBAL_LM   , 14
-
-Pendumlun_case, NO_REGULARIZE , --
-Pendumlun_case, PROJECT       , 36
-Pendumlun_case, MIRROR        , 57
-Pendumlun_case, R_STAGE_LM    , --
-Pendumlun_case, P_STAGE_LM    , 21
-Pendumlun_case, R_GLOBAL_LM   , --
-Pendumlun_case, P_GLOBAL_LM   , --
+Regularization\Problem, M_pos_P_pos, M_pos_P_inde, M_inde_P_pos, M_inde_P_inde, Pendumlun_case
+NO_REGULARIZE         , 8          , 6           , --          , --           , --
+PROJECT               , 48         , 16          , 49          , 31           , 36
+MIRROR                , 84         , 31          , 35          , 52           , 57
+R_STAGE_LM            , 8          , 6           , --          , --           , --
+P_STAGE_LM            , 8          , 6           , 10          , 12           , 21
+R_GLOBAL_LM           , 8          , 6           , 51          , 21           , --
+P_GLOBAL_LM           , 8          , 6           , 49          , 14           , --
