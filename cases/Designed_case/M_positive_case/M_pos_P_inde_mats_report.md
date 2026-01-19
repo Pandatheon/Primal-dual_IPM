@@ -8,7 +8,7 @@
 | Hessian H Eigenvalues | `[ 1.  1. -1. 12. 12.]` |
 ## Discrete Riccati Iteration Eigenvalue Evolution
 
-| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $B^T P B$ Contribution Eigenvalues |
+| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $P$ Eigenvalues |
 | :--- | :--- | :--- |
 | Step 5 | `[13.5274, 11.2226]` | `[ 1.,  1., -1.]` |
 | Step 4 | `[14.8824, 10.3913]` | `[ 1.8731,  1.9968, -2.0881]` |

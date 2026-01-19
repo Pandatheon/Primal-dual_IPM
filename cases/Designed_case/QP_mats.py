@@ -39,7 +39,7 @@ class abstract_QP_mats:
 
         # 2. Iteration Process Data Table (Core Analysis)
         md.append(f"## Discrete Riccati Iteration Eigenvalue Evolution\n")
-        md.append(f"| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $B^T P B$ Contribution Eigenvalues |")
+        md.append(f"| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $P$ Eigenvalues |")
         md.append(f"| :--- | :--- | :--- |")
         for i in range(len(reduced_list)):
             step_num = mats.N - i
