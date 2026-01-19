@@ -1,7 +1,13 @@
-import numpy as np
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-class QP_mats:
+import numpy as np
+from Designed_case.QP_mats import abstract_QP_mats
+
+class QP_mats(abstract_QP_mats):
     def __init__(self):
+        self.name = "M_pos_P_inde_mats"
         self.N = 5
         #dynamics
         self.A = np.array([[1.0, 0.0, 0.0],
@@ -30,73 +36,6 @@ class QP_mats:
         self.D = np.array([[-1.0, 0.0],[0.0, -1.0], [1.0, 0.0],[0.0, 1.0]])
         self.d = np.array([-self.lh, -self.lh, self.uh, self.uh])
 
-    def save_to_npz(self, filename="M_pos_P_inde_mats.npz"):
-        """Save all matrices to an .npz file."""
-        np.savez(filename,
-                 N=self.N,
-                 A=self.A,
-                 B=self.B,
-                 b=self.b,
-                 nx=self.nx,
-                 nu=self.nu,
-                 Q=self.Q,
-                 R=self.R,
-                 S=self.S,
-                 q=self.q,
-                 r=self.r,
-                 Q_e=self.Q_e,
-                 q_e=self.q_e,
-                 uh=self.uh,
-                 lh=self.lh,
-                 C=self.C,
-                 D=self.D,
-                 d=self.d)
-        print(f"Matrices saved to {filename}")
-
-    def export_to_markdown(self, mats, H, eigvals, reduced_list, bpb_list):
-        md = []
-        
-        # 1. Title and Basic Parameters
-        md.append(f"# QP Analysis Report\n")
-        md.append(f"## Core Parameter Summary\n")
-        md.append(f"| Parameter | Value |\n| :--- | :--- |")
-        md.append(f"| Prediction Horizon (N) | {mats.N} |")
-        md.append(f"| Hessian H Eigenvalues | `{np.array2string(eigvals, precision=3)}` |")
-
-        # 2. Iteration Process Data Table (Core Analysis)
-        md.append(f"## Discrete Riccati Iteration Eigenvalue Evolution\n")
-        md.append(f"| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $B^T P B$ Contribution Eigenvalues |")
-        md.append(f"| :--- | :--- | :--- |")
-        for i in range(len(reduced_list)):
-            step_num = mats.N - i
-            m_eigs = np.array2string(reduced_list[i], precision=4, separator=', ')
-            b_eigs = np.array2string(bpb_list[i], precision=4, separator=', ')
-            md.append(f"| Step {step_num} | `{m_eigs}` | `{b_eigs}` |")
-
-        # 3. Detail Blocks (Using HTML details tags for folding large matrices)
-        md.append(f"\n## Matrix Details (System Definition)\n")
-        
-        matrix_info = [
-            ("A (System Dynamics)", mats.A),
-            ("B (Input Matrix)", mats.B),
-            ("Q (State Cost)", mats.Q),
-            ("R (Input Cost)", mats.R),
-            ("H (Full Hessian)", H)
-        ]
-
-        for name, data in matrix_info:
-            md.append(f"<details>\n<summary>Click to expand {name}</summary>\n\n")
-            md.append(f"```python\n{np.array2string(data, precision=3, suppress_small=True)}\n```\n")
-            md.append(f"</details>\n")
-
-        # Write to file or print
-        from pathlib import Path
-        current_file = Path(__file__)
-        output = "\n".join(md)
-        with open(f"{current_file.stem}_report.md", "w", encoding="utf-8") as f:
-            f.write(output)
-        print(f"Markdown report generated to: {current_file.stem}_report.md")
-
 if __name__ == "__main__":
     mats = QP_mats()
     print("N:", mats.N)
@@ -121,20 +60,20 @@ if __name__ == "__main__":
     # get R+B'PB for N horizon
     P = mats.Q_e
     reduced_eigenvals_list = []
-    BPB_eigenvals_list = []
+    P_eigenvals_list = []
     for _ in range(mats.N):
         reduced_hessian = mats.R + mats.B.T @ P @ mats.B
         reduced_eigenvals_list.append(np.linalg.eigvals(reduced_hessian))
-        BPB_eigenvals_list.append(np.linalg.eigvals(mats.B.T @ P @ mats.B))
+        P_eigenvals_list.append(np.linalg.eigvals(P))
         K = -np.linalg.solve(reduced_hessian, (mats.S + mats.B.T @ P @ mats.A))
         P = mats.Q + mats.A.T @ P @ mats.A - (mats.S.T + mats.A.T @ P @ mats.B) @ (-K)
     print("Eigenvalues of reduced Hessians M (R + B'PB) over horizon:")
     for i, eigs in enumerate(reduced_eigenvals_list):
         print(f" Step {mats.N - i}: {eigs}")
-    print("Corresponding B'PB eigenvalues:")
-    for i, bpbs in enumerate(BPB_eigenvals_list):
-        print(f" Step {mats.N - i}: {bpbs}")
+    print("Corresponding P eigenvalues:")
+    for i, ps in enumerate(P_eigenvals_list):
+        print(f" Step {mats.N - i}: {ps}")
     
     # Save matrices to .npz file
     # mats.save_to_npz()
-    mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, BPB_eigenvals_list)
+    mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)
