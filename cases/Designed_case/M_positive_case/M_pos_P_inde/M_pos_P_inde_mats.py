@@ -53,6 +53,50 @@ class QP_mats:
                  d=self.d)
         print(f"Matrices saved to {filename}")
 
+    def export_to_markdown(self, mats, H, eigvals, reduced_list, bpb_list):
+        md = []
+        
+        # 1. Title and Basic Parameters
+        md.append(f"# QP Analysis Report\n")
+        md.append(f"## Core Parameter Summary\n")
+        md.append(f"| Parameter | Value |\n| :--- | :--- |")
+        md.append(f"| Prediction Horizon (N) | {mats.N} |")
+        md.append(f"| Hessian H Eigenvalues | `{np.array2string(eigvals, precision=3)}` |")
+
+        # 2. Iteration Process Data Table (Core Analysis)
+        md.append(f"## Discrete Riccati Iteration Eigenvalue Evolution\n")
+        md.append(f"| Step | Reduced Hessian $M = R + B^T P B$ Eigenvalues | $B^T P B$ Contribution Eigenvalues |")
+        md.append(f"| :--- | :--- | :--- |")
+        for i in range(len(reduced_list)):
+            step_num = mats.N - i
+            m_eigs = np.array2string(reduced_list[i], precision=4, separator=', ')
+            b_eigs = np.array2string(bpb_list[i], precision=4, separator=', ')
+            md.append(f"| Step {step_num} | `{m_eigs}` | `{b_eigs}` |")
+
+        # 3. Detail Blocks (Using HTML details tags for folding large matrices)
+        md.append(f"\n## Matrix Details (System Definition)\n")
+        
+        matrix_info = [
+            ("A (System Dynamics)", mats.A),
+            ("B (Input Matrix)", mats.B),
+            ("Q (State Cost)", mats.Q),
+            ("R (Input Cost)", mats.R),
+            ("H (Full Hessian)", H)
+        ]
+
+        for name, data in matrix_info:
+            md.append(f"<details>\n<summary>Click to expand {name}</summary>\n\n")
+            md.append(f"```python\n{np.array2string(data, precision=3, suppress_small=True)}\n```\n")
+            md.append(f"</details>\n")
+
+        # Write to file or print
+        from pathlib import Path
+        current_file = Path(__file__)
+        output = "\n".join(md)
+        with open(f"{current_file.stem}_report.md", "w", encoding="utf-8") as f:
+            f.write(output)
+        print(f"Markdown report generated to: {current_file.stem}_report.md")
+
 if __name__ == "__main__":
     mats = QP_mats()
     print("N:", mats.N)
@@ -92,4 +136,5 @@ if __name__ == "__main__":
         print(f" Step {mats.N - i}: {bpbs}")
     
     # Save matrices to .npz file
-    mats.save_to_npz()
+    # mats.save_to_npz()
+    mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, BPB_eigenvals_list)
