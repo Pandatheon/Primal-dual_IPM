@@ -26,6 +26,12 @@ class QP_solver:
         self.centering_param = 1.0
         self.delta_aff_dict = None
         self.delta_dict = None
+        self.res_max = {
+            'res_stat' : 1e-8,
+            'res_eq' : 1e-8,
+            'res_ineq' : 1e-8,
+            'res_comp' : 1e-8,
+        }
         self.rhs_dict = {
             'rg' : np.zeros((qp.N+1, qp.nx+qp.nu)),
             'rg_': np.zeros((qp.N+1, qp.nx+qp.nu)),
@@ -84,27 +90,58 @@ class QP_solver:
         self.solution.s0 = init_s0
         self.solution.lam0 = self.duality_measure / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=100, reg:str='NO_REGULARIZE', tol:float=1e-6)-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=100, reg:str='NO_REGULARIZE')-> iterate:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
         assert x0 is not None, "Please provide a non-zero initial state x0 to solve the QP."
         self._initilize_solution(x0)
-        res = 1e2
+        iter_res_dict = self._record_res()
+        max_res_dict = {
+            'res_stat' : np.linalg.norm(self.rhs_dict['rg'].flatten(), ord=np.inf),
+            'res_eq' : np.linalg.norm(self.rhs_dict['rb'].flatten(), ord=np.inf),
+            'res_ineq' : np.linalg.norm(np.hstack((self.rhs_dict['rd0'],self.rhs_dict['rd'].flatten())), ord=np.inf),
+            'res_comp' : np.linalg.norm(np.hstack((self.rhs_dict['rm0'],self.rhs_dict['rm'].flatten())), ord=np.inf),
+        }
         for i in range(max_iter):
             prev_sol = copy.deepcopy(self.solution)
-            if res < tol:
+
+            if self._convergence_check(iter_res_dict, max_res_dict):
+                self._update_rhs(self.solution)
+                res = max(iter_res_dict['res_stat'], iter_res_dict['res_eq'], iter_res_dict['res_ineq'], iter_res_dict['res_comp'])
                 print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
                 return self.solution
+
             self._predictor_corrector_sweep(prev_sol, reg=reg)
-            self.statistics_dict['res_stat_list'].append(np.linalg.norm(self.rhs_dict['rg'].flatten()))
-            self.statistics_dict['res_eq_list'].append(np.linalg.norm(self.rhs_dict['rb'].flatten()))
-            self.statistics_dict['res_ineq_list'].append(np.linalg.norm(np.hstack((self.rhs_dict['rd0'],self.rhs_dict['rd'].flatten()))))
-            self.statistics_dict['res_comp_list'].append(np.linalg.norm(np.hstack((self.rhs_dict['rm0'],self.rhs_dict['rm'].flatten()))))
-            res = self.statistics_dict['res_stat_list'][-1] + self.statistics_dict['res_eq_list'][-1] + self.statistics_dict['res_ineq_list'][-1] + self.statistics_dict['res_comp_list'][-1]
+
+            iter_res_dict = self._record_res()
             self.statistics_dict['iter_count'] += 1
+        self._update_rhs(self.solution)
+        res = max(iter_res_dict['res_stat'], iter_res_dict['res_eq'], iter_res_dict['res_ineq'], iter_res_dict['res_comp'])
         print(f"\033[31mNot Converged!\033[0m after {max_iter} iterations with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
         return self.solution
+
+    def _convergence_check(self, iter_res_dict, max_res_dict):
+        '''Check convergence based on KKT residuals.'''
+        return ((iter_res_dict['res_stat'] < self.res_max['res_stat'] + 1e-4*max_res_dict['res_stat']) and
+                (iter_res_dict['res_eq'] < self.res_max['res_eq'] + 1e-4*max_res_dict['res_eq']) and
+                (iter_res_dict['res_ineq'] < self.res_max['res_ineq'] + 1e-4*max_res_dict['res_ineq']) and
+                (iter_res_dict['res_comp'] < self.res_max['res_comp'] + 1e-4*max_res_dict['res_comp']))
+
+    def _record_res(self):
+        '''Record the initial KKT residuals.'''
+        self._update_rhs(self.solution, record=True)
+        iter_res_dict = {
+            'res_stat' : np.linalg.norm(self.rhs_dict['rg'].flatten(), ord=np.inf),
+            'res_eq' : np.linalg.norm(self.rhs_dict['rb'].flatten(), ord=np.inf),
+            'res_ineq' : np.linalg.norm(np.hstack((self.rhs_dict['rd0'],self.rhs_dict['rd'].flatten())), ord=np.inf),
+            'res_comp' : np.linalg.norm(np.hstack((self.rhs_dict['rm0'],self.rhs_dict['rm'].flatten())), ord=np.inf),
+        }
+        self.statistics_dict['res_stat_list'].append(iter_res_dict['res_stat'])
+        self.statistics_dict['res_eq_list'].append(iter_res_dict['res_eq'])
+        self.statistics_dict['res_ineq_list'].append(iter_res_dict['res_ineq'])
+        self.statistics_dict['res_comp_list'].append(iter_res_dict['res_comp'])
+        return iter_res_dict
 
     def _predictor_corrector_sweep(self, prev_sol:iterate, reg:str='NO_REGULARIZE'):
         # predictor step
@@ -133,13 +170,13 @@ class QP_solver:
         x_delta = prev_sol.x + alpha_pri * self.delta_dict['delta_x']
         u_delta = prev_sol.u + alpha_pri * self.delta_dict['delta_u']
         pi_delta = prev_sol.pi + alpha_dual * self.delta_dict['delta_pi']
-        lam0_delta = prev_sol.lam0 + alpha_dual * self.delta_dict['delta_lam0']
-        lam_delta = prev_sol.lam + alpha_dual * self.delta_dict['delta_lam']
-        s0_delta = prev_sol.s0 + alpha_pri * self.delta_dict['delta_s0']
-        s_delta = prev_sol.s + alpha_pri * self.delta_dict['delta_s']
+        lam0_delta = np.maximum(prev_sol.lam0 + alpha_dual * self.delta_dict['delta_lam0'], 1e-16)
+        lam_delta = np.maximum(prev_sol.lam + alpha_dual * self.delta_dict['delta_lam'], 1e-16)
+        s0_delta = np.maximum(prev_sol.s0 + alpha_pri * self.delta_dict['delta_s0'], 1e-16)
+        s_delta = np.maximum(prev_sol.s + alpha_pri * self.delta_dict['delta_s'], 1e-16)
         self.solution = iterate(x_delta, u_delta, pi_delta, lam0_delta, lam_delta, s0_delta, s_delta)
 
-    def _update_rhs(self, prev_sol:iterate, delta_aff_dict:dict = None)-> np.ndarray:
+    def _update_rhs(self, prev_sol:iterate, delta_aff_dict:dict = None, record:bool=False)-> np.ndarray:
         nx = self.qp.nx
         nu = self.qp.nu
         N = self.qp.N
@@ -193,8 +230,7 @@ class QP_solver:
         self.rhs_dict['rd'] = res_ineq
         self.rhs_dict['rm0'] = res_comp0
         self.rhs_dict['rm'] = res_comp
-
-        if delta_aff_dict is None:
+        if delta_aff_dict is None and not record:
             self.duality_measure = max(duality_measure / self.ineq_num, 1e-8)
             self.statistics_dict['duality_measure_list'].append(self.duality_measure)
 
@@ -260,11 +296,11 @@ class QP_solver:
         try:
             alpha_pri_max = np.min(frac_pri)
         except ValueError:
-            alpha_pri_max = 0.0
+            alpha_pri_max = 1e-12
         try:
             alpha_dual_max = np.min(frac_dual)
         except ValueError:
-            alpha_dual_max = 0.0
+            alpha_dual_max = 1e-12
 
         if boundary:
             # take 0.99 of the maximum step size
@@ -539,7 +575,7 @@ class QP_solver:
 
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')
-        for i in range(self.statistics_dict['iter_count']):
+        for i in range(self.statistics_dict['iter_count']+1):
             res_stat_norm = self.statistics_dict['res_stat_list'][i]
             res_eq_norm = self.statistics_dict['res_eq_list'][i]
             res_ineq_norm = self.statistics_dict['res_ineq_list'][i]
