@@ -9,18 +9,18 @@ class QP_mats(abstract_QP_mats):
         self.name = "M_inde_P_pos_mats"
         self.N = 5
         #dynamics
-        self.A = np.array([[1.0, 0.0, 0.0],
-                           [0.0, 2.0, 0.0],
-                           [0.0, 0.0, 2.0],])
-        self.B = np.array([[1.0, 2.0],
-                           [1.0, 1.0],
-                           [0.0, 1.0],])
+        self.A = np.array([[0.2, 0.0, 0.0],
+                           [0.0, 0.2, 0.0],
+                           [0.0, 0.0, 0.2],])
+        self.B = np.array([[1.0, 0.0],
+                           [0.0, 1.0],
+                           [1.0, 1.0],])
         self.b = np.array([0.0, 0.0, 0.0])
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([1.0, 3.0, 1.5]))
-        self.R = np.diag(np.array([2.0, -2.0]))
+        self.Q = np.diag(np.array([2.1, 1.0, 1.0]))
+        self.R = np.diag(np.array([-2.8, 0.1]))  # indefinite R
         self.S = np.zeros((self.nu, self.nx))
         self.q = np.zeros((self.nx,))
         self.r = np.zeros((self.nu,))
@@ -74,5 +74,5 @@ if __name__ == "__main__":
         print(f" Step {mats.N - i}: {ps}")
     
     # Save matrices to .npz file
-    # mats.save_to_npz()
+    mats.save_to_npz(filename="M_inde_P_pos_mats.npz")
     mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)
