@@ -22,12 +22,12 @@ class QP_solver:
     def __init__(self, qp:OCP_QP_varying):
         self.qp = qp
         self.feedback = None
-        self.duality_measure = 2.0
+        self.duality_measure = 10.0
         self.centering_param = 1.0
         self.delta_aff_dict = None
         self.delta_dict = None
         self.res_max = {
-            'res_stat' : 1e-8,
+            'res_stat' : 1e-6,
             'res_eq' : 1e-8,
             'res_ineq' : 1e-8,
             'res_comp' : 1e-8,
@@ -231,7 +231,7 @@ class QP_solver:
         self.rhs_dict['rm0'] = res_comp0
         self.rhs_dict['rm'] = res_comp
         if delta_aff_dict is None and not record:
-            self.duality_measure = max(duality_measure / self.ineq_num, 1e-8)
+            self.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
             self.statistics_dict['duality_measure_list'].append(self.duality_measure)
 
     def _solve_KKT_system(self, prev_sol:iterate)-> iterate:
