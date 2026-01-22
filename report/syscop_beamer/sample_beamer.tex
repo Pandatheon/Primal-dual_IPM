@@ -1,0 +1,99 @@
+\documentclass[10pt,aspectratio=1610]{beamer} % use option aspectratio=169 or 1610 for wide slides
+% Note: For online presentations via Zoom use the ratio of the screen you want to share
+\usetheme{Rochester}
+
+% load syscop style
+\usepackage{style/syscop}
+
+%--------------------------------------------------
+% TITLE
+%--------------------------------------------------
+
+% NOTE: what's in [ ] goes to footer for the fields title, author and date
+\title[Presentation title in footnote]{\huge Presentation title}
+\subtitle{\large Presentation subtitle}
+\author[You and M. Diehl]{You and Moritz Diehl}
+\institute{Systems Control and Optimization Laboratory (syscop)}
+\date[\today]{Event \\ \today }
+
+
+%--------------------------------------------------
+% Useful packages
+%--------------------------------------------------
+
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{optidef}
+
+
+\begin{document}
+
+\InsertTitle
+
+
+
+\begin{frame}{A sample title}
+	\framesubtitle{An optional subtitle}
+
+	This is how itemize looks like:
+	\begin{itemize}
+		\item First bullet
+		\item Second bullet
+		\begin{itemize}
+			\item Subitem
+			\begin{itemize}
+				\item Subsubitem \ldots
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+
+	This is how enumerate looks like:
+	\begin{enumerate}
+		\item First bullet
+		\item Second bullet
+		\begin{enumerate}
+			\item Subitem \ldots
+		\end{enumerate}
+	\end{enumerate}
+
+	This is how an equation looks like:
+	\begin{equation}
+		E = mc^2
+	\end{equation}
+\end{frame}
+
+\begin{frame}{A frame with multiple columns}
+	\begin{columns} [onlytextwidth]
+		\begin{column}{0.4\textwidth}
+			\centering
+			\rule{100pt}{150pt} % Place your graphic here
+		\end{column}
+		\begin{column}{0.2\textwidth}
+			\centering
+			\rule{40pt}{150pt} % Place your graphic here
+		\end{column}
+		\begin{column}{0.4\textwidth}
+			Here is some regular text in a column. And an equation:
+			\[
+			f(x)=ax^2+bx+c
+			\]
+			\fbox{Here is more text in a box.}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{An optimization problem with \texttt{optidef}}
+	\begin{argmini}
+		{\substack{z}}
+		{L(z; \theta) \label{eq:z_star_def}}
+		{}
+		{z^\star(\theta) \coloneqq}
+		\addConstraint{h(z; \theta)}{\leq 0}
+		\addConstraint{g(z; \theta)}{= 0},
+	\end{argmini}
+\end{frame}
+
+
+\bibliographystyle{plain}
+
+\end{document}
