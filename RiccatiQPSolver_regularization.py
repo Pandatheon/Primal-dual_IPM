@@ -63,6 +63,10 @@ class QP_solver:
         )
         self.ineq_num = self.solution.lam0.size + self.solution.lam.size
 
+        #debug
+        self.curvature_list = []
+        self.count = 0
+
     def _initilize_solution(self, x0:np.ndarray)-> iterate:
         self.solution.x = np.vstack([x0 for i in range(self.qp.N+1)])
         self.solution.u = np.zeros((self.qp.N, self.qp.nu))
@@ -146,6 +150,7 @@ class QP_solver:
     def _predictor_corrector_sweep(self, prev_sol:iterate, reg:str='NO_REGULARIZE'):
         # predictor step
         self._update_rhs(prev_sol) # get rhs for predictor step
+        self.curvature_list.clear()
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_aff_dict = self._solve_KKT_system(prev_sol)
 
@@ -161,6 +166,7 @@ class QP_solver:
 
         # predictor-corrector step
         self._update_rhs(prev_sol, self.delta_aff_dict) # get rhs for predictor-corrector step
+        self.curvature_list.clear()
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_dict = self._solve_KKT_system(prev_sol)
 
@@ -327,10 +333,10 @@ class QP_solver:
 
         if reg in ['NO_REGULARIZE','PROJECT', 'MIRROR']:
             self.feedback = Feedback(
-                P = np.empty((horizon+1, nx, nx), dtype=float),
-                p = np.empty((horizon+1, nx), dtype=float), 
-                K = np.empty((horizon, nu, nx), dtype=float), 
-                k = np.empty((horizon, nu), dtype=float)
+                P = np.zeros((horizon+1, nx, nx), dtype=float),
+                p = np.zeros((horizon+1, nx), dtype=float), 
+                K = np.zeros((horizon, nu, nx), dtype=float), 
+                k = np.zeros((horizon, nu), dtype=float)
             )
             self.feedback.P[-1] = modified_QP_stages[-1].Q_e
             self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
@@ -340,26 +346,26 @@ class QP_solver:
                 )
         elif reg in ['R_STAGE_LM', 'P_STAGE_LM']:
             self.feedback = Feedback(
-                P = np.empty((horizon+1, nx, nx), dtype=float),
-                p = np.empty((horizon+1, nx), dtype=float), 
-                K = np.empty((horizon, nu, nx), dtype=float), 
-                k = np.empty((horizon, nu), dtype=float)
+                P = np.zeros((horizon+1, nx, nx), dtype=float),
+                p = np.zeros((horizon+1, nx), dtype=float), 
+                K = np.zeros((horizon, nu, nx), dtype=float), 
+                k = np.zeros((horizon, nu), dtype=float)
             )
             self.feedback.P[-1] = modified_QP_stages[-1].Q_e
             self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
             for i in reversed(range(horizon)):
                 self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_stage_regularization(
-                modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
+                modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg, index=i
                 )
         elif reg in ['R_GLOBAL_LM', 'P_GLOBAL_LM']:
             restart = True
             adjustment = 0.0
             while restart:
                 self.feedback = Feedback(
-                    P = np.empty((horizon+1, nx, nx), dtype=float),
-                    p = np.empty((horizon+1, nx), dtype=float), 
-                    K = np.empty((horizon, nu, nx), dtype=float), 
-                    k = np.empty((horizon, nu), dtype=float)
+                    P = np.zeros((horizon+1, nx, nx), dtype=float),
+                    p = np.zeros((horizon+1, nx), dtype=float), 
+                    K = np.zeros((horizon, nu, nx), dtype=float), 
+                    k = np.zeros((horizon, nu), dtype=float)
                 )
                 self.feedback.P[-1] = modified_QP_stages[-1].Q_e
                 self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
@@ -401,9 +407,14 @@ class QP_solver:
 
             Q_tilt = lhs_modification[:qp.nx, :qp.nx]
             R_tilt = lhs_modification[qp.nx:, qp.nx:]
+            self.curvature_list.append(R_tilt)
             S_tilt = lhs_modification[qp.nx:, :qp.nx]
             modified_QP_stages.append(QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
+                 # in order to make R_stage and project the same when only R is negative definite
+                 # R_tilt has to be removed before riccati recursion to avoid possible successful cholesky decomposition 
+                 # due to the curvevature provided by constraints (which often happens!!!)
+                 # and add R_tilt back during recursion regularization
                 R = qp.stages[i].R + R_tilt,
                 S = qp.stages[i].S + S_tilt,
                 q = qp.stages[i].q, r = qp.stages[i].r,
@@ -486,7 +497,7 @@ class QP_solver:
         return new_P, new_p, K, k
 
     def _riccati_recursion_with_stage_regularization(self,
-        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, reg:str='NO_REGULARIZE'
+        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, reg:str='NO_REGULARIZE' , index:int=0
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
         Q, R, S, q, r, A, B, b, C, D, d = qp_stage
@@ -497,6 +508,7 @@ class QP_solver:
 
         try:
             R_chol = np.linalg.cholesky(R + B.T@P@B)
+            self.count += 1
             y1 = np.linalg.solve(R_chol, S + B.T@P@A)
             y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
             K = -np.linalg.solve(R_chol.T, y1)
@@ -504,13 +516,13 @@ class QP_solver:
             new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
             new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         except np.linalg.LinAlgError:
-
             if reg == 'R_STAGE_LM':
-                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals_M)
-                adjustment = -min_eig + 1e-4
-                R_reg = R + adjustment * np.eye(R.shape[0])
+                eigvals_M, eigvecs_M = np.linalg.eig(R)
+                eig_reg = np.array([max(eigval, 1e-4) for eigval in eigvals_M])
+                R_reg = eigvecs_M @ np.diag(eig_reg) @ eigvecs_M.T + self.curvature_list[index]
                 reduced_hessian_reg = R_reg + B.T@P@B
+                if np.any(np.linalg.eigvals(reduced_hessian_reg) <= 0):
+                    raise np.linalg.LinAlgError("Regularization failed to make the reduced Hessian positive definite.")
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
                 y1 = np.linalg.solve(R_chol, S + B.T@P@A)
                 y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
