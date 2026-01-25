@@ -107,7 +107,7 @@ class QP_solver:
             'res_ineq' : np.linalg.norm(np.hstack((self.rhs_dict['rd0'],self.rhs_dict['rd'].flatten())), ord=np.inf),
             'res_comp' : np.linalg.norm(np.hstack((self.rhs_dict['rm0'],self.rhs_dict['rm'].flatten())), ord=np.inf),
         }
-        for i in range(max_iter):
+        for i in range(max_iter+1):
             prev_sol = copy.deepcopy(self.solution)
 
             if self._convergence_check(iter_res_dict, max_res_dict):
@@ -382,6 +382,7 @@ class QP_solver:
                         min_eig = np.min(eigvals_M)
                         adjustment += -min_eig + 1e-4
                         restart = True
+                        self.count += 1
                         break
 
     def _modify_QP(self, qp:OCP_QP_varying, prev_sol:iterate):
@@ -413,7 +414,7 @@ class QP_solver:
                 Q = qp.stages[i].Q + Q_tilt,
                  # in order to make R_stage and project the same when only R is negative definite
                  # R_tilt has to be removed before riccati recursion to avoid possible successful cholesky decomposition 
-                 # due to the curvevature provided by constraints (which often happens!!!)
+                 # which is due to the curvature provided by constraints (which often happens!!!)
                  # and add R_tilt back during recursion regularization
                 R = qp.stages[i].R + R_tilt,
                 S = qp.stages[i].S + S_tilt,
@@ -517,9 +518,11 @@ class QP_solver:
             new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         except np.linalg.LinAlgError:
             if reg == 'R_STAGE_LM':
-                eigvals_M, eigvecs_M = np.linalg.eig(R)
-                eig_reg = np.array([max(eigval, 1e-4) for eigval in eigvals_M])
-                R_reg = eigvecs_M @ np.diag(eig_reg) @ eigvecs_M.T + self.curvature_list[index]
+                eigvals_M, eigvecs_M = np.linalg.eig(R+ B.T@P@B)
+                adjustment = -np.min(eigvals_M) + 1e-4
+                eig_reg = eigvals_M + adjustment
+                # regularize R only
+                R_reg = R + adjustment * np.eye(R.shape[0])
                 reduced_hessian_reg = R_reg + B.T@P@B
                 if np.any(np.linalg.eigvals(reduced_hessian_reg) <= 0):
                     raise np.linalg.LinAlgError("Regularization failed to make the reduced Hessian positive definite.")
