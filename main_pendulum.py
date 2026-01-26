@@ -33,10 +33,12 @@ reg_method = [
     'NO_REGULARIZE',
     'PROJECT', 
     'MIRROR',
-    'R_STAGE_LM', 
-    'P_STAGE_LM',
-    'R_GLOBAL_LM',
-    'P_GLOBAL_LM',
+    'M_STAGE_LM', 
+    'RP_STAGE_LM',
+    'M_STAGE_GMW',
+    'RP_STAGE_GMW',
+    'M_GLOBAL_LM',
+    'RP_GLOBAL_LM',
 ]
 for method in reg_method:
     print(f"\n\n=== Testing regularization method: {method} ===")
@@ -53,4 +55,4 @@ for method in reg_method:
     # print(sol.x)
     # print("\n=== Predicted control sequence (u) ===")
     # print(sol.u)
-    qp_solver.print_statistics()
+    # qp_solver.print_statistics()

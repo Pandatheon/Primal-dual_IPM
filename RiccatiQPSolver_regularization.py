@@ -1,6 +1,6 @@
 from typing import Tuple
 from dataclasses import dataclass
-
+from GMW_regularization import gmw_modified_cholesky
 from QP_formulation import OCP_QP_varying, QP_stage, QP_Terminal, iterate
 import numpy as np
 import copy
@@ -344,7 +344,7 @@ class QP_solver:
                 self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion(
                 modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
                 )
-        elif reg in ['R_STAGE_LM', 'P_STAGE_LM']:
+        elif reg in ['M_STAGE_LM', 'RP_STAGE_LM', 'M_STAGE_GMW', 'RP_STAGE_GMW']:
             self.feedback = Feedback(
                 P = np.zeros((horizon+1, nx, nx), dtype=float),
                 p = np.zeros((horizon+1, nx), dtype=float), 
@@ -357,9 +357,10 @@ class QP_solver:
                 self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_stage_regularization(
                 modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg, index=i
                 )
-        elif reg in ['R_GLOBAL_LM', 'P_GLOBAL_LM']:
+        elif reg in ['M_GLOBAL_LM', 'RP_GLOBAL_LM']:
             restart = True
-            adjustment = 0.0
+            adjustment_R = 0.0
+            adjustment_P = 0.0
             while restart:
                 self.feedback = Feedback(
                     P = np.zeros((horizon+1, nx, nx), dtype=float),
@@ -373,15 +374,22 @@ class QP_solver:
                     try:
                         self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_global_regularization(
                         modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i],
-                        adjustment = adjustment, reg=reg
+                        adjustment_R = adjustment_R, adjustment_P = adjustment_P, reg=reg
                         )
                         restart = False
                     except np.linalg.LinAlgError:
-                        M = modified_QP_stages[i].R + modified_QP_stages[i].B.T @ self.feedback.P[i+1] @ modified_QP_stages[i].B
-                        eigvals_M, eigvecs_M = np.linalg.eig(M)
-                        min_eig = np.min(eigvals_M)
-                        adjustment += -min_eig + 1e-4
-                        restart = True
+                        if reg == 'M_GLOBAL_LM':
+                            M = modified_QP_stages[i].R + modified_QP_stages[i].B.T @ self.feedback.P[i+1] @ modified_QP_stages[i].B
+                            eigvals_M = np.linalg.eigvals(M)
+                            min_eig = np.min(eigvals_M)
+                            adjustment_R += -min_eig + 1e-4
+                            restart = True
+                        elif reg == 'RP_GLOBAL_LM':
+                            eigvals_R = np.linalg.eigvals(modified_QP_stages[i].R)
+                            eigvals_P = np.linalg.eigvals(self.feedback.P[i+1])
+                            adjustment_R += -min(np.min(eigvals_R), 0) + 1e-4
+                            adjustment_P += -min(np.min(eigvals_P), 0) + 1e-4
+                            restart = True
                         self.count += 1
                         break
 
@@ -517,11 +525,11 @@ class QP_solver:
             new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
             new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
         except np.linalg.LinAlgError:
-            if reg == 'R_STAGE_LM':
+            if reg == 'M_STAGE_LM':
                 eigvals_M, eigvecs_M = np.linalg.eig(R+ B.T@P@B)
                 adjustment = -np.min(eigvals_M) + 1e-4
                 eig_reg = eigvals_M + adjustment
-                # regularize R only
+                # regularize M by regularizaing R
                 R_reg = R + adjustment * np.eye(R.shape[0])
                 reduced_hessian_reg = R_reg + B.T@P@B
                 if np.any(np.linalg.eigvals(reduced_hessian_reg) <= 0):
@@ -534,13 +542,39 @@ class QP_solver:
                 new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
                 new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
 
-            elif reg == 'P_STAGE_LM':
-                eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
-                min_eig = np.min(eigvals_M)
-                adjustment = -min_eig + 1e-4
+            elif reg == 'RP_STAGE_LM':
+                eigvals_R, eigvecs_R = np.linalg.eig(R)
+                eigvals_P, eigvecs_P = np.linalg.eig(P)
+                adjustment_R = 1e-4 - np.min(eigvals_R) if np.min(eigvals_R) < 0 else 0.0 
+                adjustment_P = 1e-4 - np.min(eigvals_P) if np.min(eigvals_P) < 0 else 0.0
                 # regulaize P and R+B'PB simultaneously
-                R_reg = R + adjustment * np.eye(R.shape[0])
-                P_reg = P + adjustment * np.eye(P.shape[0])
+                R_reg = R + adjustment_R * np.eye(R.shape[0])
+                P_reg = P + adjustment_P * np.eye(P.shape[0])
+                reduced_hessian_reg = R_reg + B.T@P_reg@B
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                y1 = np.linalg.solve(R_chol, S + B.T@P_reg@A)
+                y2 = np.linalg.solve(R_chol, r + B.T@(P_reg@b + p))
+                K = -np.linalg.solve(R_chol.T, y1)
+                k = -np.linalg.solve(R_chol.T, y2)
+                new_P = Q + A.T@P_reg@A - (S.T + A.T@P_reg@B)@(-K)
+                new_p = q + A.T@(P_reg@b + p) - (S.T + A.T@P_reg@B)@(-k)
+
+            elif reg == 'M_STAGE_GMW':
+                L, D, E = gmw_modified_cholesky(R + B.T@P@B)
+                reduced_hessian_reg = R + B.T@P@B + E
+                R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                y1 = np.linalg.solve(R_chol, S + B.T@P@A)
+                y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
+                K = -np.linalg.solve(R_chol.T, y1)
+                k = -np.linalg.solve(R_chol.T, y2)
+                new_P = Q + A.T@P@A - (S.T + A.T@P@B)@(-K)
+                new_p = q + A.T@(P@b + p) - (S.T + A.T@P@B)@(-k)
+
+            elif reg == 'RP_STAGE_GMW':
+                L_R, D_R, E_R = gmw_modified_cholesky(R) 
+                L_P, D_P, E_P = gmw_modified_cholesky(P)
+                R_reg = R + E_R if np.any(E_R > 1e-12) else R
+                P_reg = P + E_P if np.any(E_P > 1e-12) else P
                 reduced_hessian_reg = R_reg + B.T@P_reg@B
                 R_chol = np.linalg.cholesky(reduced_hessian_reg)
                 y1 = np.linalg.solve(R_chol, S + B.T@P_reg@A)
@@ -553,7 +587,8 @@ class QP_solver:
         return new_P, new_p, K, k
 
     def _riccati_recursion_with_global_regularization(self,
-        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, adjustment:float=0.0, reg:str='NO_REGULARIZE'
+        qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, 
+        adjustment_R:float=0.0, adjustment_P:float=0.0, reg:str='NO_REGULARIZE'
     )-> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         '''The core step of Riccati recursion.'''
         Q, R, S, q, r, A, B, b, C, D, d = qp_stage
@@ -562,11 +597,11 @@ class QP_solver:
         r = rg[self.qp.nx:]
         b = rb
 
-        if reg == 'R_GLOBAL_LM':
-            R += adjustment * np.eye(R.shape[0])
-        elif reg == 'P_GLOBAL_LM':
-            R += adjustment * np.eye(R.shape[0])
-            P += adjustment * np.eye(P.shape[0])
+        if reg == 'M_GLOBAL_LM':
+            R += adjustment_R * np.eye(R.shape[0])
+        elif reg == 'RP_GLOBAL_LM':
+            R += adjustment_R * np.eye(R.shape[0])
+            P += adjustment_P * np.eye(P.shape[0])
 
         R_chol = np.linalg.cholesky(R + B.T@P@B)
         y1 = np.linalg.solve(R_chol, S + B.T@P@A)
