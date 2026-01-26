@@ -150,10 +150,9 @@
     \framesubtitle{Motivation for regularization}
 	In primal-dual IPM, the full hessian matrix, i.e. $H_k$, is supposed to be positive definite, for two reasons:
 	\begin{itemize}
-		\item well-defined QP problem with unique solution and decent search direction in full space
-		\item allow Cholesky factorization of $M_k$ in Riccati recursion for fast computation
+		\item formulate well-defined QP problem with an unique solution and decent search direction in full space
+		\item allow Cholesky factorization with square-root implementation in Riccati recursion for fast computation
 	\end{itemize}
-	\vspace{1em}
 	Regularization techniques are usually introduced to ensure the positive definiteness of $H_k$, common methods include:
 	\begin{itemize}
 		\item PROJECT
@@ -165,58 +164,30 @@
 			\text{mirror}(H_k, \epsilon) := V_k [\max(\epsilon, \text{abs}(D_k))] V_k^{-1}
 		\end{equation*}
 	\end{itemize}
+    However, the positive definiteness of $M_k$ can already guarantee an unique solution in reduced space, these methods may lead to over-regularization and deteriorate the performance of IPM, especially when $M_k$ is positive definite while $H_k$ is not.
 \end{frame}
 
 \begin{frame}{Regularization techniques}
     \framesubtitle{Regularization techniques}
-	We propose the following regularization that directly regularize $M_k=R_k + B_k^T P_{k+1} B_k$ during the Riccati recursion in a Levenberg-Marquardt fashion:
+	Thus, We propose the following Levenberg-Marquardt regularization focusing on the positive definiteness of $M_k = R_k + B_k^T P_{k+1} B_k$ during the Riccati recursions:
 	\begin{itemize}
-		\item R\_STAGE\_LM: regularize $R_k$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
+		\item M\_STAGE\_LM: regularize $R_k$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
 		\begin{equation*}
 			R_k^{\text{reg}} = R_k - \rho I
 		\end{equation*}
-		\item P\_STAGE\_LM:	regularize $R_k$ and $P_{k+1}$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
+		\item RP\_STAGE\_LM:	regularize $R_k$ and $P_{k+1}$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
 		\begin{equation*}
 			R_k^{\text{reg}} = R_k - \rho I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho I
 		\end{equation*}
-		\item R\_GLOBAL\_LM: regularize $R_k$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
+		\item M\_GLOBAL\_LM: regularize $R_k$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
 		\begin{equation*}
 			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I
 		\end{equation*}
-		\item P\_GLOBAL\_LM: regularize $R_k$ and $P_{k+1}$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
+		\item RP\_GLOBAL\_LM: regularize $R_k$ and $P_{k+1}$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
 		\begin{equation*}
 			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho_{\text{global}} I
 		\end{equation*}
 	\end{itemize}
-\end{frame}
-
-\begin{frame}{Numerical results, mixed draft cases}
-
-\begin{table}
-        \centering
-        \caption{Numerical Comparison of Regularization Techniques}
-        \setlength{\tabcolsep}{3pt}
-        \begin{tabular}{c ccc ccc ccc ccc}
-            \toprule
-            % Using multirow to span the header height
-            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
-            \multicolumn{3}{c}{M-pos-P-pos} & \multicolumn{3}{c}{M-pos-P-inde} & 
-            \multicolumn{3}{c}{M-inde-P-pos} & \multicolumn{3}{c}{M-inde-P-inde} \\
-            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
-            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
-            & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. \\
-            \midrule
-            NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& -- & -- & F 	& -- & -- & F \\
-            PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S 	& 150 & 2.1e-5 & S 	& 18 & 4.10e-4 & S \\
-            MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S 	& 150 & 2.1e-5 & S 	& 44 & 3.97e-4 & S \\
-            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& -- & -- & F \\
-            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 16 & 4.51e-5 & S \\
-            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.95e+3 & N \\
-            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.21e+3 & N \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-
 \end{frame}
 
 \begin{frame}{Numerical results, M Postive Definite}
@@ -237,10 +208,12 @@
             NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S \\
             MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S \\
-            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            M\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            M\_STAGE\_GMW   & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_STAGE\_GMW  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            M\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             \bottomrule
         \end{tabular}
     \end{table}
@@ -248,36 +221,101 @@
 \end{frame}
 
 
-\begin{frame}{Numerical results, M Indefinite}
+\begin{frame}{Numerical results, M Indefinite P Indefinite}
 
 \begin{table}
         \centering
         \caption{Numerical Comparison of Regularization Techniques}
-        \setlength{\tabcolsep}{3pt}
-        \begin{tabular}{c ccc ccc ccc ccc}
+        \setlength{\tabcolsep}{1.5pt}
+        \begin{tabular}{c cccc cccc cccc}
             \toprule
             % Using multirow to span the header height
             \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
-            \multicolumn{3}{c}{M-inde-P-pos 1} & \multicolumn{3}{c}{M-inde-P-inde 2} & 
-            \multicolumn{3}{c}{M-inde-P-inde 1} & \multicolumn{3}{c}{M-inde-P-inde 2} \\
+            \multicolumn{4}{c}{M-inde-P-inde 1} & \multicolumn{4}{c}{M-inde-P-inde 2} & 
+            \multicolumn{4}{c}{M-inde-P-inde 3} \\
             % 3. \cmidrule(lr) creates gaps between groups, improving scannability
-            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
-            & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. \\
+            \cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13}
+            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
             \midrule
-            NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& -- & -- & F 	& -- & -- & F \\
-            PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S 	& 150 & 2.1e-5 & S 	& 18 & 4.10e-4 & S \\
-            MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S 	& 150 & 2.1e-5 & S 	& 44 & 3.97e-4 & S \\
-            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& -- & -- & F \\
-            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 16 & 4.51e-5 & S \\
-            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.95e+3 & N \\
-            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.21e+3 & N \\
+            PROJECT     	& 21 & 3.96e-4 & -4865 & 0      & 18 & 4.58e-4 & -16644 & 0     & 22 & 3.74e-4 & -4925 & 0 \\
+            MIRROR      	& 35 & 5.80e-4 & -4865 & 0      & 44 & 4.92e-4 & -16644 & 0     & 35 & 4.98e-4 & -4925 & 0 \\
+            M\_STAGE\_LM  	& -- &    --   & --  & -1       & -- & -- & -- & -1 	        & -- & -- & -- & -1 \\
+            RP\_STAGE\_LM  	& 100 & 1.12e-2 & -4865 & 2     & 33 & 2.35e-4 & -16644 & 0     & 47 & 9.63e-4 & -4925 & 0 \\
+            M\_STAGE\_GMW   & 19 & 2.24e-4 & -4865 & 0      & 13 & 1.83e-5 & -16644 & 0     & 16 & 1.65e-4 & -4925 & 0 \\
+            RP\_STAGE\_GMW  & 25 & 4.92e-5 & -4865 & 0      & 35 & 4.82e-4 & -16644 & 0     & 22 & 8.95e-4 & -4925 & 0 \\
+            M\_GLOBAL\_LM 	& 12 & 2.24e-4 & -4865 & 0      & 100 & 1.96e+3 & -5526 & 2     & 20 & 3.29e-5 & -4925 & 0 \\
+            RP\_GLOBAL\_LM 	& 24 & 1.04e-4 & -4865 & 0      & 20 & 1.05e-5 & -16644 & 0     & 100 & 8.07e+1 & -2113 & 2 \\
+            ACADOS\_PROJECT & -- & -- & -4865 & 0           & -- & -- & -16644 & 0          & -- & -- & -4925 & 0 \\
+            IPOPT    	    & -- & -- & -4865 & 0           & -- & -- & -16644 & 0          & -- & -- & -4925 & 0 \\
             \bottomrule
         \end{tabular}
     \end{table}
+\end{frame}
+
+\begin{frame}{Numerical results, M Indefinite P Positive}
+
+\begin{table}
+        \centering
+        \caption{Numerical Comparison of Regularization Techniques}
+        \setlength{\tabcolsep}{1.5pt}
+        \begin{tabular}{c cccc cccc cccc}
+            \toprule
+            % Using multirow to span the header height
+            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
+            \multicolumn{4}{c}{M-inde-P-pos 1} & \multicolumn{4}{c}{M-inde-P-pos 2} & 
+            \multicolumn{4}{c}{M-inde-P-pos 3} \\
+            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
+            \cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13}
+            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
+            \midrule
+            PROJECT     	& 38 & 4.41e-4 & -46.8 & 0         & 65 & 5.56e-4 & -321.8 & 0      & 43 & 3.86e-4 & -104.4 & 0 \\
+            MIRROR      	& 79 & 4.97e-4 & -46.8 & 0         & 100 & 5.75e-4 & -322.9 & 0     & 52 & 3.83e-4 & -118.7 & 0 \\
+            M\_STAGE\_LM  	& -- &    --   & --  & -1          & -- & -- & -- & -1 	            & -- & -- & -- & -1 \\
+            RP\_STAGE\_LM  	& 16 & 2.79e-4 & -46.8 & 0         & 55 & 7.15e-4 & -245.2 & 0      & 47 & 6.54e-5 & -143.1 & 0 \\
+            M\_STAGE\_GMW   &  8 & 1.80e-4 & -46.8 & 0         & 91 & 4.50e-4 & -231.3 & 0      & 27 & 2.54e-4 & -104.4 & 0 \\
+            RP\_STAGE\_GMW  & 35 & 6.45e-5 & -46.8 & 0         & 76 & 1.92e-4 & -231.2 & 0      & 75 & 3.99e-4 & -143.1 & 0 \\
+            M\_GLOBAL\_LM 	& 100 & 1.64e-0 & -30.6 & 2        & 100 & 1.45e-0 & +18.2 & 2      & 100 & 3.13e-0 & +13.9 & 2 \\
+            RP\_GLOBAL\_LM 	& 100 & 1.29e+1 & -62.2 & 2        & 35 & 4.76e-4 & -321.8 & 0      & 17 & 1.05e-5 & -150.0 & 0 \\
+            ACADOS\_PROJECT & -- & -- & -83.7 & 0              & -- & -- & -416.1 & 0           & -- & -- & -150.0 & 0 \\
+            IPOPT    	    & -- & -- & -83.7 & 0              & -- & -- & -426.5 & 0           & -- & -- & -123.4 & 0 \\
+            \bottomrule
+        \end{tabular}
+\end{table}
 
 \end{frame}
 
 
+
+\begin{frame}{Numerical results, Pendulum QP}
+
+\begin{table}
+        \centering
+        \caption{Numerical Comparison of Regularization Techniques}
+        \setlength{\tabcolsep}{1.5pt}
+        \begin{tabular}{c cccc cccc}
+            \toprule
+            % Using multirow to span the header height
+            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
+            \multicolumn{4}{c}{N=100} & \multicolumn{4}{c}{N=50} \\
+            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
+            \cmidrule(lr){2-5} \cmidrule(lr){6-9}
+            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
+            \midrule
+            PROJECT     	& 17 & 2.03e+1 & 15897245.92 & 0         & 21 & 2.20e+1 & 15897245.92 & 0 \\
+            MIRROR      	& 26 & 3.48e+1 & 15897245.96 & 0         & 23 & 4.30e+1 & 15897246.00 & 0  \\
+            M\_STAGE\_LM  	& -- &    --   & --  & -1                & -- & -- & --  & -1              \\
+            RP\_STAGE\_LM  	& 12 & 3.19e-4 & 15897245.90 & 0         & 12 & 2.51e-3 & 15897245.90 & 0    \\
+            M\_STAGE\_GMW   & 100 & 2.44e+70 & 590182.25 & 2         & 100 & 3.49e+4 & 15897245.90 & 2  \\
+            RP\_STAGE\_GMW  & 21 & 4.92e-4 & 15897245.90 & 0         & 17 & 4.53e-4 & 15897245.90 & 0    \\
+            M\_GLOBAL\_LM 	& 100 & 2.81e+4 & 16291114.37 & 2        & 100 & 9.18e+3 & 16270092.93 & 2   \\
+            RP\_GLOBAL\_LM 	& 100 & 7.32e+4 & 17896898.85 & 2        & 100 &  7.06e+4 & 17106384.96 & 2  \\
+            ACADOS\_PROJECT & -- & -- & 15897245.90 & 0              & -- & -- & 15897245.90 & --        \\
+            IPOPT    	    & -- & -- & 15897245.70 & 0              & -- & -- & 15897245.70 & --        \\
+            \bottomrule
+        \end{tabular}
+\end{table}
+
+\end{frame}
 
 \bibliographystyle{plain}
 
