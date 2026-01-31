@@ -10,7 +10,7 @@ import copy
 from utils import write_csv
 from QP_formulation import OCP_QP_varying
 from RiccatiQPSolver_regularization import QP_solver
-from Regularizations import Hessian_based_regularization, Reduced_Hessian_based_regularization_stage, Reduced_Hessian_based_regularization_global
+from Regularizations import Regularizations_config
 
 case_modules = [
     "M_inde_R_inde_P_pos_1",
@@ -24,9 +24,10 @@ case_modules = [
     "M_inde_R_inde_P_inde_3",
 ]
 
-reg_method = Hessian_based_regularization + \
-             Reduced_Hessian_based_regularization_stage + \
-             Reduced_Hessian_based_regularization_global
+reg_config = Regularizations_config()
+reg_method = reg_config.Hessian_based_regularization + \
+             reg_config.stage_based_regularization + \
+             reg_config.global_based_regularization
 
 for module_name in case_modules:
     print(f"\n>>> Running Case: {module_name}")

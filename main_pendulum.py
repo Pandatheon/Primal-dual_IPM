@@ -1,7 +1,7 @@
 import numpy as np
 from QP_formulation import OCP_QP_varying
 from RiccatiQPSolver_regularization import QP_solver
-from Regularizations import Hessian_based_regularization, Reduced_Hessian_based_regularization_stage, Reduced_Hessian_based_regularization_global
+from Regularizations import Regularizations_config
 from utils import read_matrix_list
 import copy
 from utils import write_csv
@@ -10,7 +10,10 @@ json_path_list = [
     "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json",
     "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=50.json",
 ]
-reg_method = Hessian_based_regularization + Reduced_Hessian_based_regularization_stage + Reduced_Hessian_based_regularization_global
+reg_config = Regularizations_config()
+reg_method = reg_config.Hessian_based_regularization + \
+             reg_config.stage_based_regularization + \
+             reg_config.global_based_regularization
 
 for json_path in json_path_list:
     # get N from path name

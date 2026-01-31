@@ -1,7 +1,7 @@
 from typing import Tuple
 from dataclasses import dataclass
 from QP_formulation import OCP_QP_varying, QP_stage, QP_Terminal, iterate
-from Regularizations import Hessian_based_regularization, Reduced_Hessian_based_regularization_stage, Reduced_Hessian_based_regularization_global
+from Regularizations import Regularizations_config
 import numpy as np
 import copy
 from utils import plot_metrics
@@ -65,7 +65,7 @@ class QP_solver:
             s = np.zeros((qp.N-1, self.qp.nh)),
         )
         self.ineq_num = self.solution.lam0.size + self.solution.lam.size
-
+        self.reg_config = Regularizations_config()
         #debug
         self.condition_number_arr_M = np.zeros((self.qp.N,))
         self.condition_number_arr_P = np.zeros((self.qp.N,))
@@ -360,7 +360,7 @@ class QP_solver:
             regularized_QP = copy.deepcopy(self.qp)
         modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
 
-        if reg in Hessian_based_regularization:
+        if reg in self.reg_config.Hessian_based_regularization:
             self.feedback = Feedback(
                 P = np.zeros((horizon+1, nx, nx), dtype=float),
                 p = np.zeros((horizon+1, nx), dtype=float), 
@@ -373,7 +373,7 @@ class QP_solver:
                 self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion(
                 modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg
                 )
-        elif reg in Reduced_Hessian_based_regularization_stage:
+        elif reg in self.reg_config.stage_based_regularization:
 
             self.condition_number_arr_M.fill(0.0)
             self.condition_number_arr_P.fill(0.0)
@@ -392,7 +392,7 @@ class QP_solver:
                 self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = self._riccati_recursion_with_stage_regularization(
                 modified_QP_stages[i], (self.feedback.P[i+1], self.feedback.p[i+1]), self.rhs_dict['rg_'][i], self.rhs_dict['rb'][i], reg=reg, index=i
                 )
-        elif reg in Reduced_Hessian_based_regularization_global:
+        elif reg in self.reg_config.global_based_regularization:
             restart = True
             adjustment_M = np.zeros(modified_QP_stages[0].R.shape[0])
             adjustment_P = np.zeros(modified_QP_stages[0].Q.shape[0])
@@ -419,20 +419,20 @@ class QP_solver:
                         )
                         restart = False
                     except np.linalg.LinAlgError:
-                        if reg == Reduced_Hessian_based_regularization_global[0]:
+                        if reg == self.reg_config.global_based_regularization[0]:
                             M = modified_QP_stages[i].R + modified_QP_stages[i].B.T @ self.feedback.P[i+1] @ modified_QP_stages[i].B
                             eigvals_M = np.linalg.eigvals(M)
-                            adjustment_M += 1e-6 - np.minimum(eigvals_M, 1e-6)
+                            adjustment_M += self.reg_config.delta - np.minimum(eigvals_M, self.reg_config.delta)
                             self.max_adjustment_M = max(self.max_adjustment_M, np.max(adjustment_M))
                             restart = True
-                        elif reg == Reduced_Hessian_based_regularization_global[1]:
+                        elif reg == self.reg_config.global_based_regularization[1]:
                             eigvals_P, eigvecs_P = np.linalg.eig(self.feedback.P[i+1])
-                            adjustment_P += 1e-6 - np.minimum(eigvals_P, 1e-6)
+                            adjustment_P += self.reg_config.delta - np.minimum(eigvals_P, self.reg_config.delta)
                             P_reg = eigvecs_P @ np.diag(eigvals_P+adjustment_P) @ eigvecs_P.T
                             self.max_adjustment_P = max(self.max_adjustment_P, np.max(adjustment_P))
 
                             eigvals_M = np.linalg.eigvals(modified_QP_stages[i].R + modified_QP_stages[i].B.T @ P_reg @ modified_QP_stages[i].B)
-                            adjustment_M += 1e-6 - np.minimum(eigvals_M, 1e-6)
+                            adjustment_M += self.reg_config.delta - np.minimum(eigvals_M, self.reg_config.delta)
                             self.max_adjustment_M = max(self.max_adjustment_M, np.max(adjustment_M))
 
                             restart = True
@@ -487,9 +487,9 @@ class QP_solver:
 
         def _do_regularization(eigvals: np.ndarray, method: str)-> np.ndarray:
             if method == 'PROJECT':
-                eigvals_reg = np.array([max(eigval, 1e-6) for eigval in eigvals])
+                eigvals_reg = np.array([max(eigval, self.reg_config.delta) for eigval in eigvals])
             elif method == 'MIRROR':
-                eigvals_reg = np.array([max(abs(eigval), 1e-6) for eigval in eigvals])
+                eigvals_reg = np.array([max(abs(eigval), self.reg_config.delta) for eigval in eigvals])
             return eigvals_reg
 
         regularized_QP = copy.deepcopy(qp)
@@ -580,11 +580,11 @@ class QP_solver:
             return new_P, new_p, K, k
 
         except np.linalg.LinAlgError:
-            if reg in [Reduced_Hessian_based_regularization_stage[0], Reduced_Hessian_based_regularization_stage[2]]:
+            if reg in [self.reg_config.stage_based_regularization[0], self.reg_config.stage_based_regularization[2]]:
                 eigvals_M, eigvecs_M = np.linalg.eig(R+ B.T@P@B)
 
-                if reg == Reduced_Hessian_based_regularization_stage[0]:
-                    adjustment_M = np.array([abs(eigval) + 1e-6 if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
+                if reg == self.reg_config.stage_based_regularization[0]:
+                    adjustment_M = np.array([abs(eigval) + self.reg_config.delta if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
                 else:
                     adjustment_M = np.array([2*abs(eigval) if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
 
@@ -595,12 +595,12 @@ class QP_solver:
                 P_reg = P
                 reduced_hessian_reg = R_reg + B.T@P_reg@B
 
-            elif reg in [Reduced_Hessian_based_regularization_stage[1], Reduced_Hessian_based_regularization_stage[3]]:
+            elif reg in [self.reg_config.stage_based_regularization[1], self.reg_config.stage_based_regularization[3]]:
 
                 eigvals_P, eigvecs_P = np.linalg.eig(P)
 
-                if reg == Reduced_Hessian_based_regularization_stage[1]:
-                    adjustment_P = np.array([abs(eigval) + 1e-6 if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_P)])
+                if reg == self.reg_config.stage_based_regularization[1]:
+                    adjustment_P = np.array([abs(eigval) + self.reg_config.delta if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_P)])
                 else:
                     adjustment_P = np.array([2*abs(eigval) if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_P)])
 
@@ -611,8 +611,8 @@ class QP_solver:
 
                 eigvals_M, eigvecs_M = np.linalg.eig(reduced_hessian_P_reg)
 
-                if reg == Reduced_Hessian_based_regularization_stage[1]:
-                    adjustment_M = np.array([abs(eigval) + 1e-6 if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
+                if reg == self.reg_config.stage_based_regularization[1]:
+                    adjustment_M = np.array([abs(eigval) + self.reg_config.delta if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
                 else:
                     adjustment_M = np.array([2*abs(eigval) if eigval < 0 else 0.0 for i, eigval in enumerate(eigvals_M)])
 
@@ -622,15 +622,15 @@ class QP_solver:
                 R_reg = R + eigvecs_M @ np.diag(adjustment_M) @ eigvecs_M.T
                 reduced_hessian_reg = R_reg + B.T@P_reg@B
 
-            elif reg in [Reduced_Hessian_based_regularization_stage[4], Reduced_Hessian_based_regularization_stage[5]]:
+            elif reg in [self.reg_config.stage_based_regularization[4], self.reg_config.stage_based_regularization[5]]:
 
                 # EM R first
                 eigvals_R, eigvecs_R = np.linalg.eig(R)
                 
-                if reg == Reduced_Hessian_based_regularization_stage[4]:
-                    eigvals_reg_R = np.array([max(eigval, 1e-6)  for i, eigval in enumerate(eigvals_R)])
+                if reg == self.reg_config.stage_based_regularization[4]:
+                    eigvals_reg_R = np.array([max(eigval, self.reg_config.delta)  for i, eigval in enumerate(eigvals_R)])
                 else:
-                    eigvals_reg_R = np.array([max(abs(eigval), 1e-6) for eigval in eigvals_R])
+                    eigvals_reg_R = np.array([max(abs(eigval), self.reg_config.delta) for eigval in eigvals_R])
                 
                 R_reg = eigvecs_R @ np.diag(eigvals_reg_R) @ eigvecs_R.T
                 self.adjustment_record_arr_M[index] = np.max(eigvals_reg_R - eigvals_R) if np.max(eigvals_reg_R - eigvals_R) < 1e50 else 1e50
@@ -639,10 +639,10 @@ class QP_solver:
                 # EM P next
                 eigvals_P, eigvecs_P = np.linalg.eig(P)
 
-                if reg == Reduced_Hessian_based_regularization_stage[4]:
-                    eigvals_reg_P = np.array([max(eigval, 1e-6) for i, eigval in enumerate(eigvals_P)])
+                if reg == self.reg_config.stage_based_regularization[4]:
+                    eigvals_reg_P = np.array([max(eigval, self.reg_config.delta) for i, eigval in enumerate(eigvals_P)])
                 else:
-                    eigvals_reg_P = np.array([max(abs(eigval), 1e-6) for eigval in eigvals_P])
+                    eigvals_reg_P = np.array([max(abs(eigval), self.reg_config.delta) for eigval in eigvals_P])
 
                 P_reg = eigvecs_P @ np.diag(eigvals_reg_P) @ eigvecs_P.T
                 self.adjustment_record_arr_P[index] = np.max(eigvals_reg_P - eigvals_P) if np.max(eigvals_reg_P - eigvals_P) < 1e50 else 1e50
@@ -699,12 +699,12 @@ class QP_solver:
         self.max_condition_number_M = max(self.max_condition_number_M, self.condition_number_arr_M[index])
         self.max_condition_number_P = max(self.max_condition_number_P, self.condition_number_arr_P[index])
 
-        if reg == Reduced_Hessian_based_regularization_global[0]:
+        if reg == self.reg_config.global_based_regularization[0]:
             eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
             R_reg = R + eigvecs_M @ np.diag(adjustment_M) @ eigvecs_M.T
             P_reg = P
 
-        elif reg == Reduced_Hessian_based_regularization_global[1]:
+        elif reg == self.reg_config.global_based_regularization[1]:
             eigvals_P, eigvecs_P = np.linalg.eig(P)
             P_reg = eigvecs_P @ np.diag(eigvals_P + adjustment_P) @ eigvecs_P.T
             reduced_hessian_P_reg = R + B.T@P_reg@B
