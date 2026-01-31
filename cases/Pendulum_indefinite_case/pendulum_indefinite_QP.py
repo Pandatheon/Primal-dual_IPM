@@ -3,9 +3,9 @@ from QP_formulation import OCP_QP_varying
 from RiccatiQPSolver_regularization import QP_solver
 from utils import read_matrix_list
 import copy
-json_path = "pendulum_caseF_qp_N=100.json"
+json_path = "pendulum_caseF_qp_N=20.json"
 
-N = 100
+N = 20
 uh = 80.0
 lh = -80.0
 A = read_matrix_list(json_path, "A")
@@ -37,8 +37,8 @@ reg_method = [
     'NO_REGULARIZE',
     'PROJECT', 
     'MIRROR',
-    'M_STAGE_LM', 
-    'P_STAGE_LM',
+    # 'M_STAGE_LM', 
+    # 'P_STAGE_LM',
 ]
 for method in reg_method:
     print(f"\n\n=== Testing regularization method: {method} ===")

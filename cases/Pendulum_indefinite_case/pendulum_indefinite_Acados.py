@@ -7,8 +7,8 @@ import numpy as np
 from utils import read_matrix_list
 
 
-N = 100
-json_path = "cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json"
+N = 20
+json_path = "cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=20.json"
 
 def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp = AcadosOcp()
@@ -79,8 +79,8 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
     ocp.solver_options.qp_solver_mu0 = 2.0
     ocp.solver_options.tau_min = 1e-8
-    # ocp.solver_options.nlp_solver_max_iter = 1
-    # ocp.solver_options.qp_solver_max_iter = 1
+    ocp.solver_options.nlp_solver_max_iter = 200
+    ocp.solver_options.qp_solver_iter_max = 200
     # ocp.solver_options.print_level = 5
     return ocp, param_manager
 
