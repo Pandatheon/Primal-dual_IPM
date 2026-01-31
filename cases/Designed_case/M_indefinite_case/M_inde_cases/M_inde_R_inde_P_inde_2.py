@@ -6,21 +6,21 @@ from Designed_case.QP_mats import abstract_QP_mats
 
 class QP_mats(abstract_QP_mats):
     def __init__(self):
-        self.name = "M_inde_P_inde_mats"
+        self.name = "M_inde_R_inde_P_inde_2"
         self.N = 5
         #dynamics
         self.A = np.array([[1.0, 0.0, 0.0],
-                           [0.0, 2.0, 0.0],
+                           [0.0, 1.0, 0.0],
                            [0.0, 0.0, 2.0],])
-        self.B = np.array([[1.0, 2.0],
-                           [1.0, 1.0],
-                           [0.0, 1.0],])
+        self.B = np.array([[0.2, 1.0],
+                           [1.4, 2.5],
+                           [1.2, 0.3],])
         self.b = np.array([0.0, 0.0, 0.0])
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([2.0, 2.0, -1.0]))
-        self.R = np.diag(np.array([7.0, 1.0]))
+        self.Q = np.diag(np.array([1.0, -1.1, 1.2]))
+        self.R = np.diag(np.array([0.5, -2.3]))
         self.S = np.zeros((self.nu, self.nx))
         self.q = np.zeros((self.nx,))
         self.r = np.zeros((self.nu,))
@@ -37,20 +37,6 @@ class QP_mats(abstract_QP_mats):
 
 if __name__ == "__main__":
     mats = QP_mats()
-    print("N:", mats.N)
-    print("A:\n", mats.A)
-    print("B:\n", mats.B)
-    print("b:\n", mats.b)
-    print("Q:\n", mats.Q)
-    print("R:\n", mats.R)
-    print("S:\n", mats.S)
-    print("q:\n", mats.q)
-    print("r:\n", mats.r)
-    print("C:\n", mats.C)
-    print("D:\n", mats.D)
-    print("d:\n", mats.d)
-    print("Q_e:\n", mats.Q_e)
-    print("q_e:\n", mats.q_e)
     H = np.block([[mats.Q, mats.S.T],
                   [mats.S, mats.R]])
     print("Hessian matrix H:\n", H)
@@ -75,4 +61,4 @@ if __name__ == "__main__":
     
     # Save matrices to .npz file
     # mats.save_to_npz()
-    mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)
+    # mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)

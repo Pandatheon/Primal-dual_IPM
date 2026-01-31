@@ -6,20 +6,20 @@ from Designed_case.QP_mats import abstract_QP_mats
 
 class QP_mats(abstract_QP_mats):
     def __init__(self):
-        self.name = "M_inde_P_inde_mats"
+        self.name = "M_inde_P_inde_mats_3"
         self.N = 5
         #dynamics
         self.A = np.array([[1.0, 0.0, 0.0],
-                           [0.0, 2.0, 0.0],
+                           [0.0, 1.0, 0.0],
                            [0.0, 0.0, 1.0],])
-        self.B = np.array([[1.0, 0.0],
+        self.B = np.array([[0.5, 1.0],
                            [0.0, 1.0],
-                           [1.0, 1.0],])
+                           [0.0, 0.0],])
         self.b = np.array([0.0, 0.0, 0.0])
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([2.0, -1.0, -1.0]))
+        self.Q = np.diag(np.array([1.2, -2.0, 1.5]))
         self.R = np.diag(np.array([1.0, 1.0]))
         self.S = np.zeros((self.nu, self.nx))
         self.q = np.zeros((self.nx,))
@@ -28,8 +28,8 @@ class QP_mats(abstract_QP_mats):
         self.Q_e = self.Q
         self.q_e = np.zeros((self.nx,))
 
-        self.uh = 2.0
-        self.lh = -2.0
+        self.uh = 1.0
+        self.lh = -1.0
         # inequality constraintsL: h(x,u) = Cx + Du <= d
         self.C = np.zeros((4, self.nx))
         self.D = np.array([[-1.0, 0.0],[0.0, -1.0], [1.0, 0.0],[0.0, 1.0]])

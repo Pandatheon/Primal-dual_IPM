@@ -6,21 +6,21 @@ from Designed_case.QP_mats import abstract_QP_mats
 
 class QP_mats(abstract_QP_mats):
     def __init__(self):
-        self.name = "M_inde_P_pos_mats"
+        self.name = "M_inde_R_inde_P_inde_3"
         self.N = 5
         #dynamics
         self.A = np.array([[1.0, 0.0, 0.0],
-                           [0.0, 2.0, 0.0],
-                           [0.0, 0.0, 2.0],])
-        self.B = np.array([[1.0, 2.0],
-                           [1.0, 1.0],
-                           [0.0, 1.0],])
+                           [0.0, 1.5, 0.1],
+                           [0.0, 0.0, 2.1],])
+        self.B = np.array([[0.1, 1.2],
+                           [1.1, 0.3],
+                           [0.2, 0.1],])
         self.b = np.array([0.0, 0.0, 0.0])
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([1.0, 2.0, 1.5]))
-        self.R = np.diag(np.array([2.0, -2.0]))
+        self.Q = np.diag(np.array([-1.6, 2.1, 1.2]))
+        self.R = np.diag(np.array([0.8, -0.3]))
         self.S = np.zeros((self.nu, self.nx))
         self.q = np.zeros((self.nx,))
         self.r = np.zeros((self.nu,))
@@ -28,8 +28,8 @@ class QP_mats(abstract_QP_mats):
         self.Q_e = self.Q
         self.q_e = np.zeros((self.nx,))
 
-        self.uh = 10.0
-        self.lh = -10.0
+        self.uh = 2.0
+        self.lh = -2.0
         # inequality constraintsL: h(x,u) = Cx + Du <= d
         self.C = np.zeros((4, self.nx))
         self.D = np.array([[-1.0, 0.0],[0.0, -1.0], [1.0, 0.0],[0.0, 1.0]])
@@ -37,20 +37,6 @@ class QP_mats(abstract_QP_mats):
 
 if __name__ == "__main__":
     mats = QP_mats()
-    print("N:", mats.N)
-    print("A:\n", mats.A)
-    print("B:\n", mats.B)
-    print("b:\n", mats.b)
-    print("Q:\n", mats.Q)
-    print("R:\n", mats.R)
-    print("S:\n", mats.S)
-    print("q:\n", mats.q)
-    print("r:\n", mats.r)
-    print("C:\n", mats.C)
-    print("D:\n", mats.D)
-    print("d:\n", mats.d)
-    print("Q_e:\n", mats.Q_e)
-    print("q_e:\n", mats.q_e)
     H = np.block([[mats.Q, mats.S.T],
                   [mats.S, mats.R]])
     print("Hessian matrix H:\n", H)
@@ -75,4 +61,4 @@ if __name__ == "__main__":
     
     # Save matrices to .npz file
     # mats.save_to_npz()
-    mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)
+    # mats.export_to_markdown(mats, H, eigvals, reduced_eigenvals_list, P_eigenvals_list)
