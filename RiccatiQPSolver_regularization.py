@@ -1,6 +1,7 @@
 from typing import Tuple
 from dataclasses import dataclass
 from QP_formulation import OCP_QP_varying, QP_stage, QP_Terminal, iterate
+from Regularizations import Hessian_based_regularization, Reduced_Hessian_based_regularization_stage, Reduced_Hessian_based_regularization_global
 import numpy as np
 import copy
 from utils import plot_metrics
@@ -18,10 +19,6 @@ class Feedback:
     def compute_control(self, index: int, state: np.ndarray) -> np.ndarray:
         '''compute the control according to the feedback law u = k + Kx'''
         return self.K[index] @ state + self.k[index]
-
-Hessian_based_regularization = ['NO_REGULARIZE', 'PROJECT', 'MIRROR']
-Reduced_Hessian_based_regularization_stage = ['R_STAGE_EM', 'PR_STAGE_EM', 'RP_STAGE_PROJECT', 'RP_STAGE_MIRROR']
-Reduced_Hessian_based_regularization_global = ['R_GLOBAL_EM', 'PR_GLOBAL_EM']
 
 class QP_solver:
 
@@ -79,6 +76,7 @@ class QP_solver:
         self.max_adjustment_R = 0.0
         self.max_adjustment_P = 0.0
         self.count = 0
+        self.curvature_list = []
 
     def _initilize_solution(self, x0:np.ndarray)-> iterate:
         self.solution.x = np.vstack([x0 for i in range(self.qp.N+1)])
@@ -107,7 +105,7 @@ class QP_solver:
         self.solution.s0 = init_s0
         self.solution.lam0 = self.duality_measure / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=120, reg:str='NO_REGULARIZE')-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=200, reg:str='NO_REGULARIZE')-> iterate:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
@@ -180,21 +178,23 @@ class QP_solver:
 
     def _predictor_corrector_sweep(self, prev_sol:iterate, reg:str='NO_REGULARIZE'):
         # predictor step
+        self.curvature_list.clear()
         self._update_rhs(prev_sol) # get rhs for predictor step
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_aff_dict = self._solve_KKT_system(prev_sol)
 
         # compute duality measure
         alpha_pri_max, alpha_dual_max, alpha_max = self._fraction_to_boundary(prev_sol, self.delta_aff_dict, boundary=False)
-        s0_aff = np.maximum(prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0'], 1e-16)
-        s_aff = np.maximum(prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s'], 1e-16)
-        lam0_aff = np.maximum(prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0'], 1e-16)
-        lam_aff = np.maximum(prev_sol.lam + alpha_dual_max * self.delta_aff_dict['delta_lam'], 1e-16)
+        s0_aff = np.maximum(prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0'], 1e-20)
+        s_aff = np.maximum(prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s'], 1e-20)
+        lam0_aff = np.maximum(prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0'], 1e-20)
+        lam_aff = np.maximum(prev_sol.lam + alpha_dual_max * self.delta_aff_dict['delta_lam'], 1e-20)
         mu_aff = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
         self.centering_param = (mu_aff/self.duality_measure)**3
         # self.centering_param = 0.01
 
         # predictor-corrector step
+        self.curvature_list.clear()
         self._update_rhs(prev_sol, self.delta_aff_dict) # get rhs for predictor-corrector step
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_dict = self._solve_KKT_system(prev_sol)
@@ -462,6 +462,7 @@ class QP_solver:
 
             Q_tilt = lhs_modification[:qp.nx, :qp.nx]
             R_tilt = lhs_modification[qp.nx:, qp.nx:]
+            self.curvature_list.append(R_tilt)
             S_tilt = lhs_modification[qp.nx:, :qp.nx]
             modified_QP_stages.append(QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
@@ -613,14 +614,14 @@ class QP_solver:
 
                 # Project R first
                 eigvals_R, eigvecs_R = np.linalg.eig(R)
-                eigvals_reg_R = np.array([max(eigval, 1e-6) for eigval in eigvals_R])
+                eigvals_reg_R = np.array([max(eigval, 1e-6)  for i, eigval in enumerate(eigvals_R)])
                 R_reg = eigvecs_R @ np.diag(eigvals_reg_R) @ eigvecs_R.T
                 self.adjustment_record_arr_R[index] = np.max(eigvals_reg_R - eigvals_R) if np.max(eigvals_reg_R - eigvals_R) < 1e50 else 1e50
                 self.max_adjustment_R = max(self.max_adjustment_R, self.adjustment_record_arr_R[index])
 
                 # Project P next
                 eigvals_P, eigvecs_P = np.linalg.eig(P)
-                eigvals_reg_P = np.array([max(eigval, 1e-6) for eigval in eigvals_P])
+                eigvals_reg_P = np.array([max(eigval, 1e-6) for i, eigval in enumerate(eigvals_P)])
                 P_reg = eigvecs_P @ np.diag(eigvals_reg_P) @ eigvecs_P.T
                 self.adjustment_record_arr_P[index] = np.max(eigvals_reg_P - eigvals_P) if np.max(eigvals_reg_P - eigvals_P) < 1e50 else 1e50
                 self.max_adjustment_P = max(self.max_adjustment_P, self.adjustment_record_arr_P[index])
@@ -690,7 +691,7 @@ class QP_solver:
 
         if reg == Reduced_Hessian_based_regularization_global[0]:
             eigvals_M, eigvecs_M = np.linalg.eig(R + B.T@P@B)
-            R_reg = R + adjustment_R * np.eye(R.shape[0])
+            R_reg = R + eigvecs_M @ np.diag(adjustment_R) @ eigvecs_M.T
 
             P_reg = P
 
@@ -700,7 +701,7 @@ class QP_solver:
             reduced_hessian_P_reg = R + B.T@P_reg@B
 
             eigvals_M, eigvecs_M = np.linalg.eig(reduced_hessian_P_reg)
-            R_reg = R + eigvecs_M @ np.diag(adjustment_R * np.ones_like(eigvals_M)) @ eigvecs_M.T
+            R_reg = R + eigvecs_M @ np.diag(adjustment_R) @ eigvecs_M.T
 
         reduced_hessian_reg = R_reg + B.T@P_reg@B
 
