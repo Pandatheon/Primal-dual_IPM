@@ -51,4 +51,4 @@ for json_path in json_path_list:
             continue
         cost_qp = qp_solver.get_cost()
         print(f"\n=== Predicted cost qp with {method} ===\n{cost_qp}")
-        qp_solver.print_statistics()
+        # qp_solver.print_statistics()

@@ -47,23 +47,23 @@ def read_matrix_from_npz(npz_path):
     return qp, x0
 
 def plot_metrics(condition_number_arr_P, condition_number_arr_M, 
-                 adjustment_record_arr_R, adjustment_record_arr_P,
-                 max_adjustment_R, max_adjustment_P,
+                 adjustment_record_arr_M, adjustment_record_arr_P,
+                 max_adjustment_M, max_adjustment_P,
                  max_condition_number_M, max_condition_number_P,
                  index, N, reg_type=''):
     import matplotlib.pyplot as plt
     plt.semilogy(range(index, N), condition_number_arr_P[index:N], label='Condition number of $P_{k+1}$')
     plt.semilogy(range(index, N), condition_number_arr_M[index:N], label='Condition number of $M_k$')
-    plt.semilogy(range(index, N), adjustment_record_arr_R[index:N], label='Max Adjustment to the eigenvalues of $M_k$')
+    plt.semilogy(range(index, N), adjustment_record_arr_M[index:N], label='Max Adjustment to the eigenvalues of $M_k$')
     if adjustment_record_arr_P is None:
         pass
     else:
         plt.semilogy(range(index, N), adjustment_record_arr_P[index:N], label='Max Adjustment to the eigenvalues of $P_{k+1}$')
     print('P', condition_number_arr_P)
     print('M before regularization', condition_number_arr_M)
-    print('Max Adjustment to the eigenvalues of M', adjustment_record_arr_R)
+    print('Max Adjustment to the eigenvalues of M', adjustment_record_arr_M)
     print('Max Adjustment to the eigenvalues of P', adjustment_record_arr_P)
-    print('Overall Max Adjustment to the eigenvalues R', max_adjustment_R)
+    print('Overall Max Adjustment to the eigenvalues M', max_adjustment_M)
     print('Overall Max Adjustment to the eigenvalues P', max_adjustment_P)
     print('Max Condition Number M', max_condition_number_M)
     print('Max Condition Number P', max_condition_number_P)
@@ -96,7 +96,7 @@ def write_csv(name, solver, reg, filename='qp_results.csv'):
         'Cost': [solver.get_cost()],
         'Max M Condition Number': [solver.max_condition_number_M],
         'Max P Condition Number': [solver.max_condition_number_P],
-        'Max R Adjustment': [solver.max_adjustment_R],
+        'Max M Adjustment': [solver.max_adjustment_M],
         'Max P Adjustment': [solver.max_adjustment_P],
     }
     
