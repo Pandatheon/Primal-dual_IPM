@@ -11,7 +11,7 @@
 
 % NOTE: what's in [ ] goes to footer for the fields title, author and date
 \title[Regularization techniques for a Riccati-based Interior-Point QP Solver]{\huge Regularization techniques for a Riccati-based Interior-Point QP Solver}
-% \author[Jingtao Xiong and M. Diehl]{Jingtao Xiong and Moritz Diehl}
+\author[J. Xiong, J. Frey, K. Baumgärtner and M. Diehl]{Jingtao Xiong, Jonathan Frey, Katrin Baumgärtner and Moritz Diehl}
 \institute{Systems Control and Optimization Laboratory (syscop)}
 \date[\today]{Event \\ \today }
 
@@ -21,12 +21,14 @@
 %--------------------------------------------------
 
 \usepackage{mathtools}
+\usepackage{mathdots}
 \usepackage{graphicx}
 \usepackage{optidef}
 \usepackage{booktabs}
 \usepackage{diagbox}
 \usepackage{multirow}
 \usepackage{geometry}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -38,10 +40,6 @@
 		\item Riccati-based Interior-Point Method
 		\item Regularization techniques 
 		\item Numerical results
-		\begin{itemize}
-			\item M Positive Definite cases
-			\item M Indefinite cases
-		\end{itemize}
 		\item Conclusion and future work
 	\end{itemize}
 
@@ -49,111 +47,181 @@
 
 \begin{frame}{Riccati-based Interior-Point Method}
     \framesubtitle{QP formulation}
-    Consider the following QP formulation with equality and inequality constraints with slacks:
+    Consider a convex QP with equality $Fy=b$ and inequality constraints $Gy \le d$, by introducing slacks $t$, 
+    we have following formulation:
     \begin{equation}
         \begin{aligned}
-            \min_{x, s} \quad & \frac{1}{2} x^T Q x + c^T x \\
-            \text{s.t.} \quad & A x = b \\
-            & G x + s = h \\
-            & s \ge 0
+            \min_{y, t} \quad & \frac{1}{2} y^T H y + g^T y \\
+            \text{s.t.} \quad & F y = b \\
+            & G y + t = d \\
+            & t \ge 0
         \end{aligned}
     \end{equation}
 
     \vspace{0.5em}
 	The corresponding KKT conditions are:
     \begin{equation}
-        r(x, s, \nu, \lambda) = 
+        r(y, t, \pi, \lambda) = 
         \begin{bmatrix} 
-            Qx + c + A^T \nu + G^T \lambda \\
-            Ax - b \\
-            Gx + s - h \\
-            S \Lambda \mathbf{1} - \tau \mathbf{1}
+            H y + g + F^T \pi + G^T \lambda \\
+            F y - b \\
+            G y + t - d \\
+            T \Lambda \mathbf{1} - \sigma \mu \mathbf{1}
         \end{bmatrix} = 0
     \end{equation}
+    where $T = \text{diag}(t)$, $\Lambda = \text{diag}(\lambda)$, $\pi$ and $\lambda$ are dual variables for equality and inequality constraints respectively, 
+    $\sigma$ is the centering parameter and $\mu$ is the duality measure.
 \end{frame}
 
 
 \begin{frame}{Riccati-based Interior-Point Method}
     \framesubtitle{Primal-Dual Interior-Point Method}
-	At each iteration, we solve the following linear system to get the search direction:
+	At each iteration $k$, we solve the following linear system to get the search direction:
 	\begin{equation}
 		\begin{bmatrix} 
-		Q & 0 & A^T & G^T \\
-		A & 0 & 0 & 0 \\
-		G & I & 0 & 0 \\
-		0 & \Lambda & 0 & S 
+		H & F^T & G^T & 0\\
+		F & 0 & 0 & 0 \\
+		G & 0 & 0 & I \\
+		0 & 0 & T_k & \Lambda_k 
 		\end{bmatrix}
 		\begin{bmatrix} 
-		\Delta x \\
-		\Delta s \\
-		\Delta \nu \\
-		\Delta \lambda 
+		\Delta y \\
+		\Delta \pi \\
+        \Delta \lambda \\
+		\Delta t
 		\end{bmatrix} = -
 		\begin{bmatrix} 
-            Qx + c + A^T \nu + G^T \lambda \\
-            Ax - b \\
-            Gx + s - h \\
-            S \Lambda \mathbf{1} - \tau \mathbf{1}
+            Hy_k + g + F^T \pi_k + G^T \lambda_k \\
+            Fy_k - b \\
+            Gy_k + t_k - d \\
+            T_k \Lambda_k \mathbf{1} - \sigma_k \mu_k \mathbf{1}
         \end{bmatrix} = -
 		\begin{bmatrix} 
-		r_{\text{stat}} \\
-		r_{\text{eq}} \\
-		r_{\text{ineq}} \\
-		r_{\text{comp}}
+		r_{\text{stat}}^k \\
+		r_{\text{eq}}^k \\
+		r_{\text{ineq}}^k \\
+		r_{\text{comp}}^k
 		\end{bmatrix}
 	\end{equation}
-	Eliminating $\Delta s$ and $\Delta \lambda$ based on Schur Complement, we obtain the following reduced system:
+	Eliminating $\Delta t$ and $\Delta \lambda$ based on Schur Complement, we obtain the following reduced system:
 	\begin{equation}
 		\begin{bmatrix} 
-		Q + G^T \Sigma G & A^T \\
-		A & 0 
+		H + G^T \Lambda_k T_k^{-1} G & F^T \\
+		F & 0 
 		\end{bmatrix}
 		\begin{bmatrix} 
-		\Delta x \\
-		\Delta \nu 
+		\Delta y \\
+		\Delta \pi
 		\end{bmatrix} = -
 		\begin{bmatrix} 
-		r_{\text{dual}} - G^T S^{-1} ( \Lambda r_{\text{ineq}} - r_{\text{comp}} ) \\
-		r_{\text{eq}} 
+		r_{\text{stat}}^k - G^T T_k^{-1} ( \Lambda_k r_{\text{ineq}}^k - r_{\text{comp}}^k ) \\
+		r_{\text{eq}}^k 
 		\end{bmatrix}
 	\end{equation}
-
+    where $G^T \Lambda_k T_k^{-1} G$ can be regarded as the curvature contribution from inequality constraints.
 \end{frame}
 
 \begin{frame}{Riccati-based Interior-Point Method}
-    \framesubtitle{Riccati recursion for solving the reduced system}
-	With OCP structure, the reduced system can be solved in O(N) via Riccati recursion.
+    \framesubtitle{Riccati recursion for solving OCP structure QP}
+	In Optimal Control Problems (OCP), the reduced system at certain stage $k$ can be written as follows:
+    \begin{equation*}
+        \begin{bmatrix}
+            \ddots & & & & \\
+            & 0 & -I \\   
+            & -I & \tilde{Q}_k & \tilde{S}_k^T & A_k^T \\
+             & 0 & \tilde{S}_k & \tilde{R}_k & B_k^T \\
+             & 0 & A_k & B_k & 0 \\
+            
+             &  &  &  &  & \ddots
+        \end{bmatrix}
+        \begin{bmatrix}
+            \vdots \\
+            \Delta \pi_k \\
+            \Delta x_k \\
+            \Delta u_k \\
+            \Delta \pi_{k+1}\\
+            \vdots
+        \end{bmatrix} = -
+        \begin{bmatrix} 
+            \vdots \\
+            r_{\text{eq}}^{k-1} \\
+            \tilde{r}_{\text{stat}, x}^k \\
+            \tilde{r}_{\text{stat}, u}^k \\
+            r_{\text{eq}}^k \\
+            \vdots
+        \end{bmatrix}
+    \end{equation*}
+    where $\tilde{Q}_k$, $\tilde{R}_k$, $\tilde{S}_k$, are the cost at the stage $k$ modified by $G^T \Lambda_k T_k^{-1} G$ and $A_k$, $B_k$ are dynamics matrices at stage $k$.
+\end{frame}
+
+\begin{frame}{Riccati-based Interior-Point Method}
+    \framesubtitle{Riccati recursion for solving OCP structure QP}
+    With OCP structure, the reduced system can be solved in O(N) via Riccati recursion. The main steps are as follows:
 	\begin{itemize}
-        \item \textbf{Backward recursion:} ($k = N-1, \dots, 0$ with $P_N = \tilde{Q}_N, p_N = \tilde{q}_N$)
+        \item \textbf{Backward recursion:} (For $k = N-1, \dots, 0$ with $P_N = \tilde{Q}_N, p_N = \tilde{r}_{\text{stat}, x}^N$)
         \begin{equation*}
             \begin{aligned}
-                M_k &= \tilde{R}_k + B_k^T P_{k+1} B_k, \quad \mathcal{S}_k = \tilde{S}_k + B_k^T P_{k+1} A_k \\
-                K_k &= -M_k^{-1} \mathcal{S}_k, \\
-				\quad k_k &= -M_k^{-1} (\tilde{r}_{stat, x, k} + B_k^T (P_{k+1} \tilde{r}_{eq, k} + p_{k+1})) \\
-                P_k &= \tilde{Q}_k + A_k^T P_{k+1} A_k + \mathcal{S}_k^T K_k \\
-                p_k &= \tilde{r}_{stat, u, k} + A_k^T (P_{k+1} \tilde{r}_{eq, k} + p_{k+1}) + \mathcal{S}_k^T k_k
+                M_k &= \tilde{R}_k + B_k^T P_{k+1} B_k, \quad W_k = \tilde{S}_k + B_k^T P_{k+1} A_k \\
+                K_k &= -M_k^{-1} W_k \\
+				\quad k_k &= -M_k^{-1} (\tilde{r}_{\text{stat}, u}^k + B_k^T (P_{k+1} r_{\text{eq}}^k + p_{k+1})) \\
+                P_k &= \tilde{Q}_k + A_k^T P_{k+1} A_k - W_k^T M_k^{-1} W_k \\
+                p_k &= \tilde{r}_{\text{stat}, x}^k + A_k^T (P_{k+1} r_{\text{eq}}^k + p_{k+1}) + W_k^T k_k
             \end{aligned}
 	\end{equation*}
-		\item \textbf{Forward recursion:} ($k = 0, \dots, N-1$)
+		\item \textbf{Forward recursion:} (For $k = 0, \dots, N-1$)
         \begin{equation*}
             \begin{aligned}
                 \Delta u_k &= K_k \Delta x_k + k_k \\
-                \Delta x_{k+1} &= A_k \Delta x_k + B_k \Delta u_k + \tilde{r}_{eq,k} \\
-				\Delta s_k &= -(G_{x,k} \Delta x_k + G_{u,k} \Delta u_k + r_{\text{ineq},k}) \\
-				\Delta \lambda_k &= S_k^{-1} (\Lambda_k \Delta s_k - r_{\text{comp},k} + \Lambda_k r_{\text{ineq},k})
+                \Delta x_{k+1} &= A_k \Delta x_k + B_k \Delta u_k + r_{\text{eq}}^k \\
+				\Delta t_k &= -(G_{x}^k \Delta x_k + G_{u}^k \Delta u_k + r_{\text{ineq}}^k) \\
+				\Delta \lambda_k &= T_k^{-1} (-r_{\text{comp}}^k - \Lambda_k \Delta t_k)
             \end{aligned}
         \end{equation*}
 	\end{itemize}
 \end{frame}
 
+\begin{frame}{Riccati-based Interior-Point Method}
+    \framesubtitle{Prototype implementation}
+    Baed on the above Riccati-based primal-dual IPM algorithm, we implemented a prototype solver in Python, aiming to solve the following OCP structure QP:
+\begin{equation*}
+    \begin{aligned}
+        \min_{x,u} \quad  & \sum_{k=0}^{N} \frac{1}{2} \begin{bmatrix} x_k \\ u_k \end{bmatrix}^T 
+        \begin{bmatrix} Q_k & S_k^T \\ S_k & R_k \end{bmatrix}
+        \begin{bmatrix} x_k \\ u_k \end{bmatrix}\\
+        \text{s.t.} \quad & \begin{gathered}[t]
+            x_0 = \bar{x}_0 \\
+            x_{k+1} = A_k x_k + B_k u_k , \quad k = 0, \dots, N-1 \\
+            \underline{u} \le u_k \le \overline{u} , \quad k = 0, \dots, N-1 \\
+        \end{gathered}
+    \end{aligned}
+\end{equation*}
+    
+\end{frame}
+
 \begin{frame}{Regularization techniques}
     \framesubtitle{Motivation for regularization}
-	In primal-dual IPM, the full hessian matrix, i.e. $H_k$, is supposed to be positive definite, for two reasons:
-	\begin{itemize}
-		\item formulate well-defined QP problem with an unique solution and decent search direction in full space
-		\item allow Cholesky factorization with square-root implementation in Riccati recursion for fast computation
-	\end{itemize}
-	Regularization techniques are usually introduced to ensure the positive definiteness of $H_k$, common methods include:
+	For the indefinite QP the full Hessian $H$ may not be positive definite. 
+    Regularization techniques can be introduced to find a descent direction, which can be applied to:
+    \begin{itemize}
+        \item Full Hessian $H_k$
+        \item Reduced Hessian $M_k = R_k + B_k^T P_{k+1} B_k$ during Riccati recursions
+    \end{itemize}
+    And the common regularized newton step can be written as:
+    \begin{equation*}
+        (\nabla^2 f(z_k) + E) \Delta z = -\nabla f(z_k)
+    \end{equation*}
+    where $E$ is the regularization matrix, which can be designed in various ways while preserving the sparsity of KKT matrix, such as:
+    \begin{itemize}
+        \item Eigenvalue Modification (EM)
+        \item Cholesky Modification (CM)
+        \item Levenberg-Marquardt (LM)
+    \end{itemize}
+    In this project, we mainly focus on the regularization based on Eigenvalue Modification (EM).
+\end{frame}
+
+\begin{frame}{Regularization techniques}
+    \framesubtitle{Full Hessian regularization}
+    To ensure the positive definiteness of $H_k$, common methods include:
 	\begin{itemize}
 		\item PROJECT
 		\begin{equation*}
@@ -164,33 +232,71 @@
 			\text{mirror}(H_k, \epsilon) := V_k [\max(\epsilon, \text{abs}(D_k))] V_k^{-1}
 		\end{equation*}
 	\end{itemize}
-    However, the positive definiteness of $M_k$ can already guarantee an unique solution in reduced space, these methods may lead to over-regularization and deteriorate the performance of IPM, especially when $M_k$ is positive definite while $H_k$ is not.
+    where $H_k = V_k D_k V_k^{-1}$ is the eigenvalue decomposition of $H_k$, and $\epsilon > 0$ is a small positive constant. \\
+    \begin{itemize}
+        \item Pros:
+            \begin{itemize}
+                \item Minimum Frobenius norm change to make $H_k$ positive definite
+                \item Sound and robust in practice
+            \end{itemize}
+        \item Cons:
+            \begin{itemize}
+                \item Ignore the possibility of utilizing the positive definiteness of reduced Hessian $M_k$, which already ensures a descent direction in reduced space
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Regularization techniques}
-    \framesubtitle{Regularization techniques}
-	Thus, We propose the following Levenberg-Marquardt regularization focusing on the positive definiteness of $M_k = R_k + B_k^T P_{k+1} B_k$ during the Riccati recursions:
-	\begin{itemize}
-		\item R\_STAGE\_LM: regularize $R_k$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
-		\begin{equation*}
-			R_k^{\text{reg}} = R_k - \rho I
-		\end{equation*}
-		\item RP\_STAGE\_LM:	regularize $R_k$ and $P_{k+1}$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
-		\begin{equation*}
-			R_k^{\text{reg}} = R_k - \rho I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho I
-		\end{equation*}
-		\item R\_GLOBAL\_LM: regularize $R_k$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
-		\begin{equation*}
-			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I
-		\end{equation*}
-		\item RP\_GLOBAL\_LM: regularize $R_k$ and $P_{k+1}$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
-		\begin{equation*}
-			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho_{\text{global}} I
-		\end{equation*}
+    \framesubtitle{Reduced Hessian regularization: stage wise}
+    Based on the drawback of Full Hessian regularization, we try to regularize only the reduced Hessian $M_k$ during Riccati recursions.\\
+    \vspace{0.5em}
+    Suppose the eigenvalue decomposition of $M_k$ is $M_k = V_k D_k V_k^{-1}$, we propose the following regularization techniques, when the Cholesky factorization fails in current stage:
+	\vspace{0.5em}
+    \begin{itemize}
+		\item R\_STAGE\_EM: 
+        \\ Adding $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$ for regularizing $M_k$ 
+		\item PR\_STAGE\_EM: 
+        \\ Regularize $P_{k+1}$ by eigenvalue modification in $M_k$ first, then add $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$
+		\item RP\_STAGE\_EM: 
+        \\ Regularize $R_k$ and $P_{k+1}$ by eigenvalue modification in $M_k$
 	\end{itemize}
+    \vspace{0.5em}
+    All of them can have two variants, i.e. PROJECT and MIRROR versions.
 \end{frame}
 
-\begin{frame}{Numerical results, M Postive Definite}
+\begin{frame}{Regularization techniques}
+    \framesubtitle{Reduced Hessian regularization: global}
+    To avoid the oscillation of regularization in different stages, we propose the following global regularization techniques, 
+    which will accumulate the negative eigenvalues when Cholesky factorization fails at certain stage and restart the Riccati recursion from stage $N-1$:
+    \vspace{0.5em}
+    \begin{itemize}
+        \item R\_GLOBAL\_EM: 
+        \\ Adding $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$ for regularizing $M_k$
+        \item PR\_GLOBAL\_EM: 
+        \\ Regularize $P_{k+1}$ by eigenvalue modification in $M_k$ first, then add $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$
+    \end{itemize}
+    \vspace{0.5em}
+    We only keep PROJECT version for global regularization, since MIRROR version may lead to over-regularization.
+\end{frame}
+
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Test setup}
+    We tested the above regularization techniques on designed indefinite QP problems, including:
+    \begin{itemize}
+        \item Designed case with $\text{N}=5, \text{nx}=3, \text{nu}=2$
+        \begin{itemize}
+            \item 2 M Positive cases
+            \item 3 M Indefinite R Indefinite P Positive cases
+            \item 3 M Indefinite R Positive P Indefinite cases
+            \item 3 M Indefinite R Indefinite P Indefinite cases
+        \end{itemize}
+        \item 2 Pendulum QP cases with $\text{N}=50,100$, $\text{nx}=4, \text{nu}=1$
+    \end{itemize}
+    The following numerical results are obtained by our prototype Python implementation of Riccati-based IPM solver with different regularization techniques.
+\end{frame}
+
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Positive}
 
 \begin{table}
         \centering
@@ -208,105 +314,142 @@
             NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S \\
             MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S \\
-            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            RP\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            RP\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            R\_STAGE\_EMP/M  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            PR\_STAGE\_EMP/M  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_STAGE\_PROJECT  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_STAGE\_MIRROR   & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            R\_GLOBAL\_EMP 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            PR\_GLOBAL\_EMP 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             \bottomrule
         \end{tabular}
     \end{table}
-
-\end{frame}
-
-
-\begin{frame}{Numerical results, M Indefinite P Indefinite}
-
-\begin{table}
-        \centering
-        \caption{Numerical Comparison of Regularization Techniques}
-        \setlength{\tabcolsep}{1.5pt}
-        \begin{tabular}{c cccc cccc cccc}
-            \toprule
-            % Using multirow to span the header height
-            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
-            \multicolumn{4}{c}{M-inde-P-inde 1} & \multicolumn{4}{c}{M-inde-P-inde 2} & 
-            \multicolumn{4}{c}{M-inde-P-inde 3} \\
-            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
-            \cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13}
-            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
-            \midrule
-            PROJECT     	& 21 & 3.96e-4 & -4865 & 0      & 18 & 4.58e-4 & -16644 & 0     & 22 & 3.74e-4 & -4925 & 0 \\
-            MIRROR      	& 35 & 5.80e-4 & -4865 & 0      & 44 & 4.92e-4 & -16644 & 0     & 35 & 4.98e-4 & -4925 & 0 \\
-            R\_STAGE\_LM  	& -- &    --   & --  & -1       & -- & -- & -- & -1 	        & -- & -- & -- & -1 \\
-            RP\_STAGE\_LM  	& 100 & 1.12e-2 & -4865 & 2     & 33 & 2.35e-4 & -16644 & 0     & 47 & 9.63e-4 & -4925 & 0 \\
-            R\_GLOBAL\_LM 	& 12 & 2.24e-4 & -4865 & 0      & 100 & 1.96e+3 & -5526 & 2     & 20 & 3.29e-5 & -4925 & 0 \\
-            RP\_GLOBAL\_LM 	& 24 & 1.04e-4 & -4865 & 0      & 20 & 1.05e-5 & -16644 & 0     & 100 & 8.07e+1 & -2113 & 2 \\
-            ACADOS\_PROJECT & -- & -- & -4865 & 0           & -- & -- & -16644 & 0          & -- & -- & -4925 & 0 \\
-            IPOPT    	    & -- & -- & -4865 & 0           & -- & -- & -16644 & 0          & -- & -- & -4925 & 0 \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-
-\begin{frame}{Numerical results, M Indefinite P Positive}
-
-\begin{table}
-        \centering
-        \caption{Numerical Comparison of Regularization Techniques}
-        \setlength{\tabcolsep}{1.5pt}
-        \begin{tabular}{c cccc cccc cccc}
-            \toprule
-            % Using multirow to span the header height
-            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
-            \multicolumn{4}{c}{M-inde-P-pos 1} & \multicolumn{4}{c}{M-inde-P-pos 2} & 
-            \multicolumn{4}{c}{M-inde-P-pos 3} \\
-            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
-            \cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13}
-            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
-            \midrule
-            PROJECT     	& 38 & 4.41e-4 & -46.8 & 0         & 65 & 5.56e-4 & -321.8 & 0      & 43 & 3.86e-4 & -104.4 & 0 \\
-            MIRROR      	& 79 & 4.97e-4 & -46.8 & 0         & 100 & 5.75e-4 & -322.9 & 0     & 52 & 3.83e-4 & -118.7 & 0 \\
-            R\_STAGE\_LM  	& -- &    --   & --  & -1          & -- & -- & -- & -1 	            & -- & -- & -- & -1 \\
-            RP\_STAGE\_LM  	& 16 & 2.79e-4 & -46.8 & 0         & 55 & 7.15e-4 & -245.2 & 0      & 47 & 6.54e-5 & -143.1 & 0 \\
-            R\_GLOBAL\_LM 	& 100 & 1.64e-0 & -30.6 & 2        & 100 & 1.45e-0 & +18.2 & 2      & 100 & 3.13e-0 & +13.9 & 2 \\
-            RP\_GLOBAL\_LM 	& 100 & 1.29e+1 & -62.2 & 2        & 35 & 4.76e-4 & -321.8 & 0      & 17 & 1.05e-5 & -150.0 & 0 \\
-            ACADOS\_PROJECT & -- & -- & -83.7 & 0              & -- & -- & -416.1 & 0           & -- & -- & -150.0 & 0 \\
-            IPOPT    	    & -- & -- & -83.7 & 0              & -- & -- & -426.5 & 0           & -- & -- & -123.4 & 0 \\
-            \bottomrule
-        \end{tabular}
-\end{table}
+    When M is Positive Definite, Full Hessian regularization usually leads to over-regularization.
 
 \end{frame}
 
 
 
-\begin{frame}{Numerical results, Pendulum QP}
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Indefinite}
+    For the cases where M is Indefinite, we care about the following statistics:
+    \begin{itemize}
+        \item Max adjustment on M: maximum eigenvalue adjustment made to M during regularization
+        \item Max adjustment on P: maximum eigenvalue adjustment made to P during regularization
+        \item Max condition number of M: maximum condition number of M during IPM iterations
+        \item Max condition number of P: maximum condition number of P during IPM iterations
+        \item Iteration: number of IPM iterations to reach convergence
+        \item Cost: final cost value as suboptimality measure
+    \end{itemize}
+\end{frame}
 
-\begin{table}
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Indefinite: iteration}
+    \begin{figure}[H]
         \centering
-        \caption{Numerical Comparison of Regularization Techniques}
-        \setlength{\tabcolsep}{1.5pt}
-        \begin{tabular}{c cccc cccc}
-            \toprule
-            % Using multirow to span the header height
-            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
-            \multicolumn{4}{c}{N=100} & \multicolumn{4}{c}{N=50} \\
-            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
-            \cmidrule(lr){2-5} \cmidrule(lr){6-9}
-            & iter. & res. &cost & stat.    & iter. & res. &cost & stat.\\
-            \midrule
-            PROJECT     	& 17 & 2.03e+1 & 15897245.92 & 0         & 21 & 2.20e+1 & 15897245.92 & 0 \\
-            MIRROR      	& 26 & 3.48e+1 & 15897245.96 & 0         & 23 & 4.30e+1 & 15897246.00 & 0  \\
-            R\_STAGE\_LM  	& -- &    --   & --  & -1                & -- & -- & --  & -1              \\
-            RP\_STAGE\_LM  	& 12 & 3.19e-4 & 15897245.90 & 0         & 12 & 2.51e-3 & 15897245.90 & 0    \\
-            R\_GLOBAL\_LM 	& 100 & 2.81e+4 & 16291114.37 & 2        & 100 & 9.18e+3 & 16270092.93 & 2   \\
-            RP\_GLOBAL\_LM 	& 100 & 7.32e+4 & 17896898.85 & 2        & 100 &  7.06e+4 & 17106384.96 & 2  \\
-            ACADOS\_PROJECT & -- & -- & 15897245.90 & 0              & -- & -- & 15897245.90 & --        \\
-            IPOPT    	    & -- & -- & 15897245.70 & 0              & -- & -- & 15897245.70 & --        \\
-            \bottomrule
-        \end{tabular}
-\end{table}
+        \includegraphics[width=0.85\textwidth]{results/iteration_chart.png}
+        \caption{Iteration count for different regularization techniques}
+    \end{figure}
+\end{frame}
 
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Indefinite: cost}
+
+    \begin{figure}
+        \captionsetup[subfigure]{font=tiny}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_inde_p_inde.png}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_inde_p_pos.png}
+        \end{subfigure}
+        
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_pos_p_inde.png}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/cost_comparison_pendulum.png}
+        \end{subfigure}
+        \caption{Comparison of different costs} 
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Indefinite: Max condition number}
+    \begin{figure}
+        \captionsetup[subfigure]{font=tiny}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/max_m_condition_number_chart.png}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/max_p_condition_number_chart.png}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Numerical experiments}
+    \framesubtitle{Numerical results, M Indefinite: Max adjustment}
+    \begin{figure}
+        \captionsetup[subfigure]{font=tiny}
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/max_m_adjustment_chart.png}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{results/max_p_adjustment_chart.png}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Conclusion and future work}
+    \framesubtitle{Conclusion}
+    \begin{itemize}
+        \item Full Hessian vs Reduced Hessian
+        \begin{itemize}
+            \item Full Hessian regularization may lead to over-regularization when M is already positive definite
+            \item Reduced Hessian regularization can avoid this based on recursion
+            \item However, Full Hessian regularization is more robust and sound in practice for now
+        \end{itemize}
+        \item PROJECT vs MIRROR
+        \begin{itemize}
+            \item PROJECT usually works better than MIRROR when regularizing full Hessian
+            \item MIRROR somehow works better than PROJECT when it comes to reduced Hessian regularization
+        \end{itemize}
+        \item R vs PR
+        \begin{itemize}
+            \item Always consider R and P instead of only adding something to R when regularizing reduced Hessian
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusion and future work}
+    \framesubtitle{Future work}
+    \begin{itemize}
+        \item Is it possible to achieve full hessian regularization (PROJECT) in recursion-based way?
+        \item Is it possible to know the indefiniteness of M before Cholesky factorization?
+        \item Is it possible to avoid eigenvalue decomposition with more efficient implementation?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you!}
+    \begin{center}
+        \Huge Thank you! \\
+        \vspace{1em}
+        \Large Questions?
+    \end{center}
 \end{frame}
 
 \bibliographystyle{plain}
