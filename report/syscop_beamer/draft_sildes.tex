@@ -200,7 +200,7 @@
 
 \begin{frame}{Regularization techniques}
     \framesubtitle{Motivation for regularization}
-	For the indefinite QP the full Hessian $H$ may not be positive definite. 
+	For the indefinite QP, the full Hessian $H$ may not be positive definite. 
     Regularization techniques can be introduced to find a descent direction, which can be applied to:
     \begin{itemize}
         \item Full Hessian $H_k$
@@ -210,7 +210,7 @@
     \begin{equation*}
         (\nabla^2 f(z_k) + E) \Delta z = -\nabla f(z_k)
     \end{equation*}
-    where $E$ is the regularization matrix, which can be designed in various ways while preserving the sparsity of KKT matrix, such as:
+    where $E$ is the regularization matrix, which can be designed in various ways while preserving the OCP structure, such as:
     \begin{itemize}
         \item Eigenvalue Modification (EM)
         \item Cholesky Modification (CM)
@@ -247,36 +247,21 @@
 \end{frame}
 
 \begin{frame}{Regularization techniques}
-    \framesubtitle{Reduced Hessian regularization: stage wise}
+    \framesubtitle{Reduced Hessian regularization}
     Based on the drawback of Full Hessian regularization, we try to regularize only the reduced Hessian $M_k$ during Riccati recursions.\\
     \vspace{0.5em}
-    Suppose the eigenvalue decomposition of $M_k$ is $M_k = V_k D_k V_k^{-1}$, we propose the following regularization techniques, when the Cholesky factorization fails in current stage:
+    With $M_k = R_k + B_k^T P_{k+1} B_k$, we propose the following regularization techniques, when the Cholesky factorization fails at current stage:
 	\vspace{0.5em}
     \begin{itemize}
-		\item R\_STAGE\_EM: 
-        \\ Adding $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$ for regularizing $M_k$ 
-		\item PR\_STAGE\_EM: 
-        \\ Regularize $P_{k+1}$ by eigenvalue modification in $M_k$ first, then add $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$
+		\item M\_STAGE\_EM: 
+        \\ Directly regularize $M_k$ by eigenvalue modification 
+		\item PM\_STAGE\_EM: 
+        \\ Regularize $P_{k+1}$ by eigenvalue modification in $M_k$ first, then regularize P-modified $M_k$ by eigenvalue modification
 		\item RP\_STAGE\_EM: 
         \\ Regularize $R_k$ and $P_{k+1}$ by eigenvalue modification in $M_k$
 	\end{itemize}
     \vspace{0.5em}
     All of them can have two variants, i.e. PROJECT and MIRROR versions.
-\end{frame}
-
-\begin{frame}{Regularization techniques}
-    \framesubtitle{Reduced Hessian regularization: global}
-    To avoid the oscillation of regularization in different stages, we propose the following global regularization techniques, 
-    which will accumulate the negative eigenvalues when Cholesky factorization fails at certain stage and restart the Riccati recursion from stage $N-1$:
-    \vspace{0.5em}
-    \begin{itemize}
-        \item R\_GLOBAL\_EM: 
-        \\ Adding $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$ for regularizing $M_k$
-        \item PR\_GLOBAL\_EM: 
-        \\ Regularize $P_{k+1}$ by eigenvalue modification in $M_k$ first, then add $E_k = V_k D_k^{reg} V_k^{-1}$ to $R_k$
-    \end{itemize}
-    \vspace{0.5em}
-    We only keep PROJECT version for global regularization, since MIRROR version may lead to over-regularization.
 \end{frame}
 
 \begin{frame}{Numerical experiments}
@@ -314,12 +299,9 @@
             NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S \\
             MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S \\
-            R\_STAGE\_EMP/M  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            PR\_STAGE\_EMP/M  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            RP\_STAGE\_PROJECT  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            RP\_STAGE\_MIRROR   & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            R\_GLOBAL\_EMP 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
-            PR\_GLOBAL\_EMP 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            M\_STAGE\_P/M  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            PM\_STAGE\_P/M  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            RP\_STAGE\_P/M  & 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
             \bottomrule
         \end{tabular}
     \end{table}
@@ -328,89 +310,40 @@
 \end{frame}
 
 
-
 \begin{frame}{Numerical experiments}
     \framesubtitle{Numerical results, M Indefinite}
     For the cases where M is Indefinite, we care about the following statistics:
     \begin{itemize}
-        \item Max adjustment on M: maximum eigenvalue adjustment made to M during regularization
-        \item Max adjustment on P: maximum eigenvalue adjustment made to P during regularization
-        \item Max condition number of M: maximum condition number of M during IPM iterations
-        \item Max condition number of P: maximum condition number of P during IPM iterations
-        \item Iteration: number of IPM iterations to reach convergence
-        \item Cost: final cost value as suboptimality measure
+        \item Iteration: Number of IPM iterations to reach convergence
+        \item Max eigenvalue adjustment on M/P: Worst case for adjusting eigenvalue of M/P during regularization
+        \item Min condition number adjustment on M/P: Best case for decreasing the condition number of M/P during regularization
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Numerical experiments}
-    \framesubtitle{Numerical results, M Indefinite: iteration}
+    \framesubtitle{Numerical results, M Indefinite: performance profile}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.85\textwidth]{results/iteration_chart.png}
-        \caption{Iteration count for different regularization techniques}
+        \includegraphics[width=0.75\textwidth]{results/iteration_performance_profile.png}
+        \caption{performance profile for different regularization techniques}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Numerical experiments}
-    \framesubtitle{Numerical results, M Indefinite: cost}
-
+    \framesubtitle{Numerical results, M Indefinite: Max eigenvalue adjustment}
     \begin{figure}
-        \captionsetup[subfigure]{font=tiny}
         \centering
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_inde_p_inde.png}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_inde_p_pos.png}
-        \end{subfigure}
-        
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/cost_comparison_m_inde_r_pos_p_inde.png}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/cost_comparison_pendulum.png}
-        \end{subfigure}
-        \caption{Comparison of different costs} 
+        \includegraphics[width=1.0\textwidth]{results/eigenvalue_adjustment_analysis.png}
+        \caption{Max eigenvalue adjustment of M\&P for different regularization techniques}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Numerical experiments}
-    \framesubtitle{Numerical results, M Indefinite: Max condition number}
+    \framesubtitle{Numerical results, M Indefinite: Min condition number adjustment}
     \begin{figure}
-        \captionsetup[subfigure]{font=tiny}
         \centering
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/max_m_condition_number_chart.png}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/max_p_condition_number_chart.png}
-        \end{subfigure}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Numerical experiments}
-    \framesubtitle{Numerical results, M Indefinite: Max adjustment}
-    \begin{figure}
-        \captionsetup[subfigure]{font=tiny}
-        \centering
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/max_m_adjustment_chart.png}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{results/max_p_adjustment_chart.png}
-        \end{subfigure}
+        \includegraphics[width=1.0\textwidth]{results/condition_number_adjustment_analysis.png}
+        \caption{Min condition number adjustment of M\&P for different regularization techniques}
     \end{figure}
 \end{frame}
 
@@ -426,11 +359,7 @@
         \item PROJECT vs MIRROR
         \begin{itemize}
             \item PROJECT usually works better than MIRROR when regularizing full Hessian
-            \item MIRROR somehow works better than PROJECT when it comes to reduced Hessian regularization
-        \end{itemize}
-        \item R vs PR
-        \begin{itemize}
-            \item Always consider R and P instead of only adding something to R when regularizing reduced Hessian
+            \item MIRROR works better than PROJECT when it comes to reduced Hessian regularization, due to improvement on condition number of M
         \end{itemize}
     \end{itemize}
 \end{frame}
@@ -438,7 +367,7 @@
 \begin{frame}{Conclusion and future work}
     \framesubtitle{Future work}
     \begin{itemize}
-        \item Is it possible to achieve full hessian regularization (PROJECT) in recursion-based way?
+        \item Is it possible to achieve simliar performance like full hessian regularization (PROJECT) in recursion-based way?
         \item Is it possible to know the indefiniteness of M before Cholesky factorization?
         \item Is it possible to avoid eigenvalue decomposition with more efficient implementation?
     \end{itemize}

@@ -12,8 +12,7 @@ json_path_list = [
 ]
 reg_config = Regularizations_config()
 reg_method = reg_config.Hessian_based_regularization + \
-             reg_config.stage_based_regularization + \
-             reg_config.global_based_regularization
+             reg_config.stage_based_regularization
 
 for json_path in json_path_list:
     # get N from path name

@@ -94,10 +94,52 @@ def write_csv(name, solver, reg, filename='qp_results.csv'):
         'Regularization': [reg],
         'Iteration': [solver.statistics_dict['iter_count']],
         'Cost': [solver.get_cost()],
-        'Max M Condition Number': [solver.max_condition_number_M],
-        'Max P Condition Number': [solver.max_condition_number_P],
+        'Min M Condition Number Adjustment': [solver.max_cond_adjustment_M],
+        'Min P Condition Number Adjustment': [solver.max_cond_adjustment_P],
         'Max M Adjustment': [solver.max_adjustment_M],
         'Max P Adjustment': [solver.max_adjustment_P],
+        'Status': [solver.status],
+    }
+    
+    # Create a temporary DataFrame for the single row
+    new_df = pd.DataFrame(data)
+    
+    # Check if the file already exists
+    file_exists = os.path.isfile(filename)
+    
+    # Write to CSV
+    # mode='a': Append mode
+    # header=not file_exists: Write header only if file is new
+    # index=False: Do not write row numbers (0, 1, 2...)
+    new_df.to_csv(filename, mode='a', header=not file_exists, index=False)
+    
+    print(f"Data appended for: {name}")
+
+
+def write_csv_acados(name, reg_name, cost, filename='qp_results.csv'):
+    """
+    Writes QP problem and solver data to a CSV file using Pandas.
+    
+    Parameters:
+    QP_name (str): The name of the QP problem.
+    QP_solver (dict): A dictionary containing solver details.
+                      Must include keys: 'regularization', 'iteration', 
+                      'cost', 'condition number'.
+    filename (str): The output filename, defaults to 'qp_results.csv'.
+    """
+    
+    # Construct a dictionary for the new row
+    # Note: Values are wrapped in lists [] to create a DataFrame
+    data = {
+        'QP_name': [name],
+        'Regularization': [reg_name],
+        'Iteration': [0],
+        'Cost': [cost],
+        'Max M Condition Number Adjustment': [None],
+        'Max P Condition Number Adjustment': [None],
+        'Max M Adjustment': [None],
+        'Max P Adjustment': [None],
+        'Status': [0],
     }
     
     # Create a temporary DataFrame for the single row

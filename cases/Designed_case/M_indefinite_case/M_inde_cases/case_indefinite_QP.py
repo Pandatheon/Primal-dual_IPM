@@ -26,8 +26,7 @@ case_modules = [
 
 reg_config = Regularizations_config()
 reg_method = reg_config.Hessian_based_regularization + \
-             reg_config.stage_based_regularization + \
-             reg_config.global_based_regularization
+             reg_config.stage_based_regularization
 
 def main():
     for module_name in case_modules:
