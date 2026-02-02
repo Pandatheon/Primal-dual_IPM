@@ -1,20 +1,37 @@
+import os
+import sys
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..'))
+sys.path.append(parent_dir)
+
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosModel
 import casadi as ca
 import numpy as np
-from M_inde_P_pos_mats_1 import QP_mats
-# from M_inde_P_inde_mats_1 import QP_mats
+import importlib
+import copy
 
-mats = QP_mats()
+from utils import write_csv_acados
+from Regularizations import Regularizations_config
 
-N = mats.N
+case_modules = [
+    "M_inde_R_inde_P_pos_1",
+    "M_inde_R_inde_P_pos_2",
+    "M_inde_R_inde_P_pos_3",
+    "M_inde_R_pos_P_inde_1",
+    "M_inde_R_pos_P_inde_2",
+    "M_inde_R_pos_P_inde_3",
+    'M_inde_R_inde_P_inde_1',
+    "M_inde_R_inde_P_inde_2",
+    "M_inde_R_inde_P_inde_3",
+]
 
-def formulate_OCP(regularize_method='NO_REGULARIZE'):
+def formulate_OCP(mats):
     model = AcadosModel()
     model.name = "case_indefinite"
 
     # set up model
     nx = mats.A.shape[0]
     nu = mats.B.shape[1]
+    N = mats.N
 
     x = ca.SX.sym("x", nx)
     u = ca.SX.sym("u", nu)
@@ -73,32 +90,31 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     return ocp
 
 def main():
-    ocp = formulate_OCP()
-    ocp_solver = AcadosOcpSolver(ocp, verbose=False)
-    status = ocp_solver.solve()
+    for module_name in case_modules:
+        print(f"\n>>> Running Case: {module_name}")
 
-    # if status != 0:
-    #     ocp_solver.print_statistics()
-    #     raise Exception(f"Acados returned status {status}.")
+        mod = importlib.import_module(module_name)
+        QP_mats = getattr(mod, "QP_mats") 
+        # --------------------
 
-    cost_acados = ocp_solver.get_cost()
-    print(f"\n=== Predicted cost acados ===\n{cost_acados}")
+        mats = QP_mats()
+        
+        if not hasattr(mats, 'name'):
+            mats.name = module_name
 
-    print("\n=== Predicted next state sequence (x) ===")
-    for i in range(N+1):
-        x_i = ocp_solver.get(i, "x")
-        print(x_i)
-
-    print("\n=== Predicted control sequence (u) ===")
-    for i in range(N):
-        u_i = ocp_solver.get(i, "u")
-        print(u_i)
-
-    ocp_solver.print_statistics()
-
-    for i in range(N+1):
-        H_i = ocp_solver.get_hessian_block(i)
-        print(f"\n=== Hessian block at stage {i} ===\n{H_i}")
+        try:
+            ocp = formulate_OCP(mats)
+            ocp_solver = AcadosOcpSolver(ocp, verbose=False)
+            status = ocp_solver.solve()
+            cost_acados = ocp_solver.get_cost()
+            print(f"=== Predicted cost: {cost_acados} ===")
+            # Write results to CSV
+            write_csv_acados(mats.name, 'ACADOS_PROJECT', cost_acados)
+            ocp = None
+            ocp_solver = None
+        except Exception as e:
+            print(f"  Failed: {e}")
+            continue
 
 if __name__ == "__main__":
     main()
