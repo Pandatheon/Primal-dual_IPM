@@ -10,7 +10,6 @@ import importlib
 import copy
 
 from utils import write_csv_acados
-from Regularizations import Regularizations_config
 
 case_modules = [
     "M_inde_R_inde_P_pos_1",
