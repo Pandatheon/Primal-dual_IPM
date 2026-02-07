@@ -31,10 +31,10 @@ class QP_solver:
         self.delta_aff_dict = None
         self.delta_dict = None
         self.res_max = {
-            'res_stat' : 1e-10,
-            'res_eq' : 1e-10,
-            'res_ineq' : 1e-10,
-            'res_comp' : 1e-10,
+            'res_stat' : 1e-6,
+            'res_eq' : 1e-8,
+            'res_ineq' : 1e-8,
+            'res_comp' : 1e-8,
         }
         self.rhs_dict = {
             'rg' : np.zeros((qp.N+1, qp.nx+qp.nu)),
@@ -122,7 +122,7 @@ class QP_solver:
         for i in range(max_iter+1):
             prev_sol = copy.deepcopy(self.solution)
 
-            if self._convergence_check(iter_res_dict, max_res_dict):
+            if self._convergence_check(iter_res_dict):
                 self._quit(iter_res_dict, reg, max_iter)
                 return self.solution
 
@@ -147,12 +147,12 @@ class QP_solver:
         if self.max_cond_adjustment_P == 1e15:
             self.max_cond_adjustment_P = 0.0
 
-    def _convergence_check(self, iter_res_dict, max_res_dict):
+    def _convergence_check(self, iter_res_dict, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
-        return ((iter_res_dict['res_stat'] < self.res_max['res_stat'] + 1e-5*max_res_dict['res_stat']) and
-                (iter_res_dict['res_eq'] < self.res_max['res_eq'] + 1e-5*max_res_dict['res_eq']) and
-                (iter_res_dict['res_ineq'] < self.res_max['res_ineq'] + 1e-5*max_res_dict['res_ineq']) and
-                (iter_res_dict['res_comp'] < self.res_max['res_comp'] + 1e-3*max_res_dict['res_comp']))
+        return ((iter_res_dict['res_stat'] < self.res_max['res_stat'] + relative_tol*self.res_max['res_stat']) and
+                (iter_res_dict['res_eq'] < self.res_max['res_eq'] + relative_tol*self.res_max['res_eq']) and
+                (iter_res_dict['res_ineq'] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
+                (iter_res_dict['res_comp'] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
 
     def _record_res(self):
         '''Record the initial KKT residuals.'''
@@ -172,7 +172,7 @@ class QP_solver:
     def _predictor_corrector_sweep(self, prev_sol:iterate, reg:str='NO_REGULARIZE'):
         # predictor step
         self.curvature_list.clear()
-        self._update_rhs(prev_sol) # get rhs for predictor step
+        self._update_rhs(prev_sol, step_type='predictor') # get rhs for predictor step
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_aff_dict = self._solve_KKT_system(prev_sol)
 
@@ -188,9 +188,22 @@ class QP_solver:
 
         # predictor-corrector step
         self.curvature_list.clear()
-        self._update_rhs(prev_sol, self.delta_aff_dict) # get rhs for predictor-corrector step
+        self._update_rhs(prev_sol, self.delta_aff_dict, step_type='predictor-corrector') # get rhs for predictor-corrector step
         self._backward_sweep(prev_sol, reg=reg)
         self.delta_dict = self._solve_KKT_system(prev_sol)
+
+        # compute step size
+        alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
+        lam0_delta = np.maximum(prev_sol.lam0 + alpha_dual * self.delta_dict['delta_lam0'], 1e-16)
+        lam_delta = np.maximum(prev_sol.lam + alpha_dual * self.delta_dict['delta_lam'], 1e-16)
+        s0_delta = np.maximum(prev_sol.s0 + alpha_pri * self.delta_dict['delta_s0'], 1e-16)
+        s_delta = np.maximum(prev_sol.s + alpha_pri * self.delta_dict['delta_s'], 1e-16)
+        mu_pred = ((s0_delta @ lam0_delta) + (s_delta.flatten() @ lam_delta.flatten()))/self.ineq_num
+        # conditonal Mehrotra step
+        if mu_pred > 2*mu_aff:
+            self._update_rhs(prev_sol, step_type='centering')
+            self._backward_sweep(prev_sol, reg=reg)
+            self.delta_dict = self._solve_KKT_system(prev_sol)
 
         # compute step size
         alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
@@ -204,7 +217,7 @@ class QP_solver:
         s_delta = np.maximum(prev_sol.s + alpha_pri * self.delta_dict['delta_s'], 1e-16)
         self.solution = iterate(x_delta, u_delta, pi_delta, lam0_delta, lam_delta, s0_delta, s_delta)
 
-    def _update_rhs(self, prev_sol:iterate, delta_aff_dict:dict = None, record:bool=False)-> np.ndarray:
+    def _update_rhs(self, prev_sol:iterate, delta_aff_dict:dict = None, record:bool=False, step_type:str='predictor')-> np.ndarray:
         nx = self.qp.nx
         nu = self.qp.nu
         N = self.qp.N
@@ -237,16 +250,22 @@ class QP_solver:
 
             #complementarity residual
             if i == 0:
-                if delta_aff_dict is None:
-                    res_comp0 = prev_sol.lam0 * prev_sol.s0
+                if delta_aff_dict is None and step_type == 'predictor':
+                    res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten()
                     duality_measure += (prev_sol.lam0 @ prev_sol.s0)
-                else:
-                    res_comp0 = prev_sol.lam0 * prev_sol.s0 + delta_aff_dict['delta_lam0'] * delta_aff_dict['delta_s0'] - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0))
+                elif delta_aff_dict is None and step_type == 'centering':
+                    res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0))
+                    duality_measure += (prev_sol.lam0 @ prev_sol.s0)
+                elif step_type == 'predictor-corrector':
+                    res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() + (delta_aff_dict['delta_lam0'] * delta_aff_dict['delta_s0']).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0))
             else:
-                if delta_aff_dict is None:
+                if delta_aff_dict is None and step_type == 'predictor':
                     res_comp[i-1] = (np.diag(prev_sol.lam[i-1]) @ prev_sol.s[i-1]).flatten()
                     duality_measure += (prev_sol.lam[i-1] @ prev_sol.s[i-1])
-                else:
+                elif delta_aff_dict is None and step_type == 'centering':
+                    res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1]))
+                    duality_measure += (prev_sol.lam[i-1] @ prev_sol.s[i-1])
+                elif step_type == 'predictor-corrector':
                     res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() + (delta_aff_dict['delta_lam'][i-1] * delta_aff_dict['delta_s'][i-1]) - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1]))
 
         # terminal residual
@@ -258,7 +277,7 @@ class QP_solver:
         self.rhs_dict['rd'] = res_ineq
         self.rhs_dict['rm0'] = res_comp0
         self.rhs_dict['rm'] = res_comp
-        if delta_aff_dict is None and not record:
+        if delta_aff_dict is None and not record and step_type == 'predictor':
             self.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
             self.statistics_dict['duality_measure_list'].append(self.duality_measure)
 
@@ -525,6 +544,7 @@ class QP_solver:
             return new_P, new_p, K, k
 
         except np.linalg.LinAlgError:
+            scale = 1.0
             try:
                 if reg in [self.reg_config.stage_based_regularization[0], self.reg_config.stage_based_regularization[3]]:
                     # EM M only
