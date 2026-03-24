@@ -161,8 +161,8 @@ class QPSolver:
     def _compute_step(self, prev_sol:iterate, step_type:str , reg:str='NO_REGULARIZE')-> iterate:
         '''Compute the search direction by solving the KKT system with Riccati recursion.'''
         self._update_rhs(prev_sol, self.delta_aff_dict, step_type=step_type)
-        self._backward_sweep(prev_sol, reg=reg)
-        delta_dict = self._solve_KKT_system(prev_sol)
+        feedback = self._backward_sweep(prev_sol, reg=reg)
+        delta_dict = self._foward_sweep(prev_sol, feedback)
         return delta_dict
 
     def _compute_duality(self, prev_sol:iterate, delta_dict:dict)-> float:
@@ -251,7 +251,7 @@ class QPSolver:
             self.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
             self.statistics_dict['duality_measure_list'].append(self.duality_measure)
 
-    def _solve_KKT_system(self, prev_sol:iterate)-> iterate:
+    def _foward_sweep(self, prev_sol:iterate, feedback:Feedback)-> dict:
         delta_x = copy.deepcopy(prev_sol.x)
         delta_u = copy.deepcopy(prev_sol.u)
         delta_pi = copy.deepcopy(prev_sol.pi)
@@ -266,7 +266,7 @@ class QPSolver:
         for i in range(len(self.qp.stages)):
             # recover x and u
             rhs_b = self.rhs_dict['rb'][i]
-            delta_u[i] = self.feedback.compute_control(i, delta_x[i])
+            delta_u[i] = feedback.compute_control(i, delta_x[i])
             delta_x[i+1] = self.qp.stages[i].A@delta_x[i] + self.qp.stages[i].B@delta_u[i] + rhs_b
 
             # recover s
@@ -286,7 +286,7 @@ class QPSolver:
                 rhs_m_modified = -rhs_m - (prev_sol.lam[i-1] * delta_s[i-1])
                 delta_lam[i-1] = (rhs_m_modified/prev_sol.s[i-1]).flatten()
             # recover pi
-            delta_pi[i] =  self.feedback.P[i+1] @ delta_x[i+1] + self.feedback.p[i+1]
+            delta_pi[i] =  feedback.P[i+1] @ delta_x[i+1] + feedback.p[i+1]
 
         delta_dict = {
             'delta_x': delta_x,
@@ -298,6 +298,38 @@ class QPSolver:
             'delta_s': delta_s,
         }
         return delta_dict
+
+    def _backward_sweep(self, prev_sol:iterate, reg:str ='NO_REGULARIZE')-> Feedback:
+        horizon = len(self.qp.stages)
+        nu, nx = self.qp.stages[0].S.shape
+
+        if reg == 'PROJECT' or reg == 'MIRROR':
+            regularized_QP = regularize_QP(self.qp, recorder=self.recorder,
+                                           reg_config= self.reg_config, method=reg)
+        else:
+            regularized_QP = copy.deepcopy(self.qp)
+        modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
+
+        self.recorder.reset_stage_arrays()
+
+        feedback = Feedback(
+            P = np.zeros((horizon+1, nx, nx), dtype=float),
+            p = np.zeros((horizon+1, nx), dtype=float),
+            K = np.zeros((horizon, nu, nx), dtype=float),
+            k = np.zeros((horizon, nu), dtype=float)
+        )
+        feedback.P[-1] = modified_QP_stages[-1].Q_e
+        feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
+        for i in reversed(range(horizon)):
+            feedback.P[i], feedback.p[i], feedback.K[i], feedback.k[i] = riccati_recursion_with_stage_regularization(
+            qp_stage=modified_QP_stages[i],
+            qp_terminal=(feedback.P[i+1], feedback.p[i+1]),
+            nx = nx,
+            rg=self.rhs_dict['rg_'][i], rb=self.rhs_dict['rb'][i],
+            reg_config=self.reg_config, recorder=self.recorder,
+            reg=reg, index=i
+            )
+        return feedback
 
     def _fraction_to_boundary(self, prev_sol: iterate, delta_dict, boundary:bool=True) -> iterate:
         s_old = np.hstack((prev_sol.s0, prev_sol.s.flatten()))
@@ -331,37 +363,6 @@ class QPSolver:
             return alpha_pri, alpha_dual, alpha
         else:
             return alpha_pri_max, alpha_dual_max, min(alpha_pri_max, alpha_dual_max)
-
-    def _backward_sweep(self, prev_sol:iterate, reg:str ='NO_REGULARIZE'):
-        horizon = len(self.qp.stages)
-        nu, nx = self.qp.stages[0].S.shape
-
-        if reg == 'PROJECT' or reg == 'MIRROR':
-            regularized_QP = regularize_QP(self.qp, recorder=self.recorder,
-                                           reg_config= self.reg_config, method=reg)
-        else:
-            regularized_QP = copy.deepcopy(self.qp)
-        modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
-
-        self.recorder.reset_stage_arrays()
-
-        self.feedback = Feedback(
-            P = np.zeros((horizon+1, nx, nx), dtype=float),
-            p = np.zeros((horizon+1, nx), dtype=float),
-            K = np.zeros((horizon, nu, nx), dtype=float),
-            k = np.zeros((horizon, nu), dtype=float)
-        )
-        self.feedback.P[-1] = modified_QP_stages[-1].Q_e
-        self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
-        for i in reversed(range(horizon)):
-            self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = riccati_recursion_with_stage_regularization(
-            qp_stage=modified_QP_stages[i],
-            qp_terminal=(self.feedback.P[i+1], self.feedback.p[i+1]),
-            nx = nx,
-            rg=self.rhs_dict['rg_'][i], rb=self.rhs_dict['rb'][i],
-            reg_config=self.reg_config, recorder=self.recorder,
-            reg=reg, index=i
-            )
 
     def _modify_QP(self, qp:OCP_QP_varying, prev_sol:iterate):
         modified_QP_stages = []
