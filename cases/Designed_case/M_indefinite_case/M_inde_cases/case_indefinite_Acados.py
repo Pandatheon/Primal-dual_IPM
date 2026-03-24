@@ -9,7 +9,7 @@ import numpy as np
 import importlib
 import copy
 
-from utils import write_csv_acados
+from utilis.utils import write_csv_acados
 
 case_modules = [
     'M_pos_R_pos_P_inde',

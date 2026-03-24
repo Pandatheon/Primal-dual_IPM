@@ -1,18 +1,17 @@
 import numpy as np
 from QP_formulation import OCP_QP_varying
-from RiccatiQPSolver_regularization import QP_solver
+from solvers.RiccatiQPSolver import QPSolver
 from Regularizations import Regularizations_config
-from utils import read_matrix_list
+from utilis.utils import read_matrix_list
 import copy
-from utils import write_csv
+from utilis.utils import write_csv
 
 json_path_list = [
     "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json",
-    "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=50.json",
+
 ]
 reg_config = Regularizations_config()
-reg_method = reg_config.Hessian_based_regularization + \
-             reg_config.stage_based_regularization
+reg_method = ['PROJECT','RP_STAGE_MIRROR']
 
 for x0_value in [np.pi/3, np.pi]:
     for json_path in json_path_list:
@@ -46,7 +45,7 @@ for x0_value in [np.pi/3, np.pi]:
             try:
                 name = f"Pendulum_caseF_N={N}_{x0_value:.2f}"
                 copyqp = copy.deepcopy(qp)
-                qp_solver = QP_solver(copyqp)
+                qp_solver = QPSolver(copyqp)
                 sol = qp_solver.solve(x0, reg=method)
                 write_csv(name, qp_solver, method)
             except Exception as e:

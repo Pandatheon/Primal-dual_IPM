@@ -7,9 +7,9 @@ import importlib
 import numpy as np
 import copy
 
-from utils import write_csv
+from utilis.utils import write_csv
 from QP_formulation import OCP_QP_varying
-from RiccatiQPSolver_regularization import QP_solver
+from solvers.RiccatiQPSolver import QP_solver
 from Regularizations import Regularizations_config
 
 case_modules = [

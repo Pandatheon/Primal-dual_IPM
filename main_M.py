@@ -1,6 +1,6 @@
 import os
-from RiccatiQPSolver_regularization import QP_solver
-from utils import read_matrix_from_npz
+from solvers.RiccatiQPSolver import QP_solver
+from utilis.utils import read_matrix_from_npz
 import copy
 
 folder_path = "/home/jingtao/Primal-dual_IPM/cases/Designed_case"
@@ -16,9 +16,9 @@ cases = [
 
 reg_method = [
     'NO_REGULARIZE',
-    'PROJECT', 
+    'PROJECT',
     'MIRROR',
-    'M_STAGE_LM', 
+    'M_STAGE_LM',
     'RP_STAGE_LM',
     'M_STAGE_GMW',
     'RP_STAGE_GMW',

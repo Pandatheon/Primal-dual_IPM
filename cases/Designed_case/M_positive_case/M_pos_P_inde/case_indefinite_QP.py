@@ -1,6 +1,6 @@
 import numpy as np
 from QP_formulation import OCP_QP_varying
-from RiccatiQPSolver_regularization import QP_solver
+from solvers.RiccatiQPSolver import QP_solver
 from M_pos_P_inde_mats import QP_mats
 import copy
 mats = QP_mats()

@@ -9,7 +9,7 @@ import numpy as np
 import importlib
 import copy
 
-from utils import write_csv_acados
+from utilis.utils import write_csv_acados
 from Regularizations import Regularizations_config
 
 case_modules = [
