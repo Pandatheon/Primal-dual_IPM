@@ -14,7 +14,7 @@ reg_config = Regularizations_config()
 reg_method = reg_config.Hessian_based_regularization + \
              reg_config.stage_based_regularization
 
-for x0_value in [np.pi/3]:
+for x0_value in [np.pi/3, np.pi]:
     for json_path in json_path_list:
         # get N from path name
         N = int(json_path.split("N=")[-1].split(".json")[0])
@@ -55,4 +55,4 @@ for x0_value in [np.pi/3]:
                 continue
             cost_qp = qp_solver.get_cost()
             print(f"\n=== Predicted cost qp with {method} ===\n{cost_qp}")
-            qp_solver.print_statistics()
+            # qp_solver.print_statistics()

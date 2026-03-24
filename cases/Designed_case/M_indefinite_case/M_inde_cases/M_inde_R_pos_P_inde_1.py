@@ -22,12 +22,11 @@ class QP_mats(abstract_QP_mats):
         self.Q = np.diag(np.array([1.0, 2.0, -1.0]))
         self.R = np.diag(np.array([3.0, 2.0]))
         self.S = np.zeros((self.nu, self.nx))
-        self.q = np.zeros((self.nx,))
-        self.r = np.zeros((self.nu,))
+        self.q = np.ones((self.nx,))
+        self.r = np.ones((self.nu,))
         #terminal cost
         self.Q_e = self.Q
-        self.q_e = np.zeros((self.nx,))
-
+        self.q_e = np.ones((self.nx,))
         self.uh = 2.0
         self.lh = -2.0
         # inequality constraintsL: h(x,u) = Cx + Du <= d

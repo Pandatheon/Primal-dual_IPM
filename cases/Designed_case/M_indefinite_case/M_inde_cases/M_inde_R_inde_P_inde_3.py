@@ -9,25 +9,24 @@ class QP_mats(abstract_QP_mats):
         self.name = "M_inde_R_inde_P_inde_3"
         self.N = 5
         #dynamics
-        self.A = np.array([[1.0, 0.0, 0.0],
-                           [0.0, 1.5, 0.1],
-                           [0.0, 0.0, 2.1],])
-        self.B = np.array([[0.1, 1.2],
-                           [1.1, 0.3],
-                           [0.2, 0.1],])
+        self.A = np.array([[3.0, 0.0, 0.0],
+                           [1.5, 2.5, 1.6],
+                           [0.0, 0.2, 1.1],])
+        self.B = np.array([[1.5, 4.2],
+                           [1.13, 2.6],
+                           [3.8, 2.1],])
         self.b = np.array([0.0, 0.0, 0.0])
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([-1.6, 2.1, 1.2]))
-        self.R = np.diag(np.array([0.8, -0.3]))
+        self.Q = np.diag(np.array([15, -2, 20]))
+        self.R = np.diag(np.array([5, -1.2]))
         self.S = np.zeros((self.nu, self.nx))
-        self.q = np.zeros((self.nx,))
-        self.r = np.zeros((self.nu,))
+        self.q = np.ones((self.nx,))
+        self.r = np.ones((self.nu,))
         #terminal cost
         self.Q_e = self.Q
-        self.q_e = np.zeros((self.nx,))
-
+        self.q_e = np.ones((self.nx,))
         self.uh = 2.0
         self.lh = -2.0
         # inequality constraintsL: h(x,u) = Cx + Du <= d

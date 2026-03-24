@@ -13,15 +13,19 @@ from utils import write_csv_acados
 from Regularizations import Regularizations_config
 
 case_modules = [
-    "M_inde_R_inde_P_pos_1",
-    "M_inde_R_inde_P_pos_2",
-    "M_inde_R_inde_P_pos_3",
-    "M_inde_R_pos_P_inde_1",
-    "M_inde_R_pos_P_inde_2",
-    "M_inde_R_pos_P_inde_3",
-    'M_inde_R_inde_P_inde_1',
-    "M_inde_R_inde_P_inde_2",
-    "M_inde_R_inde_P_inde_3",
+    'M_pos_R_pos_P_inde',
+    # 'M_pos_R_inde_P_pos',
+    # "M_inde_R_inde_P_pos_1",
+    # "M_inde_R_inde_P_pos_2",
+    # "M_inde_R_inde_P_pos_3",
+    # "M_inde_R_inde_P_pos_4",
+    # "M_inde_R_pos_P_inde_1",
+    # "M_inde_R_pos_P_inde_2",
+    # "M_inde_R_pos_P_inde_3",
+    # 'M_inde_R_pos_P_inde_4',
+    # "M_inde_R_inde_P_inde_2",
+    # "M_inde_R_inde_P_inde_3",
+    # 'M_inde_R_inde_P_inde_4',
 ]
 
 def formulate_OCP(mats):
@@ -53,17 +57,17 @@ def formulate_OCP(mats):
     Q = mats.Q
     R = mats.R
     S = mats.S
-    q = mats.q
-    r = mats.r
+    q = mats.q.reshape(-1,1)
+    r = mats.r.reshape(-1,1)
     Q_e = mats.Q_e
-    q_e = mats.q_e
+    q_e = mats.q_e.reshape(-1,1)
     # set up cost
     x_res = ocp.model.x
     u_res = ocp.model.u
     ocp.cost.cost_type = "EXTERNAL"
-    ocp.model.cost_expr_ext_cost = 0.5 * (x_res.T @ Q @ x_res + u_res.T @ R @ u_res + 2 * x_res.T @ S.T @ u_res)
+    ocp.model.cost_expr_ext_cost = 0.5 * (x_res.T @ Q @ x_res + u_res.T @ R @ u_res + 2 * x_res.T @ S.T @ u_res ) + q.T @ x_res + r.T @ u_res
     ocp.cost.cost_type_e = "EXTERNAL"
-    ocp.model.cost_expr_ext_cost_e = 0.5 * (x_res.T @ Q_e @ x_res)
+    ocp.model.cost_expr_ext_cost_e = 0.5 * (x_res.T @ Q_e @ x_res) + q_e.T @ x_res
 
     x0 = 3.0 * np.ones((nx,))
     ocp.constraints.x0 = x0
@@ -110,6 +114,14 @@ def main():
             print(f"=== Predicted cost: {cost_acados} ===")
             # Write results to CSV
             write_csv_acados(mats.name, 'IPOPT', cost_acados)
+            print('=== Optimal solution x at each step: ===')
+            for k in range(mats.N):
+                x_k = ocp_solver.get(k, 'x')
+                print(f" Step {k}: x = {x_k}")
+            print('=== Optimal solution u at each step: ===')
+            for k in range(mats.N):
+                u_k = ocp_solver.get(k, 'u')
+                print(f" Step {k}: u = {u_k}")
             ocp = None
             ocp_solver = None
         except Exception as e:

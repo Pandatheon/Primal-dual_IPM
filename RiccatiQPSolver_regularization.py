@@ -72,11 +72,11 @@ class QP_solver:
         self.condition_number_arr_P = np.zeros((self.qp.N,))
         self.adjustment_record_arr_M = np.zeros((self.qp.N,))
         self.adjustment_record_arr_P = np.zeros((self.qp.N,))
-        self.max_cond_adjustment_M = 1e15
-        self.max_cond_adjustment_P = 1e15
+        self.max_cond_reduction_M = 1e15
+        self.max_cond_reduction_P = 1e15
         self.max_adjustment_M = 0.0
         self.max_adjustment_P = 0.0
-        self.count = 0
+        self.reg_count = 0
         self.curvature_list = []
 
     def _initilize_solution(self, x0:np.ndarray)-> iterate:
@@ -113,12 +113,6 @@ class QP_solver:
         assert x0 is not None, "Please provide a non-zero initial state x0 to solve the QP."
         self._initilize_solution(x0)
         iter_res_dict = self._record_res()
-        max_res_dict = {
-            'res_stat' : np.linalg.norm(self.rhs_dict['rg'].flatten(), ord=np.inf),
-            'res_eq' : np.linalg.norm(self.rhs_dict['rb'].flatten(), ord=np.inf),
-            'res_ineq' : np.linalg.norm(np.hstack((self.rhs_dict['rd0'],self.rhs_dict['rd'].flatten())), ord=np.inf),
-            'res_comp' : np.linalg.norm(np.hstack((self.rhs_dict['rm0'],self.rhs_dict['rm'].flatten())), ord=np.inf),
-        }
         for i in range(max_iter+1):
             prev_sol = copy.deepcopy(self.solution)
 
@@ -142,10 +136,10 @@ class QP_solver:
             print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
             self.status = 0
 
-        if self.max_cond_adjustment_M == 1e15:
-            self.max_cond_adjustment_M = 0.0
-        if self.max_cond_adjustment_P == 1e15:
-            self.max_cond_adjustment_P = 0.0
+        if self.max_cond_reduction_M == 1e15:
+            self.max_cond_reduction_M = 0.0
+        if self.max_cond_reduction_P == 1e15:
+            self.max_cond_reduction_P = 0.0
 
     def _convergence_check(self, iter_res_dict, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
@@ -186,6 +180,8 @@ class QP_solver:
         self.centering_param = (mu_aff/self.duality_measure)**3
         # self.centering_param = 0.01
 
+        current_reg_count = self.reg_count
+
         # predictor-corrector step
         self.curvature_list.clear()
         self._update_rhs(prev_sol, self.delta_aff_dict, step_type='predictor-corrector') # get rhs for predictor-corrector step
@@ -201,6 +197,7 @@ class QP_solver:
         mu_pred = ((s0_delta @ lam0_delta) + (s_delta.flatten() @ lam_delta.flatten()))/self.ineq_num
         # conditonal Mehrotra step
         if mu_pred > 2*mu_aff:
+            self.reg_count = current_reg_count
             self._update_rhs(prev_sol, step_type='centering')
             self._backward_sweep(prev_sol, reg=reg)
             self.delta_dict = self._solve_KKT_system(prev_sol)
@@ -234,7 +231,7 @@ class QP_solver:
         for i in range(len(self.qp.stages)):
             # stationarity residual
             if i == 0:
-                res_stat[i][nx:] = self.qp.stages[0].R @ prev_sol.u[0] + self.qp.stages[0].B.T @ prev_sol.pi[0] + self.qp.stages[0].D.T @ prev_sol.lam0
+                res_stat[i][nx:] = self.qp.stages[0].R @ prev_sol.u[0] + self.qp.stages[0].r + self.qp.stages[0].B.T @ prev_sol.pi[0] + self.qp.stages[0].D.T @ prev_sol.lam0
             else:
                 res_stat[i][:nx] = self.qp.stages[i].Q @ prev_sol.x[i] + self.qp.stages[i].S.T @ prev_sol.u[i] + self.qp.stages[i].q +  self.qp.stages[i].A.T @ prev_sol.pi[i] + self.qp.stages[i].C.T @ prev_sol.lam[i-1] - prev_sol.pi[i-1]
                 res_stat[i][nx:] = self.qp.stages[i].R @ prev_sol.u[i] + self.qp.stages[i].S @ prev_sol.x[i] + self.qp.stages[i].r + self.qp.stages[i].B.T @ prev_sol.pi[i] + self.qp.stages[i].D.T @ prev_sol.lam[i-1]
@@ -466,6 +463,7 @@ class QP_solver:
 
             eigvals, eigvecs = np.linalg.eig(H)
             eigvals_reg = self._do_regularization(eigvals, method)
+            self.reg_count += 1
             H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
 
             Q_reg = H_reg[:qp.nx, :qp.nx]
@@ -487,6 +485,7 @@ class QP_solver:
         Q_e = qp.terminal.Q_e
         eigvals_e, eigvecs_e = np.linalg.eig(Q_e)
         eigvals_e_reg = self._do_regularization(eigvals_e, method)
+        self.reg_count += 1
         Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.T
         regularized_QP.terminal = QP_Terminal(
             Q_e = Q_e_reg,
@@ -516,6 +515,8 @@ class QP_solver:
         except np.linalg.LinAlgError:
             if reg == 'NO_REGULARIZE':
                 raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
+            else:
+                raise np.linalg.LinAlgError("Unkonwn error happened")
 
     def _riccati_recursion_with_stage_regularization(self,
         qp_stage:QP_stage, qp_terminal:Feedback, rg, rb, reg:str='NO_REGULARIZE' , index:int=0
@@ -533,7 +534,6 @@ class QP_solver:
             self.condition_number_arr_M[index] = np.linalg.cond(R + B.T@P@B) if np.linalg.cond(R + B.T@P@B) < 1e50 else 1e50
 
             R_chol = np.linalg.cholesky(R + B.T@P@B)
-            self.count += 1
             y1 = np.linalg.solve(R_chol, S + B.T@P@A)
             y2 = np.linalg.solve(R_chol, r + B.T@(P@b + p))
             K = -np.linalg.solve(R_chol.T, y1)
@@ -544,7 +544,6 @@ class QP_solver:
             return new_P, new_p, K, k
 
         except np.linalg.LinAlgError:
-            scale = 1.0
             try:
                 if reg in [self.reg_config.stage_based_regularization[0], self.reg_config.stage_based_regularization[3]]:
                     # EM M only
@@ -562,7 +561,8 @@ class QP_solver:
                     adjustment_eig_M = np.max(eigvals_M_reg - eigvals_M) if np.max(eigvals_M_reg - eigvals_M) < 1e50 else 1e50
                     self.max_adjustment_M = max(self.max_adjustment_M, adjustment_eig_M)
                     adjustment_cond_M = np.linalg.cond(reduced_hessian_reg) - self.condition_number_arr_M[index] if np.linalg.cond(eigvecs_M @ np.diag(eigvals_M_reg) @ eigvecs_M.T) < 1e50 else 1e50
-                    self.max_cond_adjustment_M = min(self.max_cond_adjustment_M, adjustment_cond_M)
+                    self.max_cond_reduction_M = min(self.max_cond_reduction_M, adjustment_cond_M)
+                    self.reg_count += 1
 
                 elif reg in [self.reg_config.stage_based_regularization[1], self.reg_config.stage_based_regularization[4]]:
 
@@ -580,7 +580,7 @@ class QP_solver:
                     adjustment_eig_P = np.max(eigvals_P_reg - eigvals_P) if np.max(eigvals_P_reg - eigvals_P) < 1e50 else 1e50
                     self.max_adjustment_P = max(self.max_adjustment_P, adjustment_eig_P)
                     adjustment_cond_P = np.linalg.cond(P_reg) - self.condition_number_arr_P[index] if np.linalg.cond(P_reg) < 1e50 else 1e50
-                    self.max_cond_adjustment_P = min(self.max_cond_adjustment_P, adjustment_cond_P)
+                    self.max_cond_reduction_P = min(self.max_cond_reduction_P, adjustment_cond_P)
 
                     reduced_hessian_P_reg = R + B.T@P_reg@B
 
@@ -599,7 +599,8 @@ class QP_solver:
                     adjustment_eig_M = np.max(eigvals_M_reg - eigvals_M_0) if np.max(eigvals_M_reg - eigvals_M_0) < 1e50 else 1e50
                     self.max_adjustment_M = max(self.max_adjustment_M, adjustment_eig_M)
                     adjustment_cond_M = np.linalg.cond(reduced_hessian_reg) - self.condition_number_arr_M[index] if np.linalg.cond(reduced_hessian_reg) < 1e50 else 1e50
-                    self.max_cond_adjustment_M = min(self.max_cond_adjustment_M, adjustment_cond_M)
+                    self.max_cond_reduction_M = min(self.max_cond_reduction_M, adjustment_cond_M)
+                    self.reg_count += 2
 
                 elif reg in [self.reg_config.stage_based_regularization[2], self.reg_config.stage_based_regularization[5]]:
 
@@ -627,7 +628,7 @@ class QP_solver:
                     adjustment_eig_P = np.max(eigvals_P_reg - eigvals_P) if np.max(eigvals_P_reg - eigvals_P) < 1e50 else 1e50
                     self.max_adjustment_P = max(self.max_adjustment_P, adjustment_eig_P)
                     adjustment_cond_P = np.linalg.cond(P_reg) - self.condition_number_arr_P[index] if np.linalg.cond(P_reg) < 1e50 else 1e50
-                    self.max_cond_adjustment_P = min(self.max_cond_adjustment_P, adjustment_cond_P)
+                    self.max_cond_reduction_P = min(self.max_cond_reduction_P, adjustment_cond_P)
 
                     reduced_hessian_reg = R_reg + B.T@P_reg@B
 
@@ -637,12 +638,14 @@ class QP_solver:
                     adjustment_eig_M = np.max(eigvals_M_reg - eigvals_M) if np.max(eigvals_M_reg - eigvals_M) < 1e50 else 1e50
                     self.max_adjustment_M = max(self.max_adjustment_M, adjustment_eig_M)
                     adjustment_cond_M = np.linalg.cond(reduced_hessian_reg) - self.condition_number_arr_M[index] if np.linalg.cond(reduced_hessian_reg) < 1e50 else 1e50
-                    self.max_cond_adjustment_M = min(self.max_cond_adjustment_M, adjustment_cond_M)
+                    self.max_cond_reduction_M = min(self.max_cond_reduction_M, adjustment_cond_M)
+                    self.reg_count += 2
+
             except np.linalg.LinAlgError:
-                if self.max_cond_adjustment_M == 1e15:
-                    self.max_cond_adjustment_M = 0.0
-                if self.max_cond_adjustment_P == 1e15:
-                    self.max_cond_adjustment_P = 0.0
+                if self.max_cond_reduction_M == 1e15:
+                    self.max_cond_reduction_M = 0.0
+                if self.max_cond_reduction_P == 1e15:
+                    self.max_cond_reduction_P = 0.0
                 raise np.linalg.LinAlgError("Regularization failed to make the reduced Hessian positive definite.")
 
         R_chol = np.linalg.cholesky(reduced_hessian_reg)

@@ -9,8 +9,8 @@ class QP_mats(abstract_QP_mats):
         self.name = "M_inde_R_inde_P_inde_1"
         self.N = 5
         #dynamics
-        self.A = np.array([[1.0, 0.0, 2.3],
-                           [0.0, 1.0, 0.0],
+        self.A = np.array([[2.2, 1.0, 2.3],
+                           [0.0, 3.0, 0.0],
                            [0.0, 2.0, 2.0],])
         self.B = np.array([[2.0, 0.0],
                            [1.2, 1.5],
@@ -19,14 +19,14 @@ class QP_mats(abstract_QP_mats):
         self.nx = self.A.shape[0]
         self.nu = self.B.shape[1]
         # cost
-        self.Q = np.diag(np.array([5.0, -0.2, -1.0]))
-        self.R = np.diag(np.array([-1.5, 2.2]))
+        self.Q = np.diag(np.array([35.0, -1.2, -1.0]))
+        self.R = np.diag(np.array([-1.5, 24.2]))
         self.S = np.zeros((self.nu, self.nx))
-        self.q = np.zeros((self.nx,))
-        self.r = np.zeros((self.nu,))
+        self.q = np.ones((self.nx,))
+        self.r = np.ones((self.nu,))
         #terminal cost
         self.Q_e = self.Q
-        self.q_e = np.zeros((self.nx,))
+        self.q_e = np.ones((self.nx,))
 
         self.uh = 2.0
         self.lh = -2.0

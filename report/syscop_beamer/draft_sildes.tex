@@ -277,7 +277,7 @@
     \begin{mini*}[short]
         {x, u}
         {
-        \sum_{k=0}^{N}
+        \sum_{k=0}^{N-1}
             \frac{1}{2} 
             \begin{bmatrix} x_k \\ u_k \end{bmatrix}^T
             \begin{bmatrix} Q_k & S_k^T \\ S_k & R_k \end{bmatrix}
@@ -285,6 +285,7 @@
             +
             \begin{bmatrix} q_k \\ r_k \end{bmatrix}^T
             \begin{bmatrix} x_k \\ u_k \end{bmatrix}
+            + \frac{1}{2} x_N^T Q_N x_N + q_N^T x_N
         }
         {}{} 
         \addConstraint{x_0}{= \bar{x}_0}{}

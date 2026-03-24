@@ -1,0 +1,284 @@
+\documentclass[10pt,aspectratio=1610]{beamer} % use option aspectratio=169 or 1610 for wide slides
+% Note: For online presentations via Zoom use the ratio of the screen you want to share
+\usetheme{Rochester}
+
+% load syscop style
+\usepackage{style/syscop}
+
+%--------------------------------------------------
+% TITLE
+%--------------------------------------------------
+
+% NOTE: what's in [ ] goes to footer for the fields title, author and date
+\title[Regularization techniques for a Riccati-based Interior-Point QP Solver]{\huge Regularization techniques for a Riccati-based Interior-Point QP Solver}
+% \author[Jingtao Xiong and M. Diehl]{Jingtao Xiong and Moritz Diehl}
+\institute{Systems Control and Optimization Laboratory (syscop)}
+\date[\today]{Event \\ \today }
+
+
+%--------------------------------------------------
+% Useful packages
+%--------------------------------------------------
+
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{optidef}
+\usepackage{booktabs}
+\usepackage{diagbox}
+\usepackage{multirow}
+\usepackage{geometry}
+
+\begin{document}
+
+\InsertTitle
+
+\begin{frame}{Content}
+
+	\begin{itemize}
+		\item Riccati-based Interior-Point Method
+		\item Regularization techniques 
+		\item Numerical results
+		\begin{itemize}
+			\item M Positive Definite cases
+			\item M Indefinite cases
+		\end{itemize}
+		\item Conclusion and future work
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Riccati-based Interior-Point Method}
+    \framesubtitle{QP formulation}
+    Consider the following QP formulation with equality and inequality constraints with slacks:
+    \begin{equation}
+        \begin{aligned}
+            \min_{x, s} \quad & \frac{1}{2} x^T Q x + c^T x \\
+            \text{s.t.} \quad & A x = b \\
+            & G x + s = h \\
+            & s \ge 0
+        \end{aligned}
+    \end{equation}
+
+    \vspace{0.5em}
+	The corresponding KKT conditions are:
+    \begin{equation}
+        r(x, s, \nu, \lambda) = 
+        \begin{bmatrix} 
+            Qx + c + A^T \nu + G^T \lambda \\
+            Ax - b \\
+            Gx + s - h \\
+            S \Lambda \mathbf{1} - \tau \mathbf{1}
+        \end{bmatrix} = 0
+    \end{equation}
+\end{frame}
+
+
+\begin{frame}{Riccati-based Interior-Point Method}
+    \framesubtitle{Primal-Dual Interior-Point Method}
+	At each iteration, we solve the following linear system to get the search direction:
+	\begin{equation}
+		\begin{bmatrix} 
+		Q & 0 & A^T & G^T \\
+		A & 0 & 0 & 0 \\
+		G & I & 0 & 0 \\
+		0 & \Lambda & 0 & S 
+		\end{bmatrix}
+		\begin{bmatrix} 
+		\Delta x \\
+		\Delta s \\
+		\Delta \nu \\
+		\Delta \lambda 
+		\end{bmatrix} = -
+		\begin{bmatrix} 
+            Qx + c + A^T \nu + G^T \lambda \\
+            Ax - b \\
+            Gx + s - h \\
+            S \Lambda \mathbf{1} - \tau \mathbf{1}
+        \end{bmatrix} = -
+		\begin{bmatrix} 
+		r_{\text{stat}} \\
+		r_{\text{eq}} \\
+		r_{\text{ineq}} \\
+		r_{\text{comp}}
+		\end{bmatrix}
+	\end{equation}
+	Eliminating $\Delta s$ and $\Delta \lambda$ based on Schur Complement, we obtain the following reduced system:
+	\begin{equation}
+		\begin{bmatrix} 
+		Q + G^T \Sigma G & A^T \\
+		A & 0 
+		\end{bmatrix}
+		\begin{bmatrix} 
+		\Delta x \\
+		\Delta \nu 
+		\end{bmatrix} = -
+		\begin{bmatrix} 
+		r_{\text{dual}} - G^T S^{-1} ( \Lambda r_{\text{ineq}} - r_{\text{comp}} ) \\
+		r_{\text{eq}} 
+		\end{bmatrix}
+	\end{equation}
+
+\end{frame}
+
+\begin{frame}{Riccati-based Interior-Point Method}
+    \framesubtitle{Riccati recursion for solving the reduced system}
+	With OCP structure, the reduced system can be solved in O(N) via Riccati recursion.
+	\begin{itemize}
+        \item \textbf{Backward recursion:} ($k = N-1, \dots, 0$ with $P_N = \tilde{Q}_N, p_N = \tilde{q}_N$)
+        \begin{equation*}
+            \begin{aligned}
+                M_k &= \tilde{R}_k + B_k^T P_{k+1} B_k, \quad \mathcal{S}_k = \tilde{S}_k + B_k^T P_{k+1} A_k \\
+                K_k &= -M_k^{-1} \mathcal{S}_k, \\
+				\quad k_k &= -M_k^{-1} (\tilde{r}_{stat, x, k} + B_k^T (P_{k+1} \tilde{r}_{eq, k} + p_{k+1})) \\
+                P_k &= \tilde{Q}_k + A_k^T P_{k+1} A_k + \mathcal{S}_k^T K_k \\
+                p_k &= \tilde{r}_{stat, u, k} + A_k^T (P_{k+1} \tilde{r}_{eq, k} + p_{k+1}) + \mathcal{S}_k^T k_k
+            \end{aligned}
+	\end{equation*}
+		\item \textbf{Forward recursion:} ($k = 0, \dots, N-1$)
+        \begin{equation*}
+            \begin{aligned}
+                \Delta u_k &= K_k \Delta x_k + k_k \\
+                \Delta x_{k+1} &= A_k \Delta x_k + B_k \Delta u_k + \tilde{r}_{eq,k} \\
+				\Delta s_k &= -(G_{x,k} \Delta x_k + G_{u,k} \Delta u_k + r_{\text{ineq},k}) \\
+				\Delta \lambda_k &= S_k^{-1} (\Lambda_k \Delta s_k - r_{\text{comp},k} + \Lambda_k r_{\text{ineq},k})
+            \end{aligned}
+        \end{equation*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Regularization techniques}
+    \framesubtitle{Motivation for regularization}
+	In primal-dual IPM, the full hessian matrix, i.e. $H_k$, is supposed to be positive definite, for two reasons:
+	\begin{itemize}
+		\item well-defined QP problem with unique solution and decent search direction in full space
+		\item allow Cholesky factorization of $M_k$ in Riccati recursion for fast computation
+	\end{itemize}
+	\vspace{1em}
+	Regularization techniques are usually introduced to ensure the positive definiteness of $H_k$, common methods include:
+	\begin{itemize}
+		\item PROJECT
+		\begin{equation*}
+			\text{project}(H_k, \epsilon) := V_k [\max(\epsilon, D_k)] V_k^{-1}
+		\end{equation*}
+		\item MIRROR
+		\begin{equation*}
+			\text{mirror}(H_k, \epsilon) := V_k [\max(\epsilon, \text{abs}(D_k))] V_k^{-1}
+		\end{equation*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Regularization techniques}
+    \framesubtitle{Regularization techniques}
+	We propose the following regularization that directly regularize $M_k=R_k + B_k^T P_{k+1} B_k$ during the Riccati recursion in a Levenberg-Marquardt fashion:
+	\begin{itemize}
+		\item R\_STAGE\_LM: regularize $R_k$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
+		\begin{equation*}
+			R_k^{\text{reg}} = R_k - \rho I
+		\end{equation*}
+		\item P\_STAGE\_LM:	regularize $R_k$ and $P_{k+1}$ with minimum negative eigenvalue $\rho$ of $M_k$ when the Cholesky factorization fails in current stage:
+		\begin{equation*}
+			R_k^{\text{reg}} = R_k - \rho I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho I
+		\end{equation*}
+		\item R\_GLOBAL\_LM: regularize $R_k$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
+		\begin{equation*}
+			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I
+		\end{equation*}
+		\item P\_GLOBAL\_LM: regularize $R_k$ and $P_{k+1}$ with the acculumlated global negative eigenvalue $\rho_{\text{global}}$ through all recursions:
+		\begin{equation*}
+			R_k^{\text{reg}} = R_k - \rho_{\text{global}} I  , \quad P_{k+1}^{\text{reg}} = P_{k+1} - \rho_{\text{global}} I
+		\end{equation*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical results, mixed draft cases}
+
+\begin{table}
+        \centering
+        \caption{Numerical Comparison of Regularization Techniques}
+        \setlength{\tabcolsep}{3pt}
+        \begin{tabular}{c ccc ccc ccc ccc}
+            \toprule
+            % Using multirow to span the header height
+            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
+            \multicolumn{3}{c}{M-pos-P-pos} & \multicolumn{3}{c}{M-pos-P-inde} & 
+            \multicolumn{3}{c}{M-inde-P-pos} & \multicolumn{3}{c}{M-inde-P-inde} \\
+            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. \\
+            \midrule
+            NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& -- & -- & F 	& -- & -- & F \\
+            PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S 	& 150 & 2.1e-5 & S 	& 18 & 4.10e-4 & S \\
+            MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S 	& 150 & 2.1e-5 & S 	& 44 & 3.97e-4 & S \\
+            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& -- & -- & F \\
+            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 16 & 4.51e-5 & S \\
+            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.95e+3 & N \\
+            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.21e+3 & N \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\end{frame}
+
+\begin{frame}{Numerical results, M Postive Definite}
+
+\begin{table}
+        \centering
+        \caption{Numerical Comparison of Regularization Techniques}
+        \setlength{\tabcolsep}{3pt}
+        \begin{tabular}{c ccc ccc}
+            \toprule
+            % Using multirow to span the header height
+            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
+            \multicolumn{3}{c}{M-pos-P-pos} & \multicolumn{3}{c}{M-pos-P-inde}\\
+            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+            & iter. & res. & stat. & iter. & res. & stat. \\
+            \midrule
+            NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S \\
+            MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S \\
+            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\end{frame}
+
+
+\begin{frame}{Numerical results, M Indefinite}
+
+\begin{table}
+        \centering
+        \caption{Numerical Comparison of Regularization Techniques}
+        \setlength{\tabcolsep}{3pt}
+        \begin{tabular}{c ccc ccc ccc ccc}
+            \toprule
+            % Using multirow to span the header height
+            \multirow{2}{*}{\diagbox[width=6.5em, height=2.8em]{\textbf{Reg.}}{\textbf{Problem}}} & 
+            \multicolumn{3}{c}{M-inde-P-pos 1} & \multicolumn{3}{c}{M-inde-P-inde 2} & 
+            \multicolumn{3}{c}{M-inde-P-inde 1} & \multicolumn{3}{c}{M-inde-P-inde 2} \\
+            % 3. \cmidrule(lr) creates gaps between groups, improving scannability
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. & iter. & res. & stat. \\
+            \midrule
+            NO\_REG.    	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& -- & -- & F 	& -- & -- & F \\
+            PROJECT     	& 24 & 5.47e-4 & S 	& 13 & 7.52e-5 & S 	& 150 & 2.1e-5 & S 	& 18 & 4.10e-4 & S \\
+            MIRROR      	& 44 & 5.21e-4 & S 	& 29 & 1.73e-4 & S 	& 150 & 2.1e-5 & S 	& 44 & 3.97e-4 & S \\
+            R\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& -- & -- & F \\
+            P\_STAGE\_LM  	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 16 & 4.51e-5 & S \\
+            R\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.95e+3 & N \\
+            P\_GLOBAL\_LM 	& 6 & 5.57e-5 & S 	& 5 & 9.03e-5 & S 	& 150 & 2.1e-5 & S 	& 100 & 1.21e+3 & N \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\end{frame}
+
+
+
+\bibliographystyle{plain}
+
+\end{document}

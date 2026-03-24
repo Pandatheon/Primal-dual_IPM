@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1770800431.7259 "/home/jingtao/Primal-dual_IPM/report/syscop_beamer/draft_sildes.tex" "draft_sildes.pdf" "draft_sildes" 1770800434.74851 0
-  "/home/jingtao/Primal-dual_IPM/report/syscop_beamer/draft_sildes.tex" 1770800431.39925 16539 1f988374185edbd7178cac5139e7a321 ""
+["pdflatex"] 1774348715.89875 "/home/jingtao/Primal-dual_IPM/report/syscop_beamer/draft_sildes.tex" "draft_sildes.pdf" "draft_sildes" 1774348719.01278 0
+  "/home/jingtao/Primal-dual_IPM/report/syscop_beamer/draft_sildes.tex" 1774348715.56815 16593 f3b49e5df1b4a80941b12a2a89b917e0 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex9.tfm" 1246382020 996 a18840b13b499c08ac2de96a99eda4bc ""
@@ -237,10 +237,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1762166295 5528330 eec9f591f2298dceaf6e205421f7c595 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1762166417 3633725 e8898def4c58863840b0cabbb02cf6e2 ""
   "/usr/local/texlive/2025/texmf.cnf" 1762166288.46245 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
-  "draft_sildes.aux" 1770800434.61397 5044 878f129adfb0183debe4d637482e154a "pdflatex"
-  "draft_sildes.nav" 1770800434.61766 1960 d0d1535947c8d237b01a68ef3fe122f3 "pdflatex"
-  "draft_sildes.out" 1770800432.6785 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "draft_sildes.tex" 1770800431.39925 16539 1f988374185edbd7178cac5139e7a321 ""
+  "draft_sildes.aux" 1774348718.86582 5044 878f129adfb0183debe4d637482e154a "pdflatex"
+  "draft_sildes.nav" 1774348718.86966 1960 d0d1535947c8d237b01a68ef3fe122f3 "pdflatex"
+  "draft_sildes.out" 1774348716.84268 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "draft_sildes.tex" 1774348715.56815 16593 f3b49e5df1b4a80941b12a2a89b917e0 ""
   "figures/right_highres_transparent.png" 1770757995.40227 104126 34118ceba8058c9ce9b40392429567fe ""
   "figures/ufr_logo_round.jpg" 1770757995.40227 124775 512b6a3e44c8fe51b6a386194898f08a ""
   "results/adjustment.png" 1770763303.68738 116471 38e922413f81aa430ff88aa231ee1da0 ""

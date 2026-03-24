@@ -7,8 +7,8 @@ import numpy as np
 from utils import read_matrix_list
 
 
-N = 20
-json_path = "cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=20.json"
+N = 50
+json_path = "cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=50.json"
 
 def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp = AcadosOcp()
@@ -91,12 +91,6 @@ def main():
     Q_list = read_matrix_list(json_path, "Q")
     R_list = read_matrix_list(json_path, "R")
     S_list = read_matrix_list(json_path, "S")
-    # Q_list = [np.array([[10.0, 0.0, 0.0, 0.0],
-    #             [0.0, 20.0, 0.0, 0.0],
-    #             [0.0, 0.0, 1.0, 0.0],
-    #             [0.0, 0.0, 0.0, 1.0]]) for _ in range(N)]
-    # R_list = [np.array([[0.1]]) for _ in range(N)]
-    # S_list = [np.zeros((1, 4)) for _ in range(N)]
 
     for i in range(ocp.solver_options.N_horizon):
         param_manager.set_value(name="A", value=A_list[i], stage=i)

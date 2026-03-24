@@ -22,11 +22,11 @@ class QP_mats(abstract_QP_mats):
         self.Q = np.diag(np.array([2.0, 0.2, 0.5]))
         self.R = np.diag(np.array([0.5, -1.0]))  # indefinite R
         self.S = np.zeros((self.nu, self.nx))
-        self.q = np.zeros((self.nx,))
-        self.r = np.zeros((self.nu,))
+        self.q = np.ones((self.nx,))
+        self.r = np.ones((self.nu,))
         #terminal cost
         self.Q_e = self.Q
-        self.q_e = np.zeros((self.nx,))
+        self.q_e = np.ones((self.nx,))
 
         self.uh = 10.0
         self.lh = -10.0
