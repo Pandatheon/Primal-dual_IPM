@@ -100,7 +100,25 @@ class QPSolver:
                 self._quit(iter_res_dict, reg, max_iter)
                 return self.solution
 
-            self._predictor_corrector_sweep(prev_sol, reg=reg)
+            ### Mehrotra predictor-corrector step
+            # predictor step
+            self.delta_aff_dict = self._compute_step(prev_sol, step_type='predictor', reg=reg)
+            mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
+
+            # compute centering parameter sigma
+            self.centering_param = (mu_aff/self.duality_measure)**3
+            current_reg_count = self.recorder.reg_count
+
+            # predictor-corrector step
+            self.delta_dict = self._compute_step(prev_sol, step_type='predictor-corrector', reg=reg)
+            mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+
+            ### Conditonal Mehrotra step
+            if mu_pred > 2*mu_aff:
+                self.recorder.reg_count = current_reg_count
+                self.delta_dict = self._compute_step(prev_sol, step_type='centering', reg=reg)
+
+            self._compute_step_size_and_update_solution(prev_sol)
 
             iter_res_dict = self._record_res()
             self.statistics_dict['iter_count'] += 1
@@ -140,42 +158,23 @@ class QPSolver:
         self.statistics_dict['res_comp_list'].append(iter_res_dict['res_comp'])
         return iter_res_dict
 
-    def _predictor_corrector_sweep(self, prev_sol:iterate, reg:str='NO_REGULARIZE'):
-        # predictor step
-        self._update_rhs(prev_sol, step_type='predictor') # get rhs for predictor step
+    def _compute_step(self, prev_sol:iterate, step_type:str , reg:str='NO_REGULARIZE')-> iterate:
+        '''Compute the search direction by solving the KKT system with Riccati recursion.'''
+        self._update_rhs(prev_sol, self.delta_aff_dict, step_type=step_type)
         self._backward_sweep(prev_sol, reg=reg)
-        self.delta_aff_dict = self._solve_KKT_system(prev_sol)
+        delta_dict = self._solve_KKT_system(prev_sol)
+        return delta_dict
 
-        # compute duality measure
-        alpha_pri_max, alpha_dual_max, alpha_max = self._fraction_to_boundary(prev_sol, self.delta_aff_dict, boundary=False)
+    def _compute_duality(self, prev_sol:iterate, delta_dict:dict)-> float:
+        alpha_pri_max, alpha_dual_max, alpha_max = self._fraction_to_boundary(prev_sol, delta_dict, boundary=False)
         s0_aff = np.maximum(prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0'], 1e-20)
         s_aff = np.maximum(prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s'], 1e-20)
         lam0_aff = np.maximum(prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0'], 1e-20)
         lam_aff = np.maximum(prev_sol.lam + alpha_dual_max * self.delta_aff_dict['delta_lam'], 1e-20)
-        mu_aff = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
-        self.centering_param = (mu_aff/self.duality_measure)**3
+        mu = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
+        return mu
 
-        current_reg_count = self.recorder.reg_count
-
-        # predictor-corrector step
-        self._update_rhs(prev_sol, self.delta_aff_dict, step_type='predictor-corrector') # get rhs for predictor-corrector step
-        self._backward_sweep(prev_sol, reg=reg)
-        self.delta_dict = self._solve_KKT_system(prev_sol)
-
-        # compute step size
-        alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
-        lam0_delta = np.maximum(prev_sol.lam0 + alpha_dual * self.delta_dict['delta_lam0'], 1e-16)
-        lam_delta = np.maximum(prev_sol.lam + alpha_dual * self.delta_dict['delta_lam'], 1e-16)
-        s0_delta = np.maximum(prev_sol.s0 + alpha_pri * self.delta_dict['delta_s0'], 1e-16)
-        s_delta = np.maximum(prev_sol.s + alpha_pri * self.delta_dict['delta_s'], 1e-16)
-        mu_pred = ((s0_delta @ lam0_delta) + (s_delta.flatten() @ lam_delta.flatten()))/self.ineq_num
-        # conditonal Mehrotra step
-        if mu_pred > 2*mu_aff:
-            self.recorder.reg_count = current_reg_count
-            self._update_rhs(prev_sol, step_type='centering')
-            self._backward_sweep(prev_sol, reg=reg)
-            self.delta_dict = self._solve_KKT_system(prev_sol)
-
+    def _compute_step_size_and_update_solution(self, prev_sol:iterate):
         # compute step size
         alpha_pri, alpha_dual, alpha = self._fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
         # update solution
@@ -221,19 +220,19 @@ class QPSolver:
 
             #complementarity residual
             if i == 0:
-                if delta_aff_dict is None and step_type == 'predictor':
+                if step_type == 'predictor':
                     res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten()
                     duality_measure += (prev_sol.lam0 @ prev_sol.s0)
-                elif delta_aff_dict is None and step_type == 'centering':
+                elif step_type == 'centering':
                     res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0))
                     duality_measure += (prev_sol.lam0 @ prev_sol.s0)
                 elif step_type == 'predictor-corrector':
                     res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() + (delta_aff_dict['delta_lam0'] * delta_aff_dict['delta_s0']).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam0))
             else:
-                if delta_aff_dict is None and step_type == 'predictor':
+                if step_type == 'predictor':
                     res_comp[i-1] = (np.diag(prev_sol.lam[i-1]) @ prev_sol.s[i-1]).flatten()
                     duality_measure += (prev_sol.lam[i-1] @ prev_sol.s[i-1])
-                elif delta_aff_dict is None and step_type == 'centering':
+                elif step_type == 'centering':
                     res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() - self.centering_param * self.duality_measure * np.ones(len(prev_sol.lam[i-1]))
                     duality_measure += (prev_sol.lam[i-1] @ prev_sol.s[i-1])
                 elif step_type == 'predictor-corrector':
@@ -248,7 +247,7 @@ class QPSolver:
         self.rhs_dict['rd'] = res_ineq
         self.rhs_dict['rm0'] = res_comp0
         self.rhs_dict['rm'] = res_comp
-        if delta_aff_dict is None and not record and step_type == 'predictor':
+        if step_type == 'predictor' and not record:
             self.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
             self.statistics_dict['duality_measure_list'].append(self.duality_measure)
 
@@ -340,7 +339,7 @@ class QPSolver:
         if reg == 'PROJECT' or reg == 'MIRROR':
             regularized_QP = regularize_QP(self.qp, recorder=self.recorder,
                                            reg_config= self.reg_config, method=reg)
-        else: 
+        else:
             regularized_QP = copy.deepcopy(self.qp)
         modified_QP_stages = self._modify_QP(regularized_QP ,prev_sol)
 
@@ -348,18 +347,18 @@ class QPSolver:
 
         self.feedback = Feedback(
             P = np.zeros((horizon+1, nx, nx), dtype=float),
-            p = np.zeros((horizon+1, nx), dtype=float), 
-            K = np.zeros((horizon, nu, nx), dtype=float), 
+            p = np.zeros((horizon+1, nx), dtype=float),
+            K = np.zeros((horizon, nu, nx), dtype=float),
             k = np.zeros((horizon, nu), dtype=float)
         )
         self.feedback.P[-1] = modified_QP_stages[-1].Q_e
         self.feedback.p[-1] = self.rhs_dict['rg_'][-1][:nx]
         for i in reversed(range(horizon)):
             self.feedback.P[i], self.feedback.p[i], self.feedback.K[i], self.feedback.k[i] = riccati_recursion_with_stage_regularization(
-            qp_stage=modified_QP_stages[i], 
+            qp_stage=modified_QP_stages[i],
             qp_terminal=(self.feedback.P[i+1], self.feedback.p[i+1]),
             nx = nx,
-            rg=self.rhs_dict['rg_'][i], rb=self.rhs_dict['rb'][i], 
+            rg=self.rhs_dict['rg_'][i], rb=self.rhs_dict['rb'][i],
             reg_config=self.reg_config, recorder=self.recorder,
             reg=reg, index=i
             )
@@ -392,7 +391,7 @@ class QPSolver:
             modified_QP_stages.append(QP_stage(
                 Q = qp.stages[i].Q + Q_tilt,
                  # in order to make R_stage and project the same when only R is negative definite
-                 # R_tilt has to be removed before riccati recursion to avoid possible successful cholesky decomposition 
+                 # R_tilt has to be removed before riccati recursion to avoid possible successful cholesky decomposition
                  # which is due to the curvature provided by constraints (which often happens!!!)
                  # and add R_tilt back during recursion regularization after R is modified
                 R = qp.stages[i].R + R_tilt,
