@@ -1,7 +1,7 @@
 import numpy as np
 from QP_formulation import Dense_QP_varying
 from solvers.IPQPSolver_varying import QP_solver
-from utilis.utils import read_matrix_list
+from utilis.utilis import read_matrix_list
 
 json_path = "pendulum_caseF_qp_2_100.json"
 

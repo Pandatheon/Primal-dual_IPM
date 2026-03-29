@@ -1,7 +1,7 @@
 import numpy as np
 from QP_formulation import OCP_QP_varying
 from solvers.RiccatiQPSolver import QP_solver
-from utilis.utils import read_matrix_list
+from utilis.utilis import read_matrix_list
 import copy
 json_path = "pendulum_caseF_qp_N=20.json"
 

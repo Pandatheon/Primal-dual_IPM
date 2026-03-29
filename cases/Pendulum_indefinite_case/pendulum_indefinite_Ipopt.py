@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from acados_template import AcadosOcp, AcadosCasadiOcpSolver, AcadosParam, AcadosParamManager
 import casadi as ca
 import numpy as np
-from utilis.utils import read_matrix_list
+from utilis.utilis import read_matrix_list
 
 
 N = 20
