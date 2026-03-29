@@ -1,6 +1,6 @@
 import os
 from solvers.RiccatiQPSolver import QP_solver
-from utilis.utils import read_matrix_from_npz
+from utilis.utilis import read_matrix_from_npz
 import copy
 
 folder_path = "/home/jingtao/Primal-dual_IPM/cases/Designed_case"

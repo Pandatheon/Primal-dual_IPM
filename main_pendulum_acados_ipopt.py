@@ -2,9 +2,9 @@ import numpy as np
 from QP_formulation import OCP_QP_varying
 from solvers.RiccatiQPSolver import QP_solver
 from Regularizations import Regularizations_config
-from utilis.utils import read_matrix_list
+from utilis.utilis import read_matrix_list
 import copy
-from utilis.utils import write_csv
+from utilis.utilis import write_csv
 
 json_path_list = [
     "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json",
