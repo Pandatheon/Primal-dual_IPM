@@ -181,10 +181,6 @@ def modify_QP(qp:OCP_QP_varying, rhs_dict, prev_sol:iterate):
         S_tilt = lhs_modification[qp.nx:, :qp.nx]
         modified_QP_stages.append(QP_stage(
             Q = qp.stages[i].Q + Q_tilt,
-                # in order to make R_stage and project the same when only R is negative definite
-                # R_tilt has to be removed before riccati recursion to avoid possible successful cholesky decomposition
-                # which is due to the curvature provided by constraints (which often happens!!!)
-                # and add R_tilt back during recursion regularization after R is modified
             R = qp.stages[i].R + R_tilt,
             S = qp.stages[i].S + S_tilt,
             q = qp.stages[i].q, r = qp.stages[i].r,

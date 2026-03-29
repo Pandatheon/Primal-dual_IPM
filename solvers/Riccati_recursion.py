@@ -51,7 +51,7 @@ def riccati_recursion_with_stage_regularization(
         if reg == 'NO_REGULARIZE':
             raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 
-        elif reg in reg_config.stage_based_regularization:
+        elif reg in reg_config.Reduced_Hessian_based_regularization:
             try:
                 reduced_hessian_reg, P_reg = stage_regularization(reg, reg_config, R, P, B, recorder, index)
             except np.linalg.LinAlgError:

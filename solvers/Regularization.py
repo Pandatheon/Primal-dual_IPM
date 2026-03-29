@@ -5,11 +5,11 @@ from QP_template.OCP_QP import OCP_QP_varying, QP_stage, QP_Terminal
 def stage_regularization(reg, reg_config,
                          R, P, B, 
                          recorder, index) -> np.ndarray:
-    if reg in [reg_config.stage_based_regularization[0], reg_config.stage_based_regularization[3]]:
+    if reg in [reg_config.Reduced_Hessian_based_regularization[0], reg_config.Reduced_Hessian_based_regularization[3]]:
         # EM M only
         eigvals_M, eigvecs_M = np.linalg.eig(R+ B.T@P@B)
 
-        if reg == reg_config.stage_based_regularization[0]:
+        if reg == reg_config.Reduced_Hessian_based_regularization[0]:
             eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method='PROJECT')
         else:
             eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method='MIRROR')
@@ -21,12 +21,12 @@ def stage_regularization(reg, reg_config,
         recorder.record_adjustment_M(index, eigvals_M_reg, eigvals_M, reduced_hessian_reg)
         recorder.increment_reg_count()
 
-    elif reg in [reg_config.stage_based_regularization[1], reg_config.stage_based_regularization[4]]:
+    elif reg in [reg_config.Reduced_Hessian_based_regularization[1], reg_config.Reduced_Hessian_based_regularization[4]]:
 
         # EM P first
         eigvals_P, eigvecs_P = np.linalg.eig(P)
 
-        if reg == reg_config.stage_based_regularization[1]:
+        if reg == reg_config.Reduced_Hessian_based_regularization[1]:
             eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method='PROJECT')
         else:
             eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method='MIRROR')
@@ -41,7 +41,7 @@ def stage_regularization(reg, reg_config,
         #  EM modified M next
         eigvals_M, eigvecs_M = np.linalg.eig(reduced_hessian_P_reg)
 
-        if reg == reg_config.stage_based_regularization[1]:
+        if reg == reg_config.Reduced_Hessian_based_regularization[1]:
             eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method='PROJECT')
         else:
             eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method='MIRROR')
@@ -53,12 +53,12 @@ def stage_regularization(reg, reg_config,
         recorder.record_adjustment_M(index, eigvals_M_reg, eigvals_M_0, reduced_hessian_reg)
         recorder.increment_reg_count(2)
 
-    elif reg in [reg_config.stage_based_regularization[2], reg_config.stage_based_regularization[5]]:
+    elif reg in [reg_config.Reduced_Hessian_based_regularization[2], reg_config.Reduced_Hessian_based_regularization[5]]:
 
         # EM R first
         eigvals_R, eigvecs_R = np.linalg.eig(R)
 
-        if reg == reg_config.stage_based_regularization[2]:
+        if reg == reg_config.Reduced_Hessian_based_regularization[2]:
             eigvals_R_reg = do_regularization(eigvals_R, reg_config.delta, method='PROJECT')
         else:
             eigvals_R_reg = do_regularization(eigvals_R, reg_config.delta, method='MIRROR')
@@ -68,7 +68,7 @@ def stage_regularization(reg, reg_config,
         # EM P next
         eigvals_P, eigvecs_P = np.linalg.eig(P)
 
-        if reg == reg_config.stage_based_regularization[2]:
+        if reg == reg_config.Reduced_Hessian_based_regularization[2]:
             eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method='PROJECT')
         else:
             eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method='MIRROR')
@@ -86,7 +86,7 @@ def stage_regularization(reg, reg_config,
         recorder.record_adjustment_M(index, eigvals_M_reg, eigvals_M, reduced_hessian_reg)
         recorder.increment_reg_count(2)
 
-        return reduced_hessian_reg, P_reg
+    return reduced_hessian_reg, P_reg
 
 def do_regularization(eigvals: np.ndarray, 
                       delta: float,
