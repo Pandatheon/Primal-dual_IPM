@@ -10,7 +10,7 @@ import copy
 
 
 def update_rhs(qp, centering_param:float, rhs_dict:dict, statistics_dict:dict, ineq_num:int,
-               prev_sol:iterate, delta_aff_dict:dict = None, record:bool=False, step_type:str='predictor')-> np.ndarray:
+               prev_sol:iterate, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
     nx = qp.nx
     nu = qp.nu
     N = qp.N
@@ -68,7 +68,7 @@ def update_rhs(qp, centering_param:float, rhs_dict:dict, statistics_dict:dict, i
     rhs_dict['rd'] = res_ineq
     rhs_dict['rm0'] = res_comp0
     rhs_dict['rm'] = res_comp
-    if step_type == 'predictor' and not record:
+    if step_type == 'predictor':
         rhs_dict['duality_measure'] = max(duality_measure / ineq_num, 1e-16)
         statistics_dict['duality_measure_list'].append(rhs_dict['duality_measure'])
     return rhs_dict

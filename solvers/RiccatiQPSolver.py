@@ -19,10 +19,10 @@ class QPSolver:
         self.delta_aff_dict = None
         self.delta_dict = None
         self.res_max = {
-            'res_stat' : 1e-9,
-            'res_eq' : 1e-9,
-            'res_ineq' : 1e-9,
-            'res_comp' : 1e-9,
+            'res_stat' : 1e-8,
+            'res_eq' : 1e-8,
+            'res_ineq' : 1e-8,
+            'res_comp' : 1e-8,
         }
         # rhs of KKT system, will be updated in each iteration
         self.rhs_dict = {
@@ -126,7 +126,7 @@ class QPSolver:
 
             # predictor-corrector step
             self.delta_dict = self._compute_step(prev_sol, step_type='predictor-corrector', reg=reg)
-            mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+            mu_pred = self._compute_duality(prev_sol, self.delta_dict, prob=True)
 
             ### Conditonal Mehrotra step
             if mu_pred > 2*mu_aff:
@@ -180,13 +180,22 @@ class QPSolver:
                                   prev_sol, feedback)
         return delta_dict
 
-    def _compute_duality(self, prev_sol:iterate, delta_dict:dict)-> float:
-        alpha_pri_max, alpha_dual_max, alpha_max = fraction_to_boundary(prev_sol, delta_dict, self.statistics_dict, boundary=False)
-        s0_aff = np.maximum(prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0'], 1e-20)
-        s_aff = np.maximum(prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s'], 1e-20)
-        lam0_aff = np.maximum(prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0'], 1e-20)
-        lam_aff = np.maximum(prev_sol.lam + alpha_dual_max * self.delta_aff_dict['delta_lam'], 1e-20)
-        mu = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
+    def _compute_duality(self, prev_sol:iterate, delta_dict:dict, prob:bool=False)-> float:
+        if prob:
+            # compute step size
+            alpha_pri, alpha_dual, alpha = fraction_to_boundary(prev_sol, self.delta_dict, self.statistics_dict, boundary=True)
+            lam0_delta = np.maximum(prev_sol.lam0 + alpha_dual * self.delta_dict['delta_lam0'], 1e-16)
+            lam_delta = np.maximum(prev_sol.lam + alpha_dual * self.delta_dict['delta_lam'], 1e-16)
+            s0_delta = np.maximum(prev_sol.s0 + alpha_pri * self.delta_dict['delta_s0'], 1e-16)
+            s_delta = np.maximum(prev_sol.s + alpha_pri * self.delta_dict['delta_s'], 1e-16)
+            mu = ((s0_delta @ lam0_delta) + (s_delta.flatten() @ lam_delta.flatten()))/self.ineq_num
+        else:
+            alpha_pri_max, alpha_dual_max, alpha_max = fraction_to_boundary(prev_sol, delta_dict, self.statistics_dict, boundary=False)
+            s0_aff = np.maximum(prev_sol.s0 + alpha_pri_max * self.delta_aff_dict['delta_s0'], 1e-20)
+            s_aff = np.maximum(prev_sol.s + alpha_pri_max * self.delta_aff_dict['delta_s'], 1e-20)
+            lam0_aff = np.maximum(prev_sol.lam0 + alpha_dual_max * self.delta_aff_dict['delta_lam0'], 1e-20)
+            lam_aff = np.maximum(prev_sol.lam + alpha_dual_max * self.delta_aff_dict['delta_lam'], 1e-20)
+            mu = ((s0_aff @ lam0_aff) + (s_aff.flatten() @ lam_aff.flatten()))/self.ineq_num
         return mu
 
     def _compute_step_size_and_update_solution(self, prev_sol:iterate):
