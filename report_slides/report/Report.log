@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  30 MAR 2026 15:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  1 APR 2026 22:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/jingtao/Primal-dual_IPM/report&slides/report/Report.tex
-(/home/jingtao/Primal-dual_IPM/report&slides/report/Report.tex
+**/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex
+(/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
 (./IEEEtran.cls
@@ -739,7 +739,14 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
+) [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+
+]
+Underfull \hbox (badness 2680) in paragraph at lines 143--145
+[]\OT1/ptm/m/n/10 In or-der to fa-cil-i-tate the con-ver-gence, the Mehro-tra
+ []
+
 \g__nicematrix_max_cell_width_dim=\dimen371
 \c@iRow=\count387
 \c@jCol=\count388
@@ -747,57 +754,64 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \l__nicematrix_left_delim_dim=\dimen372
 \l__nicematrix_right_delim_dim=\dimen373
 
-Overfull \hbox (2.01984pt too wide) detected at line 178
+Overfull \hbox (2.92056pt too wide) detected at line 214
 [] [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@ []
  []
 
-[1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 223.
 
+Underfull \vbox (badness 1052) has occurred while \output is active []
 
-]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 187.
  [2]
-<figures/iteration_performance_profile.pdf, id=108, 562.54416pt x 417.25261pt>
+Underfull \hbox (badness 1394) in paragraph at lines 388--391
+\OT1/ptm/m/n/10 two full Hes-sian reg-u-lar-iza-tion meth-ods (PROJECT and
+ []
+
+<figures/iteration_performance_profile.pdf, id=112, 562.54416pt x 417.25261pt>
 File: figures/iteration_performance_profile.pdf Graphic file (type pdf)
 <use figures/iteration_performance_profile.pdf>
-Package pdftex.def Info: figures/iteration_performance_profile.pdf  used on input line 355.
+Package pdftex.def Info: figures/iteration_performance_profile.pdf  used on input line 399.
 (pdftex.def)             Requested size: 252.0pt x 186.91516pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 358--358
+Underfull \hbox (badness 10000) in paragraph at lines 402--402
 \OT1/ptm/m/n/8 Fig. 1.  []Performance pro-file com-par-ing reg-u-lar-iza-tion tech-niques
  []
 
 
-Underfull \hbox (badness 6658) in paragraph at lines 358--358
+Underfull \hbox (badness 6658) in paragraph at lines 402--402
 \OT1/ptm/m/n/8 on in-def-i-nite $\OML/cmm/m/it/8 M$ \OT1/ptm/m/n/8 cases. Only four meth-ods PROJECT, MIR-ROR,
  []
 
 
-Underfull \hbox (badness 2460) in paragraph at lines 358--358
+Underfull \hbox (badness 2460) in paragraph at lines 402--402
 \OT1/ptm/m/n/8 RP[]STAGE[]EM and PM[]STAGE[]EM suc-cess-fully solved all the 30
  []
 
-<figures/regularization_avg_se.pdf, id=110, 559.7822pt x 417.42427pt>
+[3]
+<figures/regularization_avg_se.pdf, id=123, 559.7822pt x 417.42427pt>
 File: figures/regularization_avg_se.pdf Graphic file (type pdf)
 <use figures/regularization_avg_se.pdf>
-Package pdftex.def Info: figures/regularization_avg_se.pdf  used on input line 373.
+Package pdftex.def Info: figures/regularization_avg_se.pdf  used on input line 422.
 (pdftex.def)             Requested size: 252.0pt x 187.91562pt.
-[3 <./figures/iteration_performance_profile.pdf>]
-Overfull \vbox (4.40002pt too high) detected at line 396
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \vbox (4.40002pt too high) detected at line 443
  []
 
-<figures/reduction_vertical.pdf, id=165, 488.32774pt x 634.14908pt>
+[4 <./figures/iteration_performance_profile.pdf> <./figures/regularization_avg_se.pdf>]
+<figures/reduction_vertical.pdf, id=211, 488.32774pt x 634.14908pt>
 File: figures/reduction_vertical.pdf Graphic file (type pdf)
 <use figures/reduction_vertical.pdf>
-Package pdftex.def Info: figures/reduction_vertical.pdf  used on input line 432.
+Package pdftex.def Info: figures/reduction_vertical.pdf  used on input line 479.
 (pdftex.def)             Requested size: 252.0pt x 327.25325pt.
-[4 <./figures/regularization_avg_se.pdf> <./figures/reduction_vertical.pdf>]
-<figures/adjustment_vertical.pdf, id=311, 487.49942pt x 633.51193pt>
+<figures/adjustment_vertical.pdf, id=213, 487.49942pt x 633.51193pt>
 File: figures/adjustment_vertical.pdf Graphic file (type pdf)
 <use figures/adjustment_vertical.pdf>
-Package pdftex.def Info: figures/adjustment_vertical.pdf  used on input line 450.
+Package pdftex.def Info: figures/adjustment_vertical.pdf  used on input line 496.
 (pdftex.def)             Requested size: 252.0pt x 327.4851pt.
- (./Report.bbl)
+ [5 <./figures/reduction_vertical.pdf> <./figures/adjustment_vertical.pdf>] (./Report.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -809,27 +823,29 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[5 <./figures/adjustment_vertical.pdf>] (./Report.aux)
+[6
+
+] (./Report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: A2DCCF060FCA17A9834568507608E78E;2019.
+(rerunfilecheck)             Checksum: 6553DC7C04E0FA2AA2F1EACCBE549512;2044.
  ) 
 Here is how much of TeX's memory you used:
- 23498 strings out of 467578
- 457343 string characters out of 5420566
- 891414 words of memory out of 5000000
- 51940 multiletter control sequences out of 15000+600000
- 668509 words of font info for 118 fonts, out of 8000000 for 9000
+ 23503 strings out of 467578
+ 457395 string characters out of 5420566
+ 889594 words of memory out of 5000000
+ 51941 multiletter control sequences out of 15000+600000
+ 669587 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,19n,80p,560b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,18n,80p,561b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Report.pdf (5 pages, 305628 bytes).
+Output written on Report.pdf (6 pages, 308709 bytes).
 PDF statistics:
- 510 PDF objects out of 1000 (max. 8388607)
- 202 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
+ 518 PDF objects out of 1000 (max. 8388607)
+ 209 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
  137 words of extra memory for PDF output out of 10000 (max. 10000000)
 

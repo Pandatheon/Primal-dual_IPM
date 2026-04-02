@@ -39,6 +39,14 @@ D.~Arnström, A.~Bemporad, and D.~Axehill, ``A dual active-set solver for embedd
 \bibitem{gianluca2013efficient}
 G.~Frison and J.~B. Jørgensen, ``Efficient implementation of the riccati recursion for solving linear-quadratic control problems,'' in \emph{2013 IEEE International Conference on Control Applications (CCA)}, 2013, pp. 1117--1122.
 
+\bibitem{verschueren2017sparsity}
+R.~Verschueren, M.~Zanon, R.~Quirynen, and M.~Diehl, ``A {{Sparsity Preserving Convexification Procedure}} for {{Indefinite Quadratic Programs Arising}} in {{Direct Optimal Control}},'' \emph{SIAM Journal on Optimization}, vol.~27, no.~3, pp. 2085--2109, Jan. 2017.
+
+\bibitem{Mehrotra1992implementation}
+\BIBentryALTinterwordspacing
+S.~Mehrotra, ``On the implementation of a primal-dual interior point method,'' \emph{SIAM Journal on Optimization}, vol.~2, no.~4, pp. 575--601, 1992. [Online]. Available: \url{https://doi.org/10.1137/0802028}
+\BIBentrySTDinterwordspacing
+
 \bibitem{rao1998application}
 C.~V. Rao, S.~J. Wright, and J.~B. Rawlings, ``Application of {{Interior-Point Methods}} to {{Model Predictive Control}},'' \emph{Journal of Optimization Theory and Applications}, vol.~99, no.~3, pp. 723--757, Dec. 1998.
 
@@ -47,15 +55,7 @@ C.~V. Rao, S.~J. Wright, and J.~B. Rawlings, ``Application of {{Interior-Point M
 G.~Frison and M.~Diehl, ``Hpipm: a high-performance quadratic programming framework for model predictive control,'' 2020. [Online]. Available: \url{https://arxiv.org/abs/2003.02547}
 \BIBentrySTDinterwordspacing
 
-\bibitem{verschueren2017sparsity}
-R.~Verschueren, M.~Zanon, R.~Quirynen, and M.~Diehl, ``A {{Sparsity Preserving Convexification Procedure}} for {{Indefinite Quadratic Programs Arising}} in {{Direct Optimal Control}},'' \emph{SIAM Journal on Optimization}, vol.~27, no.~3, pp. 2085--2109, Jan. 2017.
-
 \bibitem{nocedal2006numerical}
 J.~Nocedal and S.~Wright, \emph{Numerical Optimization}, 2nd~ed., ser. Springer Series in Operations Research and Financial Engineering.\hskip 1em plus 0.5em minus 0.4em\relax New York: Springer Science \& Business Media, 2006.
-
-\bibitem{Mehrotra1992implementation}
-\BIBentryALTinterwordspacing
-S.~Mehrotra, ``On the implementation of a primal-dual interior point method,'' \emph{SIAM Journal on Optimization}, vol.~2, no.~4, pp. 575--601, 1992. [Online]. Available: \url{https://doi.org/10.1137/0802028}
-\BIBentrySTDinterwordspacing
 
 \end{thebibliography}

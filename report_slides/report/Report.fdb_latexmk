@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex Report"] 1774877730.0397 "Report.aux" "Report.bbl" "Report" 1774877731.50235 0
+["bibtex Report"] 1775073825.02317 "Report.aux" "Report.bbl" "Report" 1775073838.71221 0
   "./references.bib" 1774870827.81384 6391 f8c250ae91cf29a1f56cea46a22d4c38 ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "Report.aux" 1774877731.0858 7936 2167caf0008087b1b99d0b9dd7927d55 "pdflatex"
+  "Report.aux" 1775073838.36032 8100 06b5cdf1ad8235fadbccb07e379922eb "pdflatex"
   (generated)
   "Report.bbl"
   "Report.blg"
   (rewritten before read)
-["pdflatex"] 1774877730.19645 "/home/jingtao/Primal-dual_IPM/report&slides/report/Report.tex" "Report.pdf" "Report" 1774877731.50276 0
-  "/home/jingtao/Primal-dual_IPM/report&slides/report/Report.tex" 1774877728.45834 24663 83d253eae02ad6da01723a9022c2ae72 ""
+["pdflatex"] 1775073837.51785 "/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex" "Report.pdf" "Report" 1775073838.71241 0
+  "/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex" 1775073837.31898 27420 f7a704e7305d6f1cf9d01af44a3a643f ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -188,10 +188,10 @@
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1762166417 3633725 e8898def4c58863840b0cabbb02cf6e2 ""
   "/usr/local/texlive/2025/texmf.cnf" 1762166288.46245 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
   "IEEEtran.cls" 1774451200.9663 288304 b67b6fc6c2abb39f9b461923f5199343 ""
-  "Report.aux" 1774877731.0858 7936 2167caf0008087b1b99d0b9dd7927d55 "pdflatex"
-  "Report.bbl" 1774877730.18355 3803 8ddd00a190e96650defcae6c748ded3f "bibtex Report"
-  "Report.out" 1774877731.08978 2019 a2dccf060fca17a9834568507608e78e "pdflatex"
-  "Report.tex" 1774877728.45834 24663 83d253eae02ad6da01723a9022c2ae72 ""
+  "Report.aux" 1775073838.36032 8100 06b5cdf1ad8235fadbccb07e379922eb "pdflatex"
+  "Report.bbl" 1775073825.14565 3803 f0acd1a288b9d4730786a68c8151baab "bibtex Report"
+  "Report.out" 1775073838.36398 2044 6553dc7c04e0fa2aa2f1eaccbe549512 "pdflatex"
+  "Report.tex" 1775073837.31898 27420 f7a704e7305d6f1cf9d01af44a3a643f ""
   "figures/adjustment_vertical.pdf" 1774877410.44117 37075 34ea8d10cf7a3f28c668eafaabda9688 ""
   "figures/iteration_performance_profile.pdf" 1774876823.41366 20419 49219d5cd984d585c7eb23281c39c6d4 ""
   "figures/reduction_vertical.pdf" 1774877410.4207 35918 7c672a10a3708bbef9f7a4a54aaf1632 ""
