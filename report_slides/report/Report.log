@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  1 APR 2026 22:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  16 APR 2026 00:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -586,6 +586,17 @@ Package: nicematrix 2025/10/23 v7.4 Enhanced arrays with the help of PGF/TikZ
 \l__nicematrix_position_int=\count368
 \l__nicematrix_multiplicity_int=\count369
 \l__nicematrix_brace_yshift_dim=\dimen362
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/acronym/acronym.sty
+Package: acronym 2025/01/17 v1.50 Support for acronyms (Tobias Oetiker)
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/bigfoot/suffix.sty
+Package: suffix 2006/07/15 1.5a Variant command support
+) (/usr/local/texlive/2025/texmf-dist/tex/generic/xstring/xstring.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/xstring/xstring.tex
+\xs_counta=\count370
+\xs_countb=\count371
+)
+Package: xstring 2023/08/22 v1.86 String manipulations (CT)
+)
+\AC@clearlist=\toks40
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
  (/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/iftex.sty
@@ -617,13 +628,13 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count370
+\c@section@level=\count372
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
 \@linkdim=\dimen363
-\Hy@linkcounter=\count371
-\Hy@pagecounter=\count372
+\Hy@linkcounter=\count373
+\Hy@pagecounter=\count374
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -631,7 +642,7 @@ Now handling font encoding PD1 ...
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count373
+\Hy@SavedSpaceFactor=\count375
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -644,7 +655,7 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count374
+\c@Hy@tempcnt=\count376
  (/usr/local/texlive/2025/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip18
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
@@ -656,7 +667,7 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count375
+\Fld@menulength=\count377
 \Field@Width=\dimen365
 \Fld@charsize=\dimen366
 Package hyperref Info: Hyper figures OFF on input line 6078.
@@ -666,15 +677,15 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count376
-\c@Item=\count377
-\c@Hfootnote=\count378
+\Hy@abspage=\count378
+\c@Item=\count379
+\c@Hfootnote=\count380
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count379
-\c@bookmark@seq@number=\count380
+\Fld@listcount=\count381
+\c@bookmark@seq@number=\count382
  (/usr/local/texlive/2025/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
@@ -686,39 +697,39 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 ) (./Report.aux)
 \openout1 = `Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 
 -- Lines per column: 56 (exact).
 (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count381
+\scratchcounter=\count383
 \scratchdimen=\dimen367
 \scratchbox=\box73
-\nofMPsegments=\count382
-\nofMParguments=\count383
-\everyMPshowfont=\toks40
-\MPscratchCnt=\count384
+\nofMPsegments=\count384
+\nofMParguments=\count385
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count386
 \MPscratchDim=\dimen368
-\MPnumerator=\count385
-\makeMPintoPDFobject=\count386
-\everyMPtoPDFconversion=\toks41
+\MPnumerator=\count387
+\makeMPintoPDFobject=\count388
+\everyMPtoPDFconversion=\toks42
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -727,91 +738,107 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \c__nicematrix_shift_Ldots_last_row_dim=\dimen369
 \c__nicematrix_innersep_middle_dim=\dimen370
-Package hyperref Info: Link coloring OFF on input line 23.
+Package hyperref Info: Link coloring OFF on input line 36.
  (./Report.out) (./Report.out)
 \@outlinefile=\write4
 \openout4 = `Report.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
+Package acronym Info: Label `acro:IPM' newly defined as it shall be overridden
+although it is yet undefined on input line 55.
+Package acronym Info: Label `acro:OCP' newly defined as it shall be overridden
+although it is yet undefined on input line 55.
+Package acronym Info: Label `acro:QP' newly defined as it shall be overridden
+although it is yet undefined on input line 55.
+Package acronym Info: Label `acro:EM' newly defined as it shall be overridden
+although it is yet undefined on input line 56.
+Package acronym Info: Label `acro:NMPC' newly defined as it shall be overridden
+although it is yet undefined on input line 63.
+Package acronym Info: Label `acro:SQP' newly defined as it shall be overridden
+although it is yet undefined on input line 63.
+Package acronym Info: Label `acro:QP' overridden on input line 64.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
+)
+Package acronym Info: Label `acro:OCP' overridden on input line 66.
+Package acronym Info: Label `acro:EM' overridden on input line 83.
+Package acronym Info: Label `acro:CM' newly defined as it shall be overridden
+although it is yet undefined on input line 84.
+Package acronym Info: Label `acro:LM' newly defined as it shall be overridden
+although it is yet undefined on input line 85.
+Package acronym Info: Label `acro:KKT' newly defined as it shall be overridden
+although it is yet undefined on input line 105.
+ [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 2680) in paragraph at lines 143--145
+Underfull \hbox (badness 2680) in paragraph at lines 166--168
 []\OT1/ptm/m/n/10 In or-der to fa-cil-i-tate the con-ver-gence, the Mehro-tra
  []
 
 \g__nicematrix_max_cell_width_dim=\dimen371
-\c@iRow=\count387
-\c@jCol=\count388
+\c@iRow=\count389
+\c@jCol=\count390
 \l__nicematrix_cell_box=\box74
 \l__nicematrix_left_delim_dim=\dimen372
 \l__nicematrix_right_delim_dim=\dimen373
 
-Overfull \hbox (2.92056pt too wide) detected at line 214
-[] [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@ []
+Overfull \hbox (7.36497pt too wide) detected at line 235
+[] [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@ [] \OML/cmm/m/it/10 ;
  []
 
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 223.
-
-Underfull \vbox (badness 1052) has occurred while \output is active []
-
- [2]
-Underfull \hbox (badness 1394) in paragraph at lines 388--391
-\OT1/ptm/m/n/10 two full Hes-sian reg-u-lar-iza-tion meth-ods (PROJECT and
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 244.
+[2]
+Underfull \hbox (badness 1377) in paragraph at lines 411--415
+\OT1/ptm/m/n/10 sian block reg-u-lar-iza-tion meth-ods (PROJECT and MIR-
  []
 
-<figures/iteration_performance_profile.pdf, id=112, 562.54416pt x 417.25261pt>
+<figures/iteration_performance_profile.pdf, id=130, 624.74591pt x 480.38597pt>
 File: figures/iteration_performance_profile.pdf Graphic file (type pdf)
 <use figures/iteration_performance_profile.pdf>
-Package pdftex.def Info: figures/iteration_performance_profile.pdf  used on input line 399.
-(pdftex.def)             Requested size: 252.0pt x 186.91516pt.
+Package pdftex.def Info: figures/iteration_performance_profile.pdf  used on input line 423.
+(pdftex.def)             Requested size: 252.0pt x 193.77094pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
+Underfull \hbox (badness 10000) in paragraph at lines 426--426
 \OT1/ptm/m/n/8 Fig. 1.  []Performance pro-file com-par-ing reg-u-lar-iza-tion tech-niques
  []
 
 
-Underfull \hbox (badness 6658) in paragraph at lines 402--402
+Underfull \hbox (badness 6658) in paragraph at lines 426--426
 \OT1/ptm/m/n/8 on in-def-i-nite $\OML/cmm/m/it/8 M$ \OT1/ptm/m/n/8 cases. Only four meth-ods PROJECT, MIR-ROR,
  []
 
 
-Underfull \hbox (badness 2460) in paragraph at lines 402--402
+Underfull \hbox (badness 2460) in paragraph at lines 426--426
 \OT1/ptm/m/n/8 RP[]STAGE[]EM and PM[]STAGE[]EM suc-cess-fully solved all the 30
  []
 
 [3]
-<figures/regularization_avg_se.pdf, id=123, 559.7822pt x 417.42427pt>
+<figures/regularization_avg_se.pdf, id=140, 551.42247pt x 413.78761pt>
 File: figures/regularization_avg_se.pdf Graphic file (type pdf)
 <use figures/regularization_avg_se.pdf>
-Package pdftex.def Info: figures/regularization_avg_se.pdf  used on input line 422.
-(pdftex.def)             Requested size: 252.0pt x 187.91562pt.
+Package pdftex.def Info: figures/regularization_avg_se.pdf  used on input line 446.
+(pdftex.def)             Requested size: 252.0pt x 189.10077pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Overfull \vbox (4.40002pt too high) detected at line 443
+Overfull \vbox (4.40002pt too high) detected at line 467
  []
 
 [4 <./figures/iteration_performance_profile.pdf> <./figures/regularization_avg_se.pdf>]
-<figures/reduction_vertical.pdf, id=211, 488.32774pt x 634.14908pt>
-File: figures/reduction_vertical.pdf Graphic file (type pdf)
-<use figures/reduction_vertical.pdf>
-Package pdftex.def Info: figures/reduction_vertical.pdf  used on input line 479.
-(pdftex.def)             Requested size: 252.0pt x 327.25325pt.
-<figures/adjustment_vertical.pdf, id=213, 487.49942pt x 633.51193pt>
+<figures/ratio_vertical.pdf, id=227, 479.07204pt x 625.74696pt>
+File: figures/ratio_vertical.pdf Graphic file (type pdf)
+<use figures/ratio_vertical.pdf>
+Package pdftex.def Info: figures/ratio_vertical.pdf  used on input line 504.
+(pdftex.def)             Requested size: 252.0pt x 329.15224pt.
+<figures/adjustment_vertical.pdf, id=229, 480.0015pt x 625.44879pt>
 File: figures/adjustment_vertical.pdf Graphic file (type pdf)
 <use figures/adjustment_vertical.pdf>
-Package pdftex.def Info: figures/adjustment_vertical.pdf  used on input line 496.
-(pdftex.def)             Requested size: 252.0pt x 327.4851pt.
- [5 <./figures/reduction_vertical.pdf> <./figures/adjustment_vertical.pdf>] (./Report.bbl)
+Package pdftex.def Info: figures/adjustment_vertical.pdf  used on input line 527.
+(pdftex.def)             Requested size: 252.0pt x 328.35599pt.
+ [5 <./figures/ratio_vertical.pdf> <./figures/adjustment_vertical.pdf>] (./Report.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -831,21 +858,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: 6553DC7C04E0FA2AA2F1EACCBE549512;2044.
+(rerunfilecheck)             Checksum: B60A604B500659655EF6621CE7758FAA;2057.
  ) 
 Here is how much of TeX's memory you used:
- 23503 strings out of 467578
- 457395 string characters out of 5420566
- 889594 words of memory out of 5000000
- 51941 multiletter control sequences out of 15000+600000
+ 24178 strings out of 467578
+ 466774 string characters out of 5420566
+ 908575 words of memory out of 5000000
+ 52587 multiletter control sequences out of 15000+600000
  669587 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,18n,80p,561b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,18n,80p,504b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Report.pdf (6 pages, 308709 bytes).
+Output written on Report.pdf (6 pages, 304230 bytes).
 PDF statistics:
- 518 PDF objects out of 1000 (max. 8388607)
- 209 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
+ 517 PDF objects out of 1000 (max. 8388607)
+ 232 compressed objects within 3 object streams
+ 62 named destinations out of 1000 (max. 500000)
  137 words of extra memory for PDF output out of 10000 (max. 10000000)
 

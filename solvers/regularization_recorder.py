@@ -5,7 +5,7 @@ class Recorder:
     """Track regularization diagnostics and counters for the Riccati solver."""
 
     CAP = 1e50
-    INIT_COND_REDUCTION = 1e15
+    INIT_COND_REDUCTION = 1e2
 
     def __init__(self, horizon: int):
         self.condition_number_arr_M = np.zeros((horizon,))
@@ -43,7 +43,7 @@ class Recorder:
         self.max_adjustment_M = max(self.max_adjustment_M, adjustment_eig_M)
 
         cond_reg = self._safe_cond(reduced_hessian_reg)
-        adjustment_cond_M = cond_reg - self.condition_number_arr_M[index] if cond_reg < self.CAP else self.CAP
+        adjustment_cond_M = cond_reg / self.condition_number_arr_M[index] if cond_reg < self.CAP else self.INIT_COND_REDUCTION
         self.max_cond_reduction_M = min(self.max_cond_reduction_M, adjustment_cond_M)
 
     def record_adjustment_P(self, index: int, eigvals_reg: np.ndarray, eigvals_base: np.ndarray, P_reg: np.ndarray) -> None:
@@ -52,7 +52,7 @@ class Recorder:
         self.max_adjustment_P = max(self.max_adjustment_P, adjustment_eig_P)
 
         cond_reg = self._safe_cond(P_reg)
-        adjustment_cond_P = cond_reg - self.condition_number_arr_P[index] if cond_reg < self.CAP else self.CAP
+        adjustment_cond_P = cond_reg / self.condition_number_arr_P[index] if cond_reg < self.CAP else self.INIT_COND_REDUCTION
         self.max_cond_reduction_P = min(self.max_cond_reduction_P, adjustment_cond_P)
 
     def increment_reg_count(self, amount: int = 1) -> None:
@@ -60,6 +60,6 @@ class Recorder:
 
     def finalize(self) -> None:
         if self.max_cond_reduction_M == self.INIT_COND_REDUCTION:
-            self.max_cond_reduction_M = 0.0
+            self.max_cond_reduction_M = 1.0
         if self.max_cond_reduction_P == self.INIT_COND_REDUCTION:
-            self.max_cond_reduction_P = 0.0
+            self.max_cond_reduction_P = 1.0

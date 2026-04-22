@@ -16,9 +16,22 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{nicematrix}
+\usepackage{acronym}
 \usepackage{hyperref}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+\acrodef{NMPC}{nonlinear model predictive control}
+\acrodef{IPM}{interior-point method}
+\acrodef{QP}{quadratic program}
+\acrodef{OCP}{optimal control problem}
+\acrodef{SQP}{sequential quadratic programming}
+\acrodef{EM}{eigenvalue modification}
+\acrodef{CM}{Cholesky modification}
+\acrodef{LM}{Levenberg-Marquardt}
+\acrodef{KKT}{Karush-Kuhn-Tucker}
+
 
 \begin{document}
 
@@ -39,33 +52,42 @@
 \maketitle
 
 \begin{abstract}
-This report presents regularization techniques for a Riccati-based Interior-Point Method (IPM) designed to solve Optimal Control Problem (OCP) structured indefinite Quadratic Programs (QPs).
-We explore and compare Full Hessian and Reduced Hessian regularization methods, specifically focusing on Eigenvalue Modification techniques to handle indefinite QPs.
-Numerical experiments demonstrate that regularizing the Reduced Hessian during Riccati recursion avoids over-regularization and improves performance compared to Full Hessian approaches.
+This report presents regularization techniques for a Riccati-based \ac{IPM} designed to solve \ac{OCP} structured indefinite \ac{QP} problems.
+We explore and compare full Hessian and reduced Hessian regularization methods, specifically focusing on \ac{EM} techniques to handle indefinite \ac{QP}.
+Numerical experiments demonstrate that regularizing the reduced Hessian during Riccati recursion avoids over-regularization and improves performance compared to full Hessian approaches.
 \end{abstract}
 
+\acresetall
+
 \section{Introduction and Background}
-In nonlinear optimal control, Sequential Quadratic Programming (SQP) methods are widely used to solve the underlying optimization problems\cite{verschueren2020acadosmodularopensourceframework},
-where each iteration involves solving a Quadratic Program (QP) that approximates the original problem.
-As a result, the efficiency and robustness of the QP solver are crucial for the overall performance of the SQP method.
+In \ac{NMPC}, \ac{SQP} methods are widely used to solve the underlying optimization problems \cite{verschueren2020acadosmodularopensourceframework}. 
+Since each \ac{SQP} iteration requires solving a \ac{QP} approximation, the efficiency and robustness of the \ac{QP} solver are critical to the overall performance. 
+While generic convex \ac{QP} solvers \cite{osqp,Ferreau2014,arnstrom2022dual} typically exhibit cubic complexity $\mathrm{O}(N^3)$ with respect to the number of stages N, 
+solvers exploiting the \ac{OCP} structure via Riccati recursion achieve linear complexity $\mathrm{O}(N)$ \cite{gianluca2013efficient}.
 
-Currently, Convex QP solvers are commonly employed \cite{osqp}\cite{Ferreau2014}\cite{arnstrom2022dual}. Especially for convex QPs with an Optimal Control Problem (OCP) structure,
-Riccati recursion is particularly efficient due to their ability to exploit the problem's structure, achieving linear complexity in the number of stages $N$\cite{gianluca2013efficient}.
-However, when the Hessian of the QP is indefinite, convex solvers may not be able to find a descent direction, regularization techniques are often necessary to modify the Hessian and ensure positive definiteness.
+Challenges arise when the approximated \ac{QP} Hessian becomes indefinite, 
+as standard convex solvers may fail to compute a descent direction. 
+To ensure positive definiteness, regularization techniques are conventionally applied to the indefinite QP full Hessian within the SQP framework, 
+i.e. modify the indefinite QP problem into a positive definite one for a descent direction in SQP iterations \cite{verschueren2017sparsity}.
 
-Nevertheless, an indefinite full Hessian does not necessarily imply an indefinite reduced Hessian. 
-Even for indefinite problems, if reduced Hessian remains positive definite, Riccati recursion can still successfully compute a descent direction without requiring any prior global regularization.
-This observation motivates us to investigate targeted regularization techniques applied directly to the reduced Hessian within the QP solver, rather than at the SQP level as in\cite{verschueren2017sparsity}.
+Nevertheless, we highlight two critical observations challenging this convention: (i) First, performing regularization at the \ac{SQP} level is not strictly necessary \cite{wachter2006implementation}. 
+Although it facilitates the convergence of the \ac{QP} solver, it could yield an overly conservative search direction, 
+which consequently increases the total number of \ac{SQP} iterations, resulting more QP iterations in the end.
+(ii) Second, an indefinite full Hessian does not preclude a positive definite reduced Hessian \cite{nocedal2006numerical}.
+If the reduced Hessian remains positive definite, Riccati recursion can successfully compute a valid descent direction without requiring any prior regularization.
 
-Regarding regularization techniques, Most existing regularization techniques can be generally categorized as:
+These observations motivate us to investigate regularization techniques to the reduced Hessian embedded directly within the \ac{QP} solver.
+
+Regarding regularization techniques, Most existing regularization techniques \cite{higham1988computing, doi:10.1137/S105262349833266X, nesterov2006cubic} can be generally categorized as:
 \begin{itemize}
-    \item \textbf{Eigenvalue Modification (EM)}: This approach modifies the Hessian by adjusting its eigenvalues to ensure positive definiteness, often by adding a small positive constant to the eigenvalues or taking their absolute values.
-    \item \textbf{Cholesky Modification (CM)}: This method modifies the Cholesky factorization process to handle indefinite matrices, typically by adding a small positive value to the diagonal elements during factorization.
-    \item \textbf{Levenberg-Marquardt (LM)}: This technique adds a scaled identity matrix to the Hessian, effectively shifting its eigenvalues to ensure positive definiteness.
+    \item \textbf{\Ac{EM}}: This approach modifies the Hessian by adjusting its eigenvalues to ensure positive definiteness, often by adding a small positive constant to the eigenvalues or taking their absolute values.
+    \item \textbf{\ac{CM}}: This method modifies the Cholesky factorization process to handle indefinite matrices, typically by adding a small positive value to the diagonal elements during factorization.
+    \item \textbf{\ac{LM}}: This technique adds a scaled identity matrix to the Hessian, effectively shifting its eigenvalues to ensure positive definiteness.
 \end{itemize}
 
-In this report, we explore specific regularization methods based on eigenvalue modification, 
-and assess the performance differences when applying modifications to the full Hessian compared to the reduced Hessian within a Riccati-based IPM.
+In this report, we focus on the effectiveness of regularization techniques for indefinite QP, independent of computational time.
+Consequently, we primarily investigate \ac{EM}-based regularization methods, which enable targeted adjustments to the Hessian's eigenvalues.
+Furthermore, we evaluate the performance differences between applying these modifications to the full Hessian versus the reduced Hessian within a Riccati-based IPM.
 
 \section{Problem Formulation}
 Consider a QP with equality $Fy=b$ and inequality constraints $Gy \le d$. By introducing slack variables $t$, we have the following formulation:
@@ -77,10 +99,10 @@ Consider a QP with equality $Fy=b$ and inequality constraints $Gy \le d$. By int
     {}
     \addConstraint{F y}{= b}
     \addConstraint{G y + t}{= d}
-    \addConstraint{t}{\ge 0}
+    \addConstraint{t}{\ge 0},
 \end{mini}
 
-The corresponding KKT conditions are:
+The corresponding \ac{KKT} conditions are:
 \begin{equation}
     r(y, t, \pi, \lambda) =
     \begin{bmatrix}
@@ -88,15 +110,15 @@ The corresponding KKT conditions are:
         F y - b \\
         G y + t - d \\
         T \Lambda \mathbf{1}
-    \end{bmatrix} = 0
+    \end{bmatrix} = 0,
     \label{eq:KKT_conditions}
-\end{equation}, 
+\end{equation}
 where $T = \mathrm{diag}(t)$, $\Lambda = \mathrm{diag}(\lambda)$, $\pi$ and $\lambda$ are dual variables for equality and inequality constraints respectively,
 
 In equations \ref{eq:KKT_conditions}, only the last equation is nonlinear, which represents the complementarity condition for the inequality constraints.
 In primal-dual IPM, we can apply the Newton's method with last equation relaxed as:
 \begin{equation}
-    \lambda_i t_i = \tau = \sigma \mu, i = 1, . . . , nc
+    \lambda_i t_i = \tau = \sigma \mu, i = 1, . . . , n_c.
 \end{equation}
 
 Where the homotopy parameter $\tau$ is related to the barrier parameter in barrier methods, the $\sigma$ is the centering parameter and the $\mu$ is the duality measure.
@@ -121,8 +143,8 @@ As a result, we have the following linearized system:
 		r_{\mathrm{eq}}^i \\
 		r_{\mathrm{ineq}}^i \\
 		r_{\mathrm{comp}}^i
-		\end{bmatrix}
-	\end{equation}, 
+		\end{bmatrix},
+	\end{equation}
 where the residuals are defined as:
 \begin{equation}
         \begin{bmatrix}
@@ -138,7 +160,8 @@ where the residuals are defined as:
             Gy_i + t_i - d \\
             T_i \Lambda_i \mathbf{1} - \sigma_i \mu_i \mathbf{1}
         \end{bmatrix}
-\end{equation}. 
+        .
+\end{equation}
 
 In order to facilitate the convergence, the Mehrotra predictor-corrector method is often used~\cite{Mehrotra1992implementation}, 
 which modifies the right-hand side of the linearized system to include a correction term based on the predicted affine step as follows:
@@ -155,10 +178,9 @@ which modifies the right-hand side of the linearized system to include a correct
             Hy_i + g + F^\top \pi_i + G^\top \lambda_i \\
             Fy_i - b \\
             Gy_i + t_i - d \\
-            T_i \Lambda_i \mathbf{1} + \Delta T_\text{aff} \Delta \Lambda_\text{aff} \mathbf{1}  - \sigma_i \mu_i \mathbf{1}
-        \end{bmatrix}
-\end{equation}.
-
+            T_i \Lambda_i \mathbf{1} + \Delta T_\text{aff} \Delta \Lambda_\text{aff} \mathbf{1}  - \sigma_i \mu_i \mathbf{1},
+        \end{bmatrix},
+\end{equation}
 where $\Delta T_\text{aff} = \mathrm{diag}(\Delta t_\text{aff})$ and $\Delta \Lambda_\text{aff} = \mathrm{diag}(\Delta \lambda_\text{aff})$ are the diagonal matrices of the affine step for slack variables and their corresponding dual variables, respectively.
 
 
@@ -176,14 +198,13 @@ By eliminating $\Delta t_\text{aff}$ and $\Delta \lambda_\text{aff}$ using the S
     \begin{bmatrix}
     \tilde{r}_{\mathrm{stat}}^i \\
     r_{\mathrm{eq}}^i
-    \end{bmatrix}
+    \end{bmatrix},
 \end{equation}
-
-Where the $\tilde{H} = H + G^\top \Lambda_i T_i^{-1} G$ and $\tilde{r}_{\mathrm{stat}}^i = r_{\mathrm{stat}}^i - G^\top T_i^{-1} ( \Lambda_i r_{\mathrm{ineq}}^i - r_{\mathrm{comp}}^i )$.
+where the $\tilde{H} = H + G^\top \Lambda_i T_i^{-1} G$ and $\tilde{r}_{\mathrm{stat}}^i = r_{\mathrm{stat}}^i - G^\top T_i^{-1} ( \Lambda_i r_{\mathrm{ineq}}^i - r_{\mathrm{comp}}^i )$.
 The matrix $G^\top \Lambda_i T_i^{-1} G$ represents the curvature contribution from inequality constraints.
 
 For QPs with an OCP structure, by interleaving the state, control, and dual variables across $N$ stages, 
-the KKT system exhibits a block-tridiagonal structure, shown as follows:
+the \ac{KKT} system exhibits a block-tridiagonal structure, shown as follows:
 \begin{equation*}
     \begin{bNiceMatrix}[margin]
         \ddots & & & & \\
@@ -210,8 +231,8 @@ the KKT system exhibits a block-tridiagonal structure, shown as follows:
         \tilde{r}_{\mathrm{stat}, u}^k \\
         r_{\mathrm{eq}}^k \\
         \vdots
-    \end{bmatrix}
-\end{equation*}, 
+    \end{bmatrix},
+\end{equation*}
 where the matrix $\tilde{H}_k$ decomposes into the state cost $\tilde{Q}_k$, control cost $\tilde{R}_k$, and cross-term cost $\tilde{S}_k$, alongside dynamics matrices $A_k$ and $B_k$.
 
 This structure allows the reduced system to be solved in $\mathcal{O}(N)$ via the Riccati recursion, 
@@ -250,7 +271,6 @@ the algorithm is shown in the pseudocode \ref{alg:riccati_recursion}:
 \section{Regularization Techniques}
 In indefinite QPs, the regularization can be applied to either the full Hessian $\tilde{H}$ before each iteration of IPM or the reduced Hessian $M$ during the Riccati recursion,
 the resulting regularized reduced KKT system can be generally presented as:
-
 \begin{equation}
     \begin{bmatrix}
      \tilde{H} + E & F^\top \\
@@ -263,26 +283,26 @@ the resulting regularized reduced KKT system can be generally presented as:
     \begin{bmatrix}
     \tilde{r}_{\mathrm{stat}}^i \\
     r_{\mathrm{eq}}^i
-    \end{bmatrix}
-\end{equation}, 
+    \end{bmatrix},
+\end{equation}
 where $E$ is the adjustment matrix for ensuring a positive definite Hessian.
 
-And two kinds of eigenvalue modifications are usually leveraged while maintain the sparsity of the tridiagonal system\cite{verschueren2017sparsity}.
-Assuming the eigenvalue decomposition of Hessian at stage $k$ can be written as $H_k = V_k D_k V_k^\top$,
+Two kinds of eigenvalue modifications are usually applied to the Hessian blocks for ensuring positiveness while maintain the sparsity of the tridiagonal system.
+Assuming the eigenvalue decomposition of Hessian block at stage $k$ can be written as $H_k = V_k D_k V_k^\top$,
 where $V_k$ is an orthogonal matrix of eigenvectors, $D_k$ is a diagonal matrix of real eigenvalues.
 
-We have the following two variants of eigenvalue modification for regularization:
+We have the following two variants of eigenvalue modification for regularization\cite{verschueren2017sparsity}:
 \begin{itemize}
     \item \textbf{PROJECT} (Eigenvalue truncation):
     \begin{equation*}
-        \mathrm{project}(H_k, \epsilon) := V_k \max(\epsilon I, D_k) V_k^\top
+        \mathrm{project}(H_k, \epsilon) := V_k \max(\epsilon I, D_k) V_k^\top.
     \end{equation*}
     Where the $\max$ operator is applied component-wise. This approach clips any negative or near-zero eigenvalues to a small positive constant $\epsilon > 0$,
     which keeps a minimal adjustment to the original matrix for positive definiteness, but may lead to an increase in the condition number if the original eigenvalues were not close to zero.
 
     \item \textbf{MIRROR} (Absolute value modification):
     \begin{equation*}
-        \mathrm{mirror}(H_k, \epsilon) := V_k \max(\epsilon I, |D_k|) V_k^\top
+        \mathrm{mirror}(H_k, \epsilon) := V_k \max(\epsilon I, |D_k|) V_k^\top.
     \end{equation*}
     This method reflects negative eigenvalues to their positive counterparts. 
     It preserves the magnitude of the curvature in all directions, which often provides better scaling,
@@ -290,33 +310,34 @@ We have the following two variants of eigenvalue modification for regularization
 \end{itemize}
 
 
-\subsection{Full-Hessian-based Regularization}
+\subsection{Full Hessian block regularization}
 
-The full Hessian regularization approach applies the eigenvalue modification to the full Hessian matrix $\tilde{H_k}$ at every stage before each iteration of the IPM, 
+The full Hessian block regularization approach applies the eigenvalue modification to the full Hessian block matrix $\tilde{H_k}$ at every stage before each iteration of the IPM, 
 ensuring that the Hessian is positive definite for all stages and thus guaranteeing a descent direction for the solver.
 
-The primary advantage of full Hessian regularization is its robustness, as it directly ensures the positive definiteness of the full Hessian matrix,
-and also it ensures the minimal Frobenius norm adjustment to the original Hessian\cite{nocedal2006numerical}.
+The primary advantage of full Hessian block regularization is its robustness, as it directly ensures the positive definiteness of the full Hessian matrix,
+and also it ensures the minimal Frobenius norm adjustment to the original Hessian in the PROJECT case\cite{nocedal2006numerical}.
 
-However, full Hessian regularization, while robust, fails to exploit the definiteness of the reduced Hessian $M_k$.
+However, full Hessian block regularization, while robust, fails to exploit the definiteness of the reduced Hessian $M_k$.
 Because a positive definite $M_k$ alone is sufficient to provide a descent direction, 
 this conservative approach often leads to over-regularization and unnecessary computational overhead
 
-\subsection{Reduced-Hessian-Based Regularization}
-To overcome the drawback, we propose the reduced Hessian regularization as an on-the-fly regularization strategy that targets the reduced Hessian 
+\subsection{Reduced Hessian block regularization}
+To overcome the drawback, we propose the reduced Hessian block regularization as an on-the-fly regularization strategy that targets
 \begin{equation*}
-    M_k = R_k + B_k^\top P_{k+1} B_k
+    M_k = R_k + B_k^\top P_{k+1} B_k,
 \end{equation*}
 directly during the backward Riccati recursion. 
 This regularization is applied whenever $M_k$ is not positive definite, which can be detected on-the-fly by a Cholesky factorization attempt.
 
-Let \(\mathcal{E}(\cdot, \epsilon) \in \{\mathrm{project}(\cdot, \epsilon), \mathrm{mirror}(\cdot, \epsilon)\}\) denote the chosen eigenvalue modification operator. We introduce the following three structure-exploiting techniques:
+Let \(\mathcal{E}(\cdot, \epsilon) \in \{\mathrm{project}(\cdot, \epsilon), \mathrm{mirror}(\cdot, \epsilon)\}\) denote the chosen eigenvalue modification operator. 
+We introduce the following three techniques:
 
 \begin{itemize}
     \item \textbf{M\_STAGE\_EM} (Direct $M_k$ modification): 
     This approach applies the eigenvalue modification directly to the assembled reduced Hessian:
     \begin{equation*}
-        \tilde{M}_k = \mathcal{E}(M_k, \epsilon)
+        \tilde{M}_k = \mathcal{E}(M_k, \epsilon).
     \end{equation*}
 
     \item \textbf{PM\_STAGE\_EM} (Cost-to-Go modification): 
@@ -324,9 +345,9 @@ Let \(\mathcal{E}(\cdot, \epsilon) \in \{\mathrm{project}(\cdot, \epsilon), \mat
     In this variant, we first regularize $P_{k+1}$ before assembling $M_k$, and then apply a secondary safeguard to the resulting $M_k$:
     \begin{equation*}
         \begin{aligned}
-            \tilde{P}_{k+1} &= \mathcal{E}(P_{k+1}, \epsilon) \\
-            \hat{M}_k &= R_k + B_k^\top \tilde{P}_{k+1} B_k \\
-            \tilde{M}_k &= \mathcal{E}(\hat{M}_k, \epsilon)
+            \tilde{P}_{k+1} &= \mathcal{E}(P_{k+1}, \epsilon), \\
+            \hat{M}_k &= R_k + B_k^\top \tilde{P}_{k+1} B_k, \\
+            \tilde{M}_k &= \mathcal{E}(\hat{M}_k, \epsilon).
         \end{aligned}
     \end{equation*}
 
@@ -334,14 +355,14 @@ Let \(\mathcal{E}(\cdot, \epsilon) \in \{\mathrm{project}(\cdot, \epsilon), \mat
     This method implicitly regularizes the reduced Hessian, by regularizing both the control penalty matrix $R_k$ and the cost-to-go matrix $P_{k+1}$ prior to forming the reduced Hessian:
     \begin{equation*}
         \begin{aligned}
-            \tilde{R}_k &= \mathcal{E}(R_k, \epsilon) \\
-            \tilde{P}_{k+1} &= \mathcal{E}(P_{k+1}, \epsilon) \\
-            \tilde{M}_k &= \tilde{R}_k + B_k^\top \tilde{P}_{k+1} B_k
+            \tilde{R}_k &= \mathcal{E}(R_k, \epsilon), \\
+            \tilde{P}_{k+1} &= \mathcal{E}(P_{k+1}, \epsilon), \\
+            \tilde{M}_k &= \tilde{R}_k + B_k^\top \tilde{P}_{k+1} B_k.
         \end{aligned}
     \end{equation*}
 \end{itemize}
 
-All three of these reduced Hessian regularization methods can be implemented seamlessly using either the PROJECT or MIRROR variants discussed previously.
+All three of these reduced Hessian block regularization methods can be implemented seamlessly using either the PROJECT or MIRROR variants discussed previously.
 
 \section{Numerical experiments}
 
@@ -354,7 +375,7 @@ For our numerical experiments, we focus on solving control-constrained optimal c
     {}{} 
     \addConstraint{x_0}{= \bar{x}_0}{} 
     \addConstraint{x_{k+1}}{= A_k x_k + B_k u_k,}{\quad k = 0, \dots, N-1} 
-    \addConstraint{\underline{u}}{\le u_k \le \overline{u},}{\quad k = 0, \dots, N-1} 
+    \addConstraint{\underline{u}}{\le u_k \le \overline{u},}{\quad k = 0, \dots, N-1.} 
 \end{mini*}
 
 Where the stage cost $l(x_k, u_k)$ at each time step as:
@@ -366,13 +387,15 @@ Where the stage cost $l(x_k, u_k)$ at each time step as:
         &+ \begin{bmatrix} q_k \\ r_k \end{bmatrix}^\top 
         \begin{bmatrix} x_k \\ u_k \end{bmatrix},
     \end{aligned}
-\end{equation}, 
+\end{equation}
 and the terminal cost $E(x_N)$ as:
 \begin{equation}
     E(x_N) = \frac{1}{2} x_N^\top Q_N x_N + q_N^\top x_N.
 \end{equation}
 
-For testing benchmark, we designed 30 simple indefinite QP problems, including:
+For testing benchmark, we designed 13 simple indefinite QP problems plus 2 indefinite QP problems from a pendulum swing-up SQP problem, 
+assuming the full Hessian as $H$, the reduced Hessian as $M$, the cost-to-go matrix as $P$ and the control penalty matrix as $R$,
+cases are categorized into 5 groups as follows:
 \begin{itemize}
     \item 2 designed cases with $H$ indefinite $M$ Positive
     \item 4 designed cases with $H$ indefinite $M$ Indefinite $R$ Indefinite $P$ Positive
@@ -385,9 +408,10 @@ For each designed case, the dimensions of state and control are set to ${n_x}=3,
 and we give 2 different initial states, i.e. $x_0 = [5.0, 5.0, 5.0], [3.0, 3.0, 3.0]$ for designed cases, $x_0 = [0.0, \pi, 0.0, 0.0], [0.0, \frac{\pi}{3}, 0.0, 0.0] $ for pendulum cases, 
 which leads to a total of 30 QP problems.
 
-We implemented the above regularization techniques, 
-i.e. two full Hessian regularization methods (PROJECT and MIRROR) and three reduced Hessian regularization methods (M\_STAGE\_EM, RP\_STAGE\_EM and PM\_STAGE\_EM) with two variants for each method,
-in a prototype Riccati-based IPM solver with Mehrotra predictor-corrector method in python, which is available on \url{https://github.com/Pandatheon/Primal-dual_IPM}.
+The regularization techniques above,
+i.e. two full Hessian block regularization methods (PROJECT and MIRROR) and 
+three reduced Hessian block regularization methods (M\_STAGE\_EM, RP\_STAGE\_EM and PM\_STAGE\_EM) with two variants for each method,
+are implemented in a prototype Riccati-based IPM solver with Mehrotra predictor-corrector method in python, which is available on \url{https://github.com/Pandatheon/Primal-dual_IPM}.
 
 As for parameters regarding iteration, we set \(\epsilon = 10^{-4}\), with a convergence tolerance of \(10^{-8}\) (infinity norm residuals) and a maximum of 300 iterations.
 
@@ -404,18 +428,18 @@ we compare the solved problems and iteration counts across all 30 indefinite $M$
 \end{figure}
 
 Among all the regularization methods, only four methods successfully solved all the 30 cases,
-which are two full Hessian regularization methods (PROJECT and MIRROR) and two reduced Hessian regularization methods (RP\_STAGE\_MIRROR and PM\_STAGE\_MIRROR).
-The two reduced Hessian regularization methods outperform the full Hessian regularization methods in terms of iteration counts with similar performance.
+which are two full Hessian block regularization methods (PROJECT and MIRROR) and two reduced Hessian regularization methods (RP\_STAGE\_MIRROR and PM\_STAGE\_MIRROR).
+And the two reduced Hessian regularization methods outperform the full Hessian block regularization methods in terms of iteration counts with similar performance.
 
-Interestingly, for the full Hessian regularization methods, the PROJECT method performs better than the MIRROR method,
-while for the reduced Hessian regularization methods, the MIRROR method performs better than the PROJECT method,
+Interestingly, for the full Hessian block regularization methods, the PROJECT method performs better than the MIRROR method,
+while for the reduced Hessian block regularization methods, the MIRROR method generally performs better than the PROJECT method,
 which indicates that the choice of regularization method can have different impacts on the performance depending on whether it is applied to the full Hessian or the reduced Hessian.
 
 For the average regularization counts happening across 30 cases, i.e. the average number of times the regularization is applied for successfully solved cases,
-one can see from the Figure~\ref{fig:reg_counts} that the full Hessian regularization methods generally require more regularization times than the reduced Hessian regularization methods for each solved case.
+one can see from the Figure~\ref{fig:reg_counts} that the full Hessian block regularization methods generally require more regularization times than the reduced Hessian regularization methods for each solved case.
 
 This indicates the reduced Hessian regularization methods can often avoid unnecessary regularization by leveraging the positive definiteness of the reduced Hessian,
-and result in a much lower computational overhead compared to the full Hessian regularization methods.
+and result in a much lower computational overhead compared to the full Hessian block regularization methods.
 
 \begin{figure}[H]
     \centering
@@ -427,10 +451,10 @@ and result in a much lower computational overhead compared to the full Hessian r
 \subsection{Case analysis}
 
 \subsubsection{M Positive Cases}
-In Table\ref{tab:positive_count}, one can observe that full Hessian regularization (PROJECT and MIRROR) requires more iterations to converge 
+In Table\ref{tab:positive_count}, one can observe that full Hessian block regularization (PROJECT and MIRROR) requires more iterations to converge 
 compared to reduced Hessian regularization (M\_STAGE\_EM, PM\_STAGE\_EM and RP\_STAGE\_EM) for the cases where $M$ is already positive definite.
 
-This confirms that applying full Hessian regularization when $M$ is already positive definite inherently leads to over-regularization and unnecessary computational overhead. 
+This confirms that applying full Hessian block regularization when $M$ is already positive definite inherently leads to over-regularization and unnecessary computational overhead. 
 In contrast, the reduced Hessian approach effectively leverages the positive definiteness of $M$, circumventing redundant regularization and achieving faster convergence.
 
 \begin{table}[H]
@@ -460,56 +484,64 @@ In contrast, the reduced Hessian approach effectively leverages the positive def
 \subsubsection{M Indefinite Cases}
 When \(M\) is indefinite, we focus on the reduced Hessian regularization and care about the following two metrics for the reduced Hessian \(M\) and the cost-to-go matrix \(P\),
 assuming the regularization is applied at iteration $i$ for stage $k$ to a QP problem:
+
 \begin{itemize}
-    \item \textbf{Maximal reduction in condition number}: A high condition number indicates a matrix is close to being singular, 
-    regularization techniques should maintain or reduce the condition number to ensure numerical stability and convergence of the solver. This is calculated as:
+    \item \textbf{Minimal ratio of condition number}: Regularization techniques should maintain or reduce the condition number to ensure numerical stability in iteration.
+    We calculated it as the ratio of the condition number of the regularized matrix to the original matrix, and take the minimum across all iterations and stages to evaluate the worst-case scenario:
     \begin{equation*}
-        \Delta \mathrm{cond} = \min_{k,i}\{\mathrm{cond}(M^{k,i}_{\mathrm{regularized}}) - \mathrm{cond}(M^{k,i}_{\mathrm{original}})\}
+        \mathrm{R}_\mathrm{cond} = \min_{k,i}\{\frac{\mathrm{cond}(M^{k,i}_{\mathrm{regularized}})}{\mathrm{cond}(M^{k,i}_{\mathrm{original}})}\}
     \end{equation*}
     \item \textbf{Maximal adjustment to the eigenvalues}: This metric quantifies the magnitude of the modification applied to the original Hessian. 
     A smaller adjustment indicates less deviation from the original problem, which can help preserve the problem's structure and lead to better convergence properties.
-    This is calculated as:
+    This is calculated as the maximum difference between the eigenvalues of the regularized matrix and the original matrix across all iterations and stages:
     \begin{equation*}
-        \Delta \mathrm{eig} = \max_{k,i}\{D^{k,i}_{\mathrm{regularized}} - D^{k,i}_{\mathrm{original}}\}
+        \Delta_\mathrm{eig} = \max_{k,i}\{D^{k,i}_{\mathrm{regularized}} - D^{k,i}_{\mathrm{original}}\}
     \end{equation*}
 \end{itemize}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{figures/reduction_vertical.pdf}
-    \caption{Maximal Condition number reduction of $M$ and $P$ across iterations for different regularization techniques, 
-    where the negative values indicate the reduction in condition number after regularization, and the positive values indicate the increase in condition number after regularization.
+    \includegraphics[width=1.0\linewidth]{figures/ratio_vertical.pdf}
+    \caption{Minimal ratio of condition number on $M$ and $P$ across iterations and stages for different regularization techniques and 26 indefinite $M$ cases,
+    each mark indicates an indefinite case and the y-axis is logarithmic.
     M\_STAGE\_PROJECT fails to obtain trustworthy results due to numerical issues}
     \label{fig:reduction}
 \end{figure}
 
-In Figure~\ref{fig:reduction}, one can see that the condition number of $M$ is generally reduced after applying regularization, 
-but for the condition number of $P$,  PROJECT-based methods tend to increase the condition number of $P$ while MIRROR-based methods will maintain the original condition number of $P$.
+In Figure~\ref{fig:reduction}, one can see that the condition number ratio of $M$ is smaller or equal to 1, i.e. the condition number is reduced or maintained, 
+after applying regularization, 
+but for the condition number of $P$, PROJECT-based methods tend to increase the condition number of $P$ 
+while MIRROR-based methods will maintain the original condition number of $P$.
 
 This can be understood by that the PROJECT method clips negative eigenvalues to $\epsilon$, 
-which can lead to a increase in the condition number if the original eigenvalues were not close to zero, 
-while the MIRROR method reflects negative eigenvalues to their positive counterparts, which preserves the magnitude of condition number, 
-thus leading to a better numerical stability for recursion.
+which can lead to an increase in the condition number if the original eigenvalues were not close to zero, 
+while the MIRROR method reflects negative eigenvalues to their positive counterparts, which preserves the magnitude of condition number.
+
+It also can be noticed that, among MIRROR-based methods,
+the PM\_STAGE\_MIRROR and RP\_STAGE\_MIRROR method generally shows a smaller condition number ratio for $M$ than the M\_STAGE\_MIRROR method,
+this helps explain the better performance of PM\_STAGE\_MIRROR and RP\_STAGE\_MIRROR methods than M\_STAGE\_MIRROR method,
+as a smaller condition number can lead to better numerical stability and faster convergence in the Riccati recursion.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\linewidth]{figures/adjustment_vertical.pdf}
-    \caption{Maximal adjustment to the eigenvalues of $M$ and $P$ across iterations for different regularization techniques.
+    \caption{Maximal adjustment to the eigenvalues of $M$ and $P$ across iterations and stages for different regularization techniques and 26 indefinite $M$ cases,
+    each mark indicates an indefinite case and the y-axis is logarithmic.
     M\_STAGE\_PROJECT fails to obtain trustworthy results due to numerical issues}
     \label{fig:adjustment}
 \end{figure}
 
 As shown in Figure~\ref{fig:adjustment},
 the PM\_STAGE\_MIRROR method and the RP\_STAGE\_MIRROR generally shows the least modification to the eigenvalues of both $M$ and $P$.
-This indicates that these two methods can preserve the original problem structure better than other methods, and thus lead to better convergence properties, 
-consistent with the observation in the performance profiles.
+This indicates that these two methods can preserve the original problem structure better than other methods, and thus lead to better convergence properties.
 
 \section{Conclusion}
 Our numerical experiments reveal several key insights into regularization strategies for Riccati-based IPM solvers applied to indefinite QPs with an OCP structure. 
-Most notably, reduced Hessian regularization effectively leverages the problem's recursion structure to avoid the over-regularization when M is already positive definite. 
-Within this reduced framework, we found that applying regularization to $P$ can provide significant benefits regarding the numerical stability for recursion.
-Furthermore, the optimal choice of modification technique depends heavily on the target matrix,
-while PROJECT is generally more effective for full Hessian regularization, MIRROR emerges as the superior choice for the reduced Hessian approach due to its superior control over the condition number.
+Most notably, reduced Hessian regularization effectively leverages the problem's recursion structure to avoid the over-regularization when $M$ is already positive definite.
+Within this reduced framework, we found that applying regularization to $P$ can provide significant benefits over only regularizing $M$ regarding the numerical stability for recursion.
+Furthermore, the optimal choice of modification technique depends heavily on the target matrix block,
+while PROJECT is generally more effective for full Hessian block regularization, 
+MIRROR emerges as the superior choice for the reduced Hessian approach due to its superior control over the condition number.
 
 % \appendix
 % \section*{Additional Numerical Results: cost values}

@@ -1,0 +1,10 @@
+Riccati
+Riccati-based
+QPs
+QP
+Cholesky
+Levenberg-Marquardt
+block-tridiagonal
+Schur
+Frobenius
+Mehrotra

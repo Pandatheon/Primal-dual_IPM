@@ -42,6 +42,23 @@ G.~Frison and J.~B. Jørgensen, ``Efficient implementation of the riccati recurs
 \bibitem{verschueren2017sparsity}
 R.~Verschueren, M.~Zanon, R.~Quirynen, and M.~Diehl, ``A {{Sparsity Preserving Convexification Procedure}} for {{Indefinite Quadratic Programs Arising}} in {{Direct Optimal Control}},'' \emph{SIAM Journal on Optimization}, vol.~27, no.~3, pp. 2085--2109, Jan. 2017.
 
+\bibitem{wachter2006implementation}
+A.~W{\"a}chter and L.~T. Biegler, ``On the implementation of an interior-point filter line-search algorithm for large-scale nonlinear programming,'' \emph{Mathematical programming}, vol. 106, no.~1, pp. 25--57, 2006.
+
+\bibitem{nocedal2006numerical}
+J.~Nocedal and S.~Wright, \emph{Numerical Optimization}, 2nd~ed., ser. Springer Series in Operations Research and Financial Engineering.\hskip 1em plus 0.5em minus 0.4em\relax New York: Springer Science \& Business Media, 2006.
+
+\bibitem{higham1988computing}
+N.~J. Higham, ``Computing a nearest symmetric positive semidefinite matrix,'' \emph{Linear Algebra and its Applications}, vol. 103, pp. 103--118, 1988.
+
+\bibitem{doi:10.1137/S105262349833266X}
+\BIBentryALTinterwordspacing
+R.~B. Schnabel and E.~Eskow, ``A revised modified cholesky factorization algorithm,'' \emph{SIAM Journal on Optimization}, vol.~9, no.~4, pp. 1135--1148, 1999. [Online]. Available: \url{https://doi.org/10.1137/S105262349833266X}
+\BIBentrySTDinterwordspacing
+
+\bibitem{nesterov2006cubic}
+Y.~Nesterov and B.~T. Polyak, ``Cubic regularization of newton method and its global performance,'' \emph{Mathematical Programming}, vol. 108, no.~1, pp. 177--205, 2006.
+
 \bibitem{Mehrotra1992implementation}
 \BIBentryALTinterwordspacing
 S.~Mehrotra, ``On the implementation of a primal-dual interior point method,'' \emph{SIAM Journal on Optimization}, vol.~2, no.~4, pp. 575--601, 1992. [Online]. Available: \url{https://doi.org/10.1137/0802028}
@@ -54,8 +71,5 @@ C.~V. Rao, S.~J. Wright, and J.~B. Rawlings, ``Application of {{Interior-Point M
 \BIBentryALTinterwordspacing
 G.~Frison and M.~Diehl, ``Hpipm: a high-performance quadratic programming framework for model predictive control,'' 2020. [Online]. Available: \url{https://arxiv.org/abs/2003.02547}
 \BIBentrySTDinterwordspacing
-
-\bibitem{nocedal2006numerical}
-J.~Nocedal and S.~Wright, \emph{Numerical Optimization}, 2nd~ed., ser. Springer Series in Operations Research and Financial Engineering.\hskip 1em plus 0.5em minus 0.4em\relax New York: Springer Science \& Business Media, 2006.
 
 \end{thebibliography}
