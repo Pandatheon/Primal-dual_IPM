@@ -1,0 +1,1 @@
+{"rule":"A_RB_NN","sentence":"^\\QTo ensure positive definiteness, regularization techniques are conventionally applied to the indefinite QP full Hessian within the SQP framework, i.e. modify the indefinite QP problem into a positive definite one for a locally descent direction in SQP iterations \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}

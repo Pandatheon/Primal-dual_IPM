@@ -35,19 +35,19 @@ class QP_solver:
     def _initilize_solution(self, x0:np.ndarray)-> iterate:
         self.solution.x = np.vstack([x0 for i in range(self.qp.N+1)])
         self.solution.u = np.zeros((self.qp.N, self.qp.nu))
-        init_s = self.qp.d - self.qp.C @ self.solution.x[1] - self.qp.D @ self.solution.u[1]
+        init_s = self.qp.d_list[1] - self.qp.C_list[1] @ self.solution.x[1] - self.qp.D_list[1] @ self.solution.u[1]
         self.solution.s = np.vstack([init_s for _ in range(self.qp.N-1)])
         self.solution.lam = self.tau / self.solution.s
         self.solution.pi = np.zeros((self.qp.N, self.qp.nx))
 
-        init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.d))
+        init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.d_list[0]))
         init_s0 = init_d0 - self.qp.C0 @ self.solution.x[0] - self.qp.D0 @ self.solution.u[0]
-        d0 = np.hstack(( -(x0)*np.ones((self.qp.nx,)), (x0)*np.ones((self.qp.nx,)), self.qp.d))
+        d0 = np.hstack(( -(x0)*np.ones((self.qp.nx,)), (x0)*np.ones((self.qp.nx,)), self.qp.d_list[0]))
         self.qp.d0 = d0
         self.solution.s0 = init_s0
         self.solution.lam0 = self.tau / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=20, tol:float=1e-6)-> iterate:
+    def solve(self, x0:np.ndarray=None, max_iter:int=50, tol:float=1e-6)-> iterate:
         if x0 is not None:
             self._initilize_solution(x0)
         for iter in range(max_iter):
@@ -102,21 +102,21 @@ class QP_solver:
 
         # stationarity
         res_stat[0:nx] = (
-            self.qp.Q @ this_iter.x[0] + self.qp.S.T @ this_iter.u[0] + self.qp.q
-            + self.qp.A.T @ this_iter.pi[0] + self.qp.C0.T @ this_iter.lam0
+            self.qp.Q_list[0] @ this_iter.x[0] + self.qp.S_list[0].T @ this_iter.u[0] + self.qp.q_list[0]
+            + self.qp.A_list[0].T @ this_iter.pi[0] + self.qp.C0.T @ this_iter.lam0
         )
         res_stat[nx:nx+nu] = (
-            self.qp.R @ this_iter.u[0] + self.qp.S @ this_iter.x[0] + self.qp.r
-            + self.qp.B.T @ this_iter.pi[0] + self.qp.D0.T @ this_iter.lam0
+            self.qp.R_list[0] @ this_iter.u[0] + self.qp.S_list[0] @ this_iter.x[0] + self.qp.r_list[0]
+            + self.qp.B_list[0].T @ this_iter.pi[0] + self.qp.D0.T @ this_iter.lam0
         )
         for i in range(1, N):
             res_stat[i*(nx+nu):i*(nx+nu)+nx] = (
-                self.qp.Q @ this_iter.x[i] + self.qp.S.T @ this_iter.u[i] + self.qp.q
-                + self.qp.A.T @ this_iter.pi[i] + self.qp.C.T @ this_iter.lam[i-1] - this_iter.pi[i-1]
+                self.qp.Q_list[i] @ this_iter.x[i] + self.qp.S_list[i].T @ this_iter.u[i] + self.qp.q_list[i]
+                + self.qp.A_list[i].T @ this_iter.pi[i] + self.qp.C_list[i].T @ this_iter.lam[i-1] - this_iter.pi[i-1]
             )
             res_stat[i*(nx+nu)+nx:i*(nx+nu)+nx+nu] = (
-                self.qp.R @ this_iter.u[i] + self.qp.S @ this_iter.x[i] + self.qp.r
-                + self.qp.B.T @ this_iter.pi[i] + self.qp.D.T @ this_iter.lam[i-1]
+                self.qp.R_list[i] @ this_iter.u[i] + self.qp.S_list[i] @ this_iter.x[i] + self.qp.r_list[i]
+                + self.qp.B_list[i].T @ this_iter.pi[i] + self.qp.D_list[i].T @ this_iter.lam[i-1]
             )
 
         # terminal cost
@@ -128,7 +128,7 @@ class QP_solver:
         for i in range(N):
             x_next = this_iter.x[i+1]
             rest_eq[i*nx:i*nx+nx] = (
-                self.qp.A @ this_iter.x[i] + self.qp.B @ this_iter.u[i] - x_next - self.qp.b
+                self.qp.A_list[i] @ this_iter.x[i] + self.qp.B_list[i] @ this_iter.u[i] - x_next - self.qp.b_list[i]
             )
 
         # inequality constraints
@@ -136,8 +136,8 @@ class QP_solver:
             self.qp.C0 @ this_iter.x[0] + self.qp.D0 @ this_iter.u[0] + this_iter.s0 - self.qp.d0
         )
         for i in range(1, N):
-            res_ineq[self.qp.nh0+(i-1)*nx:self.qp.nh0+i*nx] = (
-                self.qp.C @ this_iter.x[i] + self.qp.D @ this_iter.u[i] + this_iter.s[i-1] - self.qp.d
+            res_ineq[self.qp.nh0+(i-1)*self.qp.nh:self.qp.nh0+i*self.qp.nh] = (
+                self.qp.C_list[i] @ this_iter.x[i] + self.qp.D_list[i] @ this_iter.u[i] + this_iter.s[i-1] - self.qp.d_list[i]
             )
 
         # complementarity
@@ -145,8 +145,8 @@ class QP_solver:
             this_iter.lam0 * this_iter.s0 - self.tau * np.ones((len(this_iter.lam0), ))
         )
         for i in range(1, N):
-            res_comp[self.qp.nh0+(i-1)*nx:self.qp.nh0+i*nx] = (
-                this_iter.lam[i-1] * this_iter.s[i-1] - self.tau * np.ones((nx, ))
+            res_comp[self.qp.nh0+(i-1)*self.qp.nh:self.qp.nh0+i*self.qp.nh] = (
+                this_iter.lam[i-1] * this_iter.s[i-1] - self.tau * np.ones((self.qp.nh, ))
             )
 
         # combine all residuals
@@ -218,15 +218,15 @@ class QP_solver:
 
         index_after_pi = index_after_xu + (self.qp.N)*self.qp.nx
         delta_lam0 =  delta_z[index_after_pi:index_after_pi + len(self.qp.d0)]
-        delta_lam = delta_z[index_after_pi + len(self.qp.d0):index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx]
-        delta_lam = delta_lam.reshape((self.qp.N-1, self.qp.nx))
+        delta_lam = delta_z[index_after_pi + len(self.qp.d0):index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh]
+        delta_lam = delta_lam.reshape((self.qp.N-1, self.qp.nh))
         delta_dict['delta_lam0'] = delta_lam0
         delta_dict['delta_lam'] = delta_lam
 
-        index_after_lam = index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx
+        index_after_lam = index_after_pi + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh
         delta_s0 = delta_z[index_after_lam:index_after_lam + len(self.qp.d0)]
-        delta_s = delta_z[index_after_lam + len(self.qp.d0):index_after_lam + len(self.qp.d0)+(self.qp.N-1)*self.qp.nx]
-        delta_s = delta_s.reshape((self.qp.N-1, self.qp.nx))
+        delta_s = delta_z[index_after_lam + len(self.qp.d0):index_after_lam + len(self.qp.d0)+(self.qp.N-1)*self.qp.nh]
+        delta_s = delta_s.reshape((self.qp.N-1, self.qp.nh))
         delta_dict['delta_s0'] = delta_s0
         delta_dict['delta_s'] = delta_s
         return delta_dict
@@ -243,7 +243,8 @@ class QP_solver:
     def get_cost(self) -> float:
         cost = 0.0
         for i in range(self.qp.N):
-            cost += 0.5 * self.solution.x[i].T @ self.qp.Q @ self.solution.x[i] + 0.5 * self.solution.u[i].T @ self.qp.R @ self.solution.u[i] + self.solution.x[i].T @ self.qp.S.T @ self.solution.u[i] + self.qp.q.T @ self.solution.x[i] + self.qp.r.T @ self.solution.u[i]
+            cost += 0.5 * self.solution.x[i].T @ self.qp.Q_list[i] @ self.solution.x[i] + 0.5 * self.solution.u[i].T @ self.qp.R_list[i] @ self.solution.u[i] \
+            + self.solution.x[i].T @ self.qp.S_list[i].T @ self.solution.u[i] + self.qp.q_list[i].T @ self.solution.x[i] + self.qp.r_list[i].T @ self.solution.u[i]
         # terminal cost
         x_N = self.solution.x[self.qp.N]
         Q_e = self.qp.Q_e
