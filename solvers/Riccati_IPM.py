@@ -1,227 +1,236 @@
-from typing import Tuple
-from dataclasses import dataclass
-from QP_template.OCP_QP import OCP_QP_varying, QP_stage, QP_Terminal, iterate
-from solvers.Riccati_recursion import Feedback, riccati_recursion_with_stage_regularization
-from Regularizations import Regularizations_config
+from QP_template.QP_base import BaseQP
+from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
+from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
-from solvers.regularization_recorder import Recorder
+from solvers.Regularization_config import Regularizations_config, Reduced_Hessian_based_regularization
 import numpy as np
 import copy
 
 
-def update_rhs(qp, centering_param:float, rhs_dict:dict, statistics_dict:dict, ineq_num:int,
-               prev_sol:iterate, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
-    nx = qp.nx
-    nu = qp.nu
-    N = qp.N
-    stage0 = qp.stages[0]
 
-    res_stat = np.zeros((N+1, nx+nu))
-    res_eq = np.zeros((N, nx))
-    res_ineq0 = np.zeros((1, stage0.C.shape[0]))
-    res_ineq = np.zeros((N-1, qp.stages[1].C.shape[0]))
-    res_comp0 = np.zeros((1, stage0.C.shape[0]))
-    res_comp = np.zeros((N-1, qp.stages[1].C.shape[0]))
-    duality_measure = 0.0
+class Riccati_IPM():
+    def __init__(self, qp: BaseQP, reg_config: Regularizations_config):
+        self.qp = qp
+        self.ineq_num = self.qp.nh * self.qp.N + 2*self.qp.nx
+        self.reg_config = reg_config
 
-    for i in range(len(qp.stages)):
-        # stationarity residual
-        if i == 0:
-            res_stat[i][nx:] = qp.stages[0].R @ prev_sol.u[0] + qp.stages[0].r + qp.stages[0].B.T @ prev_sol.pi[0] + qp.stages[0].D.T @ prev_sol.lam0
-        else:
-            res_stat[i][:nx] = qp.stages[i].Q @ prev_sol.x[i] + qp.stages[i].S.T @ prev_sol.u[i] + qp.stages[i].q +  qp.stages[i].A.T @ prev_sol.pi[i] + qp.stages[i].C.T @ prev_sol.lam[i-1] - prev_sol.pi[i-1]
-            res_stat[i][nx:] = qp.stages[i].R @ prev_sol.u[i] + qp.stages[i].S @ prev_sol.x[i] + qp.stages[i].r + qp.stages[i].B.T @ prev_sol.pi[i] + qp.stages[i].D.T @ prev_sol.lam[i-1]
+    def update_rhs(self, centering_param:float, rhs:dict, statistics_dict:dict,
+                   prev_sol:iterate_sol, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
+        nx = self.qp.nx
+        nu = self.qp.nu
 
-        #equality residual
-        res_eq[i] = qp.stages[i].A @ prev_sol.x[i] + qp.stages[i].B @ prev_sol.u[i] - prev_sol.x[i+1] - qp.stages[i].b
+        res_stat = []
+        res_eq = []
+        res_ineq = []
+        res_comp = []
+        duality_measure = 0.0
 
-        #inequality residual
-        if i == 0:
-            res_ineq0 =  qp.stages[0].C @ prev_sol.x[0] + qp.stages[0].D @ prev_sol.u[0] + prev_sol.s0 - qp.stages[0].d
-        else:
-            res_ineq[i-1] = (qp.stages[i].C @ prev_sol.x[i] + qp.stages[i].D @ prev_sol.u[i] + prev_sol.s[i-1]) - qp.stages[i].d
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k]
+            R_k = self.qp.R[k]
+            S_k = self.qp.S[k]
+            A_k = self.qp.A[k]
+            B_k = self.qp.B[k]
+            b_k = self.qp.b[k]
+            C_k = self.qp.C[k]
+            D_k = self.qp.D[k]
+            d_k = self.qp.d[k]
+            q_k = self.qp.q[k]
+            r_k = self.qp.r[k]
+            x, u, pi, lam, s = prev_sol
 
-        #complementarity residual
-        if i == 0:
+            # stationarity residual
+            temp_res_stat = np.zeros(nx + nu)
+            if k == 0:
+                temp_res_stat[nx:] = R_k @ u[0] + r_k + B_k.T @ pi[0] + D_k.T @ lam[0]
+            else:
+                temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k] + C_k.T @ lam[k] - pi[k-1]
+                temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k] + D_k.T @ lam[k]
+            res_stat.append(temp_res_stat)
+
+            #equality residual
+            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] - b_k)
+
+            #inequality residual
+            res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
+
+            #complementarity residual
             if step_type == 'predictor':
-                res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten()
-                duality_measure += (prev_sol.lam0 @ prev_sol.s0)
+                temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
+                duality_measure += (lam[k] @ s[k])
             elif step_type == 'centering':
-                res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() - centering_param * rhs_dict['duality_measure'] * np.ones(len(prev_sol.lam0))
+                temp_res_comp = (lam[k] * s[k]).flatten() - centering_param * rhs.duality_measure * np.ones(len(lam[k]))
             elif step_type == 'predictor-corrector':
-                res_comp0 = (prev_sol.lam0 * prev_sol.s0).flatten() + (delta_aff_dict['delta_lam0'] * delta_aff_dict['delta_s0']).flatten() - centering_param * rhs_dict['duality_measure'] * np.ones(len(prev_sol.lam0))
+                temp_res_comp = (lam[k] * s[k]).flatten() + (delta_aff_dict['delta_lam'][k] * delta_aff_dict['delta_s'][k]) - centering_param * rhs.duality_measure * np.ones(len(lam[k]))
+            res_comp.append(temp_res_comp)
+
+        # terminal residual
+        temp_res_stat = np.zeros(nx+nu)
+        Q_e = self.qp.Q_e
+        q_e = self.qp.q_e
+        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N-1]
+        res_stat.append(temp_res_stat)
+
+        rhs.rg = res_stat
+        rhs.rb = res_eq
+        rhs.rd = res_ineq
+        rhs.rm = res_comp
+        if step_type == 'predictor':
+            rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
+            statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(rhs.rg), ord=np.inf))
+            statistics_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(rhs.rb), ord=np.inf))
+            statistics_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(rhs.rd), ord=np.inf))
+            statistics_dict['res_comp_list'].append(np.linalg.norm(np.concatenate(rhs.rm), ord=np.inf))
+            statistics_dict['duality_measure_list'].append(rhs.duality_measure)
+        return rhs
+
+    def foward_sweep(self, rhs, prev_sol:iterate_sol, feedback:Feedback)-> dict:
+        delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
+        lam_i = prev_sol.lam
+        s_i = prev_sol.s
+
+        # recover delta_x and delta_u, delta_pi first with modified KKT system
+        # then recover delta_s and delta_lam with original KKT system
+        delta_x[0] = np.zeros((self.qp.nx,))
+        for k in range(self.qp.N):
+            C_k = self.qp.C[k]
+            D_k = self.qp.D[k]
+            rhs_b = rhs.rb[k]
+            rhs_d= rhs.rd[k]
+            rhs_m = rhs.rm[k]
+
+            # recover x and u
+            delta_u[k] = feedback.compute_control(k, delta_x[k])
+            delta_x[k+1] = self.qp.A[k]@delta_x[k] + self.qp.B[k]@delta_u[k] + rhs_b
+
+            # recover s
+            delta_s[k] = -(C_k @delta_x[k] + D_k @delta_u[k]) - rhs_d
+
+            # recover lam
+
+            rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
+            delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
+
+            # recover pi
+            delta_pi[k] =  feedback.P[k+1] @ delta_x[k+1] + feedback.p[k+1]
+
+        delta_dict = {
+            'delta_x': delta_x,
+            'delta_u': delta_u,
+            'delta_pi': delta_pi,
+            'delta_lam': delta_lam,
+            'delta_s': delta_s,
+        }
+        return delta_dict
+
+    def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
+        horizon = self.qp.N
+        nx = self.qp.nx
+
+        if self.reg_config.method == 'PROJECT' or self.reg_config.method == 'MIRROR':
+            regularized_QP = regularize_QP(self.qp, self.reg_config)
         else:
-            if step_type == 'predictor':
-                res_comp[i-1] = (np.diag(prev_sol.lam[i-1]) @ prev_sol.s[i-1]).flatten()
-                duality_measure += (prev_sol.lam[i-1] @ prev_sol.s[i-1])
-            elif step_type == 'centering':
-                res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() - centering_param * rhs_dict['duality_measure'] * np.ones(len(prev_sol.lam[i-1]))
-            elif step_type == 'predictor-corrector':
-                res_comp[i-1] = (prev_sol.lam[i-1] * prev_sol.s[i-1]).flatten() + (delta_aff_dict['delta_lam'][i-1] * delta_aff_dict['delta_s'][i-1]) - centering_param * rhs_dict['duality_measure'] * np.ones(len(prev_sol.lam[i-1]))
+            regularized_QP = copy.deepcopy(self.qp)
+        modified_qp = self.modify_QP(regularized_QP, rhs, prev_sol)
 
-    # terminal residual
-    res_stat[N][:nx] = qp.terminal.Q_e @ prev_sol.x[N] + qp.terminal.q_e - prev_sol.pi[N-1]
-
-    rhs_dict['rg'] = res_stat
-    rhs_dict['rb'] = res_eq
-    rhs_dict['rd0'] = res_ineq0
-    rhs_dict['rd'] = res_ineq
-    rhs_dict['rm0'] = res_comp0
-    rhs_dict['rm'] = res_comp
-    if step_type == 'predictor':
-        rhs_dict['duality_measure'] = max(duality_measure / ineq_num, 1e-16)
-        statistics_dict['duality_measure_list'].append(rhs_dict['duality_measure'])
-    return rhs_dict
-
-def foward_sweep(qp, rhs_dict, 
-                 prev_sol:iterate, feedback:Feedback)-> dict:
-    delta_x = copy.deepcopy(prev_sol.x)
-    delta_u = copy.deepcopy(prev_sol.u)
-    delta_pi = copy.deepcopy(prev_sol.pi)
-    delta_lam0 = copy.deepcopy(prev_sol.lam0)
-    delta_lam = copy.deepcopy(prev_sol.lam)
-    delta_s0 = copy.deepcopy(prev_sol.s0)
-    delta_s = copy.deepcopy(prev_sol.s)
-
-    # recover delta_x and delta_u, delta_pi first with modified KKT system
-    # then recover delta_s and delta_lam with original KKT system
-    delta_x[0] = 0
-    for i in range(len(qp.stages)):
-        # recover x and u
-        rhs_b = rhs_dict['rb'][i]
-        delta_u[i] = feedback.compute_control(i, delta_x[i])
-        delta_x[i+1] = qp.stages[i].A@delta_x[i] + qp.stages[i].B@delta_u[i] + rhs_b
-
-        # recover s
-        if i == 0:
-            rhs_d =  rhs_dict['rd0']
-            delta_s0 = -(qp.stages[0].C @delta_x[0] + qp.stages[0].D @delta_u[0]) - rhs_d
-        else:
-            rhs_d = rhs_dict['rd'][i-1]
-            delta_s[i-1] = -(qp.stages[i].C @delta_x[i] + qp.stages[i].D @delta_u[i]) - rhs_d
-        # recover lam
-        if i == 0:
-            rhs_m = rhs_dict['rm0']
-            rhs_m_modified = -rhs_m - (prev_sol.lam0 * delta_s0)
-            delta_lam0 = (rhs_m_modified/prev_sol.s0).flatten()
-        else:
-            rhs_m = rhs_dict['rm'][i-1]
-            rhs_m_modified = -rhs_m - (prev_sol.lam[i-1] * delta_s[i-1])
-            delta_lam[i-1] = (rhs_m_modified/prev_sol.s[i-1]).flatten()
-        # recover pi
-        delta_pi[i] =  feedback.P[i+1] @ delta_x[i+1] + feedback.p[i+1]
-
-    delta_dict = {
-        'delta_x': delta_x,
-        'delta_u': delta_u,
-        'delta_pi': delta_pi,
-        'delta_lam0': delta_lam0,
-        'delta_lam': delta_lam,
-        'delta_s0': delta_s0,
-        'delta_s': delta_s,
-    }
-    return delta_dict
-
-def backward_sweep(qp, rhs_dict, recorder, reg_config,
-                   prev_sol:iterate, reg:str ='NO_REGULARIZE')-> Feedback:
-    horizon = len(qp.stages)
-    nu, nx = qp.stages[0].S.shape
-
-    if reg == 'PROJECT' or reg == 'MIRROR':
-        regularized_QP = regularize_QP(qp, recorder=recorder,
-                                        reg_config= reg_config, method=reg)
-    else:
-        regularized_QP = copy.deepcopy(qp)
-    modified_QP_stages = modify_QP(regularized_QP, rhs_dict, prev_sol)
-
-    recorder.reset_stage_arrays()
-
-    feedback = Feedback(
-        P = np.zeros((horizon+1, nx, nx), dtype=float),
-        p = np.zeros((horizon+1, nx), dtype=float),
-        K = np.zeros((horizon, nu, nx), dtype=float),
-        k = np.zeros((horizon, nu), dtype=float)
-    )
-    feedback.P[-1] = modified_QP_stages[-1].Q_e
-    feedback.p[-1] = rhs_dict['rg_'][-1][:nx]
-    for i in reversed(range(horizon)):
-        feedback.P[i], feedback.p[i], feedback.K[i], feedback.k[i] = riccati_recursion_with_stage_regularization(
-        qp_stage=modified_QP_stages[i],
-        qp_terminal=(feedback.P[i+1], feedback.p[i+1]),
-        nx = nx,
-        rg=rhs_dict['rg_'][i], rb=rhs_dict['rb'][i],
-        reg_config=reg_config, recorder=recorder,
-        reg=reg, index=i
+        feedback = Feedback(
+            P = [None]*(horizon+1),
+            p = [None]*(horizon+1),
+            K = [None]*(horizon),
+            k = [None]*(horizon),
         )
-    return feedback
+        feedback.P[horizon] = modified_qp.Q_e
+        feedback.p[horizon] = rhs.rg[-1][:nx]
 
-def modify_QP(qp:OCP_QP_varying, rhs_dict, prev_sol:iterate):
-    modified_QP_stages = []
+        for step in range(self.qp.N):
+            k = modified_qp.N - 1 - step
+            A_k = modified_qp.A[k]
+            B_k = modified_qp.B[k]
+            Q_k = modified_qp.Q[k]
+            R_k = modified_qp.R[k]
+            S_k = modified_qp.S[k]
+            q_k = rhs.rg[k][:nx]
+            r_k = rhs.rg[k][nx:]
+            b_k = rhs.rb[k]
+            P_prev = feedback.P[k+1]
+            p_prev = feedback.p[k+1]
 
-    for i in range(len(qp.stages)):
-        if i == 0:
-            C_full = np.concatenate((qp.stages[0].C, qp.stages[0].D), axis=1)
-            T_mat = np.diag(prev_sol.s0)
-            Lam_mat = np.diag(prev_sol.lam0)
-            rd = rhs_dict['rd0']
-            rm = rhs_dict['rm0']
-        else:
-            C_full = np.concatenate((qp.stages[i].C, qp.stages[i].D), axis=1)
-            T_mat = np.diag(prev_sol.s[i-1])
-            Lam_mat = np.diag(prev_sol.lam[i-1])
-            rd = rhs_dict['rd'][i-1]
-            rm = rhs_dict['rm'][i-1]
+            reduced_hessian = R_k + B_k.T @ P_prev @ B_k
+            try:
 
-        T_mat_inv = np.linalg.inv(T_mat)
-        lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-        rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
+                R_chol = np.linalg.cholesky(reduced_hessian)
+                g1 = S_k + B_k.T@P_prev@A_k
+                g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
+                y1 = np.linalg.solve(R_chol, g1)
+                y2 = np.linalg.solve(R_chol, g2)
+                K_curr = -np.linalg.solve(R_chol.T, y1)
+                k_curr = -np.linalg.solve(R_chol.T, y2)
+                P_curr = Q_k + A_k.T@P_prev@A_k - (S_k.T + A_k.T@P_prev@B_k)@(-K_curr)
+                p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - (S_k.T + A_k.T@P_prev@B_k)@(-k_curr)
 
-        Q_tilt = lhs_modification[:qp.nx, :qp.nx]
-        R_tilt = lhs_modification[qp.nx:, qp.nx:]
-        S_tilt = lhs_modification[qp.nx:, :qp.nx]
-        modified_QP_stages.append(QP_stage(
-            Q = qp.stages[i].Q + Q_tilt,
-            R = qp.stages[i].R + R_tilt,
-            S = qp.stages[i].S + S_tilt,
-            q = qp.stages[i].q, r = qp.stages[i].r,
-            A = qp.stages[i].A, B = qp.stages[i].B, b = qp.stages[i].b,
-            C = qp.stages[i].C, D = qp.stages[i].D, d = qp.stages[i].d,
-        ))
-        rhs_dict['rg_'][i][:qp.nx] = rhs_dict['rg'][i][:qp.nx] + rhs_modification[:qp.nx]
-        rhs_dict['rg_'][i][qp.nx:] = rhs_dict['rg'][i][qp.nx:] + rhs_modification[qp.nx:]
-    modified_QP_stages.append(qp.terminal)
-    rhs_dict['rg_'][-1] = rhs_dict['rg'][-1]
-    return modified_QP_stages
+                feedback.P[k] = P_curr
+                feedback.p[k] = p_curr
+                feedback.K[k] = K_curr
+                feedback.k[k] = k_curr
 
-def fraction_to_boundary(prev_sol: iterate, delta_dict, statistics_dict, boundary:bool=True) -> iterate:
-    s_old = np.hstack((prev_sol.s0, prev_sol.s.flatten()))
-    lam_old = np.hstack((prev_sol.lam0, prev_sol.lam.flatten()))
-    delta_s = np.hstack((delta_dict['delta_s0'], delta_dict['delta_s'].flatten()))
-    delta_lam =  np.hstack((delta_dict['delta_lam0'], delta_dict['delta_lam'].flatten()))
+            except np.linalg.LinAlgError:
+                if self.reg_config.method == 'NO_REGULARIZE':
+                    raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 
-    mask_lam = delta_lam < 0
-    mask_s = delta_s < 0
-    frac_pri = s_old[mask_s] / (-delta_s[mask_s])
-    frac_dual = lam_old[mask_lam] / (-delta_lam[mask_lam])
-    # take the minimum positive step size
-    try:
-        alpha_pri_max = np.min(frac_pri)
-    except ValueError:
-        alpha_pri_max = 1e-12
-    try:
-        alpha_dual_max = np.min(frac_dual)
-    except ValueError:
-        alpha_dual_max = 1e-12
+                elif self.reg_config.method in Reduced_Hessian_based_regularization:
 
-    if boundary:
-        # take 0.99 of the maximum step size
-        alpha_pri = min(0.99 * alpha_pri_max, 1.0)
-        alpha_dual = min(0.99 * alpha_dual_max, 1.0)
-        alpha = min(alpha_pri, alpha_dual)
+                    try:
+                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, self.reg_config, reduced_hessian, P_prev, k)
+                        R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                        g1 = S_k + B_k.T@P_reg@A_k
+                        g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
+                        y1 = np.linalg.solve(R_chol, g1)
+                        y2 = np.linalg.solve(R_chol, g2)
+                        K_curr = -np.linalg.solve(R_chol.T, y1)
+                        k_curr = -np.linalg.solve(R_chol.T, y2)
+                        P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
+                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
 
-        statistics_dict['alpha_pri_list'].append(alpha_pri)
-        statistics_dict['alpha_dual_list'].append(alpha_dual)
-        statistics_dict['alpha_list'].append(alpha)
-        return alpha_pri, alpha_dual, alpha
-    else:
-        return alpha_pri_max, alpha_dual_max, min(alpha_pri_max, alpha_dual_max)
+                        feedback.P[k] = P_curr
+                        feedback.p[k] = p_curr
+                        feedback.K[k] = K_curr
+                        feedback.k[k] = k_curr
+                    except np.linalg.LinAlgError:
+                        raise np.linalg.LinAlgError("Regularization failed to make the reduced Hessian positive definite.")
+
+                else:
+                    raise np.linalg.LinAlgError("Unkonwn error happened")
+
+        return feedback
+
+    @staticmethod
+    def modify_QP(qp, rhs, prev_sol:iterate_sol):
+        modified_QP = copy.deepcopy(qp)
+
+        for k in range(qp.N):
+            s_k = prev_sol.s[k]
+            lam_k = prev_sol.lam[k]
+            C_k = qp.C[k]
+            D_k = qp.D[k]
+
+            C_full = np.concatenate((C_k, D_k), axis=1)
+            T_mat = np.diag(s_k)
+            Lam_mat = np.diag(lam_k)
+            rd = rhs.rd[k]
+            rm = rhs.rm[k]
+
+            T_mat_inv = np.linalg.inv(T_mat)
+            lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
+            rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
+
+            Q_tilt = lhs_modification[:qp.nx, :qp.nx]
+            R_tilt = lhs_modification[qp.nx:, qp.nx:]
+            S_tilt = lhs_modification[qp.nx:, :qp.nx]
+            modified_QP.Q[k] = qp.Q[k] + Q_tilt
+            modified_QP.R[k] = qp.R[k] + R_tilt
+            modified_QP.S[k] = qp.S[k] + S_tilt
+
+            rhs.rg[k][:qp.nx] = rhs.rg[k][:qp.nx] + rhs_modification[:qp.nx]
+            rhs.rg[k][qp.nx:] = rhs.rg[k][qp.nx:] + rhs_modification[qp.nx:]
+        rhs.rg[-1] = rhs.rg[-1]
+        return modified_QP
