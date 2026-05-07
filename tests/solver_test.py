@@ -61,7 +61,7 @@ def build_qp(mats):
     return qp
 
 def main():
-    module_name = 'M_inde_R_inde_P_pos_1'
+    module_name = 'M_inde_R_inde_P_pos_4'
     print(f"\n>>> Running Case: {module_name}")
 
     module_path = f"{case_package}.{module_name}"

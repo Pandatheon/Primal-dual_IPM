@@ -180,7 +180,7 @@ class Riccati_IPM():
                 elif self.reg_config.method in Reduced_Hessian_based_regularization:
 
                     try:
-                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, self.reg_config, reduced_hessian, P_prev, k)
+                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
                         R_chol = np.linalg.cholesky(reduced_hessian_reg)
                         g1 = S_k + B_k.T@P_reg@A_k
                         g2 = r_k + B_k.T@(P_reg@b_k + p_prev)

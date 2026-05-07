@@ -1,10 +1,9 @@
 import numpy as np
-from QP_formulation import OCP_QP_varying
-from solvers.RiccatiQPSolver import QP_solver
-from Regularizations import Regularizations_config
-from utilis.utilis import read_matrix_list
+from QP_template.QP_base import BaseQP
+from solvers.RiccatiQPSolver import QPSolver
+from solvers.Regularization_config import Regularizations_config
+from utils.utilis import read_matrix_list
 import copy
-from utilis.utilis import write_csv
 
 json_path_list = [
     "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=100.json",
@@ -21,25 +20,24 @@ for json_path in json_path_list:
     print(f"\n>>> Running Pendulum Case with N={N}")
     uh = 80.0
     lh = -80.0
-    A = read_matrix_list(json_path, "A")
-    B = read_matrix_list(json_path, "B")
-    nx = A[0].shape[0]
-    nu = B[0].shape[1]
-    b = [np.zeros((nx,)) for _ in range(N)]
-    Q = read_matrix_list(json_path, "Q")
-    R = read_matrix_list(json_path, "R")
-    S = read_matrix_list(json_path, "S")
-    q = [np.zeros((nx,)) for _ in range(N)]
-    r = [np.zeros((nu,)) for _ in range(N)]
-    C = [np.zeros((2, nx)) for _ in range(N)]
-    D = [np.array([[-1.0],[1.0]]) for _ in range(N)]
-    d = [np.array([-lh, uh]) for _ in range(N)]
-    Q_e = Q[-1]
-    q_e = np.zeros((nx,))
+    qp = BaseQP()
+    qp.A = read_matrix_list(json_path, "A")
+    qp.B = read_matrix_list(json_path, "B")
+    qp.nx = qp.A[0].shape[0]
+    qp.nu = qp.B[0].shape[1]
+    qp.b = read_matrix_list(json_path, "b")
+    qp.Q = read_matrix_list(json_path, "Q")
+    qp.R = read_matrix_list(json_path, "R")
+    qp.S = read_matrix_list(json_path, "S")
+    qp.q = read_matrix_list(json_path, "q")
+    qp.r = read_matrix_list(json_path, "r")
+    qp.C = [np.zeros((2, qp.nx)) for _ in range(N)]
+    qp.D = [np.array([[-1.0],[1.0]]) for _ in range(N)]
+    qp.d = [np.array([-lh, uh]) for _ in range(N)]
+    qp.Q_e = read_matrix_list(json_path, "Q")[-1]
+    qp.q_e = read_matrix_list(json_path, "q")[-1]
 
     x0 = np.array([0.0, np.pi, 0.0, 0.0])
-
-    qp = OCP_QP_varying(N, Q, R, S, q, r, A, B, b, C, D, d, Q_e, q_e)
 
     for method in reg_method:
         print(f"\n\n=== Testing regularization method: {method} ===")
@@ -47,10 +45,8 @@ for json_path in json_path_list:
             copyqp = copy.deepcopy(qp)
             qp_solver = QP_solver(copyqp)
             sol = qp_solver.solve(x0, reg=method)
-            write_csv(f"Pendulum_caseF_N={N}", qp_solver, method)
         except Exception as e:
             print(f"Method {method} failed with exception: {e}")
-            write_csv(f"Pendulum_caseF_N={N}", qp_solver, method)
             continue
         cost_qp = qp_solver.get_cost()
         print(f"\n=== Predicted cost qp with {method} ===\n{cost_qp}")

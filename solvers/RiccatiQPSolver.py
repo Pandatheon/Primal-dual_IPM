@@ -75,7 +75,7 @@ class QPSolver:
         self.solution.s[0] = init_s0
         self.solution.lam[0] = self.rhs.duality_measure / init_s0
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=200, reg:str='NO_REGULARIZE')-> iterate_sol:
+    def solve(self, x0:np.ndarray=None, max_iter:int=200)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
