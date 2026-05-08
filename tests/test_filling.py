@@ -8,41 +8,22 @@ import numpy as np
 from QP_template.QP_base import BaseQP
 from solvers.RiccatiQPSolver import QPSolver
 from solvers.Regularization_config import Regularizations_config, reg_list
-from utils.utilis import read_matrix_list
-import copy
 
-json_path_list = [
-    "/home/jingtao/Primal-dual_IPM/cases/Pendulum_indefinite_case/pendulum_caseF_qp_N=20.json",
-]
 reg_config = Regularizations_config()
-reg_method = [
-    'PM_STAGE_MIRROR', 
-    'PM_lookahead_CM'
-    ]
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_inde_M.json'
 
-for json_path in json_path_list:
-    # get N from path name
-    N = int(json_path.split("N=")[-1].split(".json")[0])
-    print(f"\n>>> Running Pendulum Case with N={N}")
-    uh = 80.0
-    lh = -80.0
+def main():
+
     qp = BaseQP()
-    qp.N = int(json_path.split("N=")[-1].split(".json")[0])
-    qp.A = read_matrix_list(json_path, "A")
-    qp.B = read_matrix_list(json_path, "B")
-    qp.nx = qp.A[0].shape[0]
-    qp.nu = qp.B[0].shape[1]
-    qp.b = read_matrix_list(json_path, "b")
-    qp.Q = read_matrix_list(json_path, "Q")[:-1]
-    qp.R = read_matrix_list(json_path, "R")
-    qp.S = read_matrix_list(json_path, "S")
-    qp.q = read_matrix_list(json_path, "q")[:-1]
-    qp.r = read_matrix_list(json_path, "r")
-    qp.C = [np.zeros((2, qp.nx)) for _ in range(qp.N)]
-    qp.D = [np.array([[-1.0],[1.0]]) for _ in range(qp.N)]
-    qp.d = [np.array([-lh, uh]) for _ in range(qp.N)]
-    qp.nh = qp.C[0].shape[0]
-    qp.Q_e = read_matrix_list(json_path, "Q")[-1]
-    qp.q_e = read_matrix_list(json_path, "q")[-1]
+    qp.populate_from_json(json_path)
+    print(f"QP loaded from {json_path} with N={qp.N}, nx={qp.nx}, nu={qp.nu}, nh_0={qp.nh_0}, nh={qp.nh}, nh_e={qp.nh_e}, nb_0={qp.nb_0}, nb={qp.nb}, nb_e={qp.nb_e}")
 
-    x0 = np.array([0.0, np.pi, 0.0, 0.0])
+    method = reg_list[1]
+    qp_solver = QPSolver(qp, reg=method)
+    x0 = np.zeros((qp.nx,))
+    qp_solver.solve(x0=x0, max_iter=200)
+    print('Method:',method)
+    qp_solver.print_statistics()
+
+if __name__ == "__main__":
+    main()

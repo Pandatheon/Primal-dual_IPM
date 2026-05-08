@@ -9,10 +9,10 @@ import copy
 
 
 class Riccati_IPM():
-    def __init__(self, qp: BaseQP, reg_config: Regularizations_config):
+    def __init__(self, qp: BaseQP, reg_config: Regularizations_config, ineq_num:int):
         self.qp = qp
-        self.ineq_num = self.qp.nh * self.qp.N + 2*self.qp.nx
         self.reg_config = reg_config
+        self.ineq_num = ineq_num
 
     def update_rhs(self, centering_param:float, rhs:dict, statistics_dict:dict,
                    prev_sol:iterate_sol, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
@@ -213,7 +213,7 @@ class Riccati_IPM():
             C_k = qp.C[k]
             D_k = qp.D[k]
 
-            C_full = np.concatenate((C_k, D_k), axis=1)
+            C_full = np.hstack((C_k, D_k))
             T_mat = np.diag(s_k)
             Lam_mat = np.diag(lam_k)
             rd = rhs.rd[k]

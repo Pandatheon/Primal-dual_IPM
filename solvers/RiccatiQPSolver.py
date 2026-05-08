@@ -50,30 +50,20 @@ class QPSolver:
             duality_measure = 10.0,
         )
 
-        self.solver = Riccati_IPM(qp, Regularizations_config(method=reg, delta=1e-4))
-        self.ineq_num = self.qp.nh * self.qp.N + 2*self.qp.nx
+        self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 + 
+                           (self.qp.nh + self.qp.nb) * (self.qp.N - 1) + 
+                           self.qp.nb_e + self.qp.nh_e)
+
+        self.solver = Riccati_IPM(qp,
+                                  Regularizations_config(method=reg, delta=1e-4), 
+                                  ineq_num=self.ineq_num)
 
     def _initilize_solution(self, x0:np.ndarray):
         self.solution.x = [x0 for i in range(self.qp.N+1)]
-        self.solution.u = [np.zeros((self.qp.nu,)) for i in range(self.qp.N)]
-        init_s = self.qp.d[0] - self.qp.C[0] @ self.solution.x[0] - self.qp.D[0] @ self.solution.u[0]
-        self.solution.s = [init_s for _ in range(self.qp.N)]
-        self.solution.lam = [self.rhs.duality_measure / self.solution.s[i] for i in range(self.qp.N)]
-        self.solution.pi = [np.zeros((self.qp.nx,)) for i in range(self.qp.N)]
-
-        init_d0 =  np.hstack(( -(x0-1e-1)*np.ones((self.qp.nx,)), (x0+1e-1)*np.ones((self.qp.nx,)), self.qp.d[0]))
-        C0 = np.vstack((-np.eye(self.qp.nx), np.eye(self.qp.nx), self.qp.C[0]))
-        D0 = np.vstack((np.zeros((self.qp.nx, self.qp.nu)), np.zeros((self.qp.nx, self.qp.nu)), self.qp.D[0]))
-        temp = C0 @ self.solution.x[0] - D0 @ self.solution.u[0]
-        init_s0 = init_d0 - temp
-        d0 = np.hstack(( -(x0)*np.ones((self.qp.nx,)), (x0)*np.ones((self.qp.nx,)), self.qp.d[0]))
-
-        self.qp.C[0] = C0
-        self.qp.D[0] = D0
-        self.qp.d[0] = d0
-
-        self.solution.s[0] = init_s0
-        self.solution.lam[0] = self.rhs.duality_measure / init_s0
+        self.solution.u = [np.zeros((self.qp.nu,)) for _ in range(self.qp.N)]
+        self.solution.s = [np.maximum(self.qp.d[k] - self.qp.C[k] @ self.solution.x[k] - self.qp.D[k] @ self.solution.u[k], 1e-1) for k in range(self.qp.N)]
+        self.solution.lam = [self.rhs.duality_measure / self.solution.s[k] for k in range(self.qp.N)]
+        self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N)]
 
     def solve(self, x0:np.ndarray=None, max_iter:int=200)-> iterate_sol:
         '''

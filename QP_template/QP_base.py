@@ -15,14 +15,15 @@ class BaseQP():
 
         # Core QP data structures
         self.N = 0
-        self.A = None
-        self.B = None
-        self.b = None
-        self.C = None
-        self.D = None
-        self.d = None
         self.nx = 0
         self.nu = 0
+        self.nb_0 = 0
+        self.nb = 0
+        self.nb_e = 0
+        self.nh_0 = 0
+        self.nh = 0
+        self.nh_e = 0
+        # cost
         self.Q = None
         self.R = None
         self.S = None
@@ -30,6 +31,15 @@ class BaseQP():
         self.r = None
         self.Q_e = None
         self.q_e = None
+        # constraints
+        self.A = None
+        self.B = None
+        self.b = None
+        self.Jbx = None
+        self.Jbu = None
+        self.C = None
+        self.D = None
+        self.d = None
 
         # Algorithmic variables
         self.feedback = None
@@ -41,34 +51,105 @@ class BaseQP():
 
         # Use filename as the QP name
         self.name = os.path.splitext(os.path.basename(json_filepath))[0]
-
+        matrix_fields = ['Q', 'R', 'S', 'A', 'B', 'C', 'D']
+        vector_fields = ['q', 'r', 'b', 'd', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
         # Helper to dynamically extract sequences like A_00, A_01...
-        def get_seq(prefix):
+        def extract_sequence(prefix):
             seq = []
             i = 0
             while f"{prefix}_{i:02d}" in data:
-                seq.append(np.array(data[f"{prefix}_{i:02d}"]))
+                if prefix in matrix_fields:
+                    seq.append(np.array(data[f"{prefix}_{i:02d}"]))
+                elif prefix in vector_fields:
+                    seq.append(np.array(data[f"{prefix}_{i:02d}"]).flatten())
                 i += 1
-            return seq or None
+            return seq if seq else None
 
-        # Populate LTV sequences[cite: 5]
-        for key in ["A", "B", "b", "C", "D", "d", "Q", "R", "S", "q", "r"]:
-            setattr(self, key, get_seq(key))
+        # Populate dynamics matrices
+        self.A = extract_sequence("A")
+        self.B = extract_sequence("B")
+        self.b = extract_sequence("b")
 
         # Determine horizon and dimensions
         self.N = len(self.A) if self.A else 0
         self.nx = self.A[0].shape[0] if self.A else 0
         self.nu = self.B[0].shape[1] if self.B else 0
-        self.nh = self.C[0].shape[0] if self.C else 0
 
-        # Terminal costs are typically stored at index N (e.g., Q_20 when N=20)
-        terminal_Q_key = f"Q_{self.N:02d}"
-        terminal_q_key = f"q_{self.N:02d}"
+        # Populate cost matrices and vectors
+        self.Q = extract_sequence("Q")
+        self.R = extract_sequence("R")
+        self.S = extract_sequence("S")
+        self.q = extract_sequence("q")
+        self.r = extract_sequence("r")
+        self.Q_e = np.array(data[ f"Q_{self.N:02d}"])
+        self.q_e = np.array(data[f"q_{self.N:02d}"])
 
-        if terminal_Q_key in data:
-            self.Q_e = np.array(data[terminal_Q_key])
-        if terminal_q_key in data:
-            self.q_e = np.array(data[terminal_q_key])
+        # Populate constraints
+        # boundary for x and u, represented as Jbx*x and Jbu*u
+        idxb = extract_sequence("idxb")
+        self.Jbx = [np.zeros((0, self.nx))] * (self.N + 1)
+        self.Jbu = [np.zeros((0, self.nu))] * (self.N + 1)
+        if idxb is not None:
+            for k in range(len(idxb)):
+                idxb_k = idxb[k]
+                idxb_u = idxb_k[idxb_k < self.nu]
+                idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
+                Jbu_k = np.zeros((len(idxb_u), self.nu))
+                Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
+                Jbx_k = np.zeros((len(idxb_x), self.nx))
+                Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
+                self.Jbu[k] = Jbu_k
+                self.Jbx[k] = Jbx_k
+
+        self.Jbx[0] = np.zeros((0, self.nx)) # ad-hoc fix for x0 elimination
+
+        self.nb_0 = self.Jbx[0].shape[0] + self.Jbu[0].shape[0]
+        self.nb = self.Jbx[1].shape[0] + self.Jbu[1].shape[0]
+        self.nb_e = self.Jbx[-1].shape[0] + self.Jbu[-1].shape[0]
+
+        # general linear constraints C*x + D*u <= d
+        self.C = []
+        self.D = []
+        C_list = extract_sequence("C")
+        D_list = extract_sequence("D")
+
+        for k in range(self.N+1):
+            C_k = C_list[k] if (C_list and k < len(C_list)) else np.zeros((0, self.nx))
+            D_k = D_list[k] if (D_list and k < len(D_list)) else np.zeros((0, self.nu))
+            self.C.append(C_k)
+            self.D.append(D_k)
+
+        self.nh_0 = self.C[0].shape[0]
+        self.nh = self.C[1].shape[0]
+        self.nh_e = self.C[-1].shape[0]
+
+        # concatanate Jbx, Jbu with C, D to form the full constraint matrices for each stage
+        for k in range(self.N+1):
+            C_lower = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx)), -self.Jbx[k], -self.C[k]))
+            C_upper = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx)), self.Jbx[k], self.C[k]))
+            self.C[k] = np.vstack((C_lower, C_upper))
+            D_lower = np.vstack((-self.Jbu[k], np.zeros((self.Jbx[k].shape[0], self.nu)), -self.D[k]))
+            D_upper = np.vstack((self.Jbu[k], np.zeros((self.Jbx[k].shape[0], self.nu)), self.D[k]))
+            self.D[k] = np.vstack((D_lower, D_upper))
+
+        lbu, ubu = extract_sequence("lbu"), extract_sequence("ubu")
+        lbx, ubx= extract_sequence("lbx"), extract_sequence("ubx")
+        lg, ug = extract_sequence("lg"), extract_sequence("ug")
+        self.d = []
+        for k in range(self.N+1):
+            lb_k = []
+            ub_k = []
+            for i, (lb, ub) in enumerate([(lbu, ubu), (lbx, ubx), (lg, ug)]):
+                if k == 0 and i ==1:
+                    continue # ad-hoc fix for x0 elimination
+                if (lb is not None and k < len(lb)) and (ub is not None and k < len(ub)):
+                    lb_k.append(-lb[k].flatten())
+                    ub_k.append(ub[k].flatten())
+            if lb_k and ub_k:
+                d_k = lb_k + ub_k
+                self.d.append(np.concatenate(d_k))
+            else:
+                self.d.append(np.array([]))
 
         return self
 

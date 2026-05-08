@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager
 import casadi as ca
 import numpy as np
-from utilis.utilis import read_matrix_list
+from utils.utilis import read_matrix_list
 
 
 N = 50
@@ -79,9 +79,9 @@ def formulate_OCP(regularize_method='NO_REGULARIZE'):
     ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
     ocp.solver_options.qp_solver_mu0 = 2.0
     ocp.solver_options.tau_min = 1e-8
-    ocp.solver_options.nlp_solver_max_iter = 200
-    ocp.solver_options.qp_solver_iter_max = 200
-    # ocp.solver_options.print_level = 5
+    ocp.solver_options.nlp_solver_max_iter = 1
+    ocp.solver_options.qp_solver_iter_max = 0
+    ocp.solver_options.print_level = 5
     return ocp, param_manager
 
 def main():
@@ -109,16 +109,6 @@ def main():
 
     cost_acados = ocp_solver.get_cost()
     print(f"\n=== Predicted cost acados ===\n{cost_acados}")
-
-    print("\n=== Predicted next state sequence (x) ===")
-    for i in range(N+1):
-        x_i = ocp_solver.get(i, "x")
-        print(x_i)
-
-    print("\n=== Predicted control sequence (u) ===")
-    for i in range(N):
-        u_i = ocp_solver.get(i, "u")
-        print(u_i)
 
     ocp_solver.print_statistics()
 
