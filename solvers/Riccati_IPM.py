@@ -2,7 +2,7 @@ from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
 from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
-from solvers.Regularization_config import Regularizations_config, Reduced_Hessian_based_regularization
+from solvers.Regularization_config import Regularizations_config, stage_reg
 import numpy as np
 import copy
 
@@ -41,15 +41,12 @@ class Riccati_IPM():
 
             # stationarity residual
             temp_res_stat = np.zeros(nx + nu)
-            if k == 0:
-                temp_res_stat[nx:] = R_k @ u[0] + r_k + B_k.T @ pi[0] + D_k.T @ lam[0]
-            else:
-                temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k] + C_k.T @ lam[k] - pi[k-1]
-                temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k] + D_k.T @ lam[k]
+            temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1] + C_k.T @ lam[k] - pi[k]
+            temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k+1] + D_k.T @ lam[k]
             res_stat.append(temp_res_stat)
 
             #equality residual
-            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] - b_k)
+            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k)
 
             #inequality residual
             res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
@@ -68,7 +65,7 @@ class Riccati_IPM():
         temp_res_stat = np.zeros(nx+nu)
         Q_e = self.qp.Q_e
         q_e = self.qp.q_e
-        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N-1]
+        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N]
         res_stat.append(temp_res_stat)
 
         rhs.rg = res_stat
@@ -92,6 +89,8 @@ class Riccati_IPM():
         # recover delta_x and delta_u, delta_pi first with modified KKT system
         # then recover delta_s and delta_lam with original KKT system
         delta_x[0] = np.zeros((self.qp.nx,))
+        delta_pi[0] = feedback.P[0] @ delta_x[0] + feedback.p[0]
+
         for k in range(self.qp.N):
             C_k = self.qp.C[k]
             D_k = self.qp.D[k]
@@ -112,7 +111,7 @@ class Riccati_IPM():
             delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
 
             # recover pi
-            delta_pi[k] =  feedback.P[k+1] @ delta_x[k+1] + feedback.p[k+1]
+            delta_pi[k+1] =  feedback.P[k+1] @ delta_x[k+1] + feedback.p[k+1]
 
         delta_dict = {
             'delta_x': delta_x,
@@ -177,7 +176,7 @@ class Riccati_IPM():
                 if self.reg_config.method == 'NO_REGULARIZE':
                     raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 
-                elif self.reg_config.method in Reduced_Hessian_based_regularization:
+                elif self.reg_config.method in stage_reg:
 
                     try:
                         reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)

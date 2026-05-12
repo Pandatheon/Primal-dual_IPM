@@ -50,26 +50,91 @@ class QPSolver:
             duality_measure = 10.0,
         )
 
-        self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 + 
-                           (self.qp.nh + self.qp.nb) * (self.qp.N - 1) + 
+        self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
+                           (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
                            self.qp.nb_e + self.qp.nh_e)
 
         self.solver = Riccati_IPM(qp,
-                                  Regularizations_config(method=reg, delta=1e-4), 
+                                  Regularizations_config(method=reg, delta=1e-4),
                                   ineq_num=self.ineq_num)
 
     def _initilize_solution(self, x0:np.ndarray):
+        if x0 is None:
+            x0 = np.zeros((self.qp.nx,))
         self.solution.x = [x0 for i in range(self.qp.N+1)]
         self.solution.u = [np.zeros((self.qp.nu,)) for _ in range(self.qp.N)]
-        self.solution.s = [np.maximum(self.qp.d[k] - self.qp.C[k] @ self.solution.x[k] - self.qp.D[k] @ self.solution.u[k], 1e-1) for k in range(self.qp.N)]
-        self.solution.lam = [self.rhs.duality_measure / self.solution.s[k] for k in range(self.qp.N)]
-        self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N)]
+        self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
+        self._initailize_lam_and_s()
+
+    def _initailize_lam_and_s(self):
+        self.solution.s = []
+        self.solution.lam = []
+        threshold = 1e-1
+        for k in range(self.qp.N):
+            nb = self.qp.nb_0 if k == 0 else (self.qp.nb_e if k == self.qp.N else self.qp.nb)
+            nh = self.qp.nh_0 if k == 0 else (self.qp.nh_e if k == self.qp.N else self.qp.nh)
+            end_lb = nb + nh
+
+            Jbx_k = self.qp.Jbx[k]
+            Jbu_k = self.qp.Jbu[k]
+            d_k = self.qp.d[k]
+            C_k = self.qp.C[k][2*nb:]
+            D_k = self.qp.D[k][2*nb:]
+
+            bounded_x = Jbx_k @ self.solution.x[k] if Jbx_k.shape[0] > 0 else np.array([])
+            bounded_u = Jbu_k @ self.solution.u[k] if Jbu_k.shape[0] > 0 else np.array([])
+            bounded_ux = np.concatenate((bounded_u, bounded_x))
+
+            d_lb_box = d_k[:nb]
+            d_ub_box = d_k[end_lb:end_lb+nb]
+
+            s_lb_box = bounded_ux + d_lb_box
+            s_ub_box = d_ub_box - bounded_ux
+
+            mask_lb = s_lb_box < threshold
+            mask_ub = s_ub_box < threshold
+            mask_both = mask_lb & mask_ub
+
+            if np.any(mask_both):
+                bounded_ux[mask_both] = 0.5 * (d_ub_box[mask_both] - d_lb_box[mask_both])
+                s_lb_box[mask_both] = threshold
+                s_ub_box[mask_both] = threshold
+
+            mask_only_lb = mask_lb & ~mask_both
+            if np.any(mask_only_lb):
+                s_lb_box[mask_only_lb] = threshold
+                bounded_ux[mask_only_lb] = -d_lb_box[mask_only_lb] + threshold
+
+            mask_only_ub = mask_ub & ~mask_both
+            if np.any(mask_only_ub):
+                s_ub_box[mask_only_ub] = threshold
+                bounded_ux[mask_only_ub] = d_ub_box[mask_only_ub] - threshold
+
+            self.solution.u[k] = bounded_ux[:self.qp.nu] if bounded_ux[:self.qp.nu].size > 0 else self.solution.u[k]
+            self.solution.x[k] = bounded_ux[self.qp.nu:] if bounded_ux[self.qp.nu:].size > 0 else self.solution.x[k]
+
+            d_lb_gen = d_k[nb:end_lb]
+            d_ub_gen = d_k[end_lb+nb:end_lb+nb+nh]
+
+            y_gen = C_k @ self.solution.x[k] + D_k @ self.solution.u[k]
+
+            s_lb_gen_raw = y_gen - d_lb_gen
+            s_ub_gen_raw = d_ub_gen - y_gen
+
+            s_lb_gen = np.maximum(s_lb_gen_raw, threshold)
+            s_ub_gen = np.maximum(s_ub_gen_raw, threshold)
+
+            s_lb_full = np.concatenate((s_lb_box, s_lb_gen))
+            s_ub_full = np.concatenate((s_ub_box, s_ub_gen))
+            s_k_full = np.concatenate((s_lb_full, s_ub_full))
+
+            self.solution.s.append(s_k_full)
+            self.solution.lam.append(self.rhs.duality_measure / s_k_full)
 
     def solve(self, x0:np.ndarray=None, max_iter:int=200)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
-        assert x0 is not None, "Please provide a non-zero initial state x0 to solve the QP."
 
         self._initilize_solution(x0)
 
@@ -105,14 +170,14 @@ class QPSolver:
 
     def _compute_step(self, prev_sol:iterate_sol, step_type:str)-> iterate_sol:
         '''Compute the search direction by solving the KKT system with Riccati recursion.'''
-        self.rhs = self.solver.update_rhs(centering_param=self.centering_param, rhs=self.rhs, statistics_dict=self.statistics_dict, 
+        self.rhs = self.solver.update_rhs(centering_param=self.centering_param, rhs=self.rhs, statistics_dict=self.statistics_dict,
                                           prev_sol=prev_sol, delta_aff_dict=self.delta_aff_dict, step_type=step_type)
         feedback = self.solver.backward_sweep(self.rhs, prev_sol=prev_sol)
         delta_dict = self.solver.foward_sweep(self.rhs, prev_sol, feedback)
         return delta_dict
 
     def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict, prob:bool=False)-> float:
-        tol = 1e-16 if prob else 1e-20
+        tol = 1e-16
         alpha_pri_max, alpha_dual_max, alpha_max = self.fraction_to_boundary(prev_sol, delta_dict, boundary=prob)
         s_aff = np.maximum(np.concatenate(prev_sol.s) + alpha_pri_max * np.concatenate(delta_dict['delta_s']), tol)
         lam_aff = np.maximum(np.concatenate(prev_sol.lam) + alpha_dual_max * np.concatenate(delta_dict['delta_lam']), tol)
@@ -125,7 +190,7 @@ class QPSolver:
         # update solution
         x_delta = [prev_sol.x[i] + alpha_pri * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_delta = [prev_sol.u[i] + alpha_pri * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
-        pi_delta = [prev_sol.pi[i] + alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N)]
+        pi_delta = [prev_sol.pi[i] + alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
         lam_delta = [np.maximum(prev_sol.lam[i] + alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
         s_delta = [np.maximum(prev_sol.s[i] + alpha_pri * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x_delta, u_delta, pi_delta, lam_delta, s_delta)
@@ -172,9 +237,9 @@ class QPSolver:
                 (self.statistics_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
 
     def _quit(self, max_iter):
-        res = max(self.statistics_dict['res_stat_list'][-1], 
-                  self.statistics_dict['res_eq_list'][-1], 
-                  self.statistics_dict['res_ineq_list'][-1], 
+        res = max(self.statistics_dict['res_stat_list'][-1],
+                  self.statistics_dict['res_eq_list'][-1],
+                  self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
         if self.statistics_dict['iter_count'] >= max_iter:
             print(f"\033[31mNot Converged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
@@ -192,6 +257,21 @@ class QPSolver:
         x_N = self.solution.x[-1]
         cost += 0.5 * x_N.T @ self.qp.Q_e @ x_N + self.qp.q_e.T @ x_N
         return cost
+
+    def get(self, stage:int, field:str):
+
+        if field == 'x':
+            return self.solution.x[stage]
+        elif field == 'u':
+            return self.solution.u[stage]
+        elif field == 'pi':
+            return self.solution.pi[stage]
+        elif field == 'lam':
+            return self.solution.lam[stage]
+        elif field == 's':
+            return self.solution.s[stage]
+        else:
+            raise ValueError(f"Invalid field {field}. Valid fields are 'x', 'u', 'pi', 'lam', 's'.")
 
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')
