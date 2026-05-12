@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex Report"] 1776270697.43971 "Report.aux" "Report.bbl" "Report" 1776271554.51777 0
-  "./references.bib" 1775482752.63798 7801 8f4a965b864f64c54ba309732477800f ""
+["bibtex Report"] 1776270697.43971 "Report.aux" "Report.bbl" "Report" 1778599667.61713 0
+  "./references.bib" 1778071255.64193 7801 8f4a965b864f64c54ba309732477800f ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "Report.aux" 1776271554.11783 10315 b273e52c84c6351ee85dd8524eac3ef5 "pdflatex"
+  "Report.aux" 1778599667.02618 10315 b273e52c84c6351ee85dd8524eac3ef5 "pdflatex"
   (generated)
   "Report.bbl"
   "Report.blg"
   (rewritten before read)
-["pdflatex"] 1776271553.05292 "/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex" "Report.pdf" "Report" 1776271554.51799 0
-  "/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex" 1776271552.81664 29457 24a6cdd2083d9d22f638f4b41d0a6eef ""
+["pdflatex"] 1778599665.49434 "/home/jingtao/temp_IPM/report_slides/report/Report.tex" "Report.pdf" "Report" 1778599667.61758 0
+  "/home/jingtao/temp_IPM/report_slides/report/Report.tex" 1778599664.88082 29457 24a6cdd2083d9d22f638f4b41d0a6eef ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -191,15 +191,15 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1762166295 5528330 eec9f591f2298dceaf6e205421f7c595 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1762166417 3633725 e8898def4c58863840b0cabbb02cf6e2 ""
   "/usr/local/texlive/2025/texmf.cnf" 1762166288.46245 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
-  "IEEEtran.cls" 1774451200.9663 288304 b67b6fc6c2abb39f9b461923f5199343 ""
-  "Report.aux" 1776271554.11783 10315 b273e52c84c6351ee85dd8524eac3ef5 "pdflatex"
-  "Report.bbl" 1776270697.58028 4767 a3b4fbd06270beb4f6cd597cb9982e9f "bibtex Report"
-  "Report.out" 1776271554.11783 2057 b60a604b500659655ef6621ce7758faa "pdflatex"
-  "Report.tex" 1776271552.81664 29457 24a6cdd2083d9d22f638f4b41d0a6eef ""
-  "figures/adjustment_vertical.pdf" 1776268115.04597 35148 42a84d08b15ee6180f403ff820d57dfc ""
-  "figures/iteration_performance_profile.pdf" 1776270497.64348 20077 8230a70359645c2f81f9ff162210d071 ""
-  "figures/ratio_vertical.pdf" 1776268126.05214 30436 871668c57c411eb616d3b5b05eae1fd6 ""
-  "figures/regularization_avg_se.pdf" 1776270405.82579 14569 b9b4bae939c7e3820973e93523057f06 ""
+  "IEEEtran.cls" 1778071255.62393 288304 b67b6fc6c2abb39f9b461923f5199343 ""
+  "Report.aux" 1778599667.02618 10315 b273e52c84c6351ee85dd8524eac3ef5 "pdflatex"
+  "Report.bbl" 1778071255.62753 4767 a3b4fbd06270beb4f6cd597cb9982e9f "bibtex Report"
+  "Report.out" 1778599667.03018 2057 b60a604b500659655ef6621ce7758faa "pdflatex"
+  "Report.tex" 1778599664.88082 29457 24a6cdd2083d9d22f638f4b41d0a6eef ""
+  "figures/adjustment_vertical.pdf" 1778071255.63833 35148 42a84d08b15ee6180f403ff820d57dfc ""
+  "figures/iteration_performance_profile.pdf" 1778599564.05469 17386 3c60e1747ab06092dcba8b454bd8317f ""
+  "figures/ratio_vertical.pdf" 1778071255.63833 30436 871668c57c411eb616d3b5b05eae1fd6 ""
+  "figures/regularization_avg_se.pdf" 1778071255.64193 14569 b9b4bae939c7e3820973e93523057f06 ""
   (generated)
   "Report.aux"
   "Report.log"

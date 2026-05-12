@@ -128,11 +128,17 @@ def backward_sweep(qp, rhs_dict, recorder, reg_config,
     nu, nx = qp.stages[0].S.shape
 
     if reg == 'PROJECT' or reg == 'MIRROR':
-        regularized_QP = regularize_QP(qp, recorder=recorder,
+        qp_mod_stages = modify_QP(qp, rhs_dict, prev_sol)
+        qp_mod = copy.deepcopy(qp)
+        for i in range(horizon):
+            qp_mod.stages[i] = qp_mod_stages[i]
+        qp_mod.terminal = qp_mod_stages[-1]
+        regularized_QP = regularize_QP(qp_mod, recorder=recorder,
                                         reg_config= reg_config, method=reg)
+        modified_QP_stages = regularized_QP.stages + [regularized_QP.terminal]
     else:
         regularized_QP = copy.deepcopy(qp)
-    modified_QP_stages = modify_QP(regularized_QP, rhs_dict, prev_sol)
+        modified_QP_stages = modify_QP(regularized_QP, rhs_dict, prev_sol)
 
     recorder.reset_stage_arrays()
 

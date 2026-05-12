@@ -36,8 +36,8 @@ case_modules = [
 
 
 reg_config = Regularizations_config()
-reg_method = reg_config.Hessian_based_regularization + \
-             reg_config.Reduced_Hessian_based_regularization
+reg_method = reg_config.Hessian_based_regularization \
+            + reg_config.Reduced_Hessian_based_regularization
 
 def main():
     for x0_value in [3.0, 5.0]:

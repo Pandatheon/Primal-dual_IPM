@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  16 APR 2026 00:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  12 MAY 2026 17:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex
-(/home/jingtao/Primal-dual_IPM/report_slides/report/Report.tex
+**/home/jingtao/temp_IPM/report_slides/report/Report.tex
+(/home/jingtao/temp_IPM/report_slides/report/Report.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
 (./IEEEtran.cls
@@ -797,11 +797,11 @@ Underfull \hbox (badness 1377) in paragraph at lines 411--415
 \OT1/ptm/m/n/10 sian block reg-u-lar-iza-tion meth-ods (PROJECT and MIR-
  []
 
-<figures/iteration_performance_profile.pdf, id=130, 624.74591pt x 480.38597pt>
+<figures/iteration_performance_profile.pdf, id=130, 642.82224pt x 497.8437pt>
 File: figures/iteration_performance_profile.pdf Graphic file (type pdf)
 <use figures/iteration_performance_profile.pdf>
 Package pdftex.def Info: figures/iteration_performance_profile.pdf  used on input line 423.
-(pdftex.def)             Requested size: 252.0pt x 193.77094pt.
+(pdftex.def)             Requested size: 252.0pt x 195.161pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 426--426
 \OT1/ptm/m/n/8 Fig. 1.  []Performance pro-file com-par-ing reg-u-lar-iza-tion tech-niques
@@ -862,14 +862,14 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  24178 strings out of 467578
- 466774 string characters out of 5420566
- 908575 words of memory out of 5000000
+ 466753 string characters out of 5420566
+ 908577 words of memory out of 5000000
  52587 multiletter control sequences out of 15000+600000
  669587 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,18n,80p,504b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,18n,80p,497b,692s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Report.pdf (6 pages, 304230 bytes).
+Output written on Report.pdf (6 pages, 301950 bytes).
 PDF statistics:
  517 PDF objects out of 1000 (max. 8388607)
  232 compressed objects within 3 object streams
