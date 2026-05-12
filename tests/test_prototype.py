@@ -7,10 +7,10 @@ sys.path.append(parent_dir)
 import numpy as np
 from QP_template.QP_base import BaseQP
 from solvers.RiccatiQPSolver import QPSolver
-from solvers.Regularization_config import Regularizations_config, reg_list
+from solvers.Regularization_config import Regularizations_config, Hessian_reg, condensed_Hessian_reg, stage_reg, reg_list
 
 reg_config = Regularizations_config()
-json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_pos_M.json'
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_inde_M.json'
 
 def main():
 
@@ -18,10 +18,13 @@ def main():
     qp.populate_from_json(json_path)
     print(f"QP loaded from {json_path} with N={qp.N}, nx={qp.nx}, nu={qp.nu}, nh_0={qp.nh_0}, nh={qp.nh}, nh_e={qp.nh_e}, nb_0={qp.nb_0}, nb={qp.nb}, nb_e={qp.nb_e}")
 
-    method = reg_list[-1]
-    qp_solver = QPSolver(qp, reg=method)
+    method = reg_list[2]
+    qp_solver = QPSolver(qp, reg=method, type='Riccati')
+    # method = reg_list[3]
+    # qp_solver = QPSolver(qp, reg=method, type='Condensed')
+
     x0 = np.array([0.0, 0.0, 0.0, 0.0])
-    qp_solver.solve(x0=x0, max_iter=200)
+    qp_solver.solve(x0=x0, max_iter=150)
     qp_solver.print_statistics()
     print('Method:',method)
     cost = qp_solver.get_cost()

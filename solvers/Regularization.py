@@ -1,7 +1,23 @@
 import numpy as np
 import copy
 from QP_template.QP_base import BaseQP
-from utils.modified_Cholesky import modified_cholesky_SE, modified_cholesky_SE99
+from utils.modified_Cholesky import modified_cholesky_SE
+
+def _safe_sym_eig(matrix: np.ndarray, tol: float = 1000.0):
+    """Compute eig on a symmetrized, real-cast matrix to avoid complex drift."""
+    matrix_real = np.real_if_close(matrix, tol=tol)
+    matrix_sym = 0.5 * (matrix_real + matrix_real.conj().T)
+    eigvals, eigvecs = np.linalg.eig(matrix_sym)
+    eigvals = np.real_if_close(eigvals, tol=tol)
+    eigvecs = np.real_if_close(eigvecs, tol=tol)
+    return eigvals, eigvecs
+
+def _to_real(matrix: np.ndarray, tol: float = 1000.0) -> np.ndarray:
+    """Force a real array when imaginary parts are numerical noise."""
+    matrix_real = np.real_if_close(matrix, tol=tol)
+    if np.iscomplexobj(matrix_real):
+        return np.real(matrix_real)
+    return matrix_real
 
 def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np.ndarray:
     R_k = qp.R[stage]
@@ -12,15 +28,17 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
 
     if reg_config.method == 'PM_STAGE_MIRROR':
         # EM P first
-        eigvals_P, eigvecs_P = np.linalg.eig(P_prev)
+        eigvals_P, eigvecs_P = _safe_sym_eig(P_prev)
         eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method=method)
-        P_reg = eigvecs_P @ np.diag(eigvals_P_reg) @ eigvecs_P.T
+        P_reg = eigvecs_P @ np.diag(eigvals_P_reg) @ eigvecs_P.conj().T
+        P_reg = _to_real(P_reg)
         reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
 
         #  EM modified M next
-        eigvals_M, eigvecs_M = np.linalg.eig(reduced_hessian_P_reg)
+        eigvals_M, eigvecs_M = _safe_sym_eig(reduced_hessian_P_reg)
         eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method=method)
-        reduced_hessian_reg = eigvecs_M @ np.diag(eigvals_M_reg) @ eigvecs_M.T
+        reduced_hessian_reg = eigvecs_M @ np.diag(eigvals_M_reg) @ eigvecs_M.conj().T
+        reduced_hessian_reg = _to_real(reduced_hessian_reg)
 
     elif reg_config.method == 'M_lookahead_CM':
         Nc = 2
@@ -68,6 +86,8 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         S_k = qp.S[stage]
 
         def _recursion_lookahead(P, stage):
+            if Nc == 0:
+                return False
             actual_range = min(Nc, stage + 1)
             start_stage = stage - actual_range + 1
             end_stage = stage
@@ -123,22 +143,23 @@ def regularize_QP(
     regularized_QP = copy.deepcopy(qp)
     for k in range(qp.N):
         H = qp.Hessian_block(k)
-
-        eigvals, eigvecs = np.linalg.eig(H)
+        eigvals, eigvecs = _safe_sym_eig(H)
         eigvals_reg = do_regularization(eigvals, reg_config.delta, reg_config.method)
-        H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
+        H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
+        H_reg = _to_real(H_reg)
 
-        Q_reg = H_reg[:qp.nx, :qp.nx]
-        R_reg = H_reg[qp.nx:, qp.nx:]
-        S_reg = H_reg[qp.nx:, :qp.nx]
+        Q_reg = _to_real(H_reg[:qp.nx, :qp.nx])
+        R_reg = _to_real(H_reg[qp.nx:, qp.nx:])
+        S_reg = _to_real(H_reg[qp.nx:, :qp.nx])
         regularized_QP.Q[k] = Q_reg
         regularized_QP.R[k] = R_reg
         regularized_QP.S[k] = S_reg
 
     Q_e = qp.Q_e
-    eigvals_e, eigvecs_e = np.linalg.eig(Q_e)
+    eigvals_e, eigvecs_e = _safe_sym_eig(Q_e)
     eigvals_e_reg = do_regularization(eigvals_e, reg_config.delta, reg_config.method)
-    Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.T
+    Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.conj().T
+    Q_e_reg = _to_real(Q_e_reg)
     regularized_QP.Q_e = Q_e_reg
 
     return regularized_QP

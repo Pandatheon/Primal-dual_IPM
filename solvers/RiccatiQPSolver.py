@@ -2,19 +2,20 @@ from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs
 from solvers.Regularization_config import Regularizations_config
 from solvers.Riccati_IPM import Riccati_IPM
+from solvers.Condensed_IPM import Condensed_IPM
 import numpy as np
 import copy
 
 class QPSolver:
 
-    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE'):
+    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE', type:str='Riccati'):
         self.qp = qp
         self.status = -1
         self.centering_param = 1.0
         self.delta_aff_dict = None
         self.delta_dict = None
         self.res_max = {
-            'res_stat' : 1e-8,
+            'res_stat' : 1e-6,
             'res_eq' : 1e-8,
             'res_ineq' : 1e-8,
             'res_comp' : 1e-8,
@@ -53,10 +54,16 @@ class QPSolver:
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
                            self.qp.nb_e + self.qp.nh_e)
-
-        self.solver = Riccati_IPM(qp,
-                                  Regularizations_config(method=reg, delta=1e-4),
-                                  ineq_num=self.ineq_num)
+        if type == 'Riccati':
+            self.solver = Riccati_IPM(qp,
+                                    Regularizations_config(method=reg, delta=1e-4),
+                                    ineq_num=self.ineq_num)
+        elif type == 'Condensed':
+            self.solver = Condensed_IPM(qp,
+                                    Regularizations_config(method=reg, delta=1e-4),
+                                    ineq_num=self.ineq_num)
+        else:
+            raise ValueError(f"Invalid solver type {type}. Valid types are 'Riccati' and 'Condensed'.")
 
     def _initilize_solution(self, x0:np.ndarray):
         if x0 is None:

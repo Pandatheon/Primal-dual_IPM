@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 Hessian_reg = ['NO_REGULARIZE', 'PROJECT', 'MIRROR']
 
-cHessian_reg = ['M_PROJECT', 'M_MIRROR', 'M_CM']
+condensed_Hessian_reg = ['M_PROJECT', 'M_MIRROR', 'M_CM']
 
 stage_reg = ['PM_STAGE_MIRROR', 'M_lookahead_CM', 'PM_lookahead_CM']
 
-reg_list = Hessian_reg + cHessian_reg + stage_reg
+reg_list = Hessian_reg + condensed_Hessian_reg + stage_reg
 
 @dataclass
 class Regularizations_config:

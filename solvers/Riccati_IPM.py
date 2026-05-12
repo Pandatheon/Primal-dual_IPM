@@ -106,7 +106,6 @@ class Riccati_IPM():
             delta_s[k] = -(C_k @delta_x[k] + D_k @delta_u[k]) - rhs_d
 
             # recover lam
-
             rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
             delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
 
@@ -127,10 +126,12 @@ class Riccati_IPM():
         nx = self.qp.nx
 
         if self.reg_config.method == 'PROJECT' or self.reg_config.method == 'MIRROR':
-            regularized_QP = regularize_QP(self.qp, self.reg_config)
+            modified_qp = self.modify_QP(self.qp, rhs, prev_sol)
+            regularized_QP = regularize_QP(modified_qp, self.reg_config)
+            modified_qp = regularized_QP
         else:
             regularized_QP = copy.deepcopy(self.qp)
-        modified_qp = self.modify_QP(regularized_QP, rhs, prev_sol)
+            modified_qp = self.modify_QP(regularized_QP, rhs, prev_sol)
 
         feedback = Feedback(
             P = [None]*(horizon+1),
