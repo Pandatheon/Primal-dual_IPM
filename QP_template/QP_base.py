@@ -101,7 +101,7 @@ class BaseQP():
                 self.Jbu[k] = Jbu_k
                 self.Jbx[k] = Jbx_k
 
-        # self.Jbx[0] = np.zeros((0, self.nx)) # ad-hoc fix for x0 elimination
+        self.Jbx[0] = np.zeros((0, self.nx)) # ad-hoc fix for x0 elimination
 
         self.nb_0 = self.Jbx[0].shape[0] + self.Jbu[0].shape[0]
         self.nb = self.Jbx[1].shape[0] + self.Jbu[1].shape[0]
@@ -140,8 +140,8 @@ class BaseQP():
             lb_k = []
             ub_k = []
             for i, (lb, ub) in enumerate([(lbu, ubu), (lbx, ubx), (lg, ug)]):
-                # if k == 0 and i ==1:
-                #     continue # ad-hoc fix for x0 elimination
+                if k == 0 and i ==1:
+                    continue # ad-hoc fix for x0 elimination
                 if (lb is not None and k < len(lb)) and (ub is not None and k < len(ub)):
                     lb_k.append(-lb[k].flatten())
                     ub_k.append(ub[k].flatten())

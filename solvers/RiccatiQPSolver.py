@@ -12,6 +12,7 @@ class QPSolver:
         self.qp = qp
         self.status = -1
         self.centering_param = 1.0
+        self.max_iter = 200
         self.delta_aff_dict = None
         self.delta_dict = None
         self.res_max = {
@@ -144,8 +145,9 @@ class QPSolver:
         '''
 
         self._initilize_solution(x0)
+        self.max_iter = max_iter
 
-        for i in range(max_iter+1):
+        while True:
 
             prev_sol = copy.deepcopy(self.solution)
 
@@ -155,7 +157,8 @@ class QPSolver:
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
 
             # check convergence based on predictor step
-            if self._convergence_check():
+            if self._convergence_check() or (self.statistics_dict['iter_count'] == self.max_iter):
+                self._quit()
                 break
 
             # compute centering parameter sigma
@@ -172,7 +175,7 @@ class QPSolver:
             self._compute_step_size_and_update_solution(prev_sol)
 
             self.statistics_dict['iter_count'] += 1
-        self._quit(max_iter)
+
         return self.solution
 
     def _compute_step(self, prev_sol:iterate_sol, step_type:str)-> iterate_sol:
@@ -243,12 +246,12 @@ class QPSolver:
                 (self.statistics_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
                 (self.statistics_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
 
-    def _quit(self, max_iter):
+    def _quit(self):
         res = max(self.statistics_dict['res_stat_list'][-1],
                   self.statistics_dict['res_eq_list'][-1],
                   self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
-        if self.statistics_dict['iter_count'] >= max_iter:
+        if self.statistics_dict['iter_count'] >= self.max_iter:
             print(f"\033[31mNot Converged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
         else:
             print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
@@ -282,7 +285,7 @@ class QPSolver:
 
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')
-        for i in range(self.statistics_dict['iter_count']):
+        for i in range(self.statistics_dict['iter_count']+1):
             res_stat_norm = self.statistics_dict['res_stat_list'][i]
             res_eq_norm = self.statistics_dict['res_eq_list'][i]
             res_ineq_norm = self.statistics_dict['res_ineq_list'][i]
