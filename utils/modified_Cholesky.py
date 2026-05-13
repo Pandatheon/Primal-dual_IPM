@@ -18,9 +18,9 @@ def eliminate_column(A_mod, j, L, D):
     L[j + 1:, j] = A_mod[j + 1:, j] / D[j]
     A_mod[j + 1:, j + 1:] -= D[j] * np.outer(L[j + 1:, j], L[j + 1:, j])
 
-def modified_cholesky_SE(A, mu=0.1, tau_bar=None):
+def modified_cholesky_SE(A, mu=0.1):
     """
-    Compute the modified Cholesky factorization (SE99) with Mirror:
+    Compute the modified Cholesky factorization (SE99) with MIRROR_H:
     P(A + E)P^T = LDL^T
 
     Parameters:
@@ -46,8 +46,8 @@ def modified_cholesky_SE(A, mu=0.1, tau_bar=None):
     gamma = np.max(diag_A)
 
     # Initialize default tolerances if not provided.
-    if tau_bar is None:
-        tau_bar = np.finfo(float).eps ** (2 / 3)
+
+    tau_bar = np.finfo(float).eps ** (2 / 3)
     tau = np.finfo(float).eps ** (1 / 3)
 
     phase_one = True

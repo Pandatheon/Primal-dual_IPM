@@ -17,7 +17,7 @@ json_path_list = [
 ]
 reg_config = Regularizations_config()
 reg_method = [
-    'PM_STAGE_MIRROR', 
+    'PM_STAGE_MIRROR_H', 
     'PM_lookahead_CM'
     ]
 

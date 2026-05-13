@@ -82,7 +82,7 @@ class Condensed_IPM():
             statistics_dict['duality_measure_list'].append(rhs.duality_measure)
         return rhs
 
-    def foward_sweep(self, rhs, prev_sol:iterate_sol, feedback)-> dict:
+    def forward_sweep(self, rhs, prev_sol:iterate_sol, feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
         lam_i = prev_sol.lam
         s_i = prev_sol.s
@@ -91,23 +91,19 @@ class Condensed_IPM():
         try:
             Hc_chol = np.linalg.cholesky(condensed_Hessian)
         except np.linalg.LinAlgError:
-            if self.reg_config.method == 'M_PROJECT':
-                eigvals, eigvecs = np.linalg.eig(condensed_Hessian)
-                eigvals_reg = do_regularization(eigvals, self.reg_config.delta, 'PROJECT')
-                condensed_Hessian_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
+            if self.reg_config.method == 'PROJECT_M':
+                condensed_Hessian_reg = do_regularization(condensed_Hessian, self.reg_config.delta, method='PROJECT_H')
                 Hc_chol = np.linalg.cholesky(condensed_Hessian_reg)
-            elif self.reg_config.method == 'M_MIRROR':
-                eigvals, eigvecs = np.linalg.eig(condensed_Hessian)
-                eigvals_reg = do_regularization(eigvals, self.reg_config.delta, 'MIRROR')
-                condensed_Hessian_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.T
+            elif self.reg_config.method == 'MIRROR_M':
+                condensed_Hessian_reg = do_regularization(condensed_Hessian, self.reg_config.delta, method='MIRROR_H')
                 Hc_chol = np.linalg.cholesky(condensed_Hessian_reg)
-            elif self.reg_config.method == 'M_CM':
+            elif self.reg_config.method == 'CHOLESKY_M':
                 L, D, E, p = modified_cholesky_SE(condensed_Hessian)
                 p_inv = np.argsort(p)
                 condensed_Hessian_reg = (L @ np.diag(D) @ L.T)[np.ix_(p_inv, p_inv)]
                 Hc_chol = np.linalg.cholesky(condensed_Hessian_reg)
             else:
-                raise ValueError(f"Unknown regularization method: {self.reg_config.method}, set self.reg_config.method to 'M_PROJECT', 'M_MIRROR' or 'M_CM'")
+                raise ValueError(f"Unknown regularization method: {self.reg_config.method}, set self.reg_config.method to 'PROJECT_H_M', 'MIRROR_H_M' or 'CHOLESKY_M'")
 
         y1 = np.linalg.solve(Hc_chol, -gc)
         delta_u_bar = np.linalg.solve(Hc_chol.T, y1)
@@ -149,7 +145,7 @@ class Condensed_IPM():
         return delta_dict
 
     def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
-        x0 = prev_sol.x[0]
+        x0 = np.zeros(self.qp.nx)
         nx = self.qp.nx
 
         modified_qp = self.modify_QP(self.qp, rhs, prev_sol)
@@ -184,8 +180,7 @@ class Condensed_IPM():
 
         # Stack Q and q
         Q_list = [modified_qp.Q[k] for k in range(1, modified_qp.N)]
-        Qe_fallback = modified_qp.Q[modified_qp.N - 1] if modified_qp.N > 0 else None
-        Q_list.append(modified_qp.Q_e if modified_qp.Q_e is not None else Qe_fallback)
+        Q_list.append(modified_qp.Q_e)
         Q_bar = block_diag(*Q_list)
 
         q_list = [rhs.rg[k][:nx] for k in range(1, modified_qp.N)]
@@ -208,8 +203,7 @@ class Condensed_IPM():
         gc = r_bar + Gamma.T @ (q_bar + Q_bar @ X_zero_input) + S_bar @ X_zero_input
 
         # Add contribution of S_0 @ x_0 to the first control step u_0
-        if modified_qp.S is not None and len(modified_qp.S) > 0:
-            gc[:modified_qp.nu] += modified_qp.S[0] @ x0
+        gc[:modified_qp.nu] += modified_qp.S[0] @ x0
 
         return (condensed_Hessian, gc)
 

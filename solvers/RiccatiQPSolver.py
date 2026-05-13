@@ -154,7 +154,20 @@ class QPSolver:
             ### Mehrotra predictor-corrector step
             # predictor step
             self.delta_aff_dict = self._compute_step(prev_sol, step_type='predictor')
+
+            # print delta_aff for debug
+            for k in range(self.qp.N+1):
+                # ux_k = np.concatenate((self.delta_aff_dict['delta_u'][k] if k < self.qp.N else np.array([]),
+                #                        self.delta_aff_dict['delta_x'][k]))
+                # print(f"Stage {k}:ux = {ux_k}")
+                if k < self.qp.N:
+                   s_k = self.delta_aff_dict['delta_s'][k]
+                   print(f"Stage {k}: delta_s = {s_k}")
+
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
+            
+            # print for debug
+            print(f"Predictor step: mu_aff = {mu_aff}")
 
             # check convergence based on predictor step
             if self._convergence_check() or (self.statistics_dict['iter_count'] == self.max_iter):
@@ -176,19 +189,21 @@ class QPSolver:
 
             self.statistics_dict['iter_count'] += 1
 
-        return self.solution
+            return self.solution
 
     def _compute_step(self, prev_sol:iterate_sol, step_type:str)-> iterate_sol:
         '''Compute the search direction by solving the KKT system with Riccati recursion.'''
         self.rhs = self.solver.update_rhs(centering_param=self.centering_param, rhs=self.rhs, statistics_dict=self.statistics_dict,
                                           prev_sol=prev_sol, delta_aff_dict=self.delta_aff_dict, step_type=step_type)
         feedback = self.solver.backward_sweep(self.rhs, prev_sol=prev_sol)
-        delta_dict = self.solver.foward_sweep(self.rhs, prev_sol, feedback)
+        delta_dict = self.solver.forward_sweep(self.rhs, prev_sol, feedback)
         return delta_dict
 
     def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict, prob:bool=False)-> float:
         tol = 1e-16
         alpha_pri_max, alpha_dual_max, alpha_max = self.fraction_to_boundary(prev_sol, delta_dict, boundary=prob)
+        # print for debug
+        print(f"alpha_pri_max = {alpha_pri_max}, alpha_dual_max = {alpha_dual_max}, alpha_max = {alpha_max}")
         s_aff = np.maximum(np.concatenate(prev_sol.s) + alpha_pri_max * np.concatenate(delta_dict['delta_s']), tol)
         lam_aff = np.maximum(np.concatenate(prev_sol.lam) + alpha_dual_max * np.concatenate(delta_dict['delta_lam']), tol)
         mu = (s_aff.flatten() @ lam_aff.flatten())/self.ineq_num
@@ -198,12 +213,12 @@ class QPSolver:
         # compute step size
         alpha_pri, alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
         # update solution
-        x_delta = [prev_sol.x[i] + alpha_pri * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
-        u_delta = [prev_sol.u[i] + alpha_pri * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
-        pi_delta = [prev_sol.pi[i] + alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_delta = [np.maximum(prev_sol.lam[i] + alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
-        s_delta = [np.maximum(prev_sol.s[i] + alpha_pri * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
-        self.solution = iterate_sol(x_delta, u_delta, pi_delta, lam_delta, s_delta)
+        x_sol = [prev_sol.x[i] + alpha_pri * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
+        u_sol = [prev_sol.u[i] + alpha_pri * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
+        pi_sol = [prev_sol.pi[i] + alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
+        lam_sol = [np.maximum(prev_sol.lam[i] + alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
+        s_sol = [np.maximum(prev_sol.s[i] + alpha_pri * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
+        self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
     def fraction_to_boundary(self, prev_sol: iterate_sol, delta_dict, boundary:bool=True) -> iterate_sol:
         s_i = np.concatenate(prev_sol.s)
@@ -220,11 +235,11 @@ class QPSolver:
         try:
             alpha_pri_max = np.min(frac_pri)
         except ValueError:
-            alpha_pri_max = 1e-12
+            alpha_pri_max = 1.0
         try:
             alpha_dual_max = np.min(frac_dual)
         except ValueError:
-            alpha_dual_max = 1e-12
+            alpha_dual_max = 1.0
 
         if boundary:
             # take 0.99 of the maximum step size

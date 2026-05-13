@@ -1,96 +1,61 @@
-'''
-Main file for runnign benchmark
-'''
-
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-
-import importlib
 import numpy as np
-import copy
-
-from solvers.RiccatiQPSolver import QPSolver
+from acados_template import AcadosOcpQp, AcadosOcpQpSolver, AcadosOcpQpOptions
 from QP_template.QP_base import BaseQP
-from solvers.Regularization_config import reg_list
+from solvers.RiccatiQPSolver import QPSolver
+from solvers.Regularization_config import Regularizations_config, no_reg, Hessian_reg, condensed_Hessian_reg, stage_reg, reg_list
 
-
-case_package = 'cases.Designed_case'
-
-case_modules = [
-    'M_pos_R_pos_P_inde',
-    'M_pos_R_inde_P_pos',
-    "M_inde_R_inde_P_pos_1",
-    "M_inde_R_inde_P_pos_2",
-    "M_inde_R_inde_P_pos_3",
-    "M_inde_R_inde_P_pos_4",
-    "M_inde_R_pos_P_inde_1",
-    "M_inde_R_pos_P_inde_2",
-    "M_inde_R_pos_P_inde_3",
-    'M_inde_R_pos_P_inde_4',
-    "M_inde_R_inde_P_inde_2",
-    "M_inde_R_inde_P_inde_3",
-    'M_inde_R_inde_P_inde_4',
-]
-
-reg_method = reg_list
-
-
-def build_qp(mats):
-    qp = BaseQP()
-    qp.Q = [mats.Q for _ in range(mats.N)]
-    qp.R = [mats.R for _ in range(mats.N)]
-    qp.S = [mats.S for _ in range(mats.N)]
-    qp.q = [mats.q for _ in range(mats.N)]
-    qp.r = [mats.r for _ in range(mats.N)]
-    qp.A = [mats.A for _ in range(mats.N)]
-    qp.B = [mats.B for _ in range(mats.N)]
-    qp.b = [mats.b for _ in range(mats.N)]
-    qp.C = [mats.C for _ in range(mats.N)]
-    qp.D = [mats.D for _ in range(mats.N)]
-    qp.d = [mats.d for _ in range(mats.N)]
-    qp.Q_e = mats.Q_e
-    qp.q_e = mats.q_e
-    qp.N = mats.N
-    qp.nx = mats.A.shape[0]
-    qp.nu = mats.B.shape[1]
-    qp.nh = mats.C.shape[0]
-    return qp
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_pos_M.json'
 
 def main():
-    module_name = 'M_inde_R_inde_P_pos_4'
-    print(f"\n>>> Running Case: {module_name}")
 
-    module_path = f"{case_package}.{module_name}"
-    mod = importlib.import_module(module_path)
-    QP_mats = getattr(mod, "QP_mats")
-    # --------------------
+    qp = AcadosOcpQp.from_json(json_file_path=json_path)
+    opts = AcadosOcpQpOptions()
+    opts.mu0 = 1e1
+    opts.hpipm_mode = 'CUSTOMIZED'
+    qp_solver = AcadosOcpQpSolver(qp, opts)
+    stats = qp_solver.solve()
+    iter = qp_solver.get_stats("iter")
+    print(f"HPIPM solved in {iter} iterations with status {stats}")
+    x_acados = [qp_solver.get(k, 'x') for k in range(qp.N+1)]
+    u_acados = [qp_solver.get(k, 'u') for k in range(qp.N)]
+    lam_acados = [qp_solver.get(k, 'lam') for k in range(qp.N)]
+    pi_acados = [qp_solver.get(k, 'pi') for k in range(qp.N)]
 
-    mats = QP_mats()
+    qp = BaseQP()
+    qp.populate_from_json(json_path)
+    print(f"QP loaded from {json_path} with N={qp.N}, nx={qp.nx}, nu={qp.nu}, nh_0={qp.nh_0}, nh={qp.nh}, nh_e={qp.nh_e}, nb_0={qp.nb_0}, nb={qp.nb}, nb_e={qp.nb_e}")
 
-    if not hasattr(mats, 'name'):
-        mats.name = module_path
+    method = no_reg[0]
+    qp_solver = QPSolver(qp, reg=method, type='Riccati')
 
-    qp = build_qp(mats)
-    x0 = 3.0 * np.ones((qp.A[0].shape[0],))
-    for method in reg_method:
-        print(f"\n=== Regularization method: {method} ===")
-        try:
-            print(f"  Testing: {method}")
-            name = f"{mats.name}_{x0[0]}"
-            copyqp = copy.deepcopy(qp)
-            qp_solver = QPSolver(copyqp, reg=method)
-            sol = qp_solver.solve(x0, max_iter=300)
+    x0 = np.array([0.0, 0.0, 0.0, 0.0])
+    qp_solver.solve(x0=x0, max_iter=100)
+    # qp_solver.print_statistics()
+    x_prototype = [qp_solver.get(k, 'x') for k in range(qp.N+1)]
+    u_prototype = [qp_solver.get(k, 'u') for k in range(qp.N)]
+    lam_prototype = [qp_solver.get(k, 'lam') for k in range(qp.N)]
+    pi_prototype = [qp_solver.get(k, 'pi') for k in range(1, qp.N+1)]
 
-            cost_qp = qp_solver.get_cost()
-            print(f"=== Predicted cost: {cost_qp} ===")
-            qp_solver.print_statistics()
-        except Exception as e:
-            print(f"\033[31m  Failed with error: {e}\033[0m")
-            continue
+    ux_print = [np.concatenate((u_prototype[k], x_prototype[k])) for k in range(qp.N)]
+    print("ux values at each stage:")
+    for k in range(qp.N):
+        print(f"Stage {k}: ux = {ux_print[k]}")
 
-if __name__ == '__main__':
+    diff_x = [np.linalg.norm(x_acados[k] - x_prototype[k]) for k in range(qp.N+1)]
+    diff_u = [np.linalg.norm(u_acados[k] - u_prototype[k]) for k in range(qp.N)]
+    diff_lam = [np.linalg.norm(lam_acados[k] - lam_prototype[k]) for k in range(1, qp.N)]
+    diff_pi = [np.linalg.norm(pi_acados[k] - pi_prototype[k]) for k in range(qp.N)]
+
+    print("Difference in x between HPIPM and prototype:", np.linalg.norm(diff_x))
+    print("Difference in u between HPIPM and prototype:", np.linalg.norm(diff_u))
+    print("Difference in lam between HPIPM and prototype:", np.linalg.norm(diff_lam))
+    print("Difference in pi between HPIPM and prototype:", np.linalg.norm(diff_pi))
+
+if __name__ == "__main__":
     main()

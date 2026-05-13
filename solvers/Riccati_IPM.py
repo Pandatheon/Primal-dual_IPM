@@ -2,7 +2,7 @@ from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
 from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
-from solvers.Regularization_config import Regularizations_config, stage_reg
+from solvers.Regularization_config import Regularizations_config, Hessian_reg, stage_reg
 import numpy as np
 import copy
 
@@ -14,7 +14,7 @@ class Riccati_IPM():
         self.reg_config = reg_config
         self.ineq_num = ineq_num
 
-    def update_rhs(self, centering_param:float, rhs:dict, statistics_dict:dict,
+    def update_rhs(self, centering_param:float, rhs:iterate_rhs, statistics_dict:dict,
                    prev_sol:iterate_sol, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
         nx = self.qp.nx
         nu = self.qp.nu
@@ -81,7 +81,7 @@ class Riccati_IPM():
             statistics_dict['duality_measure_list'].append(rhs.duality_measure)
         return rhs
 
-    def foward_sweep(self, rhs, prev_sol:iterate_sol, feedback:Feedback)-> dict:
+    def forward_sweep(self, rhs, prev_sol:iterate_sol, feedback:Feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
         lam_i = prev_sol.lam
         s_i = prev_sol.s
@@ -125,13 +125,19 @@ class Riccati_IPM():
         horizon = self.qp.N
         nx = self.qp.nx
 
-        if self.reg_config.method == 'PROJECT' or self.reg_config.method == 'MIRROR':
-            modified_qp = self.modify_QP(self.qp, rhs, prev_sol)
-            regularized_QP = regularize_QP(modified_qp, self.reg_config)
-            modified_qp = regularized_QP
-        else:
-            regularized_QP = copy.deepcopy(self.qp)
-            modified_qp = self.modify_QP(regularized_QP, rhs, prev_sol)
+        modified_qp = self.modify_QP(self.qp, rhs, prev_sol)
+        if self.reg_config.method in Hessian_reg:
+            modified_qp = regularize_QP(modified_qp, self.reg_config)
+
+        # # debug
+        # from scipy.linalg import block_diag
+        # H_reg_list = []
+        # for k in range(self.qp.N + 1):
+        #     H_reg_list.append(modified_qp.Hessian_block(k) if k < self.qp.N else modified_qp.Q_e)
+        # # concanate H_list
+        # H_reg = block_diag(*H_reg_list)
+        # cond = np.linalg.cond(H_reg)
+        # print(f"Frobenius norm of the modified Hessian: {cond}")
 
         feedback = Feedback(
             P = [None]*(horizon+1),
@@ -200,6 +206,11 @@ class Riccati_IPM():
 
                 else:
                     raise np.linalg.LinAlgError("Unkonwn error happened")
+
+        # # print P for debug
+        # for k in reversed(range(self.qp.N + 1)):
+        #     print(f"Stage {k}:")
+        #     print(f"P[{k}] = \n{feedback.P[k]}")
 
         return feedback
 

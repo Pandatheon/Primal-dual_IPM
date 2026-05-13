@@ -24,21 +24,13 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
     B_k = qp.B[stage]
     P_prev = feedback.P[stage+1]
 
-    method = reg_config.method.upper().split('_')[-1]
-
     if reg_config.method == 'PM_STAGE_MIRROR':
         # EM P first
-        eigvals_P, eigvecs_P = _safe_sym_eig(P_prev)
-        eigvals_P_reg = do_regularization(eigvals_P, reg_config.delta, method=method)
-        P_reg = eigvecs_P @ np.diag(eigvals_P_reg) @ eigvecs_P.conj().T
-        P_reg = _to_real(P_reg)
+        P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
         reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
 
         #  EM modified M next
-        eigvals_M, eigvecs_M = _safe_sym_eig(reduced_hessian_P_reg)
-        eigvals_M_reg = do_regularization(eigvals_M, reg_config.delta, method=method)
-        reduced_hessian_reg = eigvecs_M @ np.diag(eigvals_M_reg) @ eigvecs_M.conj().T
-        reduced_hessian_reg = _to_real(reduced_hessian_reg)
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="MIRROR")
 
     elif reg_config.method == 'M_lookahead_CM':
         Nc = 2
@@ -126,14 +118,17 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
 
     return reduced_hessian_reg, P_reg
 
-def do_regularization(eigvals: np.ndarray,
+def do_regularization(mat: np.ndarray,
                       delta: float,
                       method: str)-> np.ndarray:
-    if method == 'PROJECT':
-        eigvals_reg = np.array([max(eigval, delta) for eigval in eigvals])
-    elif method == 'MIRROR':
-        eigvals_reg = np.array([max(abs(eigval), delta) for eigval in eigvals])
-    return eigvals_reg
+    eigvals, eigvecs = _safe_sym_eig(mat)
+    if method == 'PROJECT_H':
+        eigvals_reg = np.maximum(eigvals, delta)
+    elif method == 'MIRROR_H':
+        eigvals_reg = np.maximum(np.abs(eigvals), delta)
+    mat_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
+    mat_reg = _to_real(mat_reg)
+    return mat_reg
 
 def regularize_QP(
         qp : BaseQP,
@@ -141,25 +136,21 @@ def regularize_QP(
     '''Regularize the modified QP to ensure positive definiteness of the reduced Hessian.'''
 
     regularized_QP = copy.deepcopy(qp)
-    for k in range(qp.N):
-        H = qp.Hessian_block(k)
-        eigvals, eigvecs = _safe_sym_eig(H)
-        eigvals_reg = do_regularization(eigvals, reg_config.delta, reg_config.method)
-        H_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
-        H_reg = _to_real(H_reg)
+    for k in range(qp.N + 1):
+        H = qp.Hessian_block(k) if k < qp.N else qp.Q_e
 
-        Q_reg = _to_real(H_reg[:qp.nx, :qp.nx])
-        R_reg = _to_real(H_reg[qp.nx:, qp.nx:])
-        S_reg = _to_real(H_reg[qp.nx:, :qp.nx])
-        regularized_QP.Q[k] = Q_reg
-        regularized_QP.R[k] = R_reg
-        regularized_QP.S[k] = S_reg
+        if reg_config.method in ['PROJECT_H', 'MIRROR_H']:
+            H_reg = do_regularization(H, reg_config.delta, reg_config.method)
+        elif reg_config.method == 'CHOLESKY_H':
+            L, D, E, p = modified_cholesky_SE(H)
+            p_inv = np.argsort(p)
+            H_reg = (L @ np.diag(D) @ L.T)[np.ix_(p_inv, p_inv)]
+        else:
+            raise ValueError(f"Unknown regularization method: {reg_config.method}, set reg_config.method to 'PROJECT_H', 'MIRROR_H' or 'CHOLESKY_H'")
 
-    Q_e = qp.Q_e
-    eigvals_e, eigvecs_e = _safe_sym_eig(Q_e)
-    eigvals_e_reg = do_regularization(eigvals_e, reg_config.delta, reg_config.method)
-    Q_e_reg = eigvecs_e @ np.diag(eigvals_e_reg) @ eigvecs_e.conj().T
-    Q_e_reg = _to_real(Q_e_reg)
-    regularized_QP.Q_e = Q_e_reg
+        regularized_QP.Q[k] = H_reg[:qp.nx, :qp.nx]
+        if k < qp.N:
+            regularized_QP.R[k] = H_reg[qp.nx:, qp.nx:]
+            regularized_QP.S[k] = H_reg[qp.nx:, :qp.nx]
 
     return regularized_QP
