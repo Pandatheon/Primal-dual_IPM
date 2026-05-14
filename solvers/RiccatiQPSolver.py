@@ -43,7 +43,7 @@ class QPSolver:
             s = [],
         )
         self.rhs = iterate_rhs(
-            # lazy intialization, will be updated in the first call of _update_rhs
+            # lazy intialization, will be updated in the first call of _compute_rhs
             rg = [],
             rb = [],
             rd = [],
@@ -51,6 +51,9 @@ class QPSolver:
             # tunable parameter, will be updated in each predictor step
             duality_measure = 10.0,
         )
+        self.backup_rm = None
+        self.alpha_prim = None
+        self.alpha_dual = None
 
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
@@ -66,6 +69,7 @@ class QPSolver:
         else:
             raise ValueError(f"Invalid solver type {type}. Valid types are 'Riccati' and 'Condensed'.")
 
+
     def _initilize_solution(self, x0:np.ndarray):
         if x0 is None:
             x0 = np.zeros((self.qp.nx,))
@@ -73,6 +77,7 @@ class QPSolver:
         self.solution.u = [np.zeros((self.qp.nu,)) for _ in range(self.qp.N)]
         self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
         self._initailize_lam_and_s()
+
 
     def _initailize_lam_and_s(self):
         self.solution.s = []
@@ -139,6 +144,80 @@ class QPSolver:
             self.solution.s.append(s_k_full)
             self.solution.lam.append(self.rhs.duality_measure / s_k_full)
 
+
+    def compute_rhs(self, prev_sol:iterate_sol)-> np.ndarray:
+        nx = self.qp.nx
+        nu = self.qp.nu
+
+        res_stat = []
+        res_eq = []
+        res_ineq = []
+        res_comp = []
+        duality_measure = 0.0
+
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k]
+            R_k = self.qp.R[k]
+            S_k = self.qp.S[k]
+            A_k = self.qp.A[k]
+            B_k = self.qp.B[k]
+            b_k = self.qp.b[k]
+            C_k = self.qp.C[k]
+            D_k = self.qp.D[k]
+            d_k = self.qp.d[k]
+            q_k = self.qp.q[k]
+            r_k = self.qp.r[k]
+            x, u, pi, lam, s = prev_sol
+
+            # stationarity residual
+            temp_res_stat = np.zeros(nx + nu)
+            temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1] + C_k.T @ lam[k] - pi[k]
+            temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k+1] + D_k.T @ lam[k]
+            res_stat.append(temp_res_stat)
+
+            #equality residual
+            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k)
+
+            #inequality residual
+            res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
+
+            #complementarity residual
+            temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
+            duality_measure += (lam[k] @ s[k])
+            res_comp.append(temp_res_comp)
+
+        # terminal residual
+        temp_res_stat = np.zeros(nx+nu)
+        Q_e = self.qp.Q_e
+        q_e = self.qp.q_e
+        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N]
+        res_stat.append(temp_res_stat)
+
+        self.rhs.rg = res_stat
+        self.rhs.rb = res_eq
+        self.rhs.rd = res_ineq
+        self.rhs.rm = res_comp
+
+        self.backup_rm = self.rhs.rm
+        self.rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
+        self.statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(self.rhs.rg), ord=np.inf))
+        self.statistics_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rb), ord=np.inf))
+        self.statistics_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rd), ord=np.inf))
+        self.statistics_dict['res_comp_list'].append(np.linalg.norm(np.concatenate(self.rhs.rm), ord=np.inf))
+        self.statistics_dict['duality_measure_list'].append(self.rhs.duality_measure)
+
+
+    def update_rhs_comp(self, step_type:str='centering'):
+        if step_type == 'centering':
+            for k in range(self.qp.N):
+                self.rhs.rm[k] = self.backup_rm[k] - self.centering_param * self.rhs.duality_measure * np.ones(len(self.rhs.rm[k]))
+        elif step_type == 'predictor-corrector':
+            for k in range(self.qp.N):
+                self.rhs.rm[k] = self.backup_rm[k] + (self.delta_aff_dict['delta_lam'][k] * self.delta_aff_dict['delta_s'][k]) - self.centering_param * self.rhs.duality_measure * np.ones(len(self.backup_rm[k]))
+        elif step_type == 'predictor':
+            for k in range(self.qp.N):
+                self.rhs.rm[k] = self.backup_rm[k] - 1e-16 * np.ones(len(self.backup_rm[k]))
+
     def solve(self, x0:np.ndarray=None, max_iter:int=200)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
@@ -147,71 +226,66 @@ class QPSolver:
         self._initilize_solution(x0)
         self.max_iter = max_iter
 
+        prev_sol = copy.deepcopy(self.solution)
+        self.compute_rhs(prev_sol=prev_sol)
+
         while True:
-
-            prev_sol = copy.deepcopy(self.solution)
-
-            ### Mehrotra predictor-corrector step
-            # predictor step
-            self.delta_aff_dict = self._compute_step(prev_sol, step_type='predictor')
-
-            # print delta_aff for debug
-            for k in range(self.qp.N+1):
-                # ux_k = np.concatenate((self.delta_aff_dict['delta_u'][k] if k < self.qp.N else np.array([]),
-                #                        self.delta_aff_dict['delta_x'][k]))
-                # print(f"Stage {k}:ux = {ux_k}")
-                if k < self.qp.N:
-                   s_k = self.delta_aff_dict['delta_s'][k]
-                   print(f"Stage {k}: delta_s = {s_k}")
-
-            mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             
-            # print for debug
-            print(f"Predictor step: mu_aff = {mu_aff}")
-
+            i = self.statistics_dict['iter_count']
             # check convergence based on predictor step
-            if self._convergence_check() or (self.statistics_dict['iter_count'] == self.max_iter):
+            if self._convergence_check() or i == self.max_iter:
                 self._quit()
                 break
+            self.statistics_dict['iter_count'] += 1
 
-            # compute centering parameter sigma
+            ### Mehrotra predictor-corrector step
+            ## predictor step
+            self.delta_aff_dict = self._compute_step(prev_sol)
+            self.alpha_prim, self.alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_aff_dict)
+            mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
+            # debug
+            print(f"Iter {i}: mu_aff = {mu_aff:.5e}, centering_param = {self.centering_param:.5e}, alpha_pri = {self.alpha_prim:.5e}, alpha_dual = {self.alpha_dual:.5e}")
 
-            # predictor-corrector step
-            self.delta_dict = self._compute_step(prev_sol, step_type='predictor-corrector')
-            mu_pred = self._compute_duality(prev_sol, self.delta_dict, prob=True)
-
+            ## predictor-corrector step
+            self.update_rhs_comp(step_type='predictor-corrector')
+            self.delta_dict = self._compute_step(prev_sol)
+            self.alpha_prim, self.alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+            mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+            # debug
+            print(f"Iter {i}: mu_aff = {mu_aff:.5e}, mu_pred = {mu_pred:.5e}, centering_param = {self.centering_param:.5e}, alpha_prim = {self.alpha_prim:.5e}, alpha_dual = {self.alpha_dual:.5e}")
+            print("-"*50)
             ### Conditonal Mehrotra step
             if mu_pred > 2*mu_aff:
-                self.delta_dict = self._compute_step(prev_sol, step_type='centering')
+                self.update_rhs_comp(step_type='centering')
+                self.delta_dict = self._compute_step(prev_sol)
 
             self._compute_step_size_and_update_solution(prev_sol)
 
-            self.statistics_dict['iter_count'] += 1
+            prev_sol = copy.deepcopy(self.solution)
+            self.compute_rhs(prev_sol=prev_sol)
 
-            return self.solution
+        return self.solution
 
-    def _compute_step(self, prev_sol:iterate_sol, step_type:str)-> iterate_sol:
+
+    def _compute_step(self, prev_sol:iterate_sol)-> iterate_sol:
         '''Compute the search direction by solving the KKT system with Riccati recursion.'''
-        self.rhs = self.solver.update_rhs(centering_param=self.centering_param, rhs=self.rhs, statistics_dict=self.statistics_dict,
-                                          prev_sol=prev_sol, delta_aff_dict=self.delta_aff_dict, step_type=step_type)
         feedback = self.solver.backward_sweep(self.rhs, prev_sol=prev_sol)
-        delta_dict = self.solver.forward_sweep(self.rhs, prev_sol, feedback)
+        delta_dict = self.solver.forward_sweep(prev_sol, feedback)
         return delta_dict
 
-    def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict, prob:bool=False)-> float:
+
+    def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict)-> float:
         tol = 1e-16
-        alpha_pri_max, alpha_dual_max, alpha_max = self.fraction_to_boundary(prev_sol, delta_dict, boundary=prob)
-        # print for debug
-        print(f"alpha_pri_max = {alpha_pri_max}, alpha_dual_max = {alpha_dual_max}, alpha_max = {alpha_max}")
-        s_aff = np.maximum(np.concatenate(prev_sol.s) + alpha_pri_max * np.concatenate(delta_dict['delta_s']), tol)
-        lam_aff = np.maximum(np.concatenate(prev_sol.lam) + alpha_dual_max * np.concatenate(delta_dict['delta_lam']), tol)
+        s_aff = np.maximum(np.concatenate(prev_sol.s) + self.alpha_prim * np.concatenate(delta_dict['delta_s']), tol)
+        lam_aff = np.maximum(np.concatenate(prev_sol.lam) + self.alpha_dual * np.concatenate(delta_dict['delta_lam']), tol)
         mu = (s_aff.flatten() @ lam_aff.flatten())/self.ineq_num
         return mu
 
+
     def _compute_step_size_and_update_solution(self, prev_sol:iterate_sol):
         # compute step size
-        alpha_pri, alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict, boundary=True)
+        alpha_pri, alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict, record=True)
         # update solution
         x_sol = [prev_sol.x[i] + alpha_pri * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + alpha_pri * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
@@ -220,7 +294,8 @@ class QPSolver:
         s_sol = [np.maximum(prev_sol.s[i] + alpha_pri * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
-    def fraction_to_boundary(self, prev_sol: iterate_sol, delta_dict, boundary:bool=True) -> iterate_sol:
+
+    def fraction_to_boundary(self, prev_sol: iterate_sol, delta_dict, record:bool=False) -> iterate_sol:
         s_i = np.concatenate(prev_sol.s)
         lam_i = np.concatenate(prev_sol.lam)
         delta_s = np.concatenate(delta_dict['delta_s'])
@@ -233,26 +308,22 @@ class QPSolver:
         frac_dual = lam_i[mask_lam] / (-delta_lam[mask_lam])
         # take the minimum positive step size
         try:
-            alpha_pri_max = np.min(frac_pri)
+            alpha_pri_max = np.min((np.min(frac_pri), 1e0))
         except ValueError:
             alpha_pri_max = 1.0
         try:
-            alpha_dual_max = np.min(frac_dual)
+            alpha_dual_max = np.min((np.min(frac_dual), 1e0))
         except ValueError:
             alpha_dual_max = 1.0
+        alpha = min(alpha_pri_max, alpha_dual_max)
 
-        if boundary:
-            # take 0.99 of the maximum step size
-            alpha_pri = min(0.99 * alpha_pri_max, 1.0)
-            alpha_dual = min(0.99 * alpha_dual_max, 1.0)
-            alpha = min(alpha_pri, alpha_dual)
-
-            self.statistics_dict['alpha_pri_list'].append(alpha_pri)
-            self.statistics_dict['alpha_dual_list'].append(alpha_dual)
+        if record:
+            self.statistics_dict['alpha_pri_list'].append(alpha_pri_max)
+            self.statistics_dict['alpha_dual_list'].append(alpha_dual_max)
             self.statistics_dict['alpha_list'].append(alpha)
-            return alpha_pri, alpha_dual, alpha
-        else:
-            return alpha_pri_max, alpha_dual_max, min(alpha_pri_max, alpha_dual_max)
+
+        return alpha_pri_max, alpha_dual_max, alpha
+
 
     def _convergence_check(self, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
@@ -261,16 +332,18 @@ class QPSolver:
                 (self.statistics_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
                 (self.statistics_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
 
+
     def _quit(self):
         res = max(self.statistics_dict['res_stat_list'][-1],
                   self.statistics_dict['res_eq_list'][-1],
                   self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
         if self.statistics_dict['iter_count'] >= self.max_iter:
-            print(f"\033[31mNot Converged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
+            print(f"\033[31mNot Converged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.5e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.5e}")
         else:
-            print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.2e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.2e}")
+            print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.5e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.5e}")
             self.status = 0
+
 
     def get_cost(self):
         cost = 0.0
@@ -282,6 +355,7 @@ class QPSolver:
         x_N = self.solution.x[-1]
         cost += 0.5 * x_N.T @ self.qp.Q_e @ x_N + self.qp.q_e.T @ x_N
         return cost
+
 
     def get(self, stage:int, field:str):
 
@@ -298,6 +372,7 @@ class QPSolver:
         else:
             raise ValueError(f"Invalid field {field}. Valid fields are 'x', 'u', 'pi', 'lam', 's'.")
 
+
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')
         for i in range(self.statistics_dict['iter_count']+1):
@@ -308,4 +383,4 @@ class QPSolver:
             duality_measure = self.statistics_dict['duality_measure_list'][i]
             alpha_pri = self.statistics_dict['alpha_pri_list'][i] if i < len(self.statistics_dict['alpha_pri_list']) else 0.0
             alpha_dual = self.statistics_dict['alpha_dual_list'][i] if i < len(self.statistics_dict['alpha_dual_list']) else 0.0
-            print(f"{i}\t{res_stat_norm:.2e}\t{res_eq_norm:.2e}\t{res_ineq_norm:.2e}\t{res_comp_norm:.2e}\t{duality_measure:.2e}\t{alpha_pri:.2e}\t{alpha_dual:.2e}")
+            print(f"{i}\t{res_stat_norm:.5e}\t{res_eq_norm:.5e}\t{res_ineq_norm:.5e}\t{res_comp_norm:.5e}\t{duality_measure:.5e}\t{alpha_pri:.5e}\t{alpha_dual:.5e}")

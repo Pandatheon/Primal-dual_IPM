@@ -13,75 +13,9 @@ class Riccati_IPM():
         self.qp = qp
         self.reg_config = reg_config
         self.ineq_num = ineq_num
+        self.rhs_kkt = None
 
-    def update_rhs(self, centering_param:float, rhs:iterate_rhs, statistics_dict:dict,
-                   prev_sol:iterate_sol, delta_aff_dict:dict = None, step_type:str='predictor')-> np.ndarray:
-        nx = self.qp.nx
-        nu = self.qp.nu
-
-        res_stat = []
-        res_eq = []
-        res_ineq = []
-        res_comp = []
-        duality_measure = 0.0
-
-        for k in range(self.qp.N):
-            Q_k = self.qp.Q[k]
-            R_k = self.qp.R[k]
-            S_k = self.qp.S[k]
-            A_k = self.qp.A[k]
-            B_k = self.qp.B[k]
-            b_k = self.qp.b[k]
-            C_k = self.qp.C[k]
-            D_k = self.qp.D[k]
-            d_k = self.qp.d[k]
-            q_k = self.qp.q[k]
-            r_k = self.qp.r[k]
-            x, u, pi, lam, s = prev_sol
-
-            # stationarity residual
-            temp_res_stat = np.zeros(nx + nu)
-            temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1] + C_k.T @ lam[k] - pi[k]
-            temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k+1] + D_k.T @ lam[k]
-            res_stat.append(temp_res_stat)
-
-            #equality residual
-            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k)
-
-            #inequality residual
-            res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
-
-            #complementarity residual
-            if step_type == 'predictor':
-                temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
-                duality_measure += (lam[k] @ s[k])
-            elif step_type == 'centering':
-                temp_res_comp = (lam[k] * s[k]).flatten() - centering_param * rhs.duality_measure * np.ones(len(lam[k]))
-            elif step_type == 'predictor-corrector':
-                temp_res_comp = (lam[k] * s[k]).flatten() + (delta_aff_dict['delta_lam'][k] * delta_aff_dict['delta_s'][k]) - centering_param * rhs.duality_measure * np.ones(len(lam[k]))
-            res_comp.append(temp_res_comp)
-
-        # terminal residual
-        temp_res_stat = np.zeros(nx+nu)
-        Q_e = self.qp.Q_e
-        q_e = self.qp.q_e
-        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N]
-        res_stat.append(temp_res_stat)
-
-        rhs.rg = res_stat
-        rhs.rb = res_eq
-        rhs.rd = res_ineq
-        rhs.rm = res_comp
-        if step_type == 'predictor':
-            rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
-            statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(rhs.rg), ord=np.inf))
-            statistics_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(rhs.rb), ord=np.inf))
-            statistics_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(rhs.rd), ord=np.inf))
-            statistics_dict['res_comp_list'].append(np.linalg.norm(np.concatenate(rhs.rm), ord=np.inf))
-            statistics_dict['duality_measure_list'].append(rhs.duality_measure)
-        return rhs
-
-    def forward_sweep(self, rhs, prev_sol:iterate_sol, feedback:Feedback)-> dict:
+    def forward_sweep(self, prev_sol:iterate_sol, feedback:Feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
         lam_i = prev_sol.lam
         s_i = prev_sol.s
@@ -94,9 +28,9 @@ class Riccati_IPM():
         for k in range(self.qp.N):
             C_k = self.qp.C[k]
             D_k = self.qp.D[k]
-            rhs_b = rhs.rb[k]
-            rhs_d= rhs.rd[k]
-            rhs_m = rhs.rm[k]
+            rhs_b = self.rhs_kkt.rb[k]
+            rhs_d= self.rhs_kkt.rd[k]
+            rhs_m = self.rhs_kkt.rm[k]
 
             # recover x and u
             delta_u[k] = feedback.compute_control(k, delta_x[k])
@@ -124,8 +58,10 @@ class Riccati_IPM():
     def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
         horizon = self.qp.N
         nx = self.qp.nx
+        self.rhs_kkt = copy.deepcopy(rhs)
 
-        modified_qp = self.modify_QP(self.qp, rhs, prev_sol)
+        modified_qp = self.modify_QP(self.qp, prev_sol)
+
         if self.reg_config.method in Hessian_reg:
             modified_qp = regularize_QP(modified_qp, self.reg_config)
 
@@ -146,7 +82,7 @@ class Riccati_IPM():
             k = [None]*(horizon),
         )
         feedback.P[horizon] = modified_qp.Q_e
-        feedback.p[horizon] = rhs.rg[-1][:nx]
+        feedback.p[horizon] = self.rhs_kkt.rg[-1][:nx]
 
         for step in range(self.qp.N):
             k = modified_qp.N - 1 - step
@@ -155,9 +91,9 @@ class Riccati_IPM():
             Q_k = modified_qp.Q[k]
             R_k = modified_qp.R[k]
             S_k = modified_qp.S[k]
-            q_k = rhs.rg[k][:nx]
-            r_k = rhs.rg[k][nx:]
-            b_k = rhs.rb[k]
+            q_k = self.rhs_kkt.rg[k][:nx]
+            r_k = self.rhs_kkt.rg[k][nx:]
+            b_k = self.rhs_kkt.rb[k]
             P_prev = feedback.P[k+1]
             p_prev = feedback.p[k+1]
 
@@ -214,8 +150,7 @@ class Riccati_IPM():
 
         return feedback
 
-    @staticmethod
-    def modify_QP(qp, rhs, prev_sol:iterate_sol):
+    def modify_QP(self, qp, prev_sol:iterate_sol):
         modified_QP = copy.deepcopy(qp)
 
         for k in range(qp.N):
@@ -227,8 +162,8 @@ class Riccati_IPM():
             C_full = np.hstack((C_k, D_k))
             T_mat = np.diag(s_k)
             Lam_mat = np.diag(lam_k)
-            rd = rhs.rd[k]
-            rm = rhs.rm[k]
+            rd = self.rhs_kkt.rd[k]
+            rm = self.rhs_kkt.rm[k]
 
             T_mat_inv = np.linalg.inv(T_mat)
             lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
@@ -241,7 +176,7 @@ class Riccati_IPM():
             modified_QP.R[k] = qp.R[k] + R_tilt
             modified_QP.S[k] = qp.S[k] + S_tilt
 
-            rhs.rg[k][:qp.nx] = rhs.rg[k][:qp.nx] + rhs_modification[:qp.nx]
-            rhs.rg[k][qp.nx:] = rhs.rg[k][qp.nx:] + rhs_modification[qp.nx:]
-        rhs.rg[-1] = rhs.rg[-1]
+            self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
+            self.rhs_kkt.rg[k][qp.nx:] = self.rhs_kkt.rg[k][qp.nx:] + rhs_modification[qp.nx:]
+        self.rhs_kkt.rg[-1] = self.rhs_kkt.rg[-1]
         return modified_QP

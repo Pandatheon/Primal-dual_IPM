@@ -21,7 +21,7 @@ def main():
     opts.tol_eq = 1e-8
     opts.tol_ineq = 1e-8
     opts.tol_comp = 1e-8
-    opts.iter_max = 1
+    opts.iter_max = 30
 
     qp_solver = AcadosOcpQpSolver(qp, opts)
     stats = qp_solver.solve()
