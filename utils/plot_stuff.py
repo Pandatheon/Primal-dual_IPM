@@ -53,7 +53,6 @@ def plot_charts(filename='qp_results.csv'):
         print("Generating Iteration Performance Profile (Status == 0)...")
 
         if 'Iteration' in df.columns and 'Status' in df.columns:
-            # 1. Prepare data
             iter_df = df.copy()
             metric = 'Iteration'
 
@@ -61,7 +60,11 @@ def plot_charts(filename='qp_results.csv'):
                 iter_df['Status'] = pd.to_numeric(iter_df['Status'], errors='coerce')
 
             iter_methods = [m for m in methods if m in iter_df['Regularization'].unique()]
-            total_problems = iter_df['QP_name'].nunique()
+
+            if 'x0_id' in iter_df.columns:
+                total_problems = iter_df[['QP_name', 'x0_id']].drop_duplicates().shape[0]
+            else:
+                total_problems = iter_df['QP_name'].nunique()
 
             method_palette = sns.color_palette("tab10", n_colors=len(iter_methods))
             method_colors = dict(zip(iter_methods, method_palette))

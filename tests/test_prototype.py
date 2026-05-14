@@ -20,7 +20,7 @@ def main():
     method = no_reg[0]
     qp_solver = QPSolver(qp, reg=method, type='Riccati')
     x0 = np.array([0.0, 0.0, 0.0, 0.0])
-    qp_solver.solve(x0=x0, max_iter=30)
+    qp_solver.solve(x0=x0, max_iter=200)
     qp_solver.print_statistics()
     print('Method:',method)
     cost = qp_solver.get_cost()

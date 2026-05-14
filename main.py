@@ -9,6 +9,7 @@ from solvers.Regularization_config import reg_list, Hessian_reg, condensed_Hessi
 
 CSV_COLUMNS = [
     "QP_name",
+    "x0_id",
     "Regularization",
     "Iteration",
     "Cost",
@@ -51,34 +52,38 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         )
 
         # Keep x0 length consistent with model dimensions.
-        x0 = np.array([0.0, np.pi, 0.0, 0.0])
+        x0_list = [np.array([0.0, 0.0, 0.0, 0.0]),
+                   np.array([0.0, np.pi/4, 0.0, 0.0]),
+                   np.array([0.0, np.pi/2, 0.0, 0.0])]
 
-        for method in methods:
-            print("-" * 50)
-            print(f"Method: {method}")
-            if method in condensed_Hessian_reg:
-                qp_solver = QPSolver(qp, reg=method, type='Condensed')
-            else:
-                qp_solver = QPSolver(qp, reg=method, type='Riccati')
-            cost = None
+        for x0_id, x0 in enumerate(x0_list):
+            for method in methods:
+                print("-" * 50)
+                print(f"Method: {method}")
+                if method in condensed_Hessian_reg:
+                    qp_solver = QPSolver(qp, reg=method, type='Condensed')
+                else:
+                    qp_solver = QPSolver(qp, reg=method, type='Riccati')
+                cost = None
 
-            try:
-                qp_solver.solve(x0=x0, max_iter=300)
-                cost = qp_solver.get_cost()
-            except Exception as exc:
-                print(f"Method {method} failed on {qp_path.name}: {exc}")
-            if cost is not None:
-                print(f"Optimal cost: {cost}")
-            write_csv_row(
-                output_path,
-                {
-                    "QP_name": qp_path.stem,
-                    "Regularization": method,
-                    "Iteration": qp_solver.statistics_dict.get("iter_count", 0),
-                    "Cost": cost,
-                    "Status": qp_solver.status,
-                },
-            )
+                try:
+                    qp_solver.solve(x0=x0, max_iter=300)
+                    cost = qp_solver.get_cost()
+                except Exception as exc:
+                    print(f"Method {method} failed on {qp_path.name}: {exc}")
+                if cost is not None:
+                    print(f"Optimal cost: {cost}")
+                write_csv_row(
+                    output_path,
+                    {
+                        "QP_name": qp_path.stem,
+                        "x0_id": x0_id,
+                        "Regularization": method,
+                        "Iteration": qp_solver.statistics_dict.get("iter_count", 0),
+                        "Cost": cost,
+                        "Status": qp_solver.status,
+                    },
+                )
 
 def main() -> None:
     qp_root = Path(__file__).resolve().parent / "cases" / "QP_json"

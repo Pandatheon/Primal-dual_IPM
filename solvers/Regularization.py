@@ -24,7 +24,14 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
     B_k = qp.B[stage]
     P_prev = feedback.P[stage+1]
 
-    if reg_config.method == 'PM_STAGE_MIRROR':
+    if reg_config.method == 'RP_STAGE_MIRROR':
+        # EM R first
+        R_reg = do_regularization(R_k, reg_config.delta, method="MIRROR")
+        # EM P next
+        P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
+
+        reduced_hessian_reg = R_reg + B_k.T @ P_reg @ B_k
+    elif reg_config.method == 'PM_STAGE_MIRROR':
         # EM P first
         P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
         reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
@@ -33,12 +40,14 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="MIRROR")
 
     elif reg_config.method == 'M_lookahead_CM':
-        Nc = 2
+        Nc = 1
         A_k = qp.A[stage]
         Q_k = qp.Q[stage]
         S_k = qp.S[stage]
 
         def _recursion_lookahead(P, stage):
+            if Nc == 0:
+                return False
             actual_range = min(Nc, stage + 1)
             start_stage = stage - actual_range + 1
             end_stage = stage
@@ -72,7 +81,7 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
             reduced_hessian_reg = reduced_hessian_reg + E_term * np.eye(reduced_hessian.shape[0])
 
     elif reg_config.method == 'PM_lookahead_CM':
-        Nc = 2
+        Nc = 1
         A_k = qp.A[stage]
         Q_k = qp.Q[stage]
         S_k = qp.S[stage]
@@ -122,9 +131,9 @@ def do_regularization(mat: np.ndarray,
                       delta: float,
                       method: str)-> np.ndarray:
     eigvals, eigvecs = _safe_sym_eig(mat)
-    if method == 'PROJECT_H':
+    if method == 'PROJECT':
         eigvals_reg = np.maximum(eigvals, delta)
-    elif method == 'MIRROR_H':
+    elif method == 'MIRROR':
         eigvals_reg = np.maximum(np.abs(eigvals), delta)
     mat_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
     mat_reg = _to_real(mat_reg)
@@ -139,8 +148,10 @@ def regularize_QP(
     for k in range(qp.N + 1):
         H = qp.Hessian_block(k) if k < qp.N else qp.Q_e
 
-        if reg_config.method in ['PROJECT_H', 'MIRROR_H']:
-            H_reg = do_regularization(H, reg_config.delta, reg_config.method)
+        if reg_config.method =='PROJECT_H':
+            H_reg = do_regularization(H, reg_config.delta, 'PROJECT')
+        elif reg_config.method == 'MIRROR_H':
+            H_reg = do_regularization(H, reg_config.delta, 'MIRROR')
         elif reg_config.method == 'CHOLESKY_H':
             L, D, E, p = modified_cholesky_SE(H)
             p_inv = np.argsort(p)
