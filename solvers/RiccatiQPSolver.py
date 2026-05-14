@@ -230,10 +230,9 @@ class QPSolver:
         self.compute_rhs(prev_sol=prev_sol)
 
         while True:
-            
-            i = self.statistics_dict['iter_count']
+
             # check convergence based on predictor step
-            if self._convergence_check() or i == self.max_iter:
+            if self._convergence_check() or self.statistics_dict['iter_count'] == self.max_iter:
                 self._quit()
                 break
             self.statistics_dict['iter_count'] += 1
@@ -244,17 +243,13 @@ class QPSolver:
             self.alpha_prim, self.alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_aff_dict)
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
-            # debug
-            print(f"Iter {i}: mu_aff = {mu_aff:.5e}, centering_param = {self.centering_param:.5e}, alpha_pri = {self.alpha_prim:.5e}, alpha_dual = {self.alpha_dual:.5e}")
 
             ## predictor-corrector step
             self.update_rhs_comp(step_type='predictor-corrector')
             self.delta_dict = self._compute_step(prev_sol)
             self.alpha_prim, self.alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
             mu_pred = self._compute_duality(prev_sol, self.delta_dict)
-            # debug
-            print(f"Iter {i}: mu_aff = {mu_aff:.5e}, mu_pred = {mu_pred:.5e}, centering_param = {self.centering_param:.5e}, alpha_prim = {self.alpha_prim:.5e}, alpha_dual = {self.alpha_dual:.5e}")
-            print("-"*50)
+
             ### Conditonal Mehrotra step
             if mu_pred > 2*mu_aff:
                 self.update_rhs_comp(step_type='centering')
