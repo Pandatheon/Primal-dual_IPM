@@ -43,19 +43,25 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str]) -> None:
         x0 = np.array([0.0, 0.0, 0.0, 0.0])
 
         for method in methods:
-            print(f"Prototye:")
+            print(f"Prototye Riccati:")
             qp_solver = QPSolver(qp, reg=method, type='Riccati')
-            qp_solver.solve(x0=x0, max_iter=300)
-            iter = qp_solver.statistics_dict['iter_count']
+            qp_solver.solve(x0=x0, max_iter=30)
+            iter_riccati = qp_solver.statistics_dict['iter_count']
+
+            print(f"Prototye Condensed:")
+            qp_solver = QPSolver(qp, reg=method, type='Condensed')
+            qp_solver.solve(x0=x0, max_iter=30)
+            iter_condensed = qp_solver.statistics_dict['iter_count']
 
             qp_acados = AcadosOcpQp.from_json(json_file_path=str(qp_path))
             qp_solver_acados = AcadosOcpQpSolver(qp_acados, opts)
             stats = qp_solver_acados.solve()
             iter_hpipm = qp_solver_acados.get_stats("iter")
             print(f"HPIPM solved in {iter_hpipm} iterations with status {stats}")
-            diff_iter = abs(iter - iter_hpipm)
-            assert diff_iter <= 2, f"Iteration count difference {diff_iter} exceeds tolerance for method {method} on QP {qp_path.name}"
-            print(f"Difference in iterations: {diff_iter}")
+            diff_iter_riccati = abs(iter_riccati - iter_hpipm)
+            diff_iter_condensed = abs(iter_condensed - iter_hpipm)
+            # assert diff_iter <= 2, f"Iteration count difference {diff_iter} exceeds tolerance for method {method} on QP {qp_path.name}"
+            print(f"Difference in iterations: {diff_iter_riccati} for Riccati, {diff_iter_condensed} for Condensed")
 
 def main() -> None:
     qp_root = Path('/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json')

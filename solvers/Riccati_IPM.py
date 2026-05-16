@@ -65,16 +65,6 @@ class Riccati_IPM():
         if self.reg_config.method in Hessian_reg:
             modified_qp = regularize_QP(modified_qp, self.reg_config)
 
-        # # debug
-        # from scipy.linalg import block_diag
-        # H_reg_list = []
-        # for k in range(self.qp.N + 1):
-        #     H_reg_list.append(modified_qp.Hessian_block(k) if k < self.qp.N else modified_qp.Q_e)
-        # # concanate H_list
-        # H_reg = block_diag(*H_reg_list)
-        # cond = np.linalg.cond(H_reg)
-        # print(f"Frobenius norm of the modified Hessian: {cond}")
-
         feedback = Feedback(
             P = [None]*(horizon+1),
             p = [None]*(horizon+1),

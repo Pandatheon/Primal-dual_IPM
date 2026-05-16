@@ -10,7 +10,7 @@ from solvers.RiccatiQPSolver import QPSolver
 from solvers.Regularization_config import Regularizations_config, no_reg, Hessian_reg, condensed_Hessian_reg, stage_reg, reg_list
 
 reg_config = Regularizations_config()
-json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_pos_M.json'
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/mock_pendulum_qp_data_000.json'
 def main():
 
     qp = BaseQP()
@@ -20,8 +20,8 @@ def main():
     method = no_reg[0]
     qp_solver = QPSolver(qp, reg=method, type='Riccati')
     x0 = np.array([0.0, 0.0, 0.0, 0.0])
-    qp_solver.solve(x0=x0, max_iter=200)
-    qp_solver.print_statistics()
+    qp_solver.solve(x0=x0, max_iter=30)
+    # qp_solver.print_statistics()
     print('Method:',method)
     cost = qp_solver.get_cost()
     print(f"Optimal cost: {cost}")

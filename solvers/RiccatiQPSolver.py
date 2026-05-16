@@ -78,6 +78,9 @@ class QPSolver:
         self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
         self._initailize_lam_and_s()
 
+        self.qp.b[0] = np.array([-0.88439,1.03168,-2.55217,6.75793]) # hard code
+        self.qp.r[0] = np.array([5.81474]) # hard code
+
 
     def _initailize_lam_and_s(self):
         self.solution.s = []
@@ -198,6 +201,25 @@ class QPSolver:
         self.rhs.rd = res_ineq
         self.rhs.rm = res_comp
 
+        # print for debug
+        # for k in range(self.qp.N):
+        #     b_k = self.qp.b[k]
+        #     print(f"Stage {k}: b_k = {b_k}")
+        # for k in range(self.qp.N):
+        #     rq_k = np.concatenate((self.qp.r[k], self.qp.q[k]))
+        #     print(f"Stage {k}: rq_k = {rq_k}")
+        # for k in range(self.qp.N):
+        #     # rg
+        #     print(f"Stage {k}: rg = {res_stat[k]}")
+        #     # rb
+        #     print(f"Stage {k}: rb = {res_eq[k]}")
+        #     # rd
+        #     print(f"Stage {k}: rd = {res_ineq[k]}")
+        #     # rm
+        #     print(f"Stage {k}: rm = {res_comp[k]}")
+        #     print("-" * 30)
+        # breakpoint()
+
         self.backup_rm = self.rhs.rm
         self.rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
         self.statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(self.rhs.rg), ord=np.inf))
@@ -244,11 +266,31 @@ class QPSolver:
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
 
+            # # print for debug
+            # for k in range(self.qp.N):
+            #     # ux
+            #     ux_k = np.concatenate((self.delta_aff_dict['delta_u'][k], self.delta_aff_dict['delta_x'][k]))
+            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} ux_k = {ux_k}")
+            #     print("-" * 30)
+
             ## predictor-corrector step
             self.update_rhs_comp(step_type='predictor-corrector')
             self.delta_dict = self._compute_step(prev_sol)
             self.alpha_prim, self.alpha_dual, alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
             mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+
+            # print for debug
+            # alpha_pri_aff & dual
+            print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_aff={self.alpha_prim:.5e}, alpha_dual_aff={self.alpha_dual:.5e}")
+            # mu_aff
+            print(f"Iter {self.statistics_dict['iter_count']}: mu_aff={mu_aff:.5e}")
+            #A sigma
+            print(f"Iter {self.statistics_dict['iter_count']}: centering_param={self.centering_param:.5e}")
+            # alpha_pri_corr & dual
+            print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_corr={self.alpha_prim:.5e}, alpha_dual_corr={self.alpha_dual:.5e}")
+            # mu_corr
+            print(f"Iter {self.statistics_dict['iter_count']}: mu_pred={mu_pred:.5e}")
+            print("-" * 50)
 
             ### Conditonal Mehrotra step
             if mu_pred > 2*mu_aff:

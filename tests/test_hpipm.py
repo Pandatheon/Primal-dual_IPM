@@ -8,7 +8,7 @@ import numpy as np
 from acados_template import AcadosOcpQp, AcadosOcpQpSolver, AcadosOcpQpOptions
 
 
-json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Furuta_pos_M.json'
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/mock_pendulum_qp_data_000.json'
 
 def main():
 
@@ -29,10 +29,10 @@ def main():
     print(f"HPIPM solved in {iter} iterations with status {stats}")
     # cost = qp_solver.get_cost()
     # print(f"Optimal cost: {cost}")
-    # print("pi values at each stage:")
+    # print("lam values at each stage:")
     # for k in range(qp.N):
-    #     pi = qp_solver.get(k, 'pi')
-    #     print(f"Stage {k}: pi = {pi}")
+    #     lam = qp_solver.get(k, 'lam')
+    #     print(f"Stage {k}: lam = {lam}")
 
 if __name__ == "__main__":
     main()
