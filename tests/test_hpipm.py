@@ -27,12 +27,19 @@ def main():
     stats = qp_solver.solve()
     iter = qp_solver.get_stats("iter")
     print(f"HPIPM solved in {iter} iterations with status {stats}")
-    # cost = qp_solver.get_cost()
-    # print(f"Optimal cost: {cost}")
-    # print("lam values at each stage:")
+
+    x = [qp_solver.get(k, "x") for k in range(qp.N+1)]
+    u = [qp_solver.get(k, "u") for k in range(qp.N)]
+    lam = [qp_solver.get(k, "lam") for k in range(qp.N)]
+    # print("Optimal state trajectory:")
+    # for k in range(qp.N+1):
+    #     print(f"x[{k}] = {x[k]}")
+    # print("Optimal control trajectory:")
     # for k in range(qp.N):
-    #     lam = qp_solver.get(k, 'lam')
-    #     print(f"Stage {k}: lam = {lam}")
+    #     print(f"u[{k}] = {u[k]}")
+    print("optimal Lagrange multipliers:")
+    for k in range(qp.N):
+        print(f"lam[{k}] = {lam[k]}")
 
 if __name__ == "__main__":
     main()

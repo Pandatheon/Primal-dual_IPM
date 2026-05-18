@@ -9,17 +9,24 @@ import json
 class BaseQP():
     """Base class providing generic QP algorithms and variable structures."""
 
-    def __init__(self):
+    def __init__(self, x0_elimination=True):
         # Initialize basic variables
         self.name = ""
+        self.x0_elimination = x0_elimination
 
         # Core QP data structures
         self.N = 0
         self.nx = 0
         self.nu = 0
         self.nb_0 = 0
+        self.nbx_0 = 0
+        self.nbu_0 = 0
         self.nb = 0
+        self.nbx = 0
+        self.nbu = 0
         self.nb_e = 0
+        self.nbx_e = 0
+        self.nbu_e = 0
         self.nh_0 = 0
         self.nh = 0
         self.nh_e = 0
@@ -43,6 +50,7 @@ class BaseQP():
 
         # Algorithmic variables
         self.feedback = None
+        self.x0 = None
 
     def populate_from_json(self, json_filepath):
         """Populate the QP instance using data from a JSON file."""
@@ -101,11 +109,21 @@ class BaseQP():
                 self.Jbu[k] = Jbu_k
                 self.Jbx[k] = Jbx_k
 
-        self.Jbx[0] = np.zeros((0, self.nx)) # ad-hoc fix for x0 elimination
+        if self.x0_elimination:
+            # ad-hoc fix for x0 elimination
+            self.Jbx[0] = np.zeros((0, self.nx))
 
-        self.nb_0 = self.Jbx[0].shape[0] + self.Jbu[0].shape[0]
-        self.nb = self.Jbx[1].shape[0] + self.Jbu[1].shape[0]
-        self.nb_e = self.Jbx[-1].shape[0] + self.Jbu[-1].shape[0]
+        self.nbx_0 = self.Jbx[0].shape[0]
+        self.nbu_0 = self.Jbu[0].shape[0]
+        self.nb_0 = self.nbx_0 + self.nbu_0
+
+        self.nbx = self.Jbx[1].shape[0]
+        self.nbu = self.Jbu[1].shape[0]
+        self.nb = self.nbx + self.nbu
+
+        self.nbx_e = self.Jbx[-1].shape[0]
+        self.nbu_e = self.Jbu[-1].shape[0]
+        self.nb_e = self.nbx_e + self.nbu_e
 
         # general linear constraints C*x + D*u <= d
         self.C = []
@@ -140,8 +158,15 @@ class BaseQP():
             lb_k = []
             ub_k = []
             for i, (lb, ub) in enumerate([(lbu, ubu), (lbx, ubx), (lg, ug)]):
-                if k == 0 and i ==1:
-                    continue # ad-hoc fix for x0 elimination
+                if k == 0 and i ==1 and self.x0_elimination:
+                    self.x0 = np.array(lb[0])
+                    # ad-hoc fix for x0 elimination
+                    b_0_remove = self.b[0] + self.A[0] @ np.array(lb[0])
+                    self.b[0] = b_0_remove
+                    r_0_remove = self.r[0] + self.S[0] @ np.array(lb[0])
+                    self.r[0] = r_0_remove
+                    continue
+
                 if (lb is not None and k < len(lb)) and (ub is not None and k < len(ub)):
                     lb_k.append(-lb[k].flatten())
                     ub_k.append(ub[k].flatten())
