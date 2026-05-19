@@ -16,6 +16,8 @@ def main():
     opts = {'ipopt': {'print_level': 0, 'max_iter': 1000, 'sb': 'yes'}}
     qp_solver = AcadosCasadiOcpQpSolver(qp, solver='ipopt', solver_opts=opts)
     stats = qp_solver.solve()
+    iter = qp_solver.get_stats("iter")
+    print(f"IPOPT iterations: {iter}")
     cost = qp_solver.get_cost()
     print(f"Optimal cost: {cost}")
     for k in range(qp.N):

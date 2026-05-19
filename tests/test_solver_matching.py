@@ -19,7 +19,7 @@ def iter_qp_json_paths(root: Path) -> list[Path]:
     return sorted(root.glob("*.json"))
 
 
-def run_benchmark(qp_json_paths: list[Path], methods: list[str]) -> None:
+def run_benchmark(qp_json_paths: list[Path]) -> None:
 
     opts = AcadosOcpQpOptions()
     opts.mu0 = 1e1

@@ -37,6 +37,7 @@ def main():
     print('Method:',method)
     cost = qp_solver.get_cost()
     print(f"Optimal cost: {cost}")
+    # qp_solver.print_statistics()
 
 if __name__ == "__main__":
     main()
