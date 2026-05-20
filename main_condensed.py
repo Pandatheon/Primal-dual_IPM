@@ -65,7 +65,10 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             cost = None
             iter = None
             try:
-                qp_solver.solve()
+                if method in ['ACADOS', 'IPOPT']:
+                    qp_solver.solve()
+                else:
+                    qp_solver.solve(mehrotra=False)
                 cost = qp_solver.get_cost()
                 if method == 'ACADOS':
                     iter = sum(qp_solver.get_stats('qp_iter'))

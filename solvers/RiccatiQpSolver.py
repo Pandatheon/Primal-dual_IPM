@@ -10,13 +10,14 @@ class QpSolver:
     """
     Prototype solver for QPs using primal-dual interior point method with Riccati recursion.
     """
-    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE', type:str='Riccati'):
+    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE', type:str='Riccati', mehrotra:bool=True):
         self.qp = qp
         self.status = -1
         self.centering_param = 1.0
         self.max_iter = 200
         self.delta_aff_dict = None
         self.delta_dict = None
+        self.Mehrotra_step = mehrotra
         self.res_max = {
             'res_stat' : 1e-6,
             'res_eq' : 1e-8,
@@ -241,6 +242,7 @@ class QpSolver:
             for k in range(self.qp.N):
                 self.rhs.rm[k] = self.backup_rm[k] - 1e-16 * np.ones(len(self.backup_rm[k]))
 
+
     def _recover_solution(self):
         # enforce x0 constraint
         self.solution.x[0] = self.qp.x0
@@ -338,29 +340,33 @@ class QpSolver:
             #     print("-" * 30)
             # exit() # debug
 
-            ## predictor-corrector step
-            self.update_rhs_comp(step_type='predictor-corrector')
-            self.delta_dict = self._compute_step(prev_sol)
-            self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
-            mu_pred = self._compute_duality(prev_sol, self.delta_dict)
-
-            # #A sigma
-            # print(f"Iter {self.statistics_dict['iter_count']}: centering_param={self.centering_param:.6e}")
-            # # alpha_pri_corr & dual
-            # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_corr={self.alpha_prim:.6e}, alpha_dual_corr={self.alpha_dual:.6e}")
-            # # mu_corr
-            # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred={mu_pred:.6e}")
-            # print("-" * 50)
-
-            ### Conditonal Mehrotra step
-            if mu_pred > 2*mu_aff:
-                self.update_rhs_comp(step_type='centering')
+            if self.Mehrotra_step:
+                ## predictor-corrector step
+                self.update_rhs_comp(step_type='predictor-corrector')
                 self.delta_dict = self._compute_step(prev_sol)
                 self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                mu_pred = self._compute_duality(prev_sol, self.delta_dict)
 
-                # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
-                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
+                # #A sigma
+                # print(f"Iter {self.statistics_dict['iter_count']}: centering_param={self.centering_param:.6e}")
+                # # alpha_pri_corr & dual
+                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_corr={self.alpha_prim:.6e}, alpha_dual_corr={self.alpha_dual:.6e}")
+                # # mu_corr
+                # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred={mu_pred:.6e}")
                 # print("-" * 50)
+
+                ### Conditonal Mehrotra step
+                if mu_pred > 2*mu_aff:
+                    self.update_rhs_comp(step_type='centering')
+                    self.delta_dict = self._compute_step(prev_sol)
+                    self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                    # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
+                    # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
+                    # print("-" * 50)
+            else:
+                    self.update_rhs_comp(step_type='centering')
+                    self.delta_dict = self._compute_step(prev_sol)
+                    self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
 
             self.update_solution(prev_sol)
             self.statistics_dict['alpha_pri_list'][-1] = self.alpha_prim
