@@ -364,9 +364,9 @@ class QpSolver:
                     # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
                     # print("-" * 50)
             else:
-                    self.update_rhs_comp(step_type='centering')
-                    self.delta_dict = self._compute_step(prev_sol)
-                    self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                self.update_rhs_comp(step_type='centering')
+                self.delta_dict = self._compute_step(prev_sol)
+                self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
 
             self.update_solution(prev_sol)
             self.statistics_dict['alpha_pri_list'][-1] = self.alpha_prim

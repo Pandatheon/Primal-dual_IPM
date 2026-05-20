@@ -80,8 +80,8 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         if E_term:
             reduced_hessian_reg = reduced_hessian_reg + E_term * np.eye(reduced_hessian.shape[0])
 
-    elif reg_config.method == 'PM_lookahead_CM':
-        Nc = 1
+    elif reg_config.method == 'PM_STAGE_CM':
+        Nc = 0
         A_k = qp.A[stage]
         Q_k = qp.Q[stage]
         S_k = qp.S[stage]

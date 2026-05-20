@@ -60,15 +60,12 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             else:
                 qp = BaseQP()
                 qp.populate_from_json(str(qp_path))
-                qp_solver = QpSolver(qp, reg=method, type='Condensed')
+                qp_solver = QpSolver(qp, reg=method, type='Condensed', mehrotra=False)
 
             cost = None
             iter = None
             try:
-                if method in ['ACADOS', 'IPOPT']:
-                    qp_solver.solve()
-                else:
-                    qp_solver.solve(mehrotra=False)
+                qp_solver.solve()
                 cost = qp_solver.get_cost()
                 if method == 'ACADOS':
                     iter = sum(qp_solver.get_stats('qp_iter'))
@@ -94,6 +91,7 @@ def main() -> None:
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_results_condensed.csv"
     run_benchmark(qp_json_paths, reg_list, output_path)
+
 
 
 if __name__ == "__main__":

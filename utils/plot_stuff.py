@@ -12,7 +12,7 @@ def set_ieee_style():
     plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.serif'] = ['Times New Roman', 'STIXGeneral', 'DejaVu Serif']
     plt.rcParams['mathtext.fontset'] = 'stix'
-    
+
     # 2. Font Sizes
     plt.rcParams['font.size'] = 18
     plt.rcParams['axes.labelsize'] = 18
@@ -28,7 +28,7 @@ def plot_charts(filename='qp_results.csv'):
         df[col] = df[col].str.strip()
 
     df = df[~df['Regularization'].isin(['NO_REGULARIZE'])]
-    
+
     # Convert status to numeric
     df['Status'] = pd.to_numeric(df['Status'], errors='coerce')
 
@@ -58,7 +58,7 @@ def plot_charts(filename='qp_results.csv'):
 
         x_plot = np.concatenate(([0], solved_iters, [max_x_limit]))
         y_plot = np.concatenate(([0], np.arange(1, current_solved_count + 1), [current_solved_count]))
-        
+
         plt.step(x_plot, y_plot, where='post', label=method,
                  color=method_colors[method], linewidth=2.5, alpha=0.85)
 
@@ -74,7 +74,7 @@ def plot_charts(filename='qp_results.csv'):
     plt.ylabel("Solved Problems (Count)")
     plt.xlim(0, max_x_limit)
     plt.ylim(0, total_problems * 1.05)
-    
+
     plt.grid(True, which="both", ls="--", alpha=0.3)
     plt.legend(loc="best", frameon=True)
 

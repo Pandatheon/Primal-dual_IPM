@@ -52,7 +52,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             print(f"Method: {method}")
             if method == 'ACADOS':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
-                qp_solver = SqpQpSolver(qp, reg='NO_REGULARIZE')
+                qp_solver = SqpQpSolver(qp, reg='NO_REGULARIZE', qp_max_iter=30)
             elif method == 'IPOPT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
                 opts = {'ipopt': {'print_level': 0, 'max_iter': 300, 'sb': 'yes'}}

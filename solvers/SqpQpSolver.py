@@ -3,9 +3,9 @@ import casadi as ca
 import numpy as np
 
 class SqpQpSolver(AcadosOcpSolver):
-    def __init__(self, qp: AcadosOcpQp, reg = 'NO_REGULARIZE'):
+    def __init__(self, qp: AcadosOcpQp, reg = 'NO_REGULARIZE', qp_max_iter=15):
         self.qp = qp
-        parametric_ocp, self.param_manager = self.formulate_parametric_OCP_QP(reg)
+        parametric_ocp, self.param_manager = self.formulate_parametric_OCP_QP(reg, qp_max_iter)
 
         super().__init__(parametric_ocp, verbose=False)
 
@@ -70,7 +70,7 @@ class SqpQpSolver(AcadosOcpSolver):
         # Set terminal node parameters
         self.set(N, 'p', param_dyna_cost_values_N)
 
-    def formulate_parametric_OCP_QP(self, reg):
+    def formulate_parametric_OCP_QP(self, reg, qp_max_iter):
         ocp = AcadosOcp()
         ocp.model.name = 'parametric_OCP_QP'
 
@@ -130,8 +130,10 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.model.cost_expr_ext_cost_e = 0.5 * (x_res.T @ Q @ x_res) + q.T @ x_res
 
         # constraints with placeholders
+        # initial state constraints
         ocp.constraints.x0 = np.array([0.0, 0.0, 0.0, 0.0])
         ocp.constraints.idxbx_0 = np.array([0, 1, 2, 3])
+        # control constraints
         ocp.constraints.lbu = -np.zeros((nu, 1))
         ocp.constraints.ubu = np.zeros((nu, 1))
         ocp.constraints.idxbu = np.arange(nu).tolist()
@@ -143,7 +145,7 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.solver_options.regularize_method = reg  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
         ocp.solver_options.integrator_type = 'DISCRETE'
         ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
-        ocp.solver_options.nlp_solver_max_iter = 200
+        ocp.solver_options.nlp_solver_max_iter = 30
         ocp.solver_options.eval_residual_at_max_iter = True
         ocp.solver_options.nlp_qp_tol_strategy = 'FIXED_QP_TOL'
 
@@ -158,7 +160,7 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.solver_options.qp_solver_cond_ric_alg = 0
         ocp.solver_options.qp_solver_mu0 = 1e1
         ocp.solver_options.tau_min = 1e-16
-        ocp.solver_options.qp_solver_iter_max = 300
+        ocp.solver_options.qp_solver_iter_max = qp_max_iter
         ocp.solver_options.hpipm_mode = 'CUSTOMIZED'  # 'DEFAULT', 'CUSTOMIZED'
 
         return ocp, param_manager
