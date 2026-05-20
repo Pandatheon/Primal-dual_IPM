@@ -87,5 +87,5 @@ def plot_charts(filename='qp_results.csv'):
 if __name__ == "__main__":
     set_ieee_style()
     plot_charts('qp_results_riccati.csv')
-    plot_charts('qp_results_condensed.csv')
-    plot_charts('qp_results_pos.csv')
+    # plot_charts('qp_results_condensed.csv')
+    # plot_charts('qp_results_pos.csv')

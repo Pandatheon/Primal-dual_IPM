@@ -1,201 +1,201 @@
-QP_name                                  , Regularization , Iteration, Cost               , Status
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , PROJECT_H      ,     101  , -4631.0916219150095, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , MIRROR_H       ,     187  , -4631.091621915005 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , CHOLESKY_H     ,     300  , -920.2954233894302 , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , RP_STAGE_MIRROR,      21  , -5721.5402607311225, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , PM_STAGE_MIRROR,      21  , -5721.5402607311225, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , M_lookahead_CM ,      21  , -5721.540260731132 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , PM_lookahead_CM,      23  , -5721.540260731135 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , IPOPT          ,      33  , -4631.091892909759 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_0   , ACADOS         ,     647.0, -4631.091621915006 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , PROJECT_H      ,     101  , -4631.0916219150095, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , MIRROR_H       ,     187  , -4631.091621915005 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , CHOLESKY_H     ,     300  , -920.2954233894302 , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , RP_STAGE_MIRROR,      21  , -5721.5402607311225, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , PM_STAGE_MIRROR,      21  , -5721.5402607311225, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , M_lookahead_CM ,      21  , -5721.540260731132 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , PM_lookahead_CM,      23  , -5721.540260731135 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , IPOPT          ,      33  , -4631.091892909759 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_1   , ACADOS         ,     647.0, -4631.091621915006 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , PROJECT_H      ,      83  , -3932.928613668728 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , MIRROR_H       ,     159  , -3932.928613668728 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , CHOLESKY_H     ,     300  , -1625.2043727823052, -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , RP_STAGE_MIRROR,      21  , -3932.9286136687215, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , PM_STAGE_MIRROR,      21  , -3932.9286136687215, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , M_lookahead_CM ,      19  , -3932.928613668728 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , PM_lookahead_CM,      21  , -3932.9286136687324, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , IPOPT          ,      29  , -3932.928730153085 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_2   , ACADOS         ,     537.0, -3932.928613668716 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , PROJECT_H      ,      90  , -39664.270108901466, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , MIRROR_H       ,     156  , -39664.27010890144 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , CHOLESKY_H     ,     300  , -11642.960251251308, -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , RP_STAGE_MIRROR,      40  , -38612.683648155995, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , PM_STAGE_MIRROR,      45  , -38612.68364815539 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , M_lookahead_CM ,     300  , -87.9773480580886  , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , PM_lookahead_CM,      46  , -2613.947462482527 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , IPOPT          ,      51  , -39664.27153731876 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_3   , ACADOS         ,     597.0, -39664.27010890146 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , PROJECT_H      ,      56  , -208.3699477637016 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , MIRROR_H       ,     101  , -208.36994776370173, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , CHOLESKY_H     ,     300  , -142.23522730216035, -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , RP_STAGE_MIRROR,       9  , -208.36994776370156, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , PM_STAGE_MIRROR,       9  , -208.36994776370156, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , M_lookahead_CM ,      11  , -208.3699477637016 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , PM_lookahead_CM,      10  , -208.36994776370162, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , IPOPT          ,      15  , -208.36996695074666, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_4   , ACADOS         ,     236.0, -208.3699477636955 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , PROJECT_H      ,      61  , -8694.022282736421 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , MIRROR_H       ,      99  , -8694.02228273641  , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , CHOLESKY_H     ,     300  , -4.269870765577183 , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , RP_STAGE_MIRROR,      23  , -996.4258577754335 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , PM_STAGE_MIRROR,      23  , -996.4258577754335 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , M_lookahead_CM ,      22  , -8694.022282736412 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , PM_lookahead_CM,      51  , -996.4258577754345 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , IPOPT          ,      46  , -8694.022584154734 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_5   , ACADOS         ,     313.0, -8694.022282736414 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , PROJECT_H      ,      49  , -16.552660414919544, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , MIRROR_H       ,      89  , -16.55266041491953 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , CHOLESKY_H     ,     300  , -10.37508340991174 , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , RP_STAGE_MIRROR,      11  , -16.552660414919544, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , PM_STAGE_MIRROR,      11  , -16.552660414919544, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , M_lookahead_CM ,      38  , -16.552660414919263, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , PM_lookahead_CM,      10  , -16.55266041491954 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , IPOPT          ,      12  , -16.55266941998613 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_6   , ACADOS         ,     189.0, -16.552660414919465, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , PROJECT_H      ,      56  , -290.52179622628495, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , MIRROR_H       ,     102  , -290.52179622628506, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , CHOLESKY_H     ,     300  , -151.74518395687133, -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , RP_STAGE_MIRROR,      11  , -290.5217962262859 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , PM_STAGE_MIRROR,      11  , -290.5217962262859 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , M_lookahead_CM ,      10  , -290.52179622628574, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , PM_lookahead_CM,      13  , -290.5217962262688 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , IPOPT          ,      18  , -290.5218266977086 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_7   , ACADOS         ,     297.0, -290.5217962260382 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , NO_REGULARIZE  ,          ,                    , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , PROJECT_H      ,      43  , -81.00510711894279 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , MIRROR_H       ,      79  , -81.00510711894282 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , CHOLESKY_H     ,     300  , -5.2714883216852035, -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , RP_STAGE_MIRROR,       9  , -81.0051071189242  , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , PM_STAGE_MIRROR,       9  , -81.0051071189242  , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , M_lookahead_CM ,      10  , -81.0051071189424  , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , PM_lookahead_CM,       9  , -81.0051071189236  , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , IPOPT          ,      17  , -81.00512457283577 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_8   , ACADOS         ,     140.0, -81.00510711894285 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , NO_REGULARIZE  ,      10  , -58.17357636850806 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , PROJECT_H      ,      44  , -58.17357636851558 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , MIRROR_H       ,      79  , -58.17357636851552 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , CHOLESKY_H     ,     300  , -11.45864127850711 , -1
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , RP_STAGE_MIRROR,      10  , -58.17357636850806 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , PM_STAGE_MIRROR,      10  , -58.17357636850806 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , M_lookahead_CM ,      10  , -58.17357636850806 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , PM_lookahead_CM,      10  , -58.17357636850806 , 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , IPOPT          ,      15  , -58.173592470574725, 0
-Furuta_FU_INDE_RE_INDE_status_4_iter_9   , ACADOS         ,     155.0, -58.17357636851556 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , PROJECT_H      ,     300  , -27692.93572983655 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , MIRROR_H       ,     300  , -27682.838971781617, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , CHOLESKY_H     ,     300  , -4353.901759912233 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , RP_STAGE_MIRROR,      21  , -2764.450654180347 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , PM_STAGE_MIRROR,      21  , -2764.450654180347 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , M_lookahead_CM ,      22  , -8698.297655089575 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , PM_lookahead_CM,      39  , -27693.356236297863, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , IPOPT          ,      24  , -14095.822270483175, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_0 , ACADOS         ,     625.0, -27691.59331423789 , 2
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , PROJECT_H      ,     300  , -27692.93572983655 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , MIRROR_H       ,     300  , -27682.838971781617, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , CHOLESKY_H     ,     300  , -4353.901759912233 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , RP_STAGE_MIRROR,      21  , -2764.450654180347 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , PM_STAGE_MIRROR,      21  , -2764.450654180347 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , M_lookahead_CM ,      22  , -8698.297655089575 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , PM_lookahead_CM,      39  , -27693.356236297863, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , IPOPT          ,      24  , -14095.822270483175, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_1 , ACADOS         ,     625.0, -27691.59331423789 , 2
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, PROJECT_H      ,      51  , -664.3503280394307 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, MIRROR_H       ,      96  , -664.3503280394309 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, CHOLESKY_H     ,     300  , -656.587666359007  , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, RP_STAGE_MIRROR,      11  , -656.735191279316  , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, PM_STAGE_MIRROR,      11  , -656.735191279316  , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, M_lookahead_CM ,      11  , -656.7351912793165 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, PM_lookahead_CM,      10  , -664.3503280394299 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, IPOPT          ,      19  , -181.4772724503825 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_10, ACADOS         ,     202.0, -664.3503280394312 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, PROJECT_H      ,     300  , -322.51097746884176, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, MIRROR_H       ,     300  , -268.8995797707741 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, CHOLESKY_H     ,     300  , -150.11122603743917, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, RP_STAGE_MIRROR,      12  , -364.60658690132004, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, PM_STAGE_MIRROR,      12  , -364.60658690132004, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, M_lookahead_CM ,      12  , -364.6065868935388 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, PM_lookahead_CM,      13  , -364.6065869021811 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, IPOPT          ,      15  , -199.69932064056619, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_12, ACADOS         ,     808.0, -276.21153313322   , 2
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , PROJECT_H      ,     300  , -13683611.042646483, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , MIRROR_H       ,     300  , -13683606.27145417 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , CHOLESKY_H     ,     300  , -6891516.654566899 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , RP_STAGE_MIRROR,      75  , -52831010.93051282 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , PM_STAGE_MIRROR,      87  , -52831010.93051286 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , M_lookahead_CM ,      46  , -52831010.93051278 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , PM_lookahead_CM,     211  , -13683611.119800737, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , IPOPT          ,      55  , -2014136.9763095255, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_2 , ACADOS         ,    2035.0, -13683610.778841356, 2
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , PROJECT_H      ,      69  , -13272513.879455326, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , MIRROR_H       ,      93  , -13272513.879455324, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , CHOLESKY_H     ,     300  , -9708196.809040422 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , RP_STAGE_MIRROR,      78  , -51557178.914716095, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , PM_STAGE_MIRROR,      69  , -51557178.914716125, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , M_lookahead_CM ,      48  , -51557178.91471608 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , PM_lookahead_CM,     216  , -13272513.879455324, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , IPOPT          ,      58  , -1985328.014836832 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_3 , ACADOS         ,     129.0, -13272513.879455328, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , PROJECT_H      ,     300  , -368965.79007886397, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , MIRROR_H       ,     126  , -1249859.903490592 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , CHOLESKY_H     ,     300  , -82473.04533041963 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , RP_STAGE_MIRROR,      89  , -1249859.9034905937, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , PM_STAGE_MIRROR,      62  , -1249859.9034905944, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , M_lookahead_CM ,      46  , -1249859.9034905934, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , PM_lookahead_CM,      84  , -1249859.903490594 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , IPOPT          ,      45  , -714215.4089079952 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_4 , ACADOS         ,     137.0, -1249859.903490594 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , PROJECT_H      ,      47  , -1956.0947816010687, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , MIRROR_H       ,      74  , -1956.094781601069 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , CHOLESKY_H     ,     300  , -1148.9099223954147, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , RP_STAGE_MIRROR,      32  , -1956.0947816010691, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , PM_STAGE_MIRROR,      32  , -1956.0947816010691, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , M_lookahead_CM ,      23  , -1956.0947816010687, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , PM_lookahead_CM,      24  , -1956.0947816010691, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , IPOPT          ,      35  , -1370.8688324612851, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_5 , ACADOS         ,     138.0, -1956.0947816010298, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , PROJECT_H      ,     193  , -1482.1710739216282, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , MIRROR_H       ,     300  , -1482.1710734720887, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , CHOLESKY_H     ,     300  , -1047.8254060222089, -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , RP_STAGE_MIRROR,      39  , -1482.1710739216346, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , PM_STAGE_MIRROR,      39  , -1482.1710739216346, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , M_lookahead_CM ,      41  , -1482.1710739216348, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , PM_lookahead_CM,      67  , -1482.1710739203188, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , IPOPT          ,      22  , -721.8249434535232 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_6 , ACADOS         ,     651.0, -1482.1710739215002, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , NO_REGULARIZE  ,          ,                    , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , PROJECT_H      ,     300  , -826.7545976838903 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , MIRROR_H       ,     300  , -812.584316344775  , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , CHOLESKY_H     ,     300  , -764.3699894423646 , -1
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , RP_STAGE_MIRROR,      15  , -829.7816246948084 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , PM_STAGE_MIRROR,      15  , -829.7816246948084 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , M_lookahead_CM ,      14  , -829.781624695709  , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , PM_lookahead_CM,      16  , -829.7816246957109 , 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , IPOPT          ,      27  , -222.38239587596283, 0
-Pendulum_FU_INDE_RE_INDE_status_4_iter_8 , ACADOS         ,     653.0, -817.261713953433  , 2
+QP_name,Regularization,Iteration,Cost,Status
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,PROJECT_H,300,-4631.078328752298,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,MIRROR_H,300,-4631.043010057986,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,CHOLESKY_H,300,-919.4535445187821,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,RP_STAGE_MIRROR,21,-5721.5402607311225,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,PM_STAGE_MIRROR,21,-5721.5402607311225,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,M_lookahead_CM,21,-5721.540260731132,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,PM_lookahead_CM,23,-5721.540260731135,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,IPOPT,33,-4631.091892909759,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_0,ACADOS,647.0,-4631.091621915006,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,PROJECT_H,300,-4631.078328752298,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,MIRROR_H,300,-4631.043010057986,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,CHOLESKY_H,300,-919.4535445187821,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,RP_STAGE_MIRROR,21,-5721.5402607311225,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,PM_STAGE_MIRROR,21,-5721.5402607311225,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,M_lookahead_CM,21,-5721.540260731132,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,PM_lookahead_CM,23,-5721.540260731135,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,IPOPT,33,-4631.091892909759,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_1,ACADOS,647.0,-4631.091621915006,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,PROJECT_H,300,-3932.926264181262,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,MIRROR_H,300,-3932.921998219389,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,CHOLESKY_H,300,-1625.5700137158417,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,RP_STAGE_MIRROR,57,-3932.9286136363644,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,PM_STAGE_MIRROR,57,-3932.9286136363644,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,M_lookahead_CM,41,-3932.9286136346673,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,PM_lookahead_CM,112,-3932.928613642408,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,IPOPT,29,-3932.928730153085,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_2,ACADOS,537.0,-3932.928613668716,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,PROJECT_H,90,-39664.270108901466,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,MIRROR_H,156,-39664.27010890144,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,CHOLESKY_H,300,-11642.960251251308,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,RP_STAGE_MIRROR,40,-38612.683648155995,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,PM_STAGE_MIRROR,45,-38612.68364815539,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,M_lookahead_CM,300,-87.9773480580886,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,PM_lookahead_CM,46,-2613.947462482527,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,IPOPT,51,-39664.27153731876,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_3,ACADOS,597.0,-39664.27010890146,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,PROJECT_H,56,-208.3699477637016,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,MIRROR_H,101,-208.36994776370173,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,CHOLESKY_H,300,-142.23522730216035,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,RP_STAGE_MIRROR,9,-208.36994776370156,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,PM_STAGE_MIRROR,9,-208.36994776370156,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,M_lookahead_CM,11,-208.3699477637016,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,PM_lookahead_CM,10,-208.36994776370162,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,IPOPT,15,-208.36996695074666,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_4,ACADOS,236.0,-208.3699477636955,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,PROJECT_H,300,-8694.02228248242,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,MIRROR_H,300,-8694.0222821569,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,CHOLESKY_H,300,-4.269870765577183,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,RP_STAGE_MIRROR,147,-996.4258577691386,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,PM_STAGE_MIRROR,147,-996.4258577691386,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,M_lookahead_CM,300,-8694.022282695927,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,PM_lookahead_CM,127,-996.4258577645751,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,IPOPT,46,-8694.022584154734,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_5,ACADOS,313.0,-8694.022282736414,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,PROJECT_H,49,-16.552660414919544,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,MIRROR_H,89,-16.55266041491953,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,CHOLESKY_H,300,-10.375030564901278,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,RP_STAGE_MIRROR,68,-16.552660411934788,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,PM_STAGE_MIRROR,68,-16.552660411934788,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,M_lookahead_CM,288,-16.552660414131843,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,PM_lookahead_CM,115,-16.55266041304043,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,IPOPT,12,-16.55266941998613,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_6,ACADOS,189.0,-16.552660414919465,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,PROJECT_H,300,-290.52149118434016,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,MIRROR_H,300,-290.5210286080236,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,CHOLESKY_H,300,-151.74450476664532,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,RP_STAGE_MIRROR,11,-290.5217962262859,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,PM_STAGE_MIRROR,11,-290.5217962262859,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,M_lookahead_CM,19,-290.5217962127941,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,PM_lookahead_CM,13,-290.5217962262688,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,IPOPT,18,-290.5218266977086,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_7,ACADOS,297.0,-290.5217962260382,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,NO_REGULARIZE,,,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,PROJECT_H,43,-81.00510711894279,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,MIRROR_H,79,-81.00510711894282,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,CHOLESKY_H,300,-5.271460138496322,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,RP_STAGE_MIRROR,9,-81.0051071189242,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,PM_STAGE_MIRROR,9,-81.0051071189242,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,M_lookahead_CM,10,-81.00510711893263,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,PM_lookahead_CM,9,-81.0051071189236,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,IPOPT,17,-81.00512457283577,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_8,ACADOS,140.0,-81.00510711894285,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,NO_REGULARIZE,11,-58.17357636851558,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,PROJECT_H,300,-58.17356368227466,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,MIRROR_H,300,-58.17354055092424,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,CHOLESKY_H,300,-11.458547078262468,-1
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,RP_STAGE_MIRROR,11,-58.17357636851558,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,PM_STAGE_MIRROR,11,-58.17357636851558,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,M_lookahead_CM,11,-58.17357636851558,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,PM_lookahead_CM,11,-58.17357636851558,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,IPOPT,15,-58.173592470574725,0
+Furuta_FU_INDE_RE_INDE_status_4_iter_9,ACADOS,155.0,-58.17357636851556,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,PROJECT_H,300,-27692.93572983655,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,MIRROR_H,300,-27682.831322059097,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,CHOLESKY_H,300,-4353.901759912233,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,RP_STAGE_MIRROR,137,-2764.4506541851215,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,PM_STAGE_MIRROR,137,-2764.4506541851215,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,M_lookahead_CM,55,-8698.297655060514,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,PM_lookahead_CM,39,-27693.356236297863,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,IPOPT,24,-14095.822270483175,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0,ACADOS,625.0,-27691.59331423789,2
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,PROJECT_H,300,-27692.93572983655,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,MIRROR_H,300,-27682.831322059097,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,CHOLESKY_H,300,-4353.901759912233,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,RP_STAGE_MIRROR,137,-2764.4506541851215,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,PM_STAGE_MIRROR,137,-2764.4506541851215,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,M_lookahead_CM,55,-8698.297655060514,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,PM_lookahead_CM,39,-27693.356236297863,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,IPOPT,24,-14095.822270483175,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_1,ACADOS,625.0,-27691.59331423789,2
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,PROJECT_H,300,-664.3501554935892,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,MIRROR_H,300,-664.350012819296,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,CHOLESKY_H,300,-656.5931732874533,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,RP_STAGE_MIRROR,11,-656.735191279316,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,PM_STAGE_MIRROR,11,-656.735191279316,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,M_lookahead_CM,11,-656.735191279316,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,PM_lookahead_CM,10,-664.3503280394299,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,IPOPT,19,-181.4772724503825,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_10,ACADOS,202.0,-664.3503280394312,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,PROJECT_H,300,-307.7248139259543,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,MIRROR_H,300,-267.7885455990543,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,CHOLESKY_H,300,-163.00589373365634,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,RP_STAGE_MIRROR,12,-364.60658690132004,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,PM_STAGE_MIRROR,12,-364.60658690132004,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,M_lookahead_CM,12,-364.6065868935388,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,PM_lookahead_CM,13,-364.6065869021811,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,IPOPT,15,-199.69932064056619,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12,ACADOS,808.0,-276.21153313322,2
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,PROJECT_H,300,-13683547.199184835,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,MIRROR_H,300,-13683515.996778596,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,CHOLESKY_H,300,-6891516.654566899,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,RP_STAGE_MIRROR,75,-52831010.93051282,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,PM_STAGE_MIRROR,87,-52831010.93051286,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,M_lookahead_CM,46,-52831010.93051278,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,PM_lookahead_CM,300,-13683610.17173168,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,IPOPT,55,-2014136.9763095255,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2,ACADOS,2035.0,-13683610.778841356,2
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,PROJECT_H,69,-13272513.879455326,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,MIRROR_H,93,-13272513.879455324,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,CHOLESKY_H,300,-9708196.809040422,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,RP_STAGE_MIRROR,78,-51557178.914716095,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,PM_STAGE_MIRROR,69,-51557178.914716125,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,M_lookahead_CM,48,-51557178.91471608,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,PM_lookahead_CM,216,-13272513.879455324,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,IPOPT,58,-1985328.014836832,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3,ACADOS,129.0,-13272513.879455328,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,PROJECT_H,300,-368965.79007886397,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,MIRROR_H,126,-1249859.903490592,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,CHOLESKY_H,300,-82473.04533041963,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,RP_STAGE_MIRROR,89,-1249859.9034905937,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,PM_STAGE_MIRROR,62,-1249859.9034905944,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,M_lookahead_CM,46,-1249859.9034905934,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,PM_lookahead_CM,84,-1249859.903490594,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,IPOPT,45,-714215.4089079952,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4,ACADOS,137.0,-1249859.903490594,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,PROJECT_H,300,-1956.0947816010307,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,MIRROR_H,300,-1956.0947812824804,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,CHOLESKY_H,300,-1148.9099223954147,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,RP_STAGE_MIRROR,32,-1956.0947816010691,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,PM_STAGE_MIRROR,32,-1956.0947816010691,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,M_lookahead_CM,35,-1956.0947816500698,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,PM_lookahead_CM,24,-1956.0947816010691,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,IPOPT,35,-1370.8688324612851,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5,ACADOS,138.0,-1956.0947816010298,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,PROJECT_H,300,-1482.1679815654952,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,MIRROR_H,300,-1481.6962422965137,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,CHOLESKY_H,300,-1047.8254060222089,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,RP_STAGE_MIRROR,40,-1482.171073921635,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,PM_STAGE_MIRROR,40,-1482.171073921635,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,M_lookahead_CM,45,-1482.1710739216337,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,PM_lookahead_CM,73,-1482.171073921635,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,IPOPT,22,-721.8249434535232,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6,ACADOS,651.0,-1482.1710739215002,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,NO_REGULARIZE,,,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,PROJECT_H,300,-826.7545976838903,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,MIRROR_H,300,-812.584316344775,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,CHOLESKY_H,300,-764.3699894423646,-1
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,RP_STAGE_MIRROR,31,-829.7816246329749,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,PM_STAGE_MIRROR,31,-829.7816246329749,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,M_lookahead_CM,31,-829.781624634174,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,PM_lookahead_CM,42,-829.7816246119801,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,IPOPT,27,-222.38239587596283,0
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8,ACADOS,653.0,-817.261713953433,2

@@ -364,9 +364,12 @@ class QpSolver:
                     # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
                     # print("-" * 50)
             else:
-                    self.update_rhs_comp(step_type='centering')
-                    self.delta_dict = self._compute_step(prev_sol)
-                    self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                self.update_rhs_comp(step_type='centering')
+                self.delta_dict = self._compute_step(prev_sol)
+                self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
+                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
+                # print("-" * 50)
 
             self.update_solution(prev_sol)
             self.statistics_dict['alpha_pri_list'][-1] = self.alpha_prim
@@ -417,13 +420,24 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
-        # Apply step-size damping if alpha is strictly less than 1.0
-        if self.alpha < 1.0:
-            tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
-            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+
+        step_cost = self._step_cost()
+        if step_cost < 0:
+            # Apply step-size damping if alpha is strictly less than 1.0
+            if self.alpha < 1.0:
+                tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
+                tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+            else:
+                tmp_alpha_prim = self.alpha_prim
+                tmp_alpha_dual = self.alpha_dual
         else:
-            tmp_alpha_prim = self.alpha_prim
-            tmp_alpha_dual = self.alpha_dual
+            safe_alpha = self._safe_step_size(prev_sol, step_cost)
+            if self.alpha < safe_alpha:
+                tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
+                tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+            else:
+                tmp_alpha_prim = safe_alpha
+                tmp_alpha_dual = self.alpha_dual
 
         # update solution
         x_sol = [prev_sol.x[i] + tmp_alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
@@ -433,6 +447,42 @@ class QpSolver:
         s_sol = [np.maximum(prev_sol.s[i] + tmp_alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
+    def _step_cost(self)-> float:
+        delta_cost = 0.0
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k]
+            R_k = self.qp.R[k]
+            S_k = self.qp.S[k]
+            q_k = self.qp.q[k]
+            r_k = self.qp.r[k]
+            delta_x = self.delta_dict['delta_x'][k]
+            delta_u = self.delta_dict['delta_u'][k]
+            delta_cost += 0.5 * delta_x.T @ Q_k @ delta_x + 0.5 * delta_u.T @ R_k @ delta_u + delta_x.T @ S_k.T @ delta_u + q_k.T @ delta_x + r_k.T @ delta_u
+         # terminal cost
+        Q_e = self.qp.Q_e
+        q_e = self.qp.q_e
+        delta_x_N = self.delta_dict['delta_x'][-1]
+        delta_cost += 0.5 * delta_x_N.T @ Q_e @ delta_x_N + q_e.T @ delta_x_N
+        return delta_cost
+
+    def _safe_step_size(self, prev_sol, step_cost)-> float:
+        gradient_delta_product = 0.0
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k]
+            R_k = self.qp.R[k]
+            S_k = self.qp.S[k]
+            q_k = self.qp.q[k]
+            r_k = self.qp.r[k]
+            delta_x = self.delta_dict['delta_x'][k]
+            delta_u = self.delta_dict['delta_u'][k]
+            gradient_delta_product += delta_x.T @ (Q_k @ prev_sol.x[k] + S_k.T @ prev_sol.u[k] + q_k) + delta_u.T @ (R_k @ prev_sol.u[k] + S_k @ prev_sol.x[k] + r_k)
+        # terminal cost contribution
+        Q_e = self.qp.Q_e
+        q_e = self.qp.q_e
+        delta_x_N = self.delta_dict['delta_x'][-1]
+        gradient_delta_product += delta_x_N.T @ (Q_e @ prev_sol.x[-1] + q_e)
+        safe_step_size = 1.5*abs(gradient_delta_product)/step_cost
+        return min(safe_step_size, 1.0)
 
     def fraction_to_boundary(self, prev_sol: iterate_sol, delta_dict, record:bool=False) -> iterate_sol:
         s_i = np.concatenate(prev_sol.s)
