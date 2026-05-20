@@ -6,7 +6,7 @@ from solvers.Condensed_IPM import Condensed_IPM
 import numpy as np
 import copy
 
-class QPSolver:
+class QpSolver:
     """
     Prototype solver for QPs using primal-dual interior point method with Riccati recursion.
     """
@@ -270,7 +270,8 @@ class QPSolver:
         self.solution.lam[0] = np.concatenate((lam_0[:nbu], lam_lbx, lam_0[nbu+nx:nbu+nx+nbx],
                                                 lam_0[end_lower:end_lower+nbu], lam_ubx, lam_0[end_lower+nbu+nx+nbx:]))
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=200)-> iterate_sol:
+
+    def solve(self, x0:np.ndarray=None, max_iter:int=300)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
@@ -499,6 +500,9 @@ class QPSolver:
         else:
             raise ValueError(f"Invalid field {field}. Valid fields are 'x', 'u', 'pi', 'lam', 's'.")
 
+    def get_stats(self, field:str):
+        if field == 'iter':
+            return self.statistics_dict['iter_count']
 
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_pri\talpha_dual')

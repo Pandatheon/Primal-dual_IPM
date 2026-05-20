@@ -79,10 +79,13 @@ def plot_charts(filename='qp_results.csv'):
     plt.legend(loc="best", frameon=True)
 
     plt.tight_layout()
-    plt.savefig("iteration_performance_profile.pdf", bbox_inches='tight')
+    name = filename.split('.')[0]
+    plt.savefig(f"iteration_{name}.pdf", bbox_inches='tight')
     plt.show()
 
 # Entry point
 if __name__ == "__main__":
     set_ieee_style()
-    plot_charts()
+    plot_charts('qp_results_riccati.csv')
+    plot_charts('qp_results_condensed.csv')
+    plot_charts('qp_results_pos.csv')

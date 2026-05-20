@@ -11,6 +11,8 @@ stage_reg = ['RP_STAGE_MIRROR', 'PM_STAGE_MIRROR', 'M_lookahead_CM', 'PM_lookahe
 
 reg_list = no_reg + Hessian_reg + condensed_Hessian_reg + stage_reg
 
+refer_list = ['IPOPT', 'ACADOS']
+
 @dataclass
 class Regularizations_config:
     method: str = ' '

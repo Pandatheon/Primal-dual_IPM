@@ -4,80 +4,19 @@
 # parent_dir = os.path.dirname(current_dir)
 # sys.path.append(parent_dir)
 
-from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager
+from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager, AcadosOcpQp
 import casadi as ca
 import numpy as np
 
 import json
 
-class QP_From_JSON:
-    def __init__(self, json_path):
-        matrix_fields = ['Q', 'R', 'S', 'A', 'B', 'C', 'D']
-        vector_fields = ['q', 'r', 'b', 'lbx', 'ubx', 'lbu', 'ubu', 'lg', 'ug']
-
-        with open(json_path, 'r') as f:
-            data = json.load(f)
-
-        def extract_sequence(prefix):
-            seq = []
-            i = 0
-            while f"{prefix}_{i:02d}" in data:
-                if prefix in matrix_fields:
-                    seq.append(np.array(data[f"{prefix}_{i:02d}"]))
-                elif prefix in vector_fields:
-                    seq.append(np.array(data[f"{prefix}_{i:02d}"]).flatten())
-                i += 1
-            return seq if seq else None
-
-        self.Q_list = extract_sequence('Q')
-        self.R_list = extract_sequence('R')
-        self.S_list = extract_sequence('S')
-        self.q_list = extract_sequence('q')
-        self.r_list = extract_sequence('r')
-        self.A_list = extract_sequence('A')
-        self.B_list = extract_sequence('B')
-        self.b_list = extract_sequence('b')
-        self.lbx_list = extract_sequence('lbx')
-        self.ubx_list = extract_sequence('ubx')
-        self.lbu_list = extract_sequence('lbu')
-        self.ubu_list = extract_sequence('ubu')
-        self.C_list = extract_sequence('C')
-        self.D_list = extract_sequence('D')
-        self.lg_list = extract_sequence('lg')
-        self.ug_list = extract_sequence('ug')
-
-        self.N = len(self.A_list)
-        self.nx = self.A_list[0].shape[0]
-        self.nu = self.B_list[0].shape[1]
-
-        if self.lbu_list is not None:
-            self.nbu_0 = self.lbu_list[0].shape[0]
-            self.nbu = self.lbu_list[1].shape[0] if len(self.lbu_list) > 1 else 0
-        else:
-            self.nbu_0 = 0
-            self.nbu = 0
-
-        if self.lbx_list is not None:
-            self.nbx_0 = self.lbx_list[0].shape[0]
-            self.nbx = self.lbx_list[1].shape[0] if len(self.lbx_list) > 1 else 0
-        else:
-            self.nbx_0 = 0
-            self.nbx = 0
-
-        if self.lg_list is not None:
-            self.nh_0 = self.lg_list[0].shape[0]
-            self.nh = self.lg_list[1].shape[0] if len(self.lg_list) > 1 else 0
-        else:
-            self.nh_0 = 0
-            self.nh = 0
-
-def formulate_parametric_OCP_QP(QP_data):
+def formulate_parametric_OCP_QP(qp:AcadosOcpQp):
     ocp = AcadosOcp()
-    N = QP_data.N
-    nx = QP_data.nx
-    nu = QP_data.nu
-    nbx = np.max([QP_data.nbx_0, QP_data.nbx])
-    nbu = np.max([QP_data.nbu_0, QP_data.nbu])
+    ocp.model.name = 'parametric_OCP_QP'
+
+    N = qp.N
+    nx = qp.A[0].shape[0]
+    nu = qp.B[0].shape[1]
 
     # params
     A_param = AcadosParam("A", np.zeros((nx, nx)))
@@ -88,19 +27,17 @@ def formulate_parametric_OCP_QP(QP_data):
     S_param = AcadosParam("S", np.zeros((nu, nx)))
     q_param = AcadosParam("q", np.zeros((nx, 1)))
     r_param = AcadosParam("r", np.zeros((nu, 1)))
-    lbx_param = AcadosParam("lbx", np.zeros((nbx, 1)))
-    ubx_param = AcadosParam("ubx", np.zeros((nbx, 1)))
-    lbu_param = AcadosParam("lbu", np.zeros((nbu, 1)))
-    ubu_param = AcadosParam("ubu", np.zeros((nbu, 1)))
+    lbx_param = AcadosParam("lbx", np.zeros((nx, 1)))
+    ubx_param = AcadosParam("ubx", np.zeros((nx, 1)))
+    lbu_param = AcadosParam("lbu", np.zeros((nu, 1)))
+    ubu_param = AcadosParam("ubu", np.zeros((nu, 1)))
 
     param_manager = AcadosParamManager([A_param, B_param, b_param,
                                         Q_param, R_param, S_param, q_param, r_param,
                                         lbx_param, ubx_param, lbu_param, ubu_param])
     param_manager.N_horizon = N
-    param_manager.p_dyna_num = QP_data.nx*QP_data.nx + QP_data.nu*QP_data.nx + QP_data.nx
-    param_manager.p_cost_num = QP_data.nx*QP_data.nx + QP_data.nu*QP_data.nu +  QP_data.nx*QP_data.nu + QP_data.nx + QP_data.nu
-
-    ocp.model.name = 'parametric_OCP_QP'
+    param_manager.p_dyna_num = nx*nx + nu*nx + nx
+    param_manager.p_cost_num = nx*nx + nu*nu +  nx*nu + nx + nu
 
     # set up model
     x = ca.SX.sym("x", nx)
@@ -169,26 +106,28 @@ def formulate_parametric_OCP_QP(QP_data):
 json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/mock_pendulum_qp_data_000.json'
 
 def main():
-    QP_data = QP_From_JSON(json_path)
-    ocp, param_manager = formulate_parametric_OCP_QP(QP_data)
-
-    for i in range(QP_data.N):
-        param_manager.set_value(name="A", value=QP_data.A_list[i], stage=i)
-        param_manager.set_value(name="B", value=QP_data.B_list[i], stage=i)
-        param_manager.set_value(name="b", value=QP_data.b_list[i], stage=i)
-        param_manager.set_value(name="Q", value=QP_data.Q_list[i], stage=i)
-        param_manager.set_value(name="R", value=QP_data.R_list[i], stage=i)
-        param_manager.set_value(name="S", value=QP_data.S_list[i], stage=i)
-        param_manager.set_value(name="q", value=QP_data.q_list[i], stage=i)
-        param_manager.set_value(name="r", value=QP_data.r_list[i], stage=i)
+    qp = AcadosOcpQp.from_json(json_file_path=json_path)
+    ocp, param_manager = formulate_parametric_OCP_QP(qp)
+    N = qp.N
+    nx = qp.A[0].shape[0]
+    nu = qp.B[0].shape[1]
+    for i in range(qp.N):
+        param_manager.set_value(name="A", value=qp.A[i], stage=i)
+        param_manager.set_value(name="B", value=qp.B[i], stage=i)
+        param_manager.set_value(name="b", value=qp.b[i], stage=i)
+        param_manager.set_value(name="Q", value=qp.Q[i], stage=i)
+        param_manager.set_value(name="R", value=qp.R[i], stage=i)
+        param_manager.set_value(name="S", value=qp.S[i], stage=i)
+        param_manager.set_value(name="q", value=qp.q[i], stage=i)
+        param_manager.set_value(name="r", value=qp.r[i], stage=i)
         if i == 0:
-            param_manager.set_value(name="lbx", value=QP_data.lbx_list[i], stage=i)
-            param_manager.set_value(name="ubx", value=QP_data.ubx_list[i], stage=i)
-        param_manager.set_value(name="lbu", value=QP_data.lbu_list[i], stage=i)
-        param_manager.set_value(name="ubu", value=QP_data.ubu_list[i], stage=i)
+            param_manager.set_value(name="lbx", value=qp.lbx[i], stage=i)
+            param_manager.set_value(name="ubx", value=qp.ubx[i], stage=i)
+        param_manager.set_value(name="lbu", value=qp.lbu[i], stage=i)
+        param_manager.set_value(name="ubu", value=qp.ubu[i], stage=i)
 
-    param_manager.set_value(name="Q", value=QP_data.Q_list[-1], stage=QP_data.N)
-    param_manager.set_value(name="q", value=QP_data.q_list[-1], stage=QP_data.N)
+    param_manager.set_value(name="Q", value=qp.Q[-1], stage=N)
+    param_manager.set_value(name="q", value=qp.q[-1], stage=N)
 
     ocp_solver = AcadosOcpSolver(ocp, verbose=False)
     for i in range(ocp.solver_options.N_horizon):
@@ -200,22 +139,22 @@ def main():
         ocp_solver.set(i, 'p', param_dyna_cost_values)
 
         # constraints
-        end_bx = 2*QP_data.nx
-        lbu = param_cons_values[end_bx:end_bx+QP_data.nu].flatten()
-        ubu = param_cons_values[end_bx+QP_data.nu:end_bx+2*QP_data.nu].flatten()
+        end_bx = 2*nx
+        lbu = param_cons_values[end_bx:end_bx+nu].flatten()
+        ubu = param_cons_values[end_bx+nu:end_bx+2*nu].flatten()
 
         ocp_solver.constraints_set(i, 'lbu', lbu)
         ocp_solver.constraints_set(i, 'ubu', ubu)
 
         if i == 0:
-            lbx = param_cons_values[:QP_data.nx].flatten()
-            ubx = param_cons_values[QP_data.nx:2*QP_data.nx].flatten()
+            lbx = param_cons_values[:nx].flatten()
+            ubx = param_cons_values[nx:2*nx].flatten()
             ocp_solver.constraints_set(i, 'lbx', lbx)
             ocp_solver.constraints_set(i, 'ubx', ubx)
 
-    param_value_N = param_manager.get_p_stagewise_values(QP_data.N)
+    param_value_N = param_manager.get_p_stagewise_values(N)
     param_dyna_cost_values_N = param_value_N[:param_manager.p_dyna_num + param_manager.p_cost_num]
-    ocp_solver.set(QP_data.N, 'p', param_dyna_cost_values_N)
+    ocp_solver.set(N, 'p', param_dyna_cost_values_N)
 
     status = ocp_solver.solve()
     if status != 0:
@@ -223,10 +162,10 @@ def main():
     ocp_solver.print_statistics()
     cost = ocp_solver.get_cost()
     print(f"Optimal cost: {cost}")
-    x = [ocp_solver.get(k, "x") for k in range(QP_data.N+1)]
-    u = [ocp_solver.get(k, "u") for k in range(QP_data.N)]
-    lam = [ocp_solver.get(k, "lam") for k in range(QP_data.N)]
-    for k in range(QP_data.N):
+    x = [ocp_solver.get(k, "x") for k in range(N+1)]
+    u = [ocp_solver.get(k, "u") for k in range(N)]
+    lam = [ocp_solver.get(k, "lam") for k in range(N)]
+    for k in range(N):
         print(f"lam[{k}] = {lam[k]}")
 
 if __name__ == "__main__":
