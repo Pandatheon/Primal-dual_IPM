@@ -10,12 +10,12 @@ import numpy as np
 from solvers.SqpQpSolver import SqpQpSolver
 import json
 
-json_path = '/home/jingtao/Primal-dual_IPM/cases/QP_json/Pendulum_FU_INDE_RE_INDE_status_4_iter_18.json'
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/Pendulum_FU_PD_RE_PD_status_2_iter_0.json'
 
 def main():
     qp = AcadosOcpQp.from_json(json_file_path=json_path)
     N = qp.N
-    Sqp_solver = SqpQpSolver(qp, reg='PROJECT')
+    Sqp_solver = SqpQpSolver(qp)
     status = Sqp_solver.solve()
     if status != 0:
         print(f"ocp_solver returned status {status}.")

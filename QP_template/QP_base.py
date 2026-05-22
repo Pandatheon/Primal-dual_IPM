@@ -61,16 +61,33 @@ class BaseQP():
         self.name = os.path.splitext(os.path.basename(json_filepath))[0]
         matrix_fields = ['Q', 'R', 'S', 'A', 'B', 'C', 'D']
         vector_fields = ['q', 'r', 'b', 'd', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
+
+        dynamics_fields = ['A', 'B', 'b']
+        cost_fields = ['Q', 'R', 'S', 'q', 'r']
+        constraints_fields = ['C', 'D', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
+
         # Helper to dynamically extract sequences like A_00, A_01...
         def extract_sequence(prefix):
             seq = []
             i = 0
-            while f"{prefix}_{i:02d}" in data:
-                if prefix in matrix_fields:
-                    seq.append(np.array(data[f"{prefix}_{i:02d}"]))
-                elif prefix in vector_fields:
-                    seq.append(np.array(data[f"{prefix}_{i:02d}"]).flatten())
-                i += 1
+            if prefix in cost_fields + dynamics_fields:
+                while f"{prefix}_{i:02d}" in data:
+                    if prefix in matrix_fields:
+                        seq.append(np.array(data[f"{prefix}_{i:02d}"]))
+                    elif prefix in vector_fields:
+                        seq.append(np.array(data[f"{prefix}_{i:02d}"]).flatten())
+                    i += 1
+            else:
+                N = len(self.A)
+                i = 0
+                for k in range(N+1):
+                    if f"{prefix}_{k:02d}" in data:
+                        if prefix in matrix_fields:
+                            seq.append(np.array(data[f"{prefix}_{k:02d}"]))
+                        elif prefix in vector_fields:
+                            seq.append(np.array(data[f"{prefix}_{k:02d}"]).flatten())
+                    else:
+                        seq.append(np.zeros((0, self.nx if prefix in ['C'] else self.nu)))
             return seq if seq else None
 
         # Populate dynamics matrices
@@ -84,7 +101,7 @@ class BaseQP():
         self.nu = self.B[0].shape[1] if self.B else 0
 
         # Populate cost matrices and vectors
-        self.Q = extract_sequence("Q")
+        self.Q = extract_sequence("Q")[:-1]
         self.R = extract_sequence("R")
         self.S = extract_sequence("S")
         self.q = extract_sequence("q")
@@ -100,6 +117,8 @@ class BaseQP():
         if idxb is not None:
             for k in range(len(idxb)):
                 idxb_k = idxb[k]
+                if idxb_k.size == 0:
+                    continue
                 idxb_u = idxb_k[idxb_k < self.nu]
                 idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
                 Jbu_k = np.zeros((len(idxb_u), self.nu))
@@ -193,12 +212,17 @@ class BaseQP():
         ])
         return H_block
 
-    def condense_Hessian(self):
-        Gamma = np.zeros((self.N * self.nx, self.N * self.nu))
 
+    def condense_Hessian(self):
+        """
+        Compute the condensed Hessian matrix using Riccati-based exact condensing.
+        This avoids the numerically unstable Gamma.T @ Q_bar @ Gamma operation,
+        preventing condition number explosion and reducing complexity.
+        """
+        # 1. Compute state-input mapping matrix Gamma
+        Gamma = np.zeros((self.N * self.nx, self.N * self.nu))
         for i in range(self.N):
             idx_x = slice(i * self.nx, (i + 1) * self.nx)
-
             for j in range(i + 1):
                 idx_u = slice(j * self.nu, (j + 1) * self.nu)
                 if i == j:
@@ -207,22 +231,86 @@ class BaseQP():
                     prev_x = slice((i - 1) * self.nx, i * self.nx)
                     Gamma[idx_x, idx_u] = self.A[i] @ Gamma[prev_x, idx_u]
 
-        Q_list = [self.Q[k] for k in range(1, self.N)]
-        Qe_fallback = self.Q[self.N - 1] if self.N > 0 else None
-        Q_list.append(self.Q_e if self.Q_e is not None else Qe_fallback)
-        Q_bar = block_diag(*Q_list)
-        R_list = [self.R[k] for k in range(self.N)]
-        R_bar = block_diag(*R_list)
-        # Build S_bar matrix (N*nu x N*nx) for u_k^T * S_k * x_k
-        S_bar = np.zeros((self.N * self.nu, self.N * self.nx))
-        for k in range(1, self.N):
-            row_idx_u = slice(k * self.nu, (k + 1) * self.nu)  # Maps to u_k
-            col_idx_x = slice((k - 1) * self.nx, k * self.nx)  # Maps to x_k
-            S_bar[row_idx_u, col_idx_x] = self.S[k]
+        # 2. Initialize dense Hessian and terminal cost matrix
+        Hc = np.zeros((self.N * self.nu, self.N * self.nu))
+        P_next = self.Q_e if self.Q_e is not None else self.Q[-1]
 
-        # Pure quadratic term computation including S
-        Hc = Gamma.T @ Q_bar @ Gamma + R_bar + S_bar @ Gamma + Gamma.T @ S_bar.T
+        # Enforce symmetry to prevent numerical drift
+        P_next = (P_next + P_next.T) / 2.0
+
+        # 3. Backward Riccati sweep for exact condensing
+        for i in range(self.N - 1, -1, -1):
+            A_i = self.A[i]
+            B_i = self.B[i]
+
+            # Compute cross-coupling matrix M_i
+            M_i = self.S[i] + B_i.T @ P_next @ A_i
+
+            # Compute diagonal block Hc[i, i]
+            idx_u_i = slice(i * self.nu, (i + 1) * self.nu)
+            Hc[idx_u_i, idx_u_i] = self.R[i] + B_i.T @ P_next @ B_i
+
+            # Update Riccati cost matrix P_i for the next iteration (i-1)
+            P_next = self.Q[i] + A_i.T @ P_next @ A_i
+            P_next = (P_next + P_next.T) / 2.0  # Crucial for numerical stability
+
+            # Compute off-diagonal blocks using the mapping Gamma
+            if i > 0:
+                idx_x_prev = slice((i - 1) * self.nx, i * self.nx)
+
+                for j in range(i):
+                    idx_u_j = slice(j * self.nu, (j + 1) * self.nu)
+                    Gamma_ij = Gamma[idx_x_prev, idx_u_j]
+
+                    # Compute interaction between future state cost and past inputs
+                    H_ij = M_i @ Gamma_ij
+
+                    # Fill symmetric blocks
+                    Hc[idx_u_i, idx_u_j] = H_ij
+                    Hc[idx_u_j, idx_u_i] = H_ij.T
+
+        # Ensure the final condensed Hessian is perfectly symmetric
+        Hc = (Hc + Hc.T) / 2.0
+
         return Hc
+
+
+    def condense_gradient(self, x0, rhs_kkt):
+        """
+        Compute the condensed gradient vector using Riccati-based exact condensing.
+        This avoids the numerically unstable Gamma.T @ g_bar operation,
+        preventing condition number explosion and reducing complexity.
+        """
+        # 1. Forward Pass: Simulate state trajectory with zero control input
+        # Complexity: O(N)
+        X_sim = np.zeros((self.N + 1, self.nx))
+        X_sim[0] = x0
+        for k in range(self.N):
+            X_sim[k+1] = self.A[k] @ X_sim[k] + rhs_kkt.rb[k]
+
+        # 2. Backward Pass: Adjoint variables and condensed gradient computation
+        # Complexity: O(N)
+        gc = np.zeros(self.N * self.nu)
+
+        # Terminal condition for the adjoint variable (costate p_N)
+        q_N = rhs_kkt.rg[-1][:self.nx]
+        p_next = q_N + self.Q_e @ X_sim[self.N]
+
+        for k in range(self.N - 1, -1, -1):
+            idx_u = slice(k * self.nu, (k + 1) * self.nu)
+
+            # Extract stage-wise linear penalties
+            q_k = rhs_kkt.rg[k][:self.nx]
+            r_k = rhs_kkt.rg[k][self.nx:]
+
+            # Compute condensed gradient block for step k
+            gc[idx_u] = r_k + self.S[k] @ X_sim[k] + self.B[k].T @ p_next
+
+            # Propagate adjoint variable backwards (skip for k=0)
+            if k > 0:
+                p_next = q_k + self.Q[k] @ X_sim[k] + self.A[k].T @ p_next
+        return gc
+
 
     def partial_condense_range(self, start_idx, end_idx):
         """

@@ -37,7 +37,7 @@ class Condensed_IPM():
                 condensed_Hessian_reg = (L @ np.diag(D) @ L.T)[np.ix_(p_inv, p_inv)]
                 Hc_chol = np.linalg.cholesky(condensed_Hessian_reg)
             else:
-                raise ValueError(f"Unknown regularization method: {self.reg_config.method}, set self.reg_config.method to 'PROJECT_H_M', 'MIRROR_H_M' or 'CHOLESKY_M'")
+                raise ValueError(f"Unknown regularization method: {self.reg_config.method}, set self.reg_config.method to 'PROJECT_M', 'MIRROR_M' or 'CHOLESKY_M'")
 
         y1 = np.linalg.solve(Hc_chol, -gc)
         delta_u_bar = np.linalg.solve(Hc_chol.T, y1)
@@ -80,65 +80,22 @@ class Condensed_IPM():
 
     def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
         x0 = np.zeros(self.qp.nx)
-        nx = self.qp.nx
         self.rhs_kkt = copy.deepcopy(rhs)
 
         modified_qp = self.modify_QP(self.qp, prev_sol)
 
         condensed_Hessian = modified_qp.condense_Hessian()
+        gc = modified_qp.condense_gradient(x0, self.rhs_kkt)
 
-        Gamma = np.zeros((modified_qp.N * modified_qp.nx, modified_qp.N * modified_qp.nu))
-        Phi = np.zeros((modified_qp.N * modified_qp.nx, modified_qp.nx))
-        upsilon_b = np.zeros(modified_qp.N * modified_qp.nx)
-
-        for k in range(modified_qp.N):
-            A_k = modified_qp.A[k]
-            b_k = self.rhs_kkt.rb[k]
-            idx_x = slice(k * modified_qp.nx, (k + 1) * modified_qp.nx)
-
-            if k == 0:
-                Phi[idx_x, :] = A_k
-                upsilon_b[idx_x] = b_k
-            else:
-                prev_x = slice((k - 1) * modified_qp.nx, k * modified_qp.nx)
-                Phi[idx_x, :] = modified_qp.A[k] @ Phi[prev_x, :]
-                upsilon_b[idx_x] = A_k @ upsilon_b[prev_x] + b_k
-
-            # Gamma matrix (same as in condense_Hessian)
-            for j in range(k + 1):
-                idx_u = slice(j * modified_qp.nu, (j + 1) * modified_qp.nu)
-                if k == j:
-                    Gamma[idx_x, idx_u] = modified_qp.B[j]
-                else:
-                    prev_x = slice((k - 1) * modified_qp.nx, k * modified_qp.nx)
-                    Gamma[idx_x, idx_u] = modified_qp.A[k] @ Gamma[prev_x, idx_u]
-
-        # Stack Q and q
-        Q_list = [modified_qp.Q[k] for k in range(1, modified_qp.N)]
-        Q_list.append(modified_qp.Q_e)
-        Q_bar = block_diag(*Q_list)
-
-        q_list = [self.rhs_kkt.rg[k][:nx] for k in range(1, modified_qp.N)]
-        q_list.append(self.rhs_kkt.rg[-1][:nx])
-        q_bar = np.concatenate(q_list)
-
-        r_list = [self.rhs_kkt.rg[k][nx:] for k in range(modified_qp.N)]
-        r_bar = np.concatenate(r_list)
-
-        X_zero_input = Phi @ x0 + upsilon_b
-        
-        # Build S_bar for k = 1 to N-1
-        S_bar = np.zeros((modified_qp.N * modified_qp.nu, modified_qp.N * modified_qp.nx))
-        for k in range(1, modified_qp.N):
-            row_idx_u = slice(k * modified_qp.nu, (k + 1) * modified_qp.nu)
-            col_idx_x = slice((k - 1) * modified_qp.nx, k * modified_qp.nx)
-            S_bar[row_idx_u, col_idx_x] = modified_qp.S[k]
-
-        # Calculate condensed gradient including S contributions
-        gc = r_bar + Gamma.T @ (q_bar + Q_bar @ X_zero_input) + S_bar @ X_zero_input
-
-        # Add contribution of S_0 @ x_0 to the first control step u_0
-        gc[:modified_qp.nu] += modified_qp.S[0] @ x0
+        # #####################
+        # from utils.utilis import test_condensing
+        # error = test_condensing(modified_qp, condensed_Hessian)
+        # max_entry = np.max(np.abs(condensed_Hessian))
+        # print(f"Max entry of condensed Hessian: {max_entry:.2e}")
+        # if error > 1e-6:
+        #     print(f"Warning: Condensed Hessian reconstruction error is {error:.2e}, which may indicate an issue with the condensing process.")
+        #     test_condensing(modified_qp, condensed_Hessian)
+        # #####################
 
         return (condensed_Hessian, gc)
 

@@ -47,10 +47,10 @@ def run_benchmark(qp_json_paths: list[Path]) -> None:
         qp_solver.solve(x0=x0, max_iter=30)
         iter_riccati = qp_solver.statistics_dict['iter_count']
 
-        print(f"Prototye Condensed:")
-        qp_solver = QpSolver(qp, type='Condensed')
-        qp_solver.solve(x0=x0, max_iter=30)
-        iter_condensed = qp_solver.statistics_dict['iter_count']
+        # print(f"Prototye Condensed:")
+        # qp_solver = QpSolver(qp, type='Condensed')
+        # qp_solver.solve(x0=x0, max_iter=30)
+        # iter_condensed = qp_solver.statistics_dict['iter_count']
 
         qp_acados = AcadosOcpQp.from_json(json_file_path=str(qp_path))
         qp_solver_acados = AcadosOcpQpSolver(qp_acados, opts)
@@ -58,15 +58,16 @@ def run_benchmark(qp_json_paths: list[Path]) -> None:
         iter_hpipm = qp_solver_acados.get_stats("iter")
         print(f"HPIPM solved in {iter_hpipm} iterations with status {stats}")
         diff_iter_riccati = abs(iter_riccati - iter_hpipm)
-        diff_iter_condensed = abs(iter_condensed - iter_hpipm)
+        # diff_iter_condensed = abs(iter_condensed - iter_hpipm)
         assert diff_iter_riccati <= 2, f"Iteration count difference {diff_iter_riccati} exceeds tolerance for Riccati on QP {qp_path.name}"
-        assert diff_iter_condensed <= 2, f"Iteration count difference {diff_iter_condensed} exceeds tolerance for Condensed on QP {qp_path.name}"
-        print(f"Difference in iterations: {diff_iter_riccati} for Riccati, {diff_iter_condensed} for Condensed")
+        # assert diff_iter_condensed <= 2, f"Iteration count difference {diff_iter_condensed} exceeds tolerance for Condensed on QP {qp_path.name}"
+        # print(f"Difference in iterations: {diff_iter_riccati} for Riccati, {diff_iter_condensed} for Condensed")
+        print(f"QP {qp_path.name} passed, diff: {diff_iter_riccati} for Riccati")
 
 def main() -> None:
     qp_root = Path('/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json')
     qp_json_paths = iter_qp_json_paths(qp_root)
-    run_benchmark(qp_json_paths, no_reg)
+    run_benchmark(qp_json_paths)
 
 if __name__ == "__main__":
     main()

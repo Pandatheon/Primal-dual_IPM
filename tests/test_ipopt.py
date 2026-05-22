@@ -8,7 +8,7 @@ import numpy as np
 from acados_template import AcadosOcpQp, AcadosCasadiOcpQpSolver
 
 
-json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/mock_pendulum_qp_data_000.json'
+json_path = '/home/jingtao/Primal-dual_IPM/tests/QP_json/Pos_QP_json/Pendulum_FU_PD_RE_PD_status_2_iter_1.json'
 
 def main():
 

@@ -96,8 +96,8 @@ class QpSolver:
             Jbx_k = self.qp.Jbx[k]
             Jbu_k = self.qp.Jbu[k]
             d_k = self.qp.d[k]
-            C_k = self.qp.C[k][2*nb:]
-            D_k = self.qp.D[k][2*nb:]
+            C_k = self.qp.C[k][end_lb+nb:]
+            D_k = self.qp.D[k][end_lb+nb:]
 
             bounded_x = Jbx_k @ self.solution.x[k] if Jbx_k.shape[0] > 0 else np.array([])
             bounded_u = Jbu_k @ self.solution.u[k] if Jbu_k.shape[0] > 0 else np.array([])
@@ -136,7 +136,7 @@ class QpSolver:
 
             y_gen = C_k @ self.solution.x[k] + D_k @ self.solution.u[k]
 
-            s_lb_gen_raw = y_gen - d_lb_gen
+            s_lb_gen_raw = y_gen + d_lb_gen
             s_ub_gen_raw = d_ub_gen - y_gen
 
             s_lb_gen = np.maximum(s_lb_gen_raw, threshold)
