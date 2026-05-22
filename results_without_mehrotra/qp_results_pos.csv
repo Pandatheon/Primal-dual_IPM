@@ -1,161 +1,93 @@
-QP_name                  , Regularization, Iteration, Cost                     , Status
-mock_pendulum_qp_data_000, Riccati       ,      14  ,     6477728.332860973    ,      0
-mock_pendulum_qp_data_000, Condensed     ,      14  ,     6477728.332860965    ,      0
-mock_pendulum_qp_data_000, IPOPT         ,      16  ,     6477741.495561639    ,      0
-mock_pendulum_qp_data_000, ACADOS        ,      14.0,     6477741.685489732    ,      0
-mock_pendulum_qp_data_001, Riccati       ,      12  ,     6289511.8882747255   ,      0
-mock_pendulum_qp_data_001, Condensed     ,      12  ,     6289511.888274727    ,      0
-mock_pendulum_qp_data_001, IPOPT         ,      17  ,     6289479.535122333    ,      0
-mock_pendulum_qp_data_001, ACADOS        ,      12.0,     6289479.559999099    ,      0
-mock_pendulum_qp_data_002, Riccati       ,       3  ,     1968113.4523024256   ,      0
-mock_pendulum_qp_data_002, Condensed     ,       3  ,     1968113.4523024252   ,      0
-mock_pendulum_qp_data_002, IPOPT         ,       6  ,     1968114.3385114288   ,      0
-mock_pendulum_qp_data_002, ACADOS        ,       3.0,     1968114.3385114286   ,      0
-mock_pendulum_qp_data_003, Riccati       ,      13  ,      686950.5770146132   ,      0
-mock_pendulum_qp_data_003, Condensed     ,      13  ,      686950.5770146128   ,      0
-mock_pendulum_qp_data_003, IPOPT         ,      17  ,      686884.463781269    ,      0
-mock_pendulum_qp_data_003, ACADOS        ,      13.0,      686884.4653423914   ,      0
-mock_pendulum_qp_data_004, Riccati       ,       3  ,      155924.10534668074  ,      0
-mock_pendulum_qp_data_004, Condensed     ,       3  ,      155924.1053466808   ,      0
-mock_pendulum_qp_data_004, IPOPT         ,       7  ,      155915.86227598487  ,      0
-mock_pendulum_qp_data_004, ACADOS        ,       3.0,      155915.86227598487  ,      0
-mock_pendulum_qp_data_005, Riccati       ,       3  ,      426679.2427588874   ,      0
-mock_pendulum_qp_data_005, Condensed     ,       3  ,      426679.24275888735  ,      0
-mock_pendulum_qp_data_005, IPOPT         ,       7  ,      426565.4019194588   ,      0
-mock_pendulum_qp_data_005, ACADOS        ,       3.0,      426565.40191945893  ,      0
-mock_pendulum_qp_data_006, Riccati       ,       3  ,    41633289.797789104    ,      0
-mock_pendulum_qp_data_006, Condensed     ,       3  ,    41633289.797789104    ,      0
-mock_pendulum_qp_data_006, IPOPT         ,       7  ,    41633229.53202316     ,      0
-mock_pendulum_qp_data_006, ACADOS        ,       3.0,    41633229.53202315     ,      0
-mock_pendulum_qp_data_007, Riccati       ,      20  ,    12313612.83716208     ,      0
-mock_pendulum_qp_data_007, Condensed     ,      20  ,    12313612.837162089    ,      0
-mock_pendulum_qp_data_007, IPOPT         ,      28  ,    12313626.445559656    ,      0
-mock_pendulum_qp_data_007, ACADOS        ,      19.0,    12313626.658634372    ,      0
-mock_pendulum_qp_data_008, Riccati       ,      15  ,      627329.8327036438   ,      0
-mock_pendulum_qp_data_008, Condensed     ,      15  ,      627329.8327036437   ,      0
-mock_pendulum_qp_data_008, IPOPT         ,      17  ,      627389.4718957648   ,      0
-mock_pendulum_qp_data_008, ACADOS        ,      15.0,      627389.4757746599   ,      0
-mock_pendulum_qp_data_009, Riccati       ,      18  ,     3128797.8693251256   ,      0
-mock_pendulum_qp_data_009, Condensed     ,      18  ,     3128797.8693251247   ,      0
-mock_pendulum_qp_data_009, IPOPT         ,      25  ,     3128921.055855372    ,      0
-mock_pendulum_qp_data_009, ACADOS        ,      18.0,     3128921.086559547    ,      0
-mock_pendulum_qp_data_010, Riccati       ,       5  ,      383795.31013114675  ,      0
-mock_pendulum_qp_data_010, Condensed     ,       5  ,      383795.3101311467   ,      0
-mock_pendulum_qp_data_010, IPOPT         ,       9  ,      383665.7675150945   ,      0
-mock_pendulum_qp_data_010, ACADOS        ,       5.0,      383665.7678045926   ,      0
-mock_pendulum_qp_data_011, Riccati       ,      39  ,     8208910.176663006    ,      0
-mock_pendulum_qp_data_011, Condensed     ,      39  ,     8208910.176663006    ,      0
-mock_pendulum_qp_data_011, IPOPT         ,      45  ,     8209028.170397306    ,      0
-mock_pendulum_qp_data_011, ACADOS        ,      40.0,     8209028.221084132    ,      0
-mock_pendulum_qp_data_012, Riccati       ,      13  ,    30757433.19369544     ,      0
-mock_pendulum_qp_data_012, Condensed     ,      13  ,    30757433.193695456    ,      0
-mock_pendulum_qp_data_012, IPOPT         ,      16  ,    30757415.08177608     ,      0
-mock_pendulum_qp_data_012, ACADOS        ,      13.0,    30757415.83351353     ,      0
-mock_pendulum_qp_data_013, Riccati       ,      12  ,     1150527.2464004443   ,      0
-mock_pendulum_qp_data_013, Condensed     ,      12  ,     1150527.2464004434   ,      0
-mock_pendulum_qp_data_013, IPOPT         ,      14  ,     1150489.2233926884   ,      0
-mock_pendulum_qp_data_013, ACADOS        ,      12.0,     1150489.2240587708   ,      0
-mock_pendulum_qp_data_014, Riccati       ,      10  ,     2988380.785602227    ,      0
-mock_pendulum_qp_data_014, Condensed     ,      10  ,     2988380.785602226    ,      0
-mock_pendulum_qp_data_014, IPOPT         ,      12  ,     2988348.447799796    ,      0
-mock_pendulum_qp_data_014, ACADOS        ,      10.0,     2988348.4721420375   ,      0
-mock_pendulum_qp_data_015, Riccati       ,      12  , 30851337938.07827        ,      0
-mock_pendulum_qp_data_015, Condensed     ,      12  , 30851337938.078297       ,      0
-mock_pendulum_qp_data_015, IPOPT         ,      16  , 30851337763.560265       ,      0
-mock_pendulum_qp_data_015, ACADOS        ,      12.0, 30851337945.564693       ,      0
-mock_pendulum_qp_data_016, Riccati       ,      14  ,    15019848.731620884    ,      0
-mock_pendulum_qp_data_016, Condensed     ,      14  ,    15019848.731620882    ,      0
-mock_pendulum_qp_data_016, IPOPT         ,      15  ,    15019810.259482311    ,      0
-mock_pendulum_qp_data_016, ACADOS        ,      14.0,    15019810.866221119    ,      0
-mock_pendulum_qp_data_017, Riccati       ,      18  ,   127364924.65855736     ,      0
-mock_pendulum_qp_data_017, Condensed     ,      18  ,   127364924.65855731     ,      0
-mock_pendulum_qp_data_017, IPOPT         ,      21  ,   127364927.12059233     ,      0
-mock_pendulum_qp_data_017, ACADOS        ,      18.0,   127364931.99404842     ,      0
-mock_pendulum_qp_data_018, Riccati       ,      14  ,      100830.87396635517  ,      0
-mock_pendulum_qp_data_018, Condensed     ,      14  ,      100830.87396635515  ,      0
-mock_pendulum_qp_data_018, IPOPT         ,      14  ,      100865.95957271097  ,      0
-mock_pendulum_qp_data_018, ACADOS        ,      14.0,      100865.95977497376  ,      0
-mock_pendulum_qp_data_019, Riccati       ,      12  ,      827840.7912973992   ,      0
-mock_pendulum_qp_data_019, Condensed     ,      12  ,      827840.7912973987   ,      0
-mock_pendulum_qp_data_019, IPOPT         ,      14  ,      827646.5413207096   ,      0
-mock_pendulum_qp_data_019, ACADOS        ,      12.0,      827646.5440453977   ,      0
-mock_pendulum_qp_data_020, Riccati       ,      12  ,     3225580.843062439    ,      0
-mock_pendulum_qp_data_020, Condensed     ,      12  ,     3225580.843062439    ,      0
-mock_pendulum_qp_data_020, IPOPT         ,      16  ,     3225536.993429209    ,      0
-mock_pendulum_qp_data_020, ACADOS        ,      12.0,     3225536.9974830006   ,      0
-mock_pendulum_qp_data_021, Riccati       ,      22  ,     7484767.271721929    ,      0
-mock_pendulum_qp_data_021, Condensed     ,      22  ,     7484767.271721928    ,      0
-mock_pendulum_qp_data_021, IPOPT         ,      32  ,     7484910.069274776    ,      0
-mock_pendulum_qp_data_021, ACADOS        ,      22.0,     7484910.246930307    ,      0
-mock_pendulum_qp_data_022, Riccati       ,       4  ,        2850.309857958123 ,      0
-mock_pendulum_qp_data_022, Condensed     ,       4  ,        2850.3098579581238,      0
-mock_pendulum_qp_data_022, IPOPT         ,       9  ,        2844.2903278943104,      0
-mock_pendulum_qp_data_022, ACADOS        ,       4.0,        2844.290328144223 ,      0
-mock_pendulum_qp_data_023, Riccati       ,      14  ,      175664.28249423046  ,      0
-mock_pendulum_qp_data_023, Condensed     ,      14  ,      175664.2824942305   ,      0
-mock_pendulum_qp_data_023, IPOPT         ,      13  ,      175684.56329309364  ,      0
-mock_pendulum_qp_data_023, ACADOS        ,      14.0,      175684.5634921766   ,      0
-mock_pendulum_qp_data_024, Riccati       ,      11  ,      815972.5917236116   ,      0
-mock_pendulum_qp_data_024, Condensed     ,      11  ,      815972.5917236111   ,      0
-mock_pendulum_qp_data_024, IPOPT         ,      13  ,      815972.8522118592   ,      0
-mock_pendulum_qp_data_024, ACADOS        ,      11.0,      815972.8575630812   ,      0
-mock_pendulum_qp_data_025, Riccati       ,      23  ,      487802.082778282    ,      0
-mock_pendulum_qp_data_025, Condensed     ,      23  ,      487802.0827782826   ,      0
-mock_pendulum_qp_data_025, IPOPT         ,      27  ,      487763.0627766429   ,      0
-mock_pendulum_qp_data_025, ACADOS        ,      23.0,      487763.0806464145   ,      0
-mock_pendulum_qp_data_026, Riccati       ,       3  ,    19810389.2057673      ,      0
-mock_pendulum_qp_data_026, Condensed     ,       3  ,    19810389.205767304    ,      0
-mock_pendulum_qp_data_026, IPOPT         ,       7  ,    19810380.340651438    ,      0
-mock_pendulum_qp_data_026, ACADOS        ,       3.0,    19810380.34065145     ,      0
-mock_pendulum_qp_data_027, Riccati       ,      15  ,   531582757.7082729      ,      0
-mock_pendulum_qp_data_027, Condensed     ,      15  ,   531582757.7082731      ,      0
-mock_pendulum_qp_data_027, IPOPT         ,      14  ,   531582775.5784302      ,      0
-mock_pendulum_qp_data_027, ACADOS        ,      15.0,   531582777.67353        ,      0
-mock_pendulum_qp_data_028, Riccati       ,       6  ,     3094139.658563948    ,      0
-mock_pendulum_qp_data_028, Condensed     ,       6  ,     3094139.6585639473   ,      0
-mock_pendulum_qp_data_028, IPOPT         ,      10  ,     3094161.176505355    ,      0
-mock_pendulum_qp_data_028, ACADOS        ,       6.0,     3094161.179509431    ,      0
-mock_pendulum_qp_data_029, Riccati       ,      18  ,    18987340.945487153    ,      0
-mock_pendulum_qp_data_029, Condensed     ,      18  ,    18987340.945487164    ,      0
-mock_pendulum_qp_data_029, IPOPT         ,      20  ,    18986941.128705095    ,      0
-mock_pendulum_qp_data_029, ACADOS        ,      18.0,    18986941.324656572    ,      0
-mock_pendulum_qp_data_030, Riccati       ,      24  ,    84990910.4452396      ,      0
-mock_pendulum_qp_data_030, Condensed     ,      24  ,    84990910.4452396      ,      0
-mock_pendulum_qp_data_030, IPOPT         ,      36  ,    84990821.45046209     ,      0
-mock_pendulum_qp_data_030, ACADOS        ,      23.0,    84990827.94950098     ,      0
-mock_pendulum_qp_data_031, Riccati       ,       3  ,      195531.8676797774   ,      0
-mock_pendulum_qp_data_031, Condensed     ,       3  ,      195531.8676797774   ,      0
-mock_pendulum_qp_data_031, IPOPT         ,       7  ,      195337.2560255802   ,      0
-mock_pendulum_qp_data_031, ACADOS        ,       3.0,      195337.25602558028  ,      0
-mock_pendulum_qp_data_032, Riccati       ,       9  ,     4179371.8624417554   ,      0
-mock_pendulum_qp_data_032, Condensed     ,       9  ,     4179371.862441755    ,      0
-mock_pendulum_qp_data_032, IPOPT         ,      11  ,     4179517.235919073    ,      0
-mock_pendulum_qp_data_032, ACADOS        ,       9.0,     4179517.237642306    ,      0
-mock_pendulum_qp_data_033, Riccati       ,       5  ,      565353.8945451444   ,      0
-mock_pendulum_qp_data_033, Condensed     ,       5  ,      565353.8945451445   ,      0
-mock_pendulum_qp_data_033, IPOPT         ,       8  ,      565358.9478889867   ,      0
-mock_pendulum_qp_data_033, ACADOS        ,       5.0,      565358.947974002    ,      0
-mock_pendulum_qp_data_034, Riccati       ,       3  ,     1022247.9103474672   ,      0
-mock_pendulum_qp_data_034, Condensed     ,       3  ,     1022247.9103474673   ,      0
-mock_pendulum_qp_data_034, IPOPT         ,       6  ,     1022247.8928325104   ,      0
-mock_pendulum_qp_data_034, ACADOS        ,       2.0,     1022247.8928325099   ,      0
-mock_pendulum_qp_data_035, Riccati       ,      20  ,  1340676852.5867271      ,      0
-mock_pendulum_qp_data_035, Condensed     ,      20  ,  1340676852.5867271      ,      0
-mock_pendulum_qp_data_035, IPOPT         ,      33  ,  1340676820.618437       ,      0
-mock_pendulum_qp_data_035, ACADOS        ,      20.0,  1340676838.6508203      ,      0
-mock_pendulum_qp_data_036, Riccati       ,       6  ,      741232.2059079539   ,      0
-mock_pendulum_qp_data_036, Condensed     ,       6  ,      741232.205907954    ,      0
-mock_pendulum_qp_data_036, IPOPT         ,      10  ,      741234.341105991    ,      0
-mock_pendulum_qp_data_036, ACADOS        ,       6.0,      741234.3411208071   ,      0
-mock_pendulum_qp_data_037, Riccati       ,      15  ,     5284488.055362362    ,      0
-mock_pendulum_qp_data_037, Condensed     ,      15  ,     5284488.055362362    ,      0
-mock_pendulum_qp_data_037, IPOPT         ,      21  ,     5284372.691700013    ,      0
-mock_pendulum_qp_data_037, ACADOS        ,      15.0,     5284372.816892789    ,      0
-mock_pendulum_qp_data_038, Riccati       ,      19  ,    16022219.897640513    ,      0
-mock_pendulum_qp_data_038, Condensed     ,      19  ,    16022219.89764051     ,      0
-mock_pendulum_qp_data_038, IPOPT         ,      28  ,    16022153.167631289    ,      0
-mock_pendulum_qp_data_038, ACADOS        ,      19.0,    16022153.279821627    ,      0
-mock_pendulum_qp_data_039, Riccati       ,       3  ,     4505694.686957026    ,      0
-mock_pendulum_qp_data_039, Condensed     ,       3  ,     4505694.686957026    ,      0
-mock_pendulum_qp_data_039, IPOPT         ,       7  ,     4505792.966893307    ,      0
-mock_pendulum_qp_data_039, ACADOS        ,       3.0,     4505792.966893309    ,      0
+QP_name,Regularization,Iteration,Cost,Status
+Pendulum_FU_PD_RE_PD_status_2_iter_0,Riccati,6,-2398.971104755646,0
+Pendulum_FU_PD_RE_PD_status_2_iter_0,Condensed,,,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_0,IPOPT,11,-2398.9711222168444,0
+Pendulum_FU_PD_RE_PD_status_2_iter_0,ACADOS,6.0,-2398.9711047556625,0
+Pendulum_FU_PD_RE_PD_status_2_iter_1,Riccati,6,1129.5300329816077,0
+Pendulum_FU_PD_RE_PD_status_2_iter_1,Condensed,300,1129.5300329816075,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_1,IPOPT,11,1129.5300288796961,0
+Pendulum_FU_PD_RE_PD_status_2_iter_1,ACADOS,6.0,1129.5300329816077,0
+Pendulum_FU_PD_RE_PD_status_2_iter_10,Riccati,5,-11.06612394445124,0
+Pendulum_FU_PD_RE_PD_status_2_iter_10,Condensed,300,-11.0661239446964,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_10,IPOPT,8,-11.066135006272336,0
+Pendulum_FU_PD_RE_PD_status_2_iter_10,ACADOS,5.0,-11.066123944450956,0
+Pendulum_FU_PD_RE_PD_status_2_iter_2,Riccati,8,2621.51763058158,0
+Pendulum_FU_PD_RE_PD_status_2_iter_2,Condensed,,,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_2,IPOPT,13,2621.5175738344087,0
+Pendulum_FU_PD_RE_PD_status_2_iter_2,ACADOS,8.0,2621.517630581583,0
+Pendulum_FU_PD_RE_PD_status_2_iter_3,Riccati,5,-6344.922059215233,0
+Pendulum_FU_PD_RE_PD_status_2_iter_3,Condensed,,,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_3,IPOPT,11,-6344.922063892465,0
+Pendulum_FU_PD_RE_PD_status_2_iter_3,ACADOS,5.0,-6344.922059215234,0
+Pendulum_FU_PD_RE_PD_status_2_iter_4,Riccati,4,507.5323910556197,0
+Pendulum_FU_PD_RE_PD_status_2_iter_4,Condensed,300,507.5323910556075,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_4,IPOPT,11,507.5323800702122,0
+Pendulum_FU_PD_RE_PD_status_2_iter_4,ACADOS,4.0,507.5323910556079,0
+Pendulum_FU_PD_RE_PD_status_2_iter_5,Riccati,5,-10.229095333238668,0
+Pendulum_FU_PD_RE_PD_status_2_iter_5,Condensed,300,-10.229095333245645,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_5,IPOPT,8,-10.229106343180653,0
+Pendulum_FU_PD_RE_PD_status_2_iter_5,ACADOS,5.0,-10.229095333244556,0
+Pendulum_FU_PD_RE_PD_status_2_iter_6,Riccati,5,-9.865003072715073,0
+Pendulum_FU_PD_RE_PD_status_2_iter_6,Condensed,300,-9.86500307275223,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_6,IPOPT,8,-9.865014120244961,0
+Pendulum_FU_PD_RE_PD_status_2_iter_6,ACADOS,5.0,-9.865003072728854,0
+Pendulum_FU_PD_RE_PD_status_2_iter_7,Riccati,5,-10.509650350727146,0
+Pendulum_FU_PD_RE_PD_status_2_iter_7,Condensed,300,-10.509650350833706,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_7,IPOPT,8,-10.509661406329935,0
+Pendulum_FU_PD_RE_PD_status_2_iter_7,ACADOS,5.0,-10.509650350727028,0
+Pendulum_FU_PD_RE_PD_status_2_iter_8,Riccati,5,-10.844244562511062,0
+Pendulum_FU_PD_RE_PD_status_2_iter_8,Condensed,300,-10.844244562687873,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_8,IPOPT,8,-10.844255621874503,0
+Pendulum_FU_PD_RE_PD_status_2_iter_8,ACADOS,5.0,-10.844244562510866,0
+Pendulum_FU_PD_RE_PD_status_2_iter_9,Riccati,5,-10.997667431303329,0
+Pendulum_FU_PD_RE_PD_status_2_iter_9,Condensed,,,-1
+Pendulum_FU_PD_RE_PD_status_2_iter_9,IPOPT,8,-10.99767849236945,0
+Pendulum_FU_PD_RE_PD_status_2_iter_9,ACADOS,5.0,-10.997667431303084,0
+mock_pendulum_qp_data_000,Riccati,14,6477728.332860973,0
+mock_pendulum_qp_data_000,Condensed,14,6477728.33286097,0
+mock_pendulum_qp_data_000,IPOPT,16,6477741.495561639,0
+mock_pendulum_qp_data_000,ACADOS,14.0,6477741.685489732,0
+mock_pendulum_qp_data_001,Riccati,12,6289511.8882747255,0
+mock_pendulum_qp_data_001,Condensed,12,6289511.8882747255,0
+mock_pendulum_qp_data_001,IPOPT,17,6289479.535122333,0
+mock_pendulum_qp_data_001,ACADOS,12.0,6289479.559999099,0
+mock_pendulum_qp_data_002,Riccati,3,1968113.4523024256,0
+mock_pendulum_qp_data_002,Condensed,3,1968113.4523024256,0
+mock_pendulum_qp_data_002,IPOPT,6,1968114.3385114288,0
+mock_pendulum_qp_data_002,ACADOS,3.0,1968114.3385114286,0
+mock_pendulum_qp_data_003,Riccati,13,686950.5770146132,0
+mock_pendulum_qp_data_003,Condensed,13,686950.5770146126,0
+mock_pendulum_qp_data_003,IPOPT,17,686884.463781269,0
+mock_pendulum_qp_data_003,ACADOS,13.0,686884.4653423914,0
+mock_pendulum_qp_data_004,Riccati,3,155924.10534668074,0
+mock_pendulum_qp_data_004,Condensed,3,155924.1053466807,0
+mock_pendulum_qp_data_004,IPOPT,7,155915.86227598487,0
+mock_pendulum_qp_data_004,ACADOS,3.0,155915.86227598487,0
+mock_pendulum_qp_data_005,Riccati,3,426679.2427588874,0
+mock_pendulum_qp_data_005,Condensed,3,426679.24275888747,0
+mock_pendulum_qp_data_005,IPOPT,7,426565.4019194588,0
+mock_pendulum_qp_data_005,ACADOS,3.0,426565.40191945893,0
+mock_pendulum_qp_data_030,Riccati,24,84990910.4452396,0
+mock_pendulum_qp_data_030,Condensed,24,84990910.44523963,0
+mock_pendulum_qp_data_030,IPOPT,36,84990821.45046209,0
+mock_pendulum_qp_data_030,ACADOS,23.0,84990827.94950098,0
+mock_pendulum_qp_data_031,Riccati,3,195531.8676797774,0
+mock_pendulum_qp_data_031,Condensed,3,195531.86767977744,0
+mock_pendulum_qp_data_031,IPOPT,7,195337.2560255802,0
+mock_pendulum_qp_data_031,ACADOS,3.0,195337.25602558028,0
+mock_pendulum_qp_data_032,Riccati,9,4179371.8624417554,0
+mock_pendulum_qp_data_032,Condensed,9,4179371.862441756,0
+mock_pendulum_qp_data_032,IPOPT,11,4179517.235919073,0
+mock_pendulum_qp_data_032,ACADOS,9.0,4179517.237642306,0
+mock_pendulum_qp_data_033,Riccati,5,565353.8945451444,0
+mock_pendulum_qp_data_033,Condensed,5,565353.8945451444,0
+mock_pendulum_qp_data_033,IPOPT,8,565358.9478889867,0
+mock_pendulum_qp_data_033,ACADOS,5.0,565358.947974002,0
+mock_pendulum_qp_data_034,Riccati,3,1022247.9103474672,0
+mock_pendulum_qp_data_034,Condensed,3,1022247.9103474676,0
+mock_pendulum_qp_data_034,IPOPT,6,1022247.8928325104,0
+mock_pendulum_qp_data_034,ACADOS,2.0,1022247.8928325099,0
+mock_pendulum_qp_data_035,Riccati,20,1340676852.5867271,0
+mock_pendulum_qp_data_035,Condensed,20,1340676852.5867271,0
+mock_pendulum_qp_data_035,IPOPT,33,1340676820.618437,0
+mock_pendulum_qp_data_035,ACADOS,20.0,1340676838.6508203,0

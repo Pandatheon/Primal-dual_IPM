@@ -159,9 +159,11 @@ def regularize_QP(
         else:
             raise ValueError(f"Unknown regularization method: {reg_config.method}, set reg_config.method to 'PROJECT_H', 'MIRROR_H' or 'CHOLESKY_H'")
 
-        regularized_QP.Q[k] = H_reg[:qp.nx, :qp.nx]
         if k < qp.N:
+            regularized_QP.Q[k] = H_reg[:qp.nx, :qp.nx]
             regularized_QP.R[k] = H_reg[qp.nx:, qp.nx:]
             regularized_QP.S[k] = H_reg[qp.nx:, :qp.nx]
+        else:
+            regularized_QP.Q_e = H_reg
 
     return regularized_QP

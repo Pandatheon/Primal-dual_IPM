@@ -42,7 +42,7 @@ class SqpQpSolver(AcadosOcpSolver):
                 self.param_manager.set_value(name="lbx", value=self.qp.lbx[i], stage=i)
                 self.param_manager.set_value(name="ubx", value=self.qp.ubx[i], stage=i)
 
-            if i == 0:
+            if i == 0 and (nh_0 or nh):
                 C_0 = self.qp.C[0] if nh_0 else np.zeros((1, nx))
                 D_0 = self.qp.D[0] if nh_0 else np.zeros((1, nu))
                 lg_0 = self.qp.lg[0] if nh_0 else -1e4*np.ones((1, 1))
@@ -84,7 +84,7 @@ class SqpQpSolver(AcadosOcpSolver):
             self.constraints_set(i, 'ubu', ubu)
 
             end_nb = end_bx + 2*nu
-            if i == 0:
+            if i == 0 and (nh_0 or nh):
                 nh_0 = nh_0 if nh_0 else 1
                 C_k = param_cons_values[end_nb:end_nb+nh_0*nx].reshape((nh_0, nx))
                 D_k = param_cons_values[end_nb+nh_0*nx:end_nb+nh_0*nx+nh_0*nu].reshape((nh_0, nu))
