@@ -11,7 +11,7 @@ stage_reg = ['RP_STAGE_MIRROR', 'PM_STAGE_MIRROR', 'M_lookahead_CM', 'PM_STAGE_C
 
 reg_list = no_reg + Hessian_reg + condensed_Hessian_reg + stage_reg
 
-refer_list = ['IPOPT', 'ACADOS']
+refer_list = ['IPOPT', 'SQP_PROJ']
 
 @dataclass
 class Regularizations_config:
