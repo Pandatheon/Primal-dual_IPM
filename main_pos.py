@@ -50,7 +50,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         for method in methods:
             print("-" * 50)
             print(f"Method: {method}")
-            if method == 'SQP_PROJ':
+            if method == 'SQP_PROJECT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
                 qp_solver = SqpQpSolver(qp, reg='NO_REGULARIZE', qp_max_iter=30)
             elif method == 'IPOPT':
@@ -67,7 +67,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             try:
                 qp_solver.solve()
                 cost = qp_solver.get_cost()
-                if method == 'SQP_PROJ':
+                if method == 'SQP_PROJECT':
                     iter = sum(qp_solver.get_stats('qp_iter'))
                 else:
                     iter = qp_solver.get_stats("iter")
