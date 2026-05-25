@@ -43,7 +43,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
 
-    methods = ['Riccati', 'Condensed'] + refer_list
+    methods = ['Riccati'] + refer_list
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")

@@ -235,9 +235,6 @@ class QpSolver:
         if step_type == 'centering':
             for k in range(self.qp.N):
                 self.rhs.rm[k] = self.backup_rm[k] - self.centering_param * self.rhs.duality_measure * np.ones(len(self.rhs.rm[k]))
-        elif step_type == 'predictor-corrector':
-            for k in range(self.qp.N):
-                self.rhs.rm[k] = self.backup_rm[k] + (self.delta_aff_dict['delta_lam'][k] * self.delta_aff_dict['delta_s'][k]) - self.centering_param * self.rhs.duality_measure * np.ones(len(self.backup_rm[k]))
         elif step_type == 'predictor':
             for k in range(self.qp.N):
                 self.rhs.rm[k] = self.backup_rm[k] - 1e-16 * np.ones(len(self.backup_rm[k]))
@@ -296,12 +293,10 @@ class QpSolver:
             self.statistics_dict['alpha_dual_list'].append(self.alpha_dual)
             self.statistics_dict['alpha_list'].append(self.alpha)
 
-            ### Mehrotra predictor-corrector step
-            ## predictor step
             self.delta_aff_dict = self._compute_step(prev_sol)
             self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_aff_dict)
             mu_k = self._compute_mu(prev_sol, self.delta_aff_dict)
-            self.centering_param = mu_k / self.rhs.duality_measure
+            self.centering_param = min(mu_k / self.rhs.duality_measure, 1.0)
 
             self.update_rhs_comp(step_type='centering')
             self.delta_dict = self._compute_step(prev_sol)
