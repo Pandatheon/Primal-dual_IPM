@@ -417,13 +417,33 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
-        # Apply step-size damping if alpha is strictly less than 1.0
-        if self.alpha < 1.0:
-            tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
-            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+
+        quadratic_term = self._quadratic_term()
+        norm_delta = self._compute_delta_norm()
+
+        s_i = np.concatenate(prev_sol.s)
+        delta_s = np.concatenate(self.delta_dict['delta_s'])
+        mask_s = delta_s < 0
+        if np.any(mask_s):
+            t_bar = np.min(s_i[mask_s] / (-delta_s[mask_s]))
         else:
-            tmp_alpha_prim = self.alpha_prim
-            tmp_alpha_dual = self.alpha_dual
+            t_bar = np.inf
+
+        tmp_alpha_prim = t_bar * ((1.0 - t_bar) * 0.99 + t_bar * 0.9999999) if t_bar < np.inf else np.inf
+        tmp_alpha_prim = max(tmp_alpha_prim, t_bar - norm_delta)
+
+        # deal with prim
+        if quadratic_term > 0:
+            safe_alpha = self._safe_step_size(prev_sol, quadratic_term)
+            tmp_alpha_prim = min(tmp_alpha_prim, safe_alpha)
+        else:
+            tmp_alpha_prim = min(tmp_alpha_prim, 1.0)
+
+        # deal with dual
+        if self.alpha_dual >= 1.0:
+            tmp_alpha_dual = 1.0
+        else:
+            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
 
         # update solution
         x_sol = [prev_sol.x[i] + tmp_alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
@@ -432,6 +452,58 @@ class QpSolver:
         lam_sol = [np.maximum(prev_sol.lam[i] + tmp_alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
         s_sol = [np.maximum(prev_sol.s[i] + tmp_alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
+
+    def _quadratic_term (self)-> float:
+        delta_cost = 0.0
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k]
+            R_k = self.qp.R[k]
+            S_k = self.qp.S[k]
+            q_k = self.qp.q[k]
+            r_k = self.qp.r[k]
+            delta_x = self.delta_dict['delta_x'][k]
+            delta_u = self.delta_dict['delta_u'][k]
+            delta_cost += delta_x.T @ Q_k @ delta_x + delta_u.T @ R_k @ delta_u + 2.0 * delta_x.T @ S_k.T @ delta_u
+         # terminal cost
+        Q_e = self.qp.Q_e
+        delta_x_N = self.delta_dict['delta_x'][-1]
+        delta_cost += delta_x_N.T @ Q_e @ delta_x_N
+        return delta_cost
+
+
+    def _gradient_delta_product(self, prev_sol) -> float:
+        grad_delta = 0.0
+        for k in range(self.qp.N):
+            Q_k     = self.qp.Q[k]
+            R_k     = self.qp.R[k]
+            S_k     = self.qp.S[k]
+            q_k     = self.qp.q[k]
+            r_k     = self.qp.r[k]
+            delta_x = self.delta_dict['delta_x'][k]
+            delta_u = self.delta_dict['delta_u'][k]
+            grad_x  = Q_k @ prev_sol.x[k] + S_k.T @ prev_sol.u[k] + q_k
+            grad_u  = R_k @ prev_sol.u[k] + S_k   @ prev_sol.x[k] + r_k
+            grad_delta += float(delta_x.T @ grad_x) + float(delta_u.T @ grad_u)
+        Q_e       = self.qp.Q_e
+        q_e       = self.qp.q_e
+        delta_x_N = self.delta_dict['delta_x'][-1]
+        grad_delta += float(delta_x_N.T @ (Q_e @ prev_sol.x[-1] + q_e))
+        return grad_delta
+
+
+    def _safe_step_size(self, prev_sol, step_cost)-> float:
+        gradient_delta_product = self._gradient_delta_product(prev_sol)
+        safe_step_size = 1.5*abs(gradient_delta_product)/step_cost
+        return min(safe_step_size, 1.0)
+
+
+    def _compute_delta_norm(self) -> float:
+        parts = []
+        for k in range(self.qp.N):
+            parts.append(self.delta_dict['delta_x'][k].ravel())
+            parts.append(self.delta_dict['delta_u'][k].ravel())
+        parts.append(self.delta_dict['delta_x'][self.qp.N].ravel())
+        return float(np.linalg.norm(np.concatenate(parts)))
 
 
     def step_size_to_boundary(self, prev_sol: iterate_sol, delta_dict) -> iterate_sol:
