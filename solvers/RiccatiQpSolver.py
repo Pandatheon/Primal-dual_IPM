@@ -314,7 +314,7 @@ class QpSolver:
             ### Mehrotra predictor-corrector step
             ## predictor step
             self.delta_aff_dict = self._compute_step(prev_sol)
-            self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_aff_dict)
+            self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_aff_dict)
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
 
@@ -344,7 +344,7 @@ class QpSolver:
                 ## predictor-corrector step
                 self.update_rhs_comp(step_type='predictor-corrector')
                 self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
                 mu_pred = self._compute_duality(prev_sol, self.delta_dict)
 
                 # #A sigma
@@ -359,14 +359,14 @@ class QpSolver:
                 if mu_pred > 2*mu_aff:
                     self.update_rhs_comp(step_type='centering')
                     self.delta_dict = self._compute_step(prev_sol)
-                    self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                    self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
                     # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
                     # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
                     # print("-" * 50)
             else:
                 self.update_rhs_comp(step_type='centering')
                 self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.fraction_to_boundary(prev_sol, self.delta_dict)
+                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
 
             self.update_solution(prev_sol)
             self.statistics_dict['alpha_pri_list'][-1] = self.alpha_prim
@@ -434,7 +434,7 @@ class QpSolver:
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
 
-    def fraction_to_boundary(self, prev_sol: iterate_sol, delta_dict, record:bool=False) -> iterate_sol:
+    def step_size_to_boundary(self, prev_sol: iterate_sol, delta_dict) -> iterate_sol:
         s_i = np.concatenate(prev_sol.s)
         lam_i = np.concatenate(prev_sol.lam)
         delta_s = np.concatenate(delta_dict['delta_s'])
