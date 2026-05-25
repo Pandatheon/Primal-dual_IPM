@@ -296,77 +296,16 @@ class QpSolver:
             self.statistics_dict['alpha_dual_list'].append(self.alpha_dual)
             self.statistics_dict['alpha_list'].append(self.alpha)
 
-
-            # for k in range(self.qp.N):
-            #     # print for debug
-            #     # # x
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} x = {prev_sol.x[k]}")
-            #     # # u
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} u = {prev_sol.u[k]}")
-            #     # # pi
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} pi = {prev_sol.pi[k]}")
-            #     # lam
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam = {prev_sol.lam[k]}")
-            #     # s
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s = {prev_sol.s[k]}")
-            #     print("-" * 30)
-
             ### Mehrotra predictor-corrector step
             ## predictor step
             self.delta_aff_dict = self._compute_step(prev_sol)
             self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_aff_dict)
-            mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
-            self.centering_param = (mu_aff/self.rhs.duality_measure)**3
+            mu_k = self._compute_mu(prev_sol, self.delta_aff_dict)
+            self.centering_param = mu_k / self.rhs.duality_measure
 
-
-            # # alpha_pri_aff & dual
-            # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_aff={self.alpha_prim:.6e}, alpha_dual_aff={self.alpha_dual:.6e}")
-            # # mu_aff
-            # print(f"Iter {self.statistics_dict['iter_count']}: mu_aff={mu_aff:.6e}")
-
-            # print for debug
-            # for k in range(self.qp.N):
-            #     # ux
-            #     ux_k = np.concatenate((self.delta_aff_dict['delta_u'][k], self.delta_aff_dict['delta_x'][k]))
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} ux_k = {ux_k}")
-            #     print("-" * 30)
-
-            # for k in range(self.qp.N):
-            #     # lam & s
-            #     lam_k = self.delta_aff_dict['delta_lam'][k]
-            #     s_k = self.delta_aff_dict['delta_s'][k]
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam_k = {lam_k}")
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s_k = {s_k}")
-            #     print("-" * 30)
-            # exit() # debug
-
-            if self.Mehrotra_step:
-                ## predictor-corrector step
-                self.update_rhs_comp(step_type='predictor-corrector')
-                self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
-                mu_pred = self._compute_duality(prev_sol, self.delta_dict)
-
-                # #A sigma
-                # print(f"Iter {self.statistics_dict['iter_count']}: centering_param={self.centering_param:.6e}")
-                # # alpha_pri_corr & dual
-                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_corr={self.alpha_prim:.6e}, alpha_dual_corr={self.alpha_dual:.6e}")
-                # # mu_corr
-                # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred={mu_pred:.6e}")
-                # print("-" * 50)
-
-                ### Conditonal Mehrotra step
-                if mu_pred > 2*mu_aff:
-                    self.update_rhs_comp(step_type='centering')
-                    self.delta_dict = self._compute_step(prev_sol)
-                    self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
-                    # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
-                    # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
-                    # print("-" * 50)
-            else:
-                self.update_rhs_comp(step_type='centering')
-                self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
+            self.update_rhs_comp(step_type='centering')
+            self.delta_dict = self._compute_step(prev_sol)
+            self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
 
             self.update_solution(prev_sol)
             self.statistics_dict['alpha_pri_list'][-1] = self.alpha_prim
@@ -375,27 +314,6 @@ class QpSolver:
 
             prev_sol = copy.deepcopy(self.solution)
             self.compute_rhs(prev_sol=prev_sol)
-
-            # if self.statistics_dict['iter_count'] == 1:
-            #     # print sol
-            #     #ux
-            #     for k in range(self.qp.N):
-            #         ux_k = np.concatenate((self.solution.u[k], self.solution.x[k]))
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} ux_k = {ux_k}")
-            #         print("-" * 30)
-            #     #lam
-            #     for k in range(self.qp.N):
-            #         lam_k = self.solution.lam[k]
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam_k = {lam_k}")
-            #         print("-" * 30)
-            #     # s
-            #     for k in range(self.qp.N):
-            #         s_k = self.solution.s[k]
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s_k = {s_k}")
-            #         print("-" * 30)
-
-            # if self.statistics_dict['iter_count'] == 2:
-            #             exit() # debug
 
         self._recover_solution()
         return self.solution
@@ -408,18 +326,48 @@ class QpSolver:
         return delta_dict
 
 
-    def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict)-> float:
-        tol = 1e-16
-        s_aff = np.maximum(np.concatenate(prev_sol.s) + self.alpha_prim * np.concatenate(delta_dict['delta_s']), tol)
-        lam_aff = np.maximum(np.concatenate(prev_sol.lam) + self.alpha_dual * np.concatenate(delta_dict['delta_lam']), tol)
-        mu = (s_aff.flatten() @ lam_aff.flatten())/self.ineq_num
-        return mu
+    def _compute_mu(self, prev_sol: iterate_sol, delta_dict: dict) -> float:
+        nu      = 3.0 
+        phi_bar = 1e6 
+        theta   = 0.8 
+
+        norm_delta = np.linalg.norm(np.concatenate(
+            [delta_dict['delta_x'][k].ravel() for k in range(self.qp.N+1)] +
+            [delta_dict['delta_u'][k].ravel() for k in range(self.qp.N)]
+        ))
+
+        # z_min^k = min_i z_i^k
+        z_min = max(min(np.min(prev_sol.lam[k]) for k in range(self.qp.N)), 1e-16)
+
+        zeta_over_z = sum(
+            np.sum((prev_sol.lam[k] + delta_dict['delta_lam'][k]) / prev_sol.lam[k])
+            for k in range(self.qp.N)
+        )
+
+        if zeta_over_z <= 0:
+            phi_k = phi_bar
+        else:
+            grad_delta = sum(
+                float(delta_dict['delta_x'][k] @ (self.qp.Q[k] @ prev_sol.x[k]
+                                                + self.qp.S[k].T @ prev_sol.u[k]
+                                                + self.qp.q[k]))
+            + float(delta_dict['delta_u'][k] @ (self.qp.R[k] @ prev_sol.u[k]
+                                                + self.qp.S[k]   @ prev_sol.x[k]
+                                                + self.qp.r[k]))
+                for k in range(self.qp.N)
+            )
+            grad_delta += float(delta_dict['delta_x'][-1] @ (self.qp.Q_e @ prev_sol.x[-1] + self.qp.q_e))
+
+            denom = (norm_delta ** nu) * z_min * zeta_over_z
+            phi_k = min((1.0 - theta) * abs(grad_delta) / denom, phi_bar) if denom > 1e-32 else phi_bar
+
+        return phi_k * (norm_delta ** nu) * z_min
 
 
     def update_solution(self, prev_sol:iterate_sol):
 
         quadratic_term = self._quadratic_term()
-        norm_delta = self._compute_delta_norm()
+        norm_delta_x, norm_delta_lam = self._compute_delta_norm()
 
         s_i = np.concatenate(prev_sol.s)
         delta_s = np.concatenate(self.delta_dict['delta_s'])
@@ -429,8 +377,8 @@ class QpSolver:
         else:
             t_bar = np.inf
 
-        tmp_alpha_prim = t_bar * ((1.0 - t_bar) * 0.99 + t_bar * 0.9999999) if t_bar < np.inf else np.inf
-        tmp_alpha_prim = max(tmp_alpha_prim, t_bar - norm_delta)
+        tmp_alpha_prim = t_bar * 0.9 if t_bar < np.inf else np.inf
+        tmp_alpha_prim = max(tmp_alpha_prim, t_bar - norm_delta_x)
 
         # deal with prim
         if quadratic_term > 0:
@@ -440,16 +388,13 @@ class QpSolver:
             tmp_alpha_prim = min(tmp_alpha_prim, 1.0)
 
         # deal with dual
-        if self.alpha_dual >= 1.0:
-            tmp_alpha_dual = 1.0
-        else:
-            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+        lower_bound = min(norm_delta_x**2 + norm_delta_lam**2, 1e-4)
 
         # update solution
         x_sol = [prev_sol.x[i] + tmp_alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + tmp_alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
-        pi_sol = [prev_sol.pi[i] + tmp_alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_sol = [np.maximum(prev_sol.lam[i] + tmp_alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
+        pi_sol = [prev_sol.pi[i] + self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
+        lam_sol = [np.maximum(lower_bound, prev_sol.lam[i] + self.delta_dict['delta_lam'][i]) for i in range(self.qp.N)]
         s_sol = [np.maximum(prev_sol.s[i] + tmp_alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
@@ -459,8 +404,6 @@ class QpSolver:
             Q_k = self.qp.Q[k]
             R_k = self.qp.R[k]
             S_k = self.qp.S[k]
-            q_k = self.qp.q[k]
-            r_k = self.qp.r[k]
             delta_x = self.delta_dict['delta_x'][k]
             delta_u = self.delta_dict['delta_u'][k]
             delta_cost += delta_x.T @ Q_k @ delta_x + delta_u.T @ R_k @ delta_u + 2.0 * delta_x.T @ S_k.T @ delta_u
@@ -496,14 +439,21 @@ class QpSolver:
         safe_step_size = 1.5*abs(gradient_delta_product)/step_cost
         return min(safe_step_size, 1.0)
 
+    def _compute_delta_norm(self) -> tuple[float, float]:
+        delta_x_parts  = []
+        delta_lam_parts = []
 
-    def _compute_delta_norm(self) -> float:
-        parts = []
         for k in range(self.qp.N):
-            parts.append(self.delta_dict['delta_x'][k].ravel())
-            parts.append(self.delta_dict['delta_u'][k].ravel())
-        parts.append(self.delta_dict['delta_x'][self.qp.N].ravel())
-        return float(np.linalg.norm(np.concatenate(parts)))
+            delta_x_parts.append(self.delta_dict['delta_x'][k].ravel())
+            delta_x_parts.append(self.delta_dict['delta_u'][k].ravel())
+            delta_lam_parts.append(self.delta_dict['delta_lam'][k].ravel())
+
+        delta_x_parts.append(self.delta_dict['delta_x'][self.qp.N].ravel())
+
+        norm_delta_x   = np.linalg.norm(np.concatenate(delta_x_parts))
+        norm_delta_lam = np.linalg.norm(np.concatenate(delta_lam_parts))
+
+        return norm_delta_x, norm_delta_lam
 
 
     def step_size_to_boundary(self, prev_sol: iterate_sol, delta_dict) -> iterate_sol:
