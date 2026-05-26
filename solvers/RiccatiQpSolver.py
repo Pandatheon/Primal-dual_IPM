@@ -318,11 +318,6 @@ class QpSolver:
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
 
-            if self.solver.reg:
-                self.Mehrotra_step = False
-            else:
-                self.Mehrotra_step = True
-
             # # alpha_pri_aff & dual
             # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_aff={self.alpha_prim:.6e}, alpha_dual_aff={self.alpha_dual:.6e}")
             # # mu_aff
@@ -422,11 +417,16 @@ class QpSolver:
 
     def update_solution(self, prev_sol:iterate_sol):
         # Apply step-size damping if alpha is strictly less than 1.0
-        if self.alpha < 1.0:
+        # primal
+        if self.alpha_prim < 1.0:
             tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
-            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
         else:
             tmp_alpha_prim = self.alpha_prim
+
+        # dual
+        if self.alpha_dual < 1.0:
+            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
+        else:
             tmp_alpha_dual = self.alpha_dual
 
         # update solution
