@@ -15,6 +15,8 @@ class Riccati_IPM():
         self.ineq_num = ineq_num
         self.rhs_kkt = None
 
+        self.reg = False
+
     def forward_sweep(self, prev_sol:iterate_sol, feedback:Feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
         lam_i = prev_sol.lam
@@ -59,6 +61,7 @@ class Riccati_IPM():
         horizon = self.qp.N
         nx = self.qp.nx
         self.rhs_kkt = copy.deepcopy(rhs)
+        self.reg = False
 
         modified_qp = self.modify_QP(self.qp, prev_sol)
 
@@ -106,6 +109,7 @@ class Riccati_IPM():
                 feedback.k[k] = k_curr
 
             except np.linalg.LinAlgError:
+                self.reg = True
                 if self.reg_config.method == 'NO_REGULARIZE':
                     raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 

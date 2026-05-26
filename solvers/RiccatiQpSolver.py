@@ -318,6 +318,10 @@ class QpSolver:
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
 
+            if self.solver.reg:
+                self.Mehrotra_step = False
+            else:
+                self.Mehrotra_step = True
 
             # # alpha_pri_aff & dual
             # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_aff={self.alpha_prim:.6e}, alpha_dual_aff={self.alpha_dual:.6e}")
