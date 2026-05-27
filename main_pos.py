@@ -60,7 +60,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             else:
                 qp = BaseQP()
                 qp.populate_from_json(str(qp_path))
-                qp_solver = QpSolver(qp, reg='NO_REG', type=method)
+                qp_solver = QpSolver(qp, reg='NO_REG', type=method, mehrotra=False)
 
             cost = None
             iter = None

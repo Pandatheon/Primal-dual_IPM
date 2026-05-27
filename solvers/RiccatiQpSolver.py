@@ -58,6 +58,7 @@ class QpSolver:
         self.alpha_prim = 1.0
         self.alpha_dual = 1.0
         self.alpha = 1.0
+        self.v = 1.0
 
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
@@ -296,48 +297,12 @@ class QpSolver:
             self.statistics_dict['alpha_dual_list'].append(self.alpha_dual)
             self.statistics_dict['alpha_list'].append(self.alpha)
 
-
-            # for k in range(self.qp.N):
-            #     # print for debug
-            #     # # x
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} x = {prev_sol.x[k]}")
-            #     # # u
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} u = {prev_sol.u[k]}")
-            #     # # pi
-            #     # print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} pi = {prev_sol.pi[k]}")
-            #     # lam
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam = {prev_sol.lam[k]}")
-            #     # s
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s = {prev_sol.s[k]}")
-            #     print("-" * 30)
-
             ### Mehrotra predictor-corrector step
             ## predictor step
             self.delta_aff_dict = self._compute_step(prev_sol)
             self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_aff_dict)
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
-
-            # # alpha_pri_aff & dual
-            # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_aff={self.alpha_prim:.6e}, alpha_dual_aff={self.alpha_dual:.6e}")
-            # # mu_aff
-            # print(f"Iter {self.statistics_dict['iter_count']}: mu_aff={mu_aff:.6e}")
-
-            # print for debug
-            # for k in range(self.qp.N):
-            #     # ux
-            #     ux_k = np.concatenate((self.delta_aff_dict['delta_u'][k], self.delta_aff_dict['delta_x'][k]))
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} ux_k = {ux_k}")
-            #     print("-" * 30)
-
-            # for k in range(self.qp.N):
-            #     # lam & s
-            #     lam_k = self.delta_aff_dict['delta_lam'][k]
-            #     s_k = self.delta_aff_dict['delta_s'][k]
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam_k = {lam_k}")
-            #     print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s_k = {s_k}")
-            #     print("-" * 30)
-            # exit() # debug
 
             if self.Mehrotra_step:
                 ## predictor-corrector step
@@ -346,22 +311,11 @@ class QpSolver:
                 self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
                 mu_pred = self._compute_duality(prev_sol, self.delta_dict)
 
-                # #A sigma
-                # print(f"Iter {self.statistics_dict['iter_count']}: centering_param={self.centering_param:.6e}")
-                # # alpha_pri_corr & dual
-                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_corr={self.alpha_prim:.6e}, alpha_dual_corr={self.alpha_dual:.6e}")
-                # # mu_corr
-                # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred={mu_pred:.6e}")
-                # print("-" * 50)
-
                 ### Conditonal Mehrotra step
                 if mu_pred > 2*mu_aff:
                     self.update_rhs_comp(step_type='centering')
                     self.delta_dict = self._compute_step(prev_sol)
                     self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
-                    # print(f"Iter {self.statistics_dict['iter_count']}: Conditional Mehrotra step taken")
-                    # print(f"Iter {self.statistics_dict['iter_count']}: alpha_prim_cond={self.alpha_prim:.6e}, alpha_dual_cond={self.alpha_dual:.6e}")
-                    # print("-" * 50)
             else:
                 self.update_rhs_comp(step_type='centering')
                 self.delta_dict = self._compute_step(prev_sol)
@@ -374,27 +328,6 @@ class QpSolver:
 
             prev_sol = copy.deepcopy(self.solution)
             self.compute_rhs(prev_sol=prev_sol)
-
-            # if self.statistics_dict['iter_count'] == 1:
-            #     # print sol
-            #     #ux
-            #     for k in range(self.qp.N):
-            #         ux_k = np.concatenate((self.solution.u[k], self.solution.x[k]))
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} ux_k = {ux_k}")
-            #         print("-" * 30)
-            #     #lam
-            #     for k in range(self.qp.N):
-            #         lam_k = self.solution.lam[k]
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} lam_k = {lam_k}")
-            #         print("-" * 30)
-            #     # s
-            #     for k in range(self.qp.N):
-            #         s_k = self.solution.s[k]
-            #         print(f"Iter {self.statistics_dict['iter_count']}: Stage {k} s_k = {s_k}")
-            #         print("-" * 30)
-
-            # if self.statistics_dict['iter_count'] == 2:
-            #             exit() # debug
 
         self._recover_solution()
         return self.solution
@@ -416,25 +349,14 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
-        # Apply step-size damping if alpha is strictly less than 1.0
-        # primal
-        if self.alpha_prim < 1.0:
-            tmp_alpha_prim = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999)
-        else:
-            tmp_alpha_prim = self.alpha_prim
-
-        # dual
-        if self.alpha_dual < 1.0:
-            tmp_alpha_dual = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999)
-        else:
-            tmp_alpha_dual = self.alpha_dual
-
+        self._update_penalty_parameter(prev_sol, self.delta_dict)
+        self.alpha_prim, self.alpha_dual, _ = self._merit_line_search(prev_sol, self.delta_dict)
         # update solution
-        x_sol = [prev_sol.x[i] + tmp_alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
-        u_sol = [prev_sol.u[i] + tmp_alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
-        pi_sol = [prev_sol.pi[i] + tmp_alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_sol = [np.maximum(prev_sol.lam[i] + tmp_alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
-        s_sol = [np.maximum(prev_sol.s[i] + tmp_alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
+        x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
+        u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
+        pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
+        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
+        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
 
@@ -462,6 +384,187 @@ class QpSolver:
 
         return alpha_pri_max, alpha_dual_max, alpha
 
+
+    def _update_penalty_parameter(self, sol: iterate_sol, delta_dict):
+        # Unpack variables
+        x, u, pi, lam, s = sol
+
+        grad_f_p = 0.0
+        p_H_p = 0.0
+        norm_c_sq = 0.0
+
+        rho = 0.1
+
+        for k in range(self.qp.N):
+            dx = delta_dict['delta_x'][k]
+            du = delta_dict['delta_u'][k]
+            ds = delta_dict['delta_s'][k]
+
+            Q_k = self.qp.Q[k]; R_k = self.qp.R[k]; S_k = self.qp.S[k]
+            A_k = self.qp.A[k]; B_k = self.qp.B[k]; b_k = self.qp.b[k]
+            C_k = self.qp.C[k]; D_k = self.qp.D[k]; d_k = self.qp.d[k]
+            q_k = self.qp.q[k]; r_k = self.qp.r[k]
+
+            # 1. Directional derivative of obj and barrier
+            grad_x = Q_k @ x[k] + S_k.T @ u[k] + q_k
+            grad_u = R_k @ u[k] + S_k @ x[k] + r_k
+            grad_f_p += grad_x @ dx + grad_u @ du
+            grad_f_p -= self.rhs.duality_measure * np.sum(ds / s[k])
+
+            p_H_p += dx @ Q_k @ dx + du @ R_k @ du + 2.0 * (dx @ S_k.T @ du)
+
+            r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
+            r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
+            norm_c_sq += r_eq @ r_eq + r_ineq @ r_ineq
+
+        # Terminal stage calculations
+        dx_N = delta_dict['delta_x'][self.qp.N]
+        grad_x_N = self.qp.Q_e @ x[self.qp.N] + self.qp.q_e
+
+        grad_f_p += grad_x_N @ dx_N
+        p_H_p += dx_N @ self.qp.Q_e @ dx_N
+
+        sigma = 1.0 if p_H_p > 0.0 else 0.0
+        norm_c = np.sqrt(norm_c_sq)
+
+        v_required = (grad_f_p + 0.5 * sigma * p_H_p) / ((1.0 - rho) * norm_c)
+        if v_required > self.v:
+            self.v = v_required + 1.0
+
+
+    def _merit_line_search(self, prev_sol, delta_dict, beta=0.8, eta=1e-4, max_ls=5):
+        phi_curr = self._compute_merit(prev_sol)
+        alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999) if self.alpha_prim < 1.0 else self.alpha_prim
+        alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999) if self.alpha_dual < 1.0 else self.alpha_dual
+
+        obj, neg_log_term = self._compute_merit_split(prev_sol)
+        print(f"Merit function components: obj = {obj}, neg_log_term = {neg_log_term}")
+
+        dphi = self._compute_merit_directional_deriv(prev_sol, delta_dict)
+
+        for i in range(max_ls):
+
+            cand = iterate_sol(
+                x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
+                u   = [prev_sol.u[i]   + alpha_p * delta_dict['delta_u'][i]   for i in range(self.qp.N)],
+                pi  = [prev_sol.pi[i]  + alpha_d * delta_dict['delta_pi'][i]  for i in range(self.qp.N + 1)],
+                lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)],
+                s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N)],
+            )
+
+            if self._compute_merit(cand) <=  phi_curr + eta * alpha_p * dphi:
+                break
+
+            alpha_p *= beta
+
+        return alpha_p, alpha_d, min(alpha_p, alpha_d)
+
+
+    def _compute_merit_directional_deriv(self, sol: iterate_sol, delta_dict) -> float:
+        x, u, pi, lam, s = sol
+        dphi = 0.0
+        r_dot_dr_total = 0.0
+        norm_c_sq_total = 0.0
+
+        for k in range(self.qp.N):
+            dx_k   = delta_dict['delta_x'][k]
+            dx_k1  = delta_dict['delta_x'][k + 1]
+            du_k   = delta_dict['delta_u'][k]
+            ds_k   = delta_dict['delta_s'][k]
+
+            A_k = self.qp.A[k]; B_k = self.qp.B[k]
+            C_k = self.qp.C[k]; D_k = self.qp.D[k]
+            Q_k = self.qp.Q[k]; R_k = self.qp.R[k]; S_k = self.qp.S[k]
+            q_k = self.qp.q[k]; r_k = self.qp.r[k]
+            b_k = self.qp.b[k]; d_k = self.qp.d[k]
+
+            grad_x = Q_k @ x[k] + S_k.T @ u[k] + q_k
+            grad_u = R_k @ u[k] + S_k @ x[k] + r_k
+            dphi += grad_x @ dx_k + grad_u @ du_k
+
+            dphi -= self.rhs.duality_measure * np.sum(ds_k / s[k])
+
+            r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
+            d_r_eq = A_k @ dx_k + B_k @ du_k - dx_k1
+
+            r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
+            d_r_ineq = C_k @ dx_k + D_k @ du_k + ds_k
+
+            r_dot_dr_total += r_eq @ d_r_eq + r_ineq @ d_r_ineq
+            norm_c_sq_total += r_eq @ r_eq + r_ineq @ r_ineq
+
+        norm_c_total = np.sqrt(norm_c_sq_total)
+        dphi += self.v * r_dot_dr_total / max(norm_c_total, 1e-16)
+
+        dx_N = delta_dict['delta_x'][self.qp.N]
+        grad_x_N = self.qp.Q_e @ x[self.qp.N] + self.qp.q_e
+        dphi += grad_x_N @ dx_N
+
+        return dphi
+
+    def _compute_merit_split(self, sol: iterate_sol) -> float:
+            x, u, pi, lam, s = sol
+
+            obj = 0.0
+            barrier = 0.0
+            res_eq_sq = 0.0
+            res_ineq_sq = 0.0
+
+            for k in range(self.qp.N):
+                Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
+                A_k = self.qp.A[k];  B_k = self.qp.B[k];  b_k = self.qp.b[k]
+                C_k = self.qp.C[k];  D_k = self.qp.D[k];  d_k = self.qp.d[k]
+                q_k = self.qp.q[k];  r_k = self.qp.r[k]
+
+                obj += 0.5 * x[k] @ Q_k @ x[k] + 0.5 * u[k] @ R_k @ u[k] + u[k] @ S_k @ x[k] + q_k @ x[k] + r_k @ u[k]
+
+                barrier += np.sum(np.log(s[k]))
+
+                r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
+                res_eq_sq += r_eq @ r_eq
+
+                r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
+                res_ineq_sq += r_ineq @ r_ineq
+
+            obj += 0.5 * x[self.qp.N] @ self.qp.Q_e @ x[self.qp.N] + self.qp.q_e @ x[self.qp.N]
+            norm_c = np.sqrt(res_eq_sq + res_ineq_sq)
+
+            # Merit calculated with self.v and squared penalties
+            merit = obj - self.rhs.duality_measure * barrier + self.v * norm_c
+
+            return obj, - self.rhs.duality_measure * barrier
+
+    def _compute_merit(self, sol: iterate_sol) -> float:
+        x, u, pi, lam, s = sol
+
+        obj = 0.0
+        barrier = 0.0
+        res_eq_sq = 0.0
+        res_ineq_sq = 0.0
+
+        for k in range(self.qp.N):
+            Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
+            A_k = self.qp.A[k];  B_k = self.qp.B[k];  b_k = self.qp.b[k]
+            C_k = self.qp.C[k];  D_k = self.qp.D[k];  d_k = self.qp.d[k]
+            q_k = self.qp.q[k];  r_k = self.qp.r[k]
+
+            obj += 0.5 * x[k] @ Q_k @ x[k] + 0.5 * u[k] @ R_k @ u[k] + u[k] @ S_k @ x[k] + q_k @ x[k] + r_k @ u[k]
+
+            barrier += np.sum(np.log(s[k]))
+
+            r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
+            res_eq_sq += r_eq @ r_eq
+
+            r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
+            res_ineq_sq += r_ineq @ r_ineq
+
+        obj += 0.5 * x[self.qp.N] @ self.qp.Q_e @ x[self.qp.N] + self.qp.q_e @ x[self.qp.N]
+        norm_c = np.sqrt(res_eq_sq + res_ineq_sq)
+
+        # Merit calculated with self.v and squared penalties
+        merit = obj - self.centering_param * self.rhs.duality_measure * barrier + self.v * norm_c
+
+        return merit
 
     def _convergence_check(self, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''

@@ -31,13 +31,13 @@ def main():
     # for k in range(qp.N):
     #     print(f"u[{k}] = {u[k]}")
     # qp_solver.print_statistics()
-    print("optimal Lagrange multipliers:")
-    for k in range(qp.N):
-        print(f"lam[{k}] = {lam[k]}")
-    print('Method:',method)
-    cost = qp_solver.get_cost()
-    print(f"Optimal cost: {cost}")
-    # qp_solver.print_statistics()
+    # print("optimal Lagrange multipliers:")
+    # for k in range(qp.N):
+    #     print(f"lam[{k}] = {lam[k]}")
+    # print('Method:',method)
+    # cost = qp_solver.get_cost()
+    # print(f"Optimal cost: {cost}")
+    qp_solver.print_statistics()
 
 if __name__ == "__main__":
     main()

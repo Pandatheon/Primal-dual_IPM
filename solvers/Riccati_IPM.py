@@ -61,6 +61,7 @@ class Riccati_IPM():
         horizon = self.qp.N
         nx = self.qp.nx
         self.rhs_kkt = copy.deepcopy(rhs)
+        self.reg = False
 
         modified_qp = self.modify_QP(self.qp, prev_sol)
 
