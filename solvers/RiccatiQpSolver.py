@@ -10,7 +10,7 @@ class QpSolver:
     """
     Prototype solver for QPs using primal-dual interior point method with Riccati recursion.
     """
-    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE', type:str='Riccati', mehrotra:bool=True):
+    def __init__(self, qp:BaseQP, reg:str='NO_REGULARIZE', type:str='Riccati', mehrotra:bool=True, globalization:bool=True):
         self.qp = qp
         self.status = -1
         self.centering_param = 1.0
@@ -18,6 +18,7 @@ class QpSolver:
         self.delta_aff_dict = None
         self.delta_dict = None
         self.Mehrotra_step = mehrotra
+        self.globalization = globalization
         self.res_max = {
             'res_stat' : 1e-6,
             'res_eq' : 1e-8,
@@ -350,8 +351,7 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
-        self.alpha_prim, self.alpha_dual, _ = self._filter_line_search(prev_sol, self.delta_dict)
-        # update solution
+        self.alpha_prim, self.alpha_dual, _ = self._funnel_line_search(prev_sol, self.delta_dict)
         x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
         pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
@@ -385,52 +385,55 @@ class QpSolver:
         return alpha_pri_max, alpha_dual_max, alpha
 
 
-    def _filter_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=5):
-        objective, norm_c = self._compute_objective_and_constraints(prev_sol)
+    def _funnel_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=5):
 
         # FTB
         alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999) if self.alpha_prim < 1.0 else self.alpha_prim
         alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999) if self.alpha_dual < 1.0 else self.alpha_dual
 
-        obj_grad = self._compute_objective_grad(prev_sol)
+        if self.globalization:
+            objective, norm_c = self._compute_objective_and_constraints(prev_sol)
+            obj_grad = self._compute_objective_grad(prev_sol)
 
-        direction_prim = np.concatenate(
-            delta_dict['delta_x'] + 
-            delta_dict['delta_u'] + 
-            delta_dict['delta_s']
-        )
-        grad_direc_prod = obj_grad.T @ direction_prim
-
-        for i in range(max_ls):
-
-            cand = iterate_sol(
-                x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
-                u   = [prev_sol.u[i]   + alpha_p * delta_dict['delta_u'][i]   for i in range(self.qp.N)],
-                pi  = [prev_sol.pi[i]  + alpha_d * delta_dict['delta_pi'][i]  for i in range(self.qp.N + 1)],
-                lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)],
-                s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N)],
+            direction_prim = np.concatenate(
+                delta_dict['delta_x'] + 
+                delta_dict['delta_u'] + 
+                delta_dict['delta_s']
             )
+            grad_direc_prod = obj_grad.T @ direction_prim
 
-            objective_cand, norm_c_cand = self._compute_objective_and_constraints(cand)
-            # check acceptablity
-            if norm_c_cand <= self.theta_max:
-                # check f type condition
-                if alpha_p*(-grad_direc_prod)>1e-4*norm_c**2:
-                    # check Armijo condition
-                    if objective_cand <= objective + 1e-8*alpha_p*grad_direc_prod:
-                        break
+            for i in range(max_ls):
+
+                cand = iterate_sol(
+                    x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
+                    u   = [prev_sol.u[i]   + alpha_p * delta_dict['delta_u'][i]   for i in range(self.qp.N)],
+                    pi  = [prev_sol.pi[i]  + alpha_d * delta_dict['delta_pi'][i]  for i in range(self.qp.N + 1)],
+                    lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)],
+                    s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N)],
+                )
+
+                objective_cand, norm_c_cand = self._compute_objective_and_constraints(cand)
+                # check acceptablity
+                if norm_c_cand <= self.theta_max:
+                    # check f type condition
+                    if alpha_p*(-grad_direc_prod)>1e-4*norm_c**2:
+                        # check Armijo condition
+                        if objective_cand <= objective + 1e-8*alpha_p*grad_direc_prod:
+                            break
+                        else:
+                            alpha_p *= beta
                     else:
-                        alpha_p *= beta
+                        # check theta type condition
+                        if norm_c_cand <= 0.9999*self.theta_max:
+                            # update theta_max
+                            self.theta_max = (1-0.5)*self.theta_max + 0.5*norm_c_cand
+                            break
+                        else:
+                            alpha_p *= beta
                 else:
-                    # check theta type condition
-                    if norm_c_cand <= 0.9999*self.theta_max:
-                        # update theta_max
-                        self.theta_max = (1-0.5)*self.theta_max + 0.5*norm_c_cand
-                        break
-                    else:
-                        alpha_p *= beta
-            else:
-                alpha_p *= beta
+                    alpha_p *= beta
+        else:
+            pass
 
         return alpha_p, alpha_d, min(alpha_p, alpha_d)
 
