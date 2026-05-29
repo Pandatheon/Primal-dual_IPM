@@ -58,7 +58,7 @@ class QpSolver:
         self.alpha_prim = 1.0
         self.alpha_dual = 1.0
         self.alpha = 1.0
-        self.v = 1.0
+        self.theta_max = 0.0
 
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
@@ -83,7 +83,8 @@ class QpSolver:
         self.solution.u = [np.zeros((self.qp.nu,)) for _ in range(self.qp.N)]
         self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
         self._initailize_lam_and_s()
-
+        _, theta_max = self._compute_objective_and_constraints(self.solution)
+        self.theta_max = max(1.25 * theta_max, 100)
 
     def _initailize_lam_and_s(self):
         self.solution.s = []
@@ -393,6 +394,13 @@ class QpSolver:
 
         obj_grad = self._compute_objective_grad(prev_sol)
 
+        direction_prim = np.concatenate(
+            delta_dict['delta_x'] + 
+            delta_dict['delta_u'] + 
+            delta_dict['delta_s']
+        )
+        grad_direc_prod = obj_grad.T @ direction_prim
+
         for i in range(max_ls):
 
             cand = iterate_sol(
@@ -404,25 +412,20 @@ class QpSolver:
             )
 
             objective_cand, norm_c_cand = self._compute_objective_and_constraints(cand)
-
             # check acceptablity
-            if objective_cand < objective or norm_c_cand < norm_c:
-                direction_prim = np.concatenate(
-                    delta_dict['delta_x'] + 
-                    delta_dict['delta_u'] + 
-                    delta_dict['delta_s']
-                )
-                grad_direc_prod = obj_grad.T @ direction_prim
-                # check switch condition
-                if (grad_direc_prod) < 0 and (alpha_p * (-grad_direc_prod)**2.3 > norm_c**1.1):
+            if norm_c_cand <= self.theta_max:
+                # check f type condition
+                if alpha_p*(-grad_direc_prod)>1e-4*norm_c**2:
                     # check Armijo condition
                     if objective_cand <= objective + 1e-8*alpha_p*grad_direc_prod:
                         break
                     else:
                         alpha_p *= beta
                 else:
-                    # check sufficient decrease condition
-                    if objective_cand <= objective - 1e-8*norm_c or norm_c_cand <= (1-1e-5)*norm_c:
+                    # check theta type condition
+                    if norm_c_cand <= 0.9999*self.theta_max:
+                        # update theta_max
+                        self.theta_max = (1-0.5)*self.theta_max + 0.5*norm_c_cand
                         break
                     else:
                         alpha_p *= beta
