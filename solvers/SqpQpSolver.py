@@ -224,9 +224,10 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.solver_options.N_horizon = N
         ocp.solver_options.hessian_approx = 'EXACT' # 'GAUSS_NEWTON', 'EXACT'
         ocp.solver_options.regularize_method = reg  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
+        ocp.solver_options.globalization = 'MERIT_BACKTRACKING'  # 'FIXED', 'MERIT_BACKTRACKING', 'FILTER'
         ocp.solver_options.integrator_type = 'DISCRETE'
         ocp.solver_options.nlp_solver_type = 'SQP' # SQP_RTI, SQP
-        ocp.solver_options.nlp_solver_max_iter = 30
+        ocp.solver_options.nlp_solver_max_iter = 50
         ocp.solver_options.eval_residual_at_max_iter = True
         ocp.solver_options.nlp_qp_tol_strategy = 'FIXED_QP_TOL'
 

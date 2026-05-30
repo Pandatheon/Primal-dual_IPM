@@ -14,7 +14,7 @@ class QpSolver:
         self.qp = qp
         self.status = -1
         self.centering_param = 1.0
-        self.max_iter = 200
+        self.max_iter = 400
         self.delta_aff_dict = None
         self.delta_dict = None
         self.Mehrotra_step = mehrotra
@@ -276,7 +276,7 @@ class QpSolver:
                                                 lam_0[end_lower:end_lower+nbu], lam_ubx, lam_0[end_lower+nbu+nx+nbx:]))
 
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=300)-> iterate_sol:
+    def solve(self, x0:np.ndarray=None, max_iter:int=400)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''

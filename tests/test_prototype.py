@@ -18,7 +18,7 @@ def main():
     print(f"QP loaded from {json_path} with N={qp.N}, nx={qp.nx}, nu={qp.nu}, nh_0={qp.nh_0}, nh={qp.nh}, nh_e={qp.nh_e}, nb_0={qp.nb_0}, nb={qp.nb}, nb_e={qp.nb_e}")
 
     method = no_reg[0]
-    qp_solver = QpSolver(qp, reg=method, type='Riccati')
+    qp_solver = QpSolver(qp, reg=method, type='Riccati', mehrotra=True, globalization=False)
     x0 = np.array([0.0, 0.0, 0.0, 0.0])
     qp_solver.solve(x0=x0, max_iter=30)
     x = [qp_solver.get(k, "x") for k in range(qp.N+1)]
