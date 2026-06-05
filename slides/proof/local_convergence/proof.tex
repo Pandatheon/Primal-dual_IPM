@@ -361,8 +361,10 @@ This issue reveals two insights in stage regularization:
 \end{itemize}
 
 \section{Local quadratic convergence rate}
-In this section, we will attempt to prove the local quadratic convergence of the regularized interior point method for solving indefinite QPs.
-We will organize the proof based on the formulation \ref{eq:reduced_KKT_system_schur} and start with several assumptions,
+In this section, 
+we will attempt to prove the local quadratic convergence of the regularized interior point method for solving indefinite QPs.
+Following similar proof structure as in \cite{absilNewtonKKTInteriorpointMethods2007},
+we will organize the proof based on the formulation \ref{eq:reduced_KKT_system_schur} and start with several assumptions,
 
 \begin{assumption}
     $(y^*, \lambda^*)$ is a local (or global) minimizer for \ref{eq:qp_problem}.
@@ -425,26 +427,23 @@ so we have the following lemma 1:
     Therefore, we conclude that $W^i = \tilde{M}^i$ for all $i$ sufficiently large, i.e. $E_i=0$.
 \end{proof}
 
-Similar to \cite{absilNewtonKKTInteriorpointMethods2007}, We take the following proposition from \cite{titsSimpleQuadraticallyConvergent1994} as a key step for proof.
+
+We take part of the following proposition from \cite{titsSimpleQuadraticallyConvergent1994} as a key step for proof.
 
 \begin{proposition}
-Let $F : \mathcal{R}^n \to \mathcal{R}^n$ be twice continuously differentiable and let $w^* \in \mathcal{R}^n$. 
-Let $\rho > 0$ be such that $F(w^*) = 0$ and $\frac{\partial F}{\partial w}(w)$ is invertible whenever $w \in \overline{B}(w^*, \rho)$. 
-Let $\delta^N : \overline{B}(w^*, \rho) \to \mathcal{R}^n$ be the Newton increment $\delta^N(w) := -\left(\frac{\partial F}{\partial w}(w)\right)^{-1} F(w)$. 
-Then given any $c_1 > 0$ there exists $c_2 > 0$ such that the following statement holds:
+Let $F : \mathcal{R}^n \to \mathcal{R}^n$ be twice continuously differentiable and let $w^* \in \mathcal{R}^n$.
+Let $\rho > 0$ be such that $F(w^*) = 0$ and $\frac{\partial F}{\partial w}(w)$ is invertible whenever $w \in \overline{B}(w^*, \rho)$.
+Let $\delta^N : \overline{B}(w^*, \rho) \to \mathcal{R}^n$ be the Newton increment $\delta^N(w) := -\left(\frac{\partial F}{\partial w}(w)\right)^{-1} F(w)$.
+Then given any $c_1 > 0$ there exist $c_2 > 0$ such that the following statement holds:
 
-
-For every $w \in \overline{B}(w^*, \rho)$ and every $w^+ \in \mathcal{R}^n$ for which, for each $i \in \{1, \dots, n\}$, either
-\begin{itemize}
-    \item[(i)] $|w^+_i - w^*_i| \leq c_1 \|\delta^N(w)\|^2$
-\end{itemize}
-or
-\begin{itemize}
-    \item[(ii)] $|w^+_i - (w_i + \delta^N_i(w))| \leq c_1 \|\delta^N(w)\|^2$,
-\end{itemize}
+For every $w \in \overline{B}(w^*, \rho)$ and every $w^+ \in \mathcal{R}^n$ satisfying
+\begin{equation}
+    \|w^+ - (w + \delta^N(w))\| \leq c_1 \|\delta^N(w)\|^2,
+    \label{ineq:condition}
+\end{equation}
 it holds that
 \begin{equation}
-    \|w^+ - w^*\| \leq c_2 \|w - w^*\|^2. \tag{22}
+    \|w^+ - w^*\| \leq c_2 \|w - w^*\|^2.
 \end{equation}
 \end{proposition}
 
@@ -476,42 +475,67 @@ and establish the local quadratic convergence by showing that the conditions in 
 \end{proof}
 
 \begin{lemma}
-    Under Assumption 4, when \{$(y^i, \lambda^i)$\} $\rightarrow$ $(y^*, \lambda^*)$, $\alpha_{p/d} \rightarrow 1$.
+    Under Assumption 4, when \{$(y^i, \lambda^i)$\} $\rightarrow$ $(y^*, \lambda^*)$, the affine step size of primal step and dual step satisfy
+    \begin{equation*}
+        |1-\alpha_p| = O(\|\delta^N\|), \qquad |1-\alpha_d| = O(\|\delta^N\|).
+    \end{equation*}
 \end{lemma}
 
 \begin{proof}
 For the affine step, the linearized complementary condition is given by:
 \begin{equation*}
-t_i \Delta \lambda_i + \lambda_i \Delta t_i = -t_i \lambda_i
+t_i \Delta \lambda_i^{\mathrm{aff}} + \lambda_i \Delta t_i^{\mathrm{aff}} = -t_i \lambda_i
 \end{equation*}
 
 Dividing both sides by $t_i \lambda_i$ yields the fundamental step identity:
 \begin{equation*}
-\frac{\Delta \lambda_i}{\lambda_i} + \frac{\Delta t_i}{t_i} = -1
+\frac{\Delta \lambda_i^{\mathrm{aff}}}{\lambda_i} + \frac{\Delta t_i^{\mathrm{aff}}}{t_i} = -1,
 \end{equation*}
-
-We evaluate the limits for the two subsets of constraints:
-
-For active constraints,
-as the iterates converge, $t_i \rightarrow 0$ and, by the strict complementarity condition, $\lambda_i \rightarrow \lambda_i^* > 0$. 
-This gives $\lim_{k \to \infty} \frac{\Delta \lambda_i}{\lambda_i} = 0$. Substituting this into the fundamental identity yields:
+where the magnitude bounds for the affine step are given from Lemma 4 as:
 \begin{equation*}
-\frac{\Delta t_i}{t_i} \rightarrow -1 \implies \lim_{k \to \infty} \frac{t_i}{-\Delta t_i} = 1
+    \|\Delta t^{\mathrm{aff}}\| = O(\|\delta^N\|), \qquad \|\Delta \lambda^{\mathrm{aff}}\| = O(\|\delta^N\|).
 \end{equation*}
 
-For inactive constraints,
-Conversely, $t_i \rightarrow t_i^* > 0$ and $\lambda_i \rightarrow 0$. This gives $\lim_{k \to \infty} \frac{\Delta t_i}{t_i} = 0$. Substituting this into the fundamental identity yields:
+\emph{Primal step.}
+As the FTB for primal variables is defined as:
 \begin{equation*}
-\frac{\Delta \lambda_i}{\lambda_i} \rightarrow -1 \implies \lim_{k \to \infty} \frac{\lambda_i}{-\Delta \lambda_i} = 1
-\end{equation*}
-
-The fraction-to-the-boundary step sizes are defined as:
+    \alpha_p = \min\left(1, \min_{\Delta t_j < 0} \frac{t_j}{-\Delta t_j}\right),
+\end{equation*} 
+where based on the identity, the ratio $\frac{t_j}{-\Delta t_j}$ can be expressed as:
 \begin{equation*}
-\alpha_p = \min \left( 1, \min_{\Delta t_i < 0} \frac{t_i}{-\Delta t_i} \right), \quad \alpha_d = \min \left( 1, \min_{\Delta \lambda_i < 0} \frac{\lambda_i}{-\Delta \lambda_i} \right)
+    \frac{t_j}{-\Delta t_j} = \frac{1}{1 + \frac{\Delta \lambda_i}{\lambda_i}}.
 \end{equation*}
 
-For $\alpha_p$, the active constraints yield ratios converging to $1$, while inactive constraints yield ratios converging to $\infty$. For $\alpha_d$, the inactive constraints yield ratios converging to $1$, while active constraints yield ratios converging to $\infty$. 
-Therefore, the minimum for both sequences converges to the full step size: $\alpha_p \rightarrow 1$ and $\alpha_d \rightarrow 1$.
+For inactive constraints $t_j\rightarrow t^\star > 0$, thus the ratio $\frac{t_j}{-\Delta t_j}  \rightarrow \infty$, and such indices do not attain the minimum.
+
+For active constraints, $\lambda_i \rightarrow \lambda_i^* > 0$ and $\Delta \lambda_i = O(\|\delta^N\|)$, we have:
+\begin{equation*}
+    1 - \frac{t_j}{-\Delta t_j} = \frac{\Delta \lambda}{\lambda + \Delta \lambda} = O(\|\delta^N\|).
+\end{equation*}
+
+Since $\alpha_p \le 1$, we have:
+\begin{equation*}
+    1 - \alpha_p = \max\left(0, \max_{\substack{j\in \mathit{A} \\ \Delta t_j < 0}} \left(1 - \frac{t_j}{-\Delta t_j}\right)\right) = O(\|\delta^N\|).
+\end{equation*}
+
+\emph{Dual step.}
+Symmetrically, the FTB for dual variables is defined as:
+\begin{equation*}
+    \alpha_d = \min\left(1, \min_{\Delta \lambda_j < 0} \frac{\lambda_j}{-\Delta \lambda_j}\right),
+\end{equation*}
+For active constraints, corresponding indices do not attain the minimum, due to $\frac{\lambda}{-\Delta \lambda} \rightarrow \infty$.
+For inactive constraints, $t_j \rightarrow t_j^* > 0$ and $\Delta t_j = O(\|\delta^N\|)$, 
+thus the ratio $\frac{\lambda_j}{-\Delta \lambda_j} = 1 - O(\|\delta^N \|)$.
+
+We then have:
+\begin{equation*}
+    1 - \alpha_d = \max\left(0, \max_{\substack{j \notin \mathit{A}}{\Delta \lambda_j < 0}} \left(1 - \frac{\lambda_j}{-\Delta \lambda_j}\right)\right) = O(\|\delta^N\|).
+\end{equation*}
+
+Combining the two estimates gives 
+\begin{equation*}
+    |1-\alpha_p| = O(\|\delta^N\|), \qquad |1-\alpha_d| = O(\|\delta^N\|).
+\end{equation*}
 \end{proof}
 
 \begin{theorem}
@@ -520,40 +544,46 @@ Therefore, the minimum for both sequences converges to the full step size: $\alp
 \end{theorem}
 
 \begin{proof}
-    We establish that the conditions in Proposition 3 hold with \ref{eq:IPM_KKT_system} as:
-	\begin{equation}
-        F(y, \pi, \lambda, t)= -
-		\begin{bmatrix}
-            Hy_i + g + F^\top \pi_i + G^\top \lambda_i \\
-            Fy_i - b \\
-            Gy_i + t_i - d \\
-            T_i \Lambda_i \mathbf{1} - \sigma_i \mu_i \mathbf{1}
-        \end{bmatrix}.
-	\end{equation}
-    Since the barrier parameter $\sigma_i \mu_i$ is of order O($||\delta^N||^4$) by lemma 3, the right-hand side of \ref{eq:IPM_KKT_system} can be expressed as affine step:
-    	\begin{equation}
-        F(y, \pi, \lambda, t)= -
-		\begin{bmatrix}
-            Hy_i + g + F^\top \pi_i + G^\top \lambda_i \\
-            Fy_i - b \\
-            Gy_i + t_i - d \\
-            T_i \Lambda_i \mathbf{1}
+    We establish that the conditions in Proposition 3 hold with \ref{eq:reduced_KKT_system_schur} as:
+
+    \begin{equation}
+        \underbrace{
+            \begin{bmatrix}
+            M + E^i & Z^\top G^\top\\
+            GZ & -\Lambda_i^{-1}T_i\\
+            \end{bmatrix}
+            \begin{bmatrix}
+            \Delta y_z \\
+            \Delta \lambda \\
+            \end{bmatrix}
+        }_{\mathcal{M}(w)} = -
+        \begin{bmatrix}
+        r_{\mathrm{stat, redu}}^i \\
+        \tilde{r}_{\mathrm{ineq, redu}}^i \\
         \end{bmatrix},
-	\end{equation}
-    for all $i$ is sufficiently large.
-    Based on this, it follows from lemma 2 that $W^i = \tilde{M^i}$ when $i$ is sufficiently large, indicating the same right-hand side to the Newton's method.
+    \end{equation}
 
-    We first then consider the update of primal variables $y$:
+    Under Assumptions 1-4, $\frac{\partial \mathcal{M}}{\partial w}$ is invertible at $w^*$.
+    By Lemma 2, $E^i=0$ for all $i$ sufficiently large,
+    so the left-hand side coincides with the exact Newton Jacobian.
+    By Lemma 4,
+    $\sigma_i\mu_i = O(\|\delta^N\|^4)$. Consequently,$||\Delta w_i - \delta^N(w_i)|| = O(\|\delta^N(w^i)\|^4)$ for $w^i \to w^*$.
+
+    With $\Delta w_i = [\Delta y_i, \Delta \lambda_i]^\top$, we start with the update of primal variables $y$,
     \begin{align}
-        |x_{i+1} - (x_i+ \Delta x_i)| &=  |x_{i}+ \alpha_p \Delta x_i - (x_i+ \Delta x_i)| \\
-                                      &= |1 - \alpha_p| ||\Delta x_i|| \\
-                                      &= |\frac{\Delta \lambda_i}{\lambda_i} \cdot \frac{-t_i}{\Delta t_i}| ||\Delta x_i|| \\
-                                     &\le C ||\Delta\lambda_i|| ||\Delta x_i|| \le C' ||\delta^N||^2,
+        \|y_{i+1} - (y_i+ \delta^N_y)\| &=  \|y_{i}+ \alpha_p \Delta y_i - (y_i+ \delta^N_y)\| \\
+                                      &\le |1 - \alpha_p| ||\Delta y_i|| + ||\Delta y_i - \delta^N_y||\\
+                                      &\le C_1 ||\delta^N_y|| ||\Delta y_i|| + C_2 ||\delta^N_y||^4 \\
+                                      &\le C' ||\delta^N_y||^2,
     \end{align}
-    as a result, the condition (ii) in Proposition 3 holds for the primal variables.
-    For the dual variables $\lambda$, The same logic also applies which results in the condition (ii) in Proposition 3 holds for the dual variables as well.
+    As a result, the condition \ref{ineq:condition} in Proposition 3 holds for the primal variables.
+    For the dual variables $\lambda$, the same logic applies with $\alpha_d$ substituting $\alpha_p$.
+    \footnote{In the implementation, 
+    the update for the dual variables is taken as $\max(\lambda+\alpha_d\Delta\lambda, \epsilon)$, 
+    where $\epsilon$ is on the order of machine precision.
+    This truncation is only activated when the accuracy reaches $\mathcal{O}(\sqrt{\epsilon})$ and thus does not affect the asymptotic convergence rate analysis above.}
 
-    Thus, all conditions in Proposition 3 hold, and we conclude that the sequence $\{(y^i, \lambda^i)\}$ converges to $(y^*, \lambda^*)$ with local quadratic convergence rate.
+    Thus, we can conclude that the sequence $\{(y^i, \lambda^i)\}$ converges to $(y^*, \lambda^*)$ with local quadratic convergence rate.
 \end{proof}
 
 \bibliographystyle{IEEEtran}
