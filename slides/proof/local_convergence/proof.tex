@@ -275,8 +275,10 @@ So, we could describe the Riccati recursion as an explicit block $\mathrm{L}^\to
 where the diagonal blocks are the reduced Hessian blocks obtained by Riccati recursion, and the off-diagonal blocks are defined by the feedback gain $K_k$ and the system dynamics $A_k$ and $B_k$.
 
 \subsection{Stage wise regularization}
-With this interpretation, we can directly apply the regularization to the reduced Hessian block $\tilde{M}_k^i$ during the Riccati recursion 
-when the Cholesky factorization of $\tilde{M}_k^i$ fails, which, by the relationship, can also guarantee the positive definiteness of $\tilde{M}^i$.
+With this interpretation, we can directly apply the regularization to the reduced Hessian block $\tilde{M}_k^i$ during the Riccati recursion.
+When the Cholesky factorization of $\tilde{M}_k^i$ fails in practice, 
+we do regularization to the reduced Hessian block $\tilde{M}_k^i$ by adding a regularization matrix block $E_k^i$, i.e. $\tilde{M}_k^i + E_k^i$.
+By the relationship, this can also guarantee the positive definiteness of $\tilde{M}^i$.
 The Backward pass of modified Riccati recursion can be concluded as follows:
 \begin{algorithm}[H]
 \caption{Backward Pass of Modified Riccati Recursion}
@@ -403,28 +405,32 @@ so we have the following lemma 1:
 \end{proof}
 
 \begin{lemma}
-    Under Assumption 1-4, given the sequence $\{W^i\}$ constructed by the algorithm, $W^i = \tilde{M}^i = Z^\top \tilde{H}^i Z$ for all $i$ sufficiently large.
+    Under Assumption 1-4, given the sequence $\{W^i\}$ constructed by the algorithm, as \{$(y^i, \lambda^i)$\} $\rightarrow$ $(y^*, \lambda^*)$,
+    $W^i = \tilde{M}^i = Z^\top \tilde{H}^i Z \succ 0$ for all $i$ sufficiently large.
 \end{lemma}
 
 \begin{proof}
     Under Assumption 4, the critical cone $C(y^*,\lambda^*)$ reduces to the tangent space of the active constraints. 
     Therefore, we have $C(y^*,\lambda^*) = \{v \mid F v = 0 ,G_{\mathcal{A}} v = 0\}$.
 
-    We then proceed with the reduced Hessian, for any $v \notin \{0\}$:
+    We then proceed with the reduced Hessian. For any $ v \in \{v \mid \|v\| = 1 \}$, we have:
     \begin{align*}
-        v^\top \tilde{M}^i v &= d^\top (H^i + G^\top T_i^{-1} \Lambda_i  G) d \\
-                    &= d^\top H^i d + \Sigma_{j} \frac{\lambda_j}{s_j} (G_j d)^2 \\
-                    &= d^\top H^i d + \Sigma_{j \in \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 + \Sigma_{j \notin \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2
+        v^\top \tilde{M}^i v &= d^\top (H + G^\top T_i^{-1} \Lambda_i  G) d \\
+                             &= d^\top H d + \sum_{j} \frac{\lambda_j}{s_j} (G_j d)^2 \\
+                             &= d^\top H d + \sum_{j \in \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 + \sum_{j \notin \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2
     \end{align*}
-    where $d = Zv \in \{d\mid Ad = 0\} \setminus \{0\}$, we now can distinguish two cases:
+    where $d = Zv \in \{d \mid Ad = 0\} \setminus \{0\}$. 
 
-    For $G_{\mathcal{A}}d=0$, this indicates $d \in C(y^*,\lambda^*) \setminus \{0\}$, $d^\top H^i d > 0$ follows by lemma 1,
-    the $\Sigma_{j \in \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 = 0$, $\Sigma_{j \notin \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 \rightarrow 0$ due to $\lambda_j\rightarrow0$. 
-    Thus, $\tilde{M}^i > 0$ for all $i$ sufficiently large.
+    We now proceed by contradiction, Assume $\exists v_i \in \{v \mid \|v\| = 1 \}, v_i \rightarrow \bar{v} : v_i^\top \tilde{M}^i v_i \leq 0$.
+    We can distinguish two cases:
 
-    For $G_{\mathcal{A}}d \neq 0$, the $\Sigma_{j \in \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 \rightarrow \infty$, ensuring the positive definiteness of $\tilde{M}^i$ for all $i$ sufficiently large.
-    
-    Therefore, we conclude that $W^i = \tilde{M}^i$ for all $i$ sufficiently large, i.e. $E_i=0$.
+    For $G_{\mathcal{A}}\bar{d}=0$, this indicates $d_i \in C(y^*,\lambda^*) \setminus \{0\}$. $d_i^\top H d_i > 0$ follows by Lemma 1.
+    Rest of the terms are non-negative, so we have $\bar{v}^\top \tilde{M}^i \bar{v}> 0$, contradict with assumption.
+
+    For $G_{\mathcal{A}}\bar{d} \neq 0$, the term $\sum_{j \in \mathcal{A}} \frac{\lambda_j}{s_j} (G_j d)^2 \rightarrow \infty$, 
+    which dominates the other two terms, and thus $v_i^\top \tilde{M}^i v_i \rightarrow \infty > 0$, contradict with assumption.
+
+    Therefore, we can conclude that $W^i = \tilde{M}^i = Z^\top \tilde{H}^i Z \succ 0$ for all $i$ sufficiently large, i.e., $E_i=0$.
 \end{proof}
 
 
@@ -499,7 +505,7 @@ where the magnitude bounds for the affine step are given from Lemma 4 as:
 \emph{Primal step.}
 As the FTB for primal variables is defined as:
 \begin{equation*}
-    \alpha_p = \min\left(1, \min_{\Delta t_j < 0} \frac{t_j}{-\Delta t_j}\right),
+    \alpha_p^{\max} = \min\left(1, \min_{\Delta t_j < 0} \frac{t_j}{-\Delta t_j}\right),
 \end{equation*} 
 where based on the identity, the ratio $\frac{t_j}{-\Delta t_j}$ can be expressed as:
 \begin{equation*}
@@ -508,20 +514,35 @@ where based on the identity, the ratio $\frac{t_j}{-\Delta t_j}$ can be expresse
 
 For inactive constraints $t_j\rightarrow t^\star > 0$, thus the ratio $\frac{t_j}{-\Delta t_j}  \rightarrow \infty$, and such indices do not attain the minimum.
 
-For active constraints, $\lambda_i \rightarrow \lambda_i^* > 0$ and $\Delta \lambda_i = O(\|\delta^N\|)$, we have:
+Since $\alpha_p^{\max} \leq 1$, for active constraints, $\lambda_i \rightarrow \lambda_i^* > 0$ 
+and $\Delta \lambda_i = O(\|\delta^N\|)$, we have:
 \begin{equation*}
-    1 - \frac{t_j}{-\Delta t_j} = \frac{\Delta \lambda}{\lambda + \Delta \lambda} = O(\|\delta^N\|).
+    1 - \alpha_p^{\max} = 1 - \frac{t_j}{-\Delta t_j} = \frac{\Delta \lambda}{\lambda + \Delta \lambda} = O(\|\delta^N\|).
 \end{equation*}
 
-Since $\alpha_p \le 1$, we have:
-\begin{equation*}
-    1 - \alpha_p = \max\left(0, \max_{\substack{j\in \mathit{A} \\ \Delta t_j < 0}} \left(1 - \frac{t_j}{-\Delta t_j}\right)\right) = O(\|\delta^N\|).
-\end{equation*}
+Considering the safeguard value:
+\begin{align*}
+    \tau(\alpha_p^{\max}) &= (1-\alpha_p^{\max}) \epsilon_\alpha + (1 - \mu_c) \alpha_p^{\max},
+\end{align*}
+where $\mu_c = \min(\epsilon_\mu, \mu)$.
+
+We have:
+\begin{align*}
+    \alpha_p &= \tau(\alpha_p^{\max}) \alpha_p^{\max} \\
+             &= \alpha_p^{\max}[1-(1-\alpha_p^{\max})(1-\epsilon_\alpha) - \mu_c\alpha_p^{\max}] \\
+             &= \alpha_p^{\max} - (1-\alpha_p^{\max})(1-\epsilon_\alpha)\alpha_p^{\max} - \mu_c(\alpha_p^{\max})^2
+\end{align*}
+
+In local convergence, $\mu_c = \mu$ holds, by lemma 4, the $1 - \alpha_p$ is :
+\begin{align*}
+    1 - \alpha_p &= O(\|\delta^N\|) + O(\|\delta^N\|) + O(\|\delta^N\|^4) \\
+                 &= O(\|\delta^N\|).
+\end{align*}
 
 \emph{Dual step.}
 Symmetrically, the FTB for dual variables is defined as:
 \begin{equation*}
-    \alpha_d = \min\left(1, \min_{\Delta \lambda_j < 0} \frac{\lambda_j}{-\Delta \lambda_j}\right),
+    \alpha_d^{\max} = \min\left(1, \min_{\Delta \lambda_j < 0} \frac{\lambda_j}{-\Delta \lambda_j}\right),
 \end{equation*}
 For active constraints, corresponding indices do not attain the minimum, due to $\frac{\lambda}{-\Delta \lambda} \rightarrow \infty$.
 For inactive constraints, $t_j \rightarrow t_j^* > 0$ and $\Delta t_j = O(\|\delta^N\|)$, 
@@ -529,8 +550,10 @@ thus the ratio $\frac{\lambda_j}{-\Delta \lambda_j} = 1 - O(\|\delta^N \|)$.
 
 We then have:
 \begin{equation*}
-    1 - \alpha_d = \max\left(0, \max_{\substack{j \notin \mathit{A}}{\Delta \lambda_j < 0}} \left(1 - \frac{\lambda_j}{-\Delta \lambda_j}\right)\right) = O(\|\delta^N\|).
+    1 - \alpha_d^{\max} =  1 - \frac{\lambda_j}{-\Delta \lambda_j} = O(\|\delta^N\|).
 \end{equation*}
+
+Following the same logic as primal step, we can conclude that $1 - \alpha_d = O(\|\delta^N\|)$.
 
 Combining the two estimates gives 
 \begin{equation*}
