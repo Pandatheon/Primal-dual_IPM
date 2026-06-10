@@ -31,6 +31,7 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
 
         reduced_hessian_reg = R_reg + B_k.T @ P_reg @ B_k
+
     elif reg_config.method == 'PM_STAGE_MIRROR':
         # EM P first
         P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
@@ -125,6 +126,82 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         if E_term:
             reduced_hessian_reg = reduced_hessian_reg + E_term * np.eye(reduced_hessian.shape[0])
 
+    #Trial methods below,
+    elif reg_config.method == 'M_STAGE_CM':
+        A_k = qp.A[stage]
+        Q_k = qp.Q[stage]
+        S_k = qp.S[stage]
+
+        P_reg = P_prev
+
+        L, D, E, p = modified_cholesky_SE(reduced_hessian)
+        R_chol = L * np.sqrt(D)
+        inv_p = np.argsort(p)
+        g1 = S_k + B_k.T @ P_reg @ A_k
+        g1_permuted = g1[p]
+        y1 = np.linalg.solve(R_chol, g1_permuted)
+        K_permuted = -np.linalg.solve(R_chol.T, y1)
+        K_curr = K_permuted[inv_p]
+        P_curr = Q_k + A_k.T @ P_reg @ A_k - (S_k.T + A_k.T @ P_reg @ B_k) @ (-K_curr)
+
+        reduced_hessian_reg = (R_chol @ R_chol.T)[np.ix_(inv_p, inv_p)]
+
+    elif reg_config.method == 'M_STAGE_MIRROR':
+        A_k = qp.A[stage]
+        Q_k = qp.Q[stage]
+        S_k = qp.S[stage]
+
+        P_reg = P_prev
+
+        reduced_hessian_reg = R_k + B_k.T @ P_reg @ B_k
+        reduced_hessian_reg = do_regularization(reduced_hessian_reg, reg_config.delta, method="MIRROR")
+
+    elif reg_config.method == 'RP_STAGE_CM':
+        A_k = qp.A[stage]
+        Q_k = qp.Q[stage]
+        S_k = qp.S[stage]
+
+        L_R, D_R, E_R, p = modified_cholesky_SE(R_k)
+        R_reg = (L_R @ np.diag(D_R) @ L_R.T)[np.ix_(np.argsort(p), np.argsort(p))]
+        L_P, D_P, E_P, p_P = modified_cholesky_SE(P_prev)
+        P_reg = (L_P @ np.diag(D_P) @ L_P.T)[np.ix_(np.argsort(p_P), np.argsort(p_P))]
+
+        reduced_hessian_reg = R_reg + B_k.T @ P_reg @ B_k
+
+        R_chol = np.linalg.cholesky(reduced_hessian_reg)
+        inv_p = np.argsort(p)
+        g1 = S_k + B_k.T @ P_reg @ A_k
+        g1_permuted = g1[p]
+        y1 = np.linalg.solve(R_chol, g1_permuted)
+        K_permuted = -np.linalg.solve(R_chol.T, y1)
+        K_curr = K_permuted[inv_p]
+        P_curr = Q_k + A_k.T @ P_reg @ A_k - (S_k.T + A_k.T @ P_reg @ B_k) @ (-K_curr)
+
+        reduced_hessian_reg = (R_chol @ R_chol.T)[np.ix_(inv_p, inv_p)]
+
+    elif reg_config.method == 'PM_STAGE_PROJECT':
+        # EM P first
+        P_reg = do_regularization(P_prev, reg_config.delta, method="PROJECT")
+        reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
+
+        #  EM modified M next
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="PROJECT")
+
+    elif reg_config.method == 'PM_STAGE_MIPROJECT':
+        # EM P first
+        P_reg = do_regularization(P_prev, reg_config.delta, method="MIRROR")
+        reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
+
+        #  EM modified M next
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="PROJECT")
+
+    elif reg_config.method == 'PM_STAGE_PROMIRROR':
+        # EM P first
+        P_reg = do_regularization(P_prev, reg_config.delta, method="PROJECT")
+        reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
+
+        #  EM modified M next
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="MIRROR")
     return reduced_hessian_reg, P_reg
 
 def do_regularization(mat: np.ndarray,

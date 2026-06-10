@@ -112,7 +112,7 @@ class Riccati_IPM():
                 if self.reg_config.method == 'NO_REGULARIZE':
                     raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
 
-                elif self.reg_config.method in stage_reg:
+                elif self.reg_config.method not in Hessian_reg:
 
                     try:
                         reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)

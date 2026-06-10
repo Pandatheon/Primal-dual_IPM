@@ -66,28 +66,41 @@ class BaseQP():
         cost_fields = ['Q', 'R', 'S', 'q', 'r']
         constraints_fields = ['C', 'D', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
 
-        # Helper to dynamically extract sequences like A_00, A_01...
         def extract_sequence(prefix):
             seq = []
-            i = 0
+
+            # Get the actual padding length
+            pad_len = 2
+            for key in data:
+                if key.startswith(f"{prefix}_"):
+                    pad_len = len(key.split('_')[-1])
+                    break
+
             if prefix in cost_fields + dynamics_fields:
-                while f"{prefix}_{i:02d}" in data:
+                i = 0
+                while True:
+                    key = f"{prefix}_{i:0{pad_len}d}"
+                    if key not in data:
+                        break
+
                     if prefix in matrix_fields:
-                        seq.append(np.array(data[f"{prefix}_{i:02d}"]))
+                        seq.append(np.array(data[key]))
                     elif prefix in vector_fields:
-                        seq.append(np.array(data[f"{prefix}_{i:02d}"]).flatten())
+                        seq.append(np.array(data[key]).flatten())
                     i += 1
             else:
                 N = len(self.A)
-                i = 0
                 for k in range(N+1):
-                    if f"{prefix}_{k:02d}" in data:
+                    key = f"{prefix}_{k:0{pad_len}d}"
+
+                    if key in data:
                         if prefix in matrix_fields:
-                            seq.append(np.array(data[f"{prefix}_{k:02d}"]))
+                            seq.append(np.array(data[key]))
                         elif prefix in vector_fields:
-                            seq.append(np.array(data[f"{prefix}_{k:02d}"]).flatten())
+                            seq.append(np.array(data[key]).flatten())
                     else:
                         seq.append(np.zeros((0, self.nx if prefix in ['C'] else self.nu)))
+
             return seq if seq else None
 
         # Populate dynamics matrices

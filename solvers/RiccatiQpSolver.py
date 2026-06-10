@@ -388,8 +388,9 @@ class QpSolver:
     def _funnel_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=5):
 
         # FTB
-        alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * 0.9999999) if self.alpha_prim < 1.0 else self.alpha_prim
-        alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * 0.9999999) if self.alpha_dual < 1.0 else self.alpha_dual
+        tau_hi = 1.0 - min(1e-7, self.rhs.duality_measure)
+        alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * tau_hi) if self.alpha_prim < 1.0 else self.alpha_prim
+        alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * tau_hi) if self.alpha_dual < 1.0 else self.alpha_dual
 
         if self.globalization:
             objective, norm_c = self._compute_objective_and_constraints(prev_sol)
@@ -504,6 +505,12 @@ class QpSolver:
 
     def _convergence_check(self, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
+        res = max(self.statistics_dict['res_stat_list'][-1],
+                  self.statistics_dict['res_eq_list'][-1],
+                  self.statistics_dict['res_ineq_list'][-1],
+                  self.statistics_dict['res_comp_list'][-1])
+        if res == np.inf or np.isnan(res):
+            return True
         return ((self.statistics_dict['res_stat_list'][-1] < self.res_max['res_stat'] + relative_tol*self.res_max['res_stat']) and
                 (self.statistics_dict['res_eq_list'][-1] < self.res_max['res_eq'] + relative_tol*self.res_max['res_eq']) and
                 (self.statistics_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
@@ -515,6 +522,10 @@ class QpSolver:
                   self.statistics_dict['res_eq_list'][-1],
                   self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
+        if res == np.inf or np.isnan(res):
+            print(f"\033[31mSolver diverged!\033[0m after {self.statistics_dict['iter_count']} iterations.")
+            self.status = -1
+            return
         if self.statistics_dict['iter_count'] >= self.max_iter:
             print(f"\033[31mNot Converged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.6e}")
         else:

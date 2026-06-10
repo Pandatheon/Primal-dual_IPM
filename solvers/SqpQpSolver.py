@@ -202,8 +202,8 @@ class SqpQpSolver(AcadosOcpSolver):
 
         # constraints with placeholders
         # initial state constraints
-        ocp.constraints.x0 = np.array([0.0, 0.0, 0.0, 0.0])
-        ocp.constraints.idxbx_0 = np.array([0, 1, 2, 3])
+        ocp.constraints.x0 = np.zeros((nx, 1))
+        ocp.constraints.idxbx_0 = np.arange(nx).tolist()
         # control constraints
         ocp.constraints.lbu = -np.zeros((nu, 1))
         ocp.constraints.ubu = np.zeros((nu, 1))
