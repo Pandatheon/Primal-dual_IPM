@@ -18,7 +18,7 @@ class Riccati_IPM():
         self.reg = False
 
     def forward_sweep(self, prev_sol:iterate_sol, feedback:Feedback)-> dict:
-        delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*self.qp.N, [None]*self.qp.N
+        delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*(self.qp.N+1), [None]*(self.qp.N+1)
         lam_i = prev_sol.lam
         s_i = prev_sol.s
 
@@ -27,26 +27,39 @@ class Riccati_IPM():
         delta_x[0] = np.zeros((self.qp.nx,))
         delta_pi[0] = feedback.P[0] @ delta_x[0] + feedback.p[0]
 
-        for k in range(self.qp.N):
-            C_k = self.qp.C[k]
-            D_k = self.qp.D[k]
-            rhs_b = self.rhs_kkt.rb[k]
-            rhs_d= self.rhs_kkt.rd[k]
-            rhs_m = self.rhs_kkt.rm[k]
+        for k in range(self.qp.N+1):
+            if k < self.qp.N:
+                C_k = self.qp.C[k]
+                D_k = self.qp.D[k]
+                rhs_b = self.rhs_kkt.rb[k]
+                rhs_d= self.rhs_kkt.rd[k]
+                rhs_m = self.rhs_kkt.rm[k]
 
-            # recover x and u
-            delta_u[k] = feedback.compute_control(k, delta_x[k])
-            delta_x[k+1] = self.qp.A[k]@delta_x[k] + self.qp.B[k]@delta_u[k] + rhs_b
+                # recover x and u
+                delta_u[k] = feedback.compute_control(k, delta_x[k])
+                delta_x[k+1] = self.qp.A[k]@delta_x[k] + self.qp.B[k]@delta_u[k] + rhs_b
 
-            # recover s
-            delta_s[k] = -(C_k @delta_x[k] + D_k @delta_u[k]) - rhs_d
+                # recover s
+                delta_s[k] = -(C_k @delta_x[k] + D_k @delta_u[k]) - rhs_d
 
-            # recover lam
-            rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
-            delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
+                # recover lam
+                rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
+                delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
 
-            # recover pi
-            delta_pi[k+1] =  feedback.P[k+1] @ delta_x[k+1] + feedback.p[k+1]
+                # recover pi
+                delta_pi[k+1] =  feedback.P[k+1] @ delta_x[k+1] + feedback.p[k+1]
+            else:
+                C_k = self.qp.C[k]
+                D_k = self.qp.D[k]
+                rhs_d= self.rhs_kkt.rd[k]
+                rhs_m = self.rhs_kkt.rm[k]
+
+                # recover s
+                delta_s[k] = -(C_k @delta_x[k]) - rhs_d
+
+                # recover lam
+                rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
+                delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
 
         delta_dict = {
             'delta_x': delta_x,
@@ -146,30 +159,51 @@ class Riccati_IPM():
     def modify_QP(self, qp, prev_sol:iterate_sol):
         modified_QP = copy.deepcopy(qp)
 
-        for k in range(qp.N):
-            s_k = prev_sol.s[k]
-            lam_k = prev_sol.lam[k]
-            C_k = qp.C[k]
-            D_k = qp.D[k]
+        for k in range(qp.N+1):
+            if k < qp.N:
+                s_k = prev_sol.s[k]
+                lam_k = prev_sol.lam[k]
+                C_k = qp.C[k]
+                D_k = qp.D[k]
 
-            C_full = np.hstack((C_k, D_k))
-            T_mat = np.diag(s_k)
-            Lam_mat = np.diag(lam_k)
-            rd = self.rhs_kkt.rd[k]
-            rm = self.rhs_kkt.rm[k]
+                C_full = np.hstack((C_k, D_k))
+                T_mat = np.diag(s_k)
+                Lam_mat = np.diag(lam_k)
+                rd = self.rhs_kkt.rd[k]
+                rm = self.rhs_kkt.rm[k]
 
-            T_mat_inv = np.linalg.inv(T_mat)
-            lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-            rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
+                T_mat_inv = np.linalg.inv(T_mat)
+                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
+                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
 
-            Q_tilt = lhs_modification[:qp.nx, :qp.nx]
-            R_tilt = lhs_modification[qp.nx:, qp.nx:]
-            S_tilt = lhs_modification[qp.nx:, :qp.nx]
-            modified_QP.Q[k] = qp.Q[k] + Q_tilt
-            modified_QP.R[k] = qp.R[k] + R_tilt
-            modified_QP.S[k] = qp.S[k] + S_tilt
+                Q_tilt = lhs_modification[:qp.nx, :qp.nx]
+                R_tilt = lhs_modification[qp.nx:, qp.nx:]
+                S_tilt = lhs_modification[qp.nx:, :qp.nx]
+                modified_QP.Q[k] = qp.Q[k] + Q_tilt
+                modified_QP.R[k] = qp.R[k] + R_tilt
+                modified_QP.S[k] = qp.S[k] + S_tilt
 
-            self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
-            self.rhs_kkt.rg[k][qp.nx:] = self.rhs_kkt.rg[k][qp.nx:] + rhs_modification[qp.nx:]
-        self.rhs_kkt.rg[-1] = self.rhs_kkt.rg[-1]
+                self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
+                self.rhs_kkt.rg[k][qp.nx:] = self.rhs_kkt.rg[k][qp.nx:] + rhs_modification[qp.nx:]
+            else:
+                s_k = prev_sol.s[k]
+                lam_k = prev_sol.lam[k]
+                C_k = qp.C[k]
+                D_k = qp.D[k]
+
+                C_full = C_k
+                T_mat = np.diag(s_k)
+                Lam_mat = np.diag(lam_k)
+                rd = self.rhs_kkt.rd[k]
+                rm = self.rhs_kkt.rm[k]
+
+                T_mat_inv = np.linalg.inv(T_mat)
+                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
+                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
+
+                Q_tilt = lhs_modification[:qp.nx, :qp.nx]
+                modified_QP.Q_e = qp.Q_e + Q_tilt
+
+                self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
+
         return modified_QP

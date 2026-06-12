@@ -80,78 +80,72 @@ class QpSolver:
         if x0 is None:
             x0 = np.zeros((self.qp.nx,))
         x_0 = np.zeros((self.qp.nx,))
-        self.solution.x = [x_0] + [x0 for i in range(self.qp.N)]
-        self.solution.u = [np.zeros((self.qp.nu,)) for _ in range(self.qp.N)]
+        self.solution.x = [np.zeros(self.qp.nx) for _ in range(self.qp.N + 1)]
+        self.solution.u = [np.zeros(self.qp.nu) for _ in range(self.qp.N)]
         self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
-        self._initailize_lam_and_s()
-        _, theta_max = self._compute_objective_and_constraints(self.solution)
-        self.theta_max = max(1.25 * theta_max, 100)
+        self._initialize_lam_and_s()
 
-    def _initailize_lam_and_s(self):
+        if self.globalization:
+            _, theta_max = self._compute_objective_and_constraints(self.solution)
+            self.theta_max = max(1.25 * theta_max, 100)
+
+    def _initialize_lam_and_s(self):
         self.solution.s = []
         self.solution.lam = []
-        threshold = 1e-1
-        for k in range(self.qp.N):
-            nb = self.qp.nb_0 if k == 0 else (self.qp.nb_e if k == self.qp.N else self.qp.nb)
-            nh = self.qp.nh_0 if k == 0 else (self.qp.nh_e if k == self.qp.N else self.qp.nh)
+        thr = 1e-1
+        mu0 = self.rhs.duality_measure
+        for k in range(self.qp.N + 1):
+            if k == 0:
+                nb, nh = self.qp.nb_0, self.qp.nh_0
+            elif k == self.qp.N:
+                nb, nh = self.qp.nb_e, self.qp.nh_e
+            else:
+                nb, nh = self.qp.nb, self.qp.nh
             end_lb = nb + nh
 
-            Jbx_k = self.qp.Jbx[k]
-            Jbu_k = self.qp.Jbu[k]
+            Jbx_k, Jbu_k = self.qp.Jbx[k], self.qp.Jbu[k]
             d_k = self.qp.d[k]
-            C_k = self.qp.C[k][end_lb+nb:]
-            D_k = self.qp.D[k][end_lb+nb:]
+            C_k = self.qp.C[k][end_lb + nb:]
+            D_k = self.qp.D[k][end_lb + nb:]
+            idxbu = np.nonzero(Jbu_k)[1] if Jbu_k.shape[0] > 0 else np.empty(0, dtype=int)
+            idxbx = np.nonzero(Jbx_k)[1] if Jbx_k.shape[0] > 0 else np.empty(0, dtype=int)
+            nbu = idxbu.size
 
-            bounded_x = Jbx_k @ self.solution.x[k] if Jbx_k.shape[0] > 0 else np.array([])
-            bounded_u = Jbu_k @ self.solution.u[k] if Jbu_k.shape[0] > 0 else np.array([])
-            bounded_ux = np.concatenate((bounded_u, bounded_x))
+            v = np.concatenate((
+                self.solution.u[k][idxbu] if nbu > 0 else np.empty(0),
+                self.solution.x[k][idxbx] if idxbx.size > 0 else np.empty(0),
+            ))
+            lb = -d_k[:nb]
+            ub = d_k[end_lb:end_lb + nb]
 
-            d_lb_box = d_k[:nb]
-            d_ub_box = d_k[end_lb:end_lb+nb]
+            t_lb = v - lb
+            t_ub = ub - v
+            small_lb = t_lb < thr
+            small_ub = t_ub < thr
+            both    = small_lb &  small_ub
+            only_lb = small_lb & ~small_ub
+            only_ub = small_ub & ~small_lb
 
-            s_lb_box = bounded_ux + d_lb_box
-            s_ub_box = d_ub_box - bounded_ux
+            v[both]    = 0.5 * (lb[both] + ub[both]); t_lb[both] = thr; t_ub[both] = thr
+            v[only_lb] = lb[only_lb] + thr;           t_lb[only_lb] = thr
+            v[only_ub] = ub[only_ub] - thr;           t_ub[only_ub] = thr
 
-            mask_lb = s_lb_box < threshold
-            mask_ub = s_ub_box < threshold
-            mask_both = mask_lb & mask_ub
+            s_lb_box, s_ub_box = t_lb, t_ub
+            if nbu > 0:
+                self.solution.u[k][idxbu] = v[:nbu]
+            if idxbx.size > 0:
+                self.solution.x[k][idxbx] = v[nbu:]
 
-            if np.any(mask_both):
-                bounded_ux[mask_both] = 0.5 * (d_ub_box[mask_both] - d_lb_box[mask_both])
-                s_lb_box[mask_both] = threshold
-                s_ub_box[mask_both] = threshold
+            if k < self.qp.N:
+                y = C_k @ self.solution.x[k] + D_k @ self.solution.u[k]
+            else:
+                y = C_k @ self.solution.x[k]
+            s_lb_gen = np.maximum(y + d_k[nb:end_lb], thr)
+            s_ub_gen = np.maximum(d_k[end_lb + nb:end_lb + nb + nh] - y, thr)
 
-            mask_only_lb = mask_lb & ~mask_both
-            if np.any(mask_only_lb):
-                s_lb_box[mask_only_lb] = threshold
-                bounded_ux[mask_only_lb] = -d_lb_box[mask_only_lb] + threshold
-
-            mask_only_ub = mask_ub & ~mask_both
-            if np.any(mask_only_ub):
-                s_ub_box[mask_only_ub] = threshold
-                bounded_ux[mask_only_ub] = d_ub_box[mask_only_ub] - threshold
-
-            self.solution.u[k] = bounded_ux[:self.qp.nu] if bounded_ux[:self.qp.nu].size > 0 else self.solution.u[k]
-            self.solution.x[k] = bounded_ux[self.qp.nu:] if bounded_ux[self.qp.nu:].size > 0 else self.solution.x[k]
-
-            d_lb_gen = d_k[nb:end_lb]
-            d_ub_gen = d_k[end_lb+nb:end_lb+nb+nh]
-
-            y_gen = C_k @ self.solution.x[k] + D_k @ self.solution.u[k]
-
-            s_lb_gen_raw = y_gen + d_lb_gen
-            s_ub_gen_raw = d_ub_gen - y_gen
-
-            s_lb_gen = np.maximum(s_lb_gen_raw, threshold)
-            s_ub_gen = np.maximum(s_ub_gen_raw, threshold)
-
-            s_lb_full = np.concatenate((s_lb_box, s_lb_gen))
-            s_ub_full = np.concatenate((s_ub_box, s_ub_gen))
-            s_k_full = np.concatenate((s_lb_full, s_ub_full))
-
-            self.solution.s.append(s_k_full)
-            self.solution.lam.append(self.rhs.duality_measure / s_k_full)
-
+            s_k = np.concatenate((s_lb_box, s_lb_gen, s_ub_box, s_ub_gen))
+            self.solution.s.append(s_k)
+            self.solution.lam.append(mu0 / s_k)
 
     def compute_rhs(self, prev_sol:iterate_sol)-> np.ndarray:
         nx = self.qp.nx
@@ -163,67 +157,82 @@ class QpSolver:
         res_comp = []
         duality_measure = 0.0
 
-        for k in range(self.qp.N):
-            Q_k = self.qp.Q[k]
-            R_k = self.qp.R[k]
-            S_k = self.qp.S[k]
-            A_k = self.qp.A[k]
-            B_k = self.qp.B[k]
-            b_k = self.qp.b[k]
-            C_k = self.qp.C[k]
-            D_k = self.qp.D[k]
-            d_k = self.qp.d[k]
-            q_k = self.qp.q[k]
-            r_k = self.qp.r[k]
+        for k in range(self.qp.N+1):
             x, u, pi, lam, s = prev_sol
+            if k < self.qp.N:
+                Q_k = self.qp.Q[k]
+                R_k = self.qp.R[k]
+                S_k = self.qp.S[k]
+                A_k = self.qp.A[k]
+                B_k = self.qp.B[k]
+                b_k = self.qp.b[k]
+                C_k = self.qp.C[k]
+                D_k = self.qp.D[k]
+                d_k = self.qp.d[k]
+                q_k = self.qp.q[k]
+                r_k = self.qp.r[k]
 
-            # stationarity residual
-            temp_res_stat = np.zeros(nx + nu)
-            temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1] + C_k.T @ lam[k] - pi[k]
-            temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k+1] + D_k.T @ lam[k]
-            res_stat.append(temp_res_stat)
+                # stationarity residual
+                temp_res_stat = np.zeros(nx + nu)
+                temp_res_stat[:nx] = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1] + C_k.T @ lam[k] - pi[k]
+                temp_res_stat[nx:] = R_k @ u[k] + S_k @ x[k] + r_k + B_k.T @ pi[k+1] + D_k.T @ lam[k]
+                res_stat.append(temp_res_stat)
 
-            #equality residual
-            res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k)
+                #equality residual
+                res_eq.append(A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k)
 
-            #inequality residual
-            res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
+                #inequality residual
+                res_ineq.append((C_k @ x[k] + D_k @ u[k] + s[k]) - d_k)
 
-            #complementarity residual
-            temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
-            duality_measure += (lam[k] @ s[k])
-            res_comp.append(temp_res_comp)
+                #complementarity residual
+                temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
+                duality_measure += (lam[k] @ s[k])
+                res_comp.append(temp_res_comp)
+            else:
+                Q_e = self.qp.Q_e
+                q_e = self.qp.q_e
+                C_k = self.qp.C[k]
+                d_k = self.qp.d[k]
 
-        # terminal residual
-        temp_res_stat = np.zeros(nx+nu)
-        Q_e = self.qp.Q_e
-        q_e = self.qp.q_e
-        temp_res_stat[:nx] = Q_e @ x[self.qp.N] + q_e - pi[self.qp.N]
-        res_stat.append(temp_res_stat)
+                # stationarity residual
+                temp_res_stat = np.zeros(nx)
+                temp_res_stat = Q_e @ x[k] + q_e + C_k.T @ lam[k] - pi[k]
+                res_stat.append(temp_res_stat)
+
+                #inequality residual
+                res_ineq.append((C_k @ x[k] + s[k]) - d_k)
+
+                #complementarity residual
+                temp_res_comp = (np.diag(lam[k]) @ s[k]).flatten()
+                duality_measure += (lam[k] @ s[k])
+                res_comp.append(temp_res_comp)
 
         self.rhs.rg = res_stat
         self.rhs.rb = res_eq
         self.rhs.rd = res_ineq
         self.rhs.rm = res_comp
 
-        # # print for debug
+        # if self.statistics_dict['iter_count'] == 1:
+        #     print("rg:")
+        #     for k in range(self.qp.N+1):
+        #         print(f"== Stage {k} ==")
+        #         row_str = "  ".join(f"{x:>13.5e}" for x in self.rhs.rg[k])
+        #         print(row_str)
+        #         print()
+
+        # print("b:")
         # for k in range(self.qp.N):
-        #     b_k = self.qp.b[k]
-        #     print(f"Stage {k}: b_k = {b_k}")
+        #     print(f"== Stage {k} ==")
+        #     row_str = "  ".join(f"{x:>13.5e}" for x in self.qp.b[k])
+        #     print(row_str)
+        #     print()
+
+        # print("rb:")
         # for k in range(self.qp.N):
-        #     rq_k = np.concatenate((self.qp.r[k], self.qp.q[k]))
-        #     print(f"Stage {k}: rq_k = {rq_k}")
-        # for k in range(self.qp.N):
-        #     # rg
-        #     print(f"Stage {k}: rg = {res_stat[k]}")
-        #     # rb
-        #     print(f"Stage {k}: rb = {res_eq[k]}")
-        #     # rd
-        #     print(f"Stage {k}: rd = {res_ineq[k]}")
-        #     # rm
-        #     print(f"Stage {k}: rm = {res_comp[k]}")
-        #     print("-" * 30)
-        # breakpoint()
+        #     print(f"== Stage {k} ==")
+        #     row_str = "  ".join(f"{x:>13.5e}" for x in self.rhs.rb[k])
+        #     print(row_str)
+        #     print()
 
         self.backup_rm = copy.deepcopy(self.rhs.rm)
         self.rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
@@ -236,13 +245,13 @@ class QpSolver:
 
     def update_rhs_comp(self, step_type:str='centering'):
         if step_type == 'centering':
-            for k in range(self.qp.N):
+            for k in range(self.qp.N+1):
                 self.rhs.rm[k] = self.backup_rm[k] - self.centering_param * self.rhs.duality_measure * np.ones(len(self.rhs.rm[k]))
         elif step_type == 'predictor-corrector':
-            for k in range(self.qp.N):
+            for k in range(self.qp.N+1):
                 self.rhs.rm[k] = self.backup_rm[k] + (self.delta_aff_dict['delta_lam'][k] * self.delta_aff_dict['delta_s'][k]) - self.centering_param * self.rhs.duality_measure * np.ones(len(self.backup_rm[k]))
         elif step_type == 'predictor':
-            for k in range(self.qp.N):
+            for k in range(self.qp.N+1):
                 self.rhs.rm[k] = self.backup_rm[k] - 1e-16 * np.ones(len(self.backup_rm[k]))
 
 
@@ -285,10 +294,29 @@ class QpSolver:
         self.max_iter = max_iter
 
         prev_sol = copy.deepcopy(self.solution)
-        self.compute_rhs(prev_sol=prev_sol)
+
+        # print ux
+        # print("Initial primal variables (u concatenated with x):")
+        # for k in range(self.qp.N+1):
+        #     ux = np.concatenate((self.solution.u[k] if k < self.qp.N else np.empty(0), self.solution.x[k]))
+        #     # Format each float to 5 decimal places with a fixed width of 9 characters
+        #     row_str = "  ".join(f"{x:>9.5f}" for x in ux)
+        #     print(row_str)
+        #     print()
+        # print lam
+        # print("Initial Lagrange multipliers:")
+        # for k in range(self.qp.N+1):
+        #     print(f"Stage {k}: lam = {self.solution.lam[k]}")
+        # # print slack
+        # print("Initial slack variables:")
+        # for k in range(self.qp.N+1):
+        #     print(f"Stage {k}: s = {self.solution.s[k]}")
+
 
         while True:
 
+            self.compute_rhs(prev_sol=prev_sol)
+            # exit()
             # check convergence based on predictor step
             if self._convergence_check() or self.statistics_dict['iter_count'] == self.max_iter:
                 self._quit()
@@ -306,12 +334,24 @@ class QpSolver:
             mu_aff = self._compute_duality(prev_sol, self.delta_aff_dict)
             self.centering_param = (mu_aff/self.rhs.duality_measure)**3
 
+            # for k in range(self.qp.N):
+            #     dux = np.concatenate((self.delta_aff_dict['delta_u'][k], self.delta_aff_dict['delta_x'][k]))
+            #     print(f"Stage {k}: {dux}")
+            # breakpoint()
+
+            # print(f"Iter {self.statistics_dict['iter_count']}: alpha_aff_pri = {self.alpha_prim:.6f}, alpha_aff_dual = {self.alpha_dual:.6f}, alpha_aff = {self.alpha:.6f}")
+            # print(f"Iter {self.statistics_dict['iter_count']}: mu_aff = {mu_aff:.6e}")
+            # print(f"Iter {self.statistics_dict['iter_count']}: centering_param = {self.centering_param:.6e}")
+
             if self.Mehrotra_step:
                 ## predictor-corrector step
                 self.update_rhs_comp(step_type='predictor-corrector')
                 self.delta_dict = self._compute_step(prev_sol)
                 self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
                 mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+
+                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_corr_pri = {self.alpha_prim:.6f}, alpha_corr_dual = {self.alpha_dual:.6f}, alpha_corr = {self.alpha:.6f}")
+                # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred = {mu_pred:.6e}")
 
                 ### Conditonal Mehrotra step
                 if mu_pred > 2*mu_aff:
@@ -329,7 +369,22 @@ class QpSolver:
             self.statistics_dict['alpha_list'][-1] = self.alpha
 
             prev_sol = copy.deepcopy(self.solution)
-            self.compute_rhs(prev_sol=prev_sol)
+
+            # print("primal variables (u concatenated with x):")
+            # for k in range(self.qp.N+1):
+            #     ux = np.concatenate((self.solution.u[k] if k < self.qp.N else np.empty(0), self.solution.x[k]))
+            #     # Format each float to 5 decimal places with a fixed width of 9 characters
+            #     row_str = "  ".join(f"{x:>9.5f}" for x in ux)
+            #     print(row_str)
+            #     print()
+
+            # print("dynamic pi:")
+            # for k in range(1, self.qp.N+1):
+            #     pi_k = self.solution.pi[k]
+            #     # Format each float to 5 decimal places with a fixed width of 9 characters
+            #     row_str = "  ".join(f"{x:>9.5f}" for x in pi_k)
+            #     print(row_str)
+            #     print()
 
         self._recover_solution()
         return self.solution
@@ -355,8 +410,8 @@ class QpSolver:
         x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
         pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)]
-        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N)]
+        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N+1)]
+        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N+1)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
 
@@ -397,8 +452,8 @@ class QpSolver:
             obj_grad = self._compute_objective_grad(prev_sol)
 
             direction_prim = np.concatenate(
-                delta_dict['delta_x'] + 
-                delta_dict['delta_u'] + 
+                delta_dict['delta_x'] +
+                delta_dict['delta_u'] +
                 delta_dict['delta_s']
             )
             grad_direc_prod = obj_grad.T @ direction_prim
@@ -409,8 +464,8 @@ class QpSolver:
                     x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
                     u   = [prev_sol.u[i]   + alpha_p * delta_dict['delta_u'][i]   for i in range(self.qp.N)],
                     pi  = [prev_sol.pi[i]  + alpha_d * delta_dict['delta_pi'][i]  for i in range(self.qp.N + 1)],
-                    lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N)],
-                    s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N)],
+                    lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N+1)],
+                    s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N+1)],
                 )
 
                 objective_cand, norm_c_cand = self._compute_objective_and_constraints(cand)
@@ -447,26 +502,31 @@ class QpSolver:
         grad_s = []
         tau = self.centering_param*self.rhs.duality_measure
 
-        for k in range(self.qp.N):
-            Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
-            q_k = self.qp.q[k];  r_k = self.qp.r[k]
+        for k in range(self.qp.N+1):
+            if k < self.qp.N:
+                Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
+                q_k = self.qp.q[k];  r_k = self.qp.r[k]
 
-            # Gradient of the actual objective function f(x, u)
-            grad_x_k = Q_k @ x[k] + S_k.T @ u[k] + q_k
-            grad_u_k = R_k @ u[k] + S_k @ x[k] + r_k
-            
-            # Gradient of the barrier term: -tau / s
-            grad_s_k = -tau / s[k]
+                # Gradient of the actual objective function f(x, u)
+                grad_x_k = Q_k @ x[k] + S_k.T @ u[k] + q_k
+                grad_u_k = R_k @ u[k] + S_k @ x[k] + r_k
 
-            grad_x.append(grad_x_k)
-            grad_u.append(grad_u_k)
-            grad_s.append(grad_s_k)
+                # Gradient of the barrier term: -tau / s
+                grad_s_k = -tau / s[k]
 
-        # Terminal cost gradient
-        Q_e = self.qp.Q_e
-        q_e = self.qp.q_e
-        grad_x_N = Q_e @ x[self.qp.N] + q_e
-        grad_x.append(grad_x_N)
+                grad_x.append(grad_x_k)
+                grad_u.append(grad_u_k)
+                grad_s.append(grad_s_k)
+            else:
+                # Terminal cost gradient
+                Q_e = self.qp.Q_e
+                q_e = self.qp.q_e
+
+                grad_x_N = Q_e @ x[self.qp.N] + q_e
+                grad_x.append(grad_x_N)
+
+                grad_s_k = -tau / s[k]
+                grad_s.append(grad_s_k)
 
         # Return a single concatenated 1D numpy array
         return np.concatenate(grad_x + grad_u + grad_s)
@@ -481,23 +541,30 @@ class QpSolver:
         res_ineq_sq = 0.0
         tau = self.centering_param*self.rhs.duality_measure
 
-        for k in range(self.qp.N):
-            Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
-            A_k = self.qp.A[k];  B_k = self.qp.B[k];  b_k = self.qp.b[k]
-            C_k = self.qp.C[k];  D_k = self.qp.D[k];  d_k = self.qp.d[k]
-            q_k = self.qp.q[k];  r_k = self.qp.r[k]
+        for k in range(self.qp.N+1):
+            if k < self.qp.N:
+                Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
+                A_k = self.qp.A[k];  B_k = self.qp.B[k];  b_k = self.qp.b[k]
+                C_k = self.qp.C[k];  D_k = self.qp.D[k];  d_k = self.qp.d[k]
+                q_k = self.qp.q[k];  r_k = self.qp.r[k]
 
-            obj += 0.5 * x[k] @ Q_k @ x[k] + 0.5 * u[k] @ R_k @ u[k] + u[k] @ S_k @ x[k] + q_k @ x[k] + r_k @ u[k]
+                obj += 0.5 * x[k] @ Q_k @ x[k] + 0.5 * u[k] @ R_k @ u[k] + u[k] @ S_k @ x[k] + q_k @ x[k] + r_k @ u[k]
 
-            barrier += np.sum(np.log(s[k]))
+                barrier += np.sum(np.log(s[k]))
 
-            r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
-            res_eq_sq += r_eq @ r_eq
+                r_eq = A_k @ x[k] + B_k @ u[k] - x[k+1] + b_k
+                res_eq_sq += r_eq @ r_eq
 
-            r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
-            res_ineq_sq += r_ineq @ r_ineq
+                r_ineq = C_k @ x[k] + D_k @ u[k] + s[k] - d_k
+                res_ineq_sq += r_ineq @ r_ineq
+            else:
+                obj += 0.5 * x[self.qp.N] @ self.qp.Q_e @ x[self.qp.N] + self.qp.q_e @ x[self.qp.N]
+                barrier += np.sum(np.log(s[k]))
 
-        obj += 0.5 * x[self.qp.N] @ self.qp.Q_e @ x[self.qp.N] + self.qp.q_e @ x[self.qp.N]
+                C_k = self.qp.C[k];  d_k = self.qp.d[k]
+                r_ineq = C_k @ x[k] + s[k] - d_k
+                res_ineq_sq += r_ineq @ r_ineq
+
         norm_c = np.sqrt(res_eq_sq + res_ineq_sq)
 
         return obj - tau * barrier, norm_c
@@ -523,7 +590,7 @@ class QpSolver:
                   self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
         if res == np.inf or np.isnan(res):
-            print(f"\033[31mSolver diverged!\033[0m after {self.statistics_dict['iter_count']} iterations.")
+            print(f"\033[31mDiverged!\033[0m after {self.statistics_dict['iter_count']} iterations.")
             self.status = -1
             return
         if self.statistics_dict['iter_count'] >= self.max_iter:
