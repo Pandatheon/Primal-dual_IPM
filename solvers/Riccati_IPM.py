@@ -123,7 +123,10 @@ class Riccati_IPM():
 
             except np.linalg.LinAlgError:
                 if self.reg_config.method == 'NO_REGULARIZE':
-                    raise np.linalg.LinAlgError("R + B'PB is not positive definite. Consider using regularization.")
+                    eigs = np.linalg.eigvals(reduced_hessian)
+                    min_eig = np.min(eigs)
+                    print(f"R + B'PB is not positive definite with {min_eig} at stage {k} without regularization.")
+                    return None
 
                 elif self.reg_config.method not in Hessian_reg:
 
@@ -144,10 +147,11 @@ class Riccati_IPM():
                         feedback.K[k] = K_curr
                         feedback.k[k] = k_curr
                     except np.linalg.LinAlgError:
-                        raise np.linalg.LinAlgError("Regularization failed to make the reduced Hessian positive definite.")
-
-                else:
-                    raise np.linalg.LinAlgError("Unkonwn error happened")
+                        # ad-hoc handling
+                        eigs = np.linalg.eigvals(reduced_hessian_reg)
+                        min_eig = np.min(eigs)
+                        print(f"Regularization failed with {min_eig} during method " + self.reg_config.method)
+                        return None
 
         # # print P for debug
         # for k in reversed(range(self.qp.N + 1)):
