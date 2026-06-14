@@ -326,7 +326,6 @@ class QpSolver:
                 self._quit()
                 break
 
-            # check convergence based on predictor step
             if self._convergence_check():
                 self.status = 0
                 self._quit()
@@ -418,9 +417,8 @@ class QpSolver:
 
 
     def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict)-> float:
-        tol = 0.0
-        s_aff = np.maximum(np.concatenate(prev_sol.s) + self.alpha_prim * np.concatenate(delta_dict['delta_s']), tol)
-        lam_aff = np.maximum(np.concatenate(prev_sol.lam) + self.alpha_dual * np.concatenate(delta_dict['delta_lam']), tol)
+        s_aff = np.concatenate(prev_sol.s) + self.alpha_prim * np.concatenate(delta_dict['delta_s'])
+        lam_aff = np.concatenate(prev_sol.lam) + self.alpha_dual * np.concatenate(delta_dict['delta_lam'])
         mu = (s_aff.flatten() @ lam_aff.flatten())/self.ineq_num
         return mu
 
