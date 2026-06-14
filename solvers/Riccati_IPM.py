@@ -76,10 +76,12 @@ class Riccati_IPM():
         self.rhs_kkt = copy.deepcopy(rhs)
         self.reg = False
 
-        modified_qp = self.modify_QP(self.qp, prev_sol)
+        temp_qp = self.modify_QP(self.qp, prev_sol)
 
         if self.reg_config.method in Hessian_reg:
-            modified_qp = regularize_QP(modified_qp, self.reg_config)
+            modified_qp = regularize_QP(temp_qp, self.reg_config)
+        else:
+            modified_qp = temp_qp
 
         feedback = Feedback(
             P = [None]*(horizon+1),
@@ -152,6 +154,12 @@ class Riccati_IPM():
                         min_eig = np.min(eigs)
                         print(f"Regularization failed with {min_eig} during method " + self.reg_config.method)
                         return None
+                else:
+                    # ad-hoc handling
+                    eigs = np.linalg.eigvals(reduced_hessian)
+                    min_eig = np.min(eigs)
+                    print(f"Regularization method " + self.reg_config.method + f" failed with {min_eig} at stage {k}.")
+                    return None
 
         # # print P for debug
         # for k in reversed(range(self.qp.N + 1)):

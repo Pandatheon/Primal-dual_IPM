@@ -23,7 +23,7 @@ class QpSolver:
             'res_stat' : 1e-6,
             'res_eq' : 1e-8,
             'res_ineq' : 1e-8,
-            'res_comp' : 1e-8,
+            'res_comp' : 1e-6,
         }
         # statistics for analysis
         self.statistics_dict = {
@@ -36,6 +36,7 @@ class QpSolver:
             'alpha_list' : [],
             'duality_measure_list' : [],
             'obj' : [],
+            'ls' : [],
             'iter_count' : 0,
         }
 
@@ -213,13 +214,14 @@ class QpSolver:
         self.rhs.rd = res_ineq
         self.rhs.rm = res_comp
 
-        # if self.statistics_dict['iter_count'] == 1:
+        # if self.statistics_dict['iter_count'] == 9:
         #     print("rg:")
         #     for k in range(self.qp.N+1):
         #         print(f"== Stage {k} ==")
         #         row_str = "  ".join(f"{x:>13.5e}" for x in self.rhs.rg[k])
         #         print(row_str)
         #         print()
+        #     exit()
 
         # print("b:")
         # for k in range(self.qp.N):
@@ -236,7 +238,7 @@ class QpSolver:
         #     print()
 
         self.backup_rm = copy.deepcopy(self.rhs.rm)
-        self.rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
+        self.rhs.duality_measure = max(duality_measure / self.ineq_num, 0.0)
         self.statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(self.rhs.rg), ord=np.inf))
         self.statistics_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rb), ord=np.inf))
         self.statistics_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rd), ord=np.inf))
@@ -416,7 +418,7 @@ class QpSolver:
 
 
     def _compute_duality(self, prev_sol:iterate_sol, delta_dict:dict)-> float:
-        tol = 1e-16
+        tol = 0.0
         s_aff = np.maximum(np.concatenate(prev_sol.s) + self.alpha_prim * np.concatenate(delta_dict['delta_s']), tol)
         lam_aff = np.maximum(np.concatenate(prev_sol.lam) + self.alpha_dual * np.concatenate(delta_dict['delta_lam']), tol)
         mu = (s_aff.flatten() @ lam_aff.flatten())/self.ineq_num
@@ -424,12 +426,13 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
+        tol = 1e-12
         self.alpha_prim, self.alpha_dual, _ = self._funnel_line_search(prev_sol, self.delta_dict)
         x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
         pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N+1)]
-        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], 1e-16) for i in range(self.qp.N+1)]
+        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], tol) for i in range(self.qp.N+1)]
+        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], tol) for i in range(self.qp.N+1)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
 
@@ -500,7 +503,7 @@ class QpSolver:
                         # check theta type condition
                         if norm_c_cand <= 0.9999*self.theta_max:
                             # update theta_max
-                            self.theta_max = (1-0.5)*self.theta_max + 0.5*norm_c_cand
+                            self.theta_max = max((1-0.5)*self.theta_max + 0.5*norm_c_cand, self.theta_max*0.9999)
                             break
                         else:
                             alpha_p *= beta
@@ -601,7 +604,7 @@ class QpSolver:
                   self.statistics_dict['res_eq_list'][-1],
                   self.statistics_dict['res_ineq_list'][-1],
                   self.statistics_dict['res_comp_list'][-1])
-        return res >= 1e16
+        return np.isinf(res) or np.isnan(res)
 
 
     def _quit(self):
@@ -619,7 +622,7 @@ class QpSolver:
             print(f"\033[31mMax iters!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.6e}")
             self.status = 2
             return
-        if self.satus == 3:
+        if self.status == 3:
             print(f"\033[31mDiverged!\033[0m after {self.statistics_dict['iter_count']} iterations.")
             return
 
