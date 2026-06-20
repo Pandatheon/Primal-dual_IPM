@@ -22,7 +22,7 @@ def write_csv(name, solver, recorder, reg, filename='qp_results.csv'):
     data = {
         'QP_name': [name],
         'Regularization': [reg],
-        'Iteration': [solver.statistics_dict['iter_count']],
+        'Iteration': [solver.stat_dict['iter_count']],
         'Regularization Count': [int(recorder.reg_count/2)],
         'Cost': [solver.get_cost()],
         'Status': [solver.status],

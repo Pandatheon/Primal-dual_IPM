@@ -1,7 +1,8 @@
 from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs
-from solvers.Regularization_config import Regularizations_config
+from solvers.Regularization_config import Regularizations_config, Iteration_based_reg, Block_Hessian_reg
 from solvers.Riccati_IPM import Riccati_IPM
+from solvers.Riccati_IPM_reg import Riccati_IPM as Riccati_IPM_reg
 from solvers.Condensed_IPM import Condensed_IPM
 import numpy as np
 import copy
@@ -26,7 +27,7 @@ class QpSolver:
             'res_comp' : 1e-6,
         }
         # statistics for analysis
-        self.statistics_dict = {
+        self.stat_dict = {
             'res_stat_list' : [],
             'res_eq_list' : [],
             'res_ineq_list' : [],
@@ -38,8 +39,8 @@ class QpSolver:
             'obj' : [],
             'ls' : [],
             'iter_count' : 0,
+            'decomp_flop' : 0,
         }
-
         # sol and rhs initialization
         self.solution = iterate_sol(
             x =[],
@@ -67,9 +68,16 @@ class QpSolver:
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
                            self.qp.nb_e + self.qp.nh_e)
         if type == 'Riccati':
-            self.solver = Riccati_IPM(qp,
-                                    Regularizations_config(method=reg, delta=1e-4),
-                                    ineq_num=self.ineq_num)
+            if reg in Iteration_based_reg + Block_Hessian_reg:
+                self.solver = Riccati_IPM_reg(qp,
+                                            Regularizations_config(method=reg, delta=1e-4),
+                                            ineq_num=self.ineq_num,
+                                            stat_dict=self.stat_dict)
+            else:
+                self.solver = Riccati_IPM(qp,
+                                        Regularizations_config(method=reg, delta=1e-4),
+                                        ineq_num=self.ineq_num,
+                                        stat_dict=self.stat_dict)
         elif type == 'Condensed':
             self.solver = Condensed_IPM(qp,
                                     Regularizations_config(method=reg, delta=1e-4),
@@ -90,6 +98,7 @@ class QpSolver:
         if self.globalization:
             _, theta_max = self._compute_objective_and_constraints(self.solution)
             self.theta_max = max(1.25 * theta_max, 100)
+
 
     def _initialize_lam_and_s(self):
         self.solution.s = []
@@ -148,6 +157,7 @@ class QpSolver:
             s_k = np.concatenate((s_lb_box, s_lb_gen, s_ub_box, s_ub_gen))
             self.solution.s.append(s_k)
             self.solution.lam.append(mu0 / s_k)
+
 
     def compute_rhs(self, prev_sol:iterate_sol)-> np.ndarray:
         nx = self.qp.nx
@@ -214,7 +224,7 @@ class QpSolver:
         self.rhs.rd = res_ineq
         self.rhs.rm = res_comp
 
-        # if self.statistics_dict['iter_count'] == 9:
+        # if self.stat_dict['iter_count'] == 9:
         #     print("rg:")
         #     for k in range(self.qp.N+1):
         #         print(f"== Stage {k} ==")
@@ -238,12 +248,12 @@ class QpSolver:
         #     print()
 
         self.backup_rm = copy.deepcopy(self.rhs.rm)
-        self.rhs.duality_measure = max(duality_measure / self.ineq_num, 0.0)
-        self.statistics_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(self.rhs.rg), ord=np.inf))
-        self.statistics_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rb), ord=np.inf))
-        self.statistics_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rd), ord=np.inf))
-        self.statistics_dict['res_comp_list'].append(np.linalg.norm(np.concatenate(self.rhs.rm), ord=np.inf))
-        self.statistics_dict['duality_measure_list'].append(self.rhs.duality_measure)
+        self.rhs.duality_measure = max(duality_measure / self.ineq_num, 1e-16)
+        self.stat_dict['res_stat_list'].append(np.linalg.norm(np.concatenate(self.rhs.rg), ord=np.inf))
+        self.stat_dict['res_eq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rb), ord=np.inf))
+        self.stat_dict['res_ineq_list'].append(np.linalg.norm(np.concatenate(self.rhs.rd), ord=np.inf))
+        self.stat_dict['res_comp_list'].append(np.linalg.norm(np.concatenate(self.rhs.rm), ord=np.inf))
+        self.stat_dict['duality_measure_list'].append(self.rhs.duality_measure)
 
 
     def update_rhs_comp(self, step_type:str='centering'):
@@ -288,7 +298,7 @@ class QpSolver:
                                                 lam_0[end_lower:end_lower+nbu], lam_ubx, lam_0[end_lower+nbu+nx+nbx:]))
 
 
-    def solve(self, x0:np.ndarray=None, max_iter:int=400)-> iterate_sol:
+    def solve(self, x0:np.ndarray=None, max_iter:int=100)-> iterate_sol:
         '''
         Solve the QP using primal-dual interior point method with Riccati recursion.
         '''
@@ -331,14 +341,14 @@ class QpSolver:
                 self._quit()
                 break
 
-            if self.statistics_dict['iter_count'] >= self.max_iter:
+            if self.stat_dict['iter_count'] >= self.max_iter:
                 self.status = 2
                 self._quit()
                 break
 
 
-            self.statistics_dict['iter_count'] += 1
-            self.statistics_dict['obj'].append(self.get_cost())
+            self.stat_dict['iter_count'] += 1
+            self.stat_dict['obj'].append(self.get_cost())
 
             ### Mehrotra predictor-corrector step
             ## predictor step
@@ -358,9 +368,9 @@ class QpSolver:
             #     print(f"Stage {k}: {dux}")
             # breakpoint()
 
-            # print(f"Iter {self.statistics_dict['iter_count']}: alpha_aff_pri = {self.alpha_prim:.6f}, alpha_aff_dual = {self.alpha_dual:.6f}, alpha_aff = {self.alpha:.6f}")
-            # print(f"Iter {self.statistics_dict['iter_count']}: mu_aff = {mu_aff:.6e}")
-            # print(f"Iter {self.statistics_dict['iter_count']}: centering_param = {self.centering_param:.6e}")
+            # print(f"Iter {self.stat_dict['iter_count']}: alpha_aff_pri = {self.alpha_prim:.6f}, alpha_aff_dual = {self.alpha_dual:.6f}, alpha_aff = {self.alpha:.6f}")
+            # print(f"Iter {self.stat_dict['iter_count']}: mu_aff = {mu_aff:.6e}")
+            # print(f"Iter {self.stat_dict['iter_count']}: centering_param = {self.centering_param:.6e}")
 
             if self.Mehrotra_step:
                 ## predictor-corrector step
@@ -369,8 +379,8 @@ class QpSolver:
                 self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
                 mu_pred = self._compute_duality(prev_sol, self.delta_dict)
 
-                # print(f"Iter {self.statistics_dict['iter_count']}: alpha_corr_pri = {self.alpha_prim:.6f}, alpha_corr_dual = {self.alpha_dual:.6f}, alpha_corr = {self.alpha:.6f}")
-                # print(f"Iter {self.statistics_dict['iter_count']}: mu_pred = {mu_pred:.6e}")
+                # print(f"Iter {self.stat_dict['iter_count']}: alpha_corr_pri = {self.alpha_prim:.6f}, alpha_corr_dual = {self.alpha_dual:.6f}, alpha_corr = {self.alpha:.6f}")
+                # print(f"Iter {self.stat_dict['iter_count']}: mu_pred = {mu_pred:.6e}")
 
                 ### Conditonal Mehrotra step
                 if mu_pred > 2*mu_aff:
@@ -382,9 +392,9 @@ class QpSolver:
                 self.delta_dict = self._compute_step(prev_sol)
                 self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
 
-            self.statistics_dict['alpha_pri_list'].append(self.alpha_prim)
-            self.statistics_dict['alpha_dual_list'].append(self.alpha_dual)
-            self.statistics_dict['alpha_list'].append(self.alpha)
+            self.stat_dict['alpha_pri_list'].append(self.alpha_prim)
+            self.stat_dict['alpha_dual_list'].append(self.alpha_dual)
+            self.stat_dict['alpha_list'].append(self.alpha)
 
             self.update_solution(prev_sol)
             prev_sol = copy.deepcopy(self.solution)
@@ -591,37 +601,37 @@ class QpSolver:
 
     def _convergence_check(self, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
-        return ((self.statistics_dict['res_stat_list'][-1] < self.res_max['res_stat'] + relative_tol*self.res_max['res_stat']) and
-                (self.statistics_dict['res_eq_list'][-1] < self.res_max['res_eq'] + relative_tol*self.res_max['res_eq']) and
-                (self.statistics_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
-                (self.statistics_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
+        return ((self.stat_dict['res_stat_list'][-1] < self.res_max['res_stat'] + relative_tol*self.res_max['res_stat']) and
+                (self.stat_dict['res_eq_list'][-1] < self.res_max['res_eq'] + relative_tol*self.res_max['res_eq']) and
+                (self.stat_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
+                (self.stat_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
 
 
     def _inf_check(self):
-        res = max(self.statistics_dict['res_stat_list'][-1],
-                  self.statistics_dict['res_eq_list'][-1],
-                  self.statistics_dict['res_ineq_list'][-1],
-                  self.statistics_dict['res_comp_list'][-1])
+        res = max(self.stat_dict['res_stat_list'][-1],
+                  self.stat_dict['res_eq_list'][-1],
+                  self.stat_dict['res_ineq_list'][-1],
+                  self.stat_dict['res_comp_list'][-1])
         return np.isinf(res) or np.isnan(res)
 
 
     def _quit(self):
-        res = max(self.statistics_dict['res_stat_list'][-1],
-                  self.statistics_dict['res_eq_list'][-1],
-                  self.statistics_dict['res_ineq_list'][-1],
-                  self.statistics_dict['res_comp_list'][-1])
+        res = max(self.stat_dict['res_stat_list'][-1],
+                  self.stat_dict['res_eq_list'][-1],
+                  self.stat_dict['res_ineq_list'][-1],
+                  self.stat_dict['res_comp_list'][-1])
         if self.status == 0:
-            print(f"\033[32mConverged!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.6e}")
+            print(f"\033[32mConverged!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
             return
         if self.status == 1:
-            print(f"\033[31mUnregularized!\033[0m after {self.statistics_dict['iter_count']} iterations.")
+            print(f"\033[31mUnregularized!\033[0m after {self.stat_dict['iter_count']} iterations.")
             return
-        if self.statistics_dict['iter_count'] >= self.max_iter:
-            print(f"\033[31mMax iters!\033[0m after {self.statistics_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.statistics_dict['duality_measure_list'][-1]:.6e}")
+        if self.stat_dict['iter_count'] >= self.max_iter:
+            print(f"\033[31mMax iters!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
             self.status = 2
             return
         if self.status == 3:
-            print(f"\033[31mDiverged!\033[0m after {self.statistics_dict['iter_count']} iterations.")
+            print(f"\033[31mDiverged!\033[0m after {self.stat_dict['iter_count']} iterations.")
             return
 
 
@@ -654,17 +664,17 @@ class QpSolver:
 
     def get_stats(self, field:str):
         if field == 'iter':
-            return self.statistics_dict['iter_count']
+            return self.stat_dict['iter_count']
 
     def print_statistics(self):
         print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_prim\talpha_dual\tobj')
-        for i in range(self.statistics_dict['iter_count']+1):
-            res_stat_norm = self.statistics_dict['res_stat_list'][i] if i < len(self.statistics_dict['res_stat_list']) else 0.0
-            res_eq_norm = self.statistics_dict['res_eq_list'][i] if i < len(self.statistics_dict['res_eq_list']) else 0.0
-            res_ineq_norm = self.statistics_dict['res_ineq_list'][i] if i < len(self.statistics_dict['res_ineq_list']) else 0.0
-            res_comp_norm = self.statistics_dict['res_comp_list'][i] if i < len(self.statistics_dict['res_comp_list']) else 0.0
-            duality_measure = self.statistics_dict['duality_measure_list'][i] if i < len(self.statistics_dict['duality_measure_list']) else 0.0
-            alpha_pri = self.statistics_dict['alpha_pri_list'][i] if i < len(self.statistics_dict['alpha_pri_list']) else 0.0
-            alpha_dual = self.statistics_dict['alpha_dual_list'][i] if i < len(self.statistics_dict['alpha_dual_list']) else 0.0
-            cost = self.statistics_dict['obj'][i] if i < len(self.statistics_dict['obj']) else 0.0
+        for i in range(self.stat_dict['iter_count']+1):
+            res_stat_norm = self.stat_dict['res_stat_list'][i] if i < len(self.stat_dict['res_stat_list']) else 0.0
+            res_eq_norm = self.stat_dict['res_eq_list'][i] if i < len(self.stat_dict['res_eq_list']) else 0.0
+            res_ineq_norm = self.stat_dict['res_ineq_list'][i] if i < len(self.stat_dict['res_ineq_list']) else 0.0
+            res_comp_norm = self.stat_dict['res_comp_list'][i] if i < len(self.stat_dict['res_comp_list']) else 0.0
+            duality_measure = self.stat_dict['duality_measure_list'][i] if i < len(self.stat_dict['duality_measure_list']) else 0.0
+            alpha_pri = self.stat_dict['alpha_pri_list'][i] if i < len(self.stat_dict['alpha_pri_list']) else 0.0
+            alpha_dual = self.stat_dict['alpha_dual_list'][i] if i < len(self.stat_dict['alpha_dual_list']) else 0.0
+            cost = self.stat_dict['obj'][i] if i < len(self.stat_dict['obj']) else 0.0
             print(f"{i}\t{res_stat_norm:.6e}\t{res_eq_norm:.6e}\t{res_ineq_norm:.6e}\t{res_comp_norm:.6e}\t{duality_measure:.6e}\t{alpha_pri:.6e}\t{alpha_dual:.6e}\t{cost:.6e}")
