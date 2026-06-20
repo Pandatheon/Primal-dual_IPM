@@ -2,20 +2,22 @@ from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
 from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
-from solvers.Regularization_config import Regularizations_config, Hessian_reg, stage_reg
+from solvers.Regularization_config import Regularizations_config, Block_Hessian_reg
 import numpy as np
 import copy
 
 
 
 class Riccati_IPM():
-    def __init__(self, qp: BaseQP, reg_config: Regularizations_config, ineq_num:int):
+    def __init__(self, qp: BaseQP, reg_config: Regularizations_config, ineq_num:int, stat_dict: dict):
         self.qp = qp
         self.reg_config = reg_config
         self.ineq_num = ineq_num
         self.rhs_kkt = None
+        self.stat_dict = stat_dict
 
         self.reg = False
+        self.rho = (self.qp.nx/self.qp.nu)**3
 
     def forward_sweep(self, prev_sol:iterate_sol, feedback:Feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*(self.qp.N+1), [None]*(self.qp.N+1)
@@ -76,12 +78,7 @@ class Riccati_IPM():
         self.rhs_kkt = copy.deepcopy(rhs)
         self.reg = False
 
-        temp_qp = self.modify_QP(self.qp, prev_sol)
-
-        if self.reg_config.method in Hessian_reg:
-            modified_qp = regularize_QP(temp_qp, self.reg_config)
-        else:
-            modified_qp = temp_qp
+        modified_qp = self.modify_QP(self.qp, prev_sol)
 
         feedback = Feedback(
             P = [None]*(horizon+1),
@@ -107,6 +104,7 @@ class Riccati_IPM():
 
             reduced_hessian = R_k + B_k.T @ P_prev @ B_k
             try:
+                self.stat_dict['decomp_flop'] += 1
 
                 R_chol = np.linalg.cholesky(reduced_hessian)
                 g1 = S_k + B_k.T@P_prev@A_k
@@ -130,24 +128,46 @@ class Riccati_IPM():
                     print(f"R + B'PB is not positive definite with {min_eig} at stage {k} without regularization.")
                     return None
 
-                elif self.reg_config.method not in Hessian_reg:
+                elif self.reg_config.method not in Block_Hessian_reg:
 
                     try:
-                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
-                        R_chol = np.linalg.cholesky(reduced_hessian_reg)
-                        g1 = S_k + B_k.T@P_reg@A_k
-                        g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
-                        y1 = np.linalg.solve(R_chol, g1)
-                        y2 = np.linalg.solve(R_chol, g2)
-                        K_curr = -np.linalg.solve(R_chol.T, y1)
-                        k_curr = -np.linalg.solve(R_chol.T, y2)
-                        P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
-                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
+                        if self.reg_config.method == 'M_STAGE_SE':
+                            reduced_hessian_reg, P_reg, flag_P = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
+                            R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                            g1 = S_k + B_k.T@P_reg@A_k
+                            g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
+                            y1 = np.linalg.solve(R_chol, g1)
+                            y2 = np.linalg.solve(R_chol, g2)
+                            K_curr = -np.linalg.solve(R_chol.T, y1)
+                            k_curr = -np.linalg.solve(R_chol.T, y2)
+                            P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
+                            p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
 
-                        feedback.P[k] = P_curr
-                        feedback.p[k] = p_curr
-                        feedback.K[k] = K_curr
-                        feedback.k[k] = k_curr
+                            feedback.P[k] = P_curr
+                            feedback.p[k] = p_curr
+                            feedback.K[k] = K_curr
+                            feedback.k[k] = k_curr
+
+                            self.stat_dict['decomp_flop'] += 2
+                        else:
+                            reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
+                            R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                            g1 = S_k + B_k.T@P_reg@A_k
+                            g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
+                            y1 = np.linalg.solve(R_chol, g1)
+                            y2 = np.linalg.solve(R_chol, g2)
+                            K_curr = -np.linalg.solve(R_chol.T, y1)
+                            k_curr = -np.linalg.solve(R_chol.T, y2)
+                            P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
+                            p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
+
+                            feedback.P[k] = P_curr
+                            feedback.p[k] = p_curr
+                            feedback.K[k] = K_curr
+                            feedback.k[k] = k_curr
+
+                            coeff = 27 if 'MIRROR' in self.reg_config.method else 1
+                            self.stat_dict['decomp_flop'] += coeff*(1+self.rho)
                     except np.linalg.LinAlgError:
                         # ad-hoc handling
                         eigs = np.linalg.eigvals(reduced_hessian_reg)
