@@ -66,15 +66,15 @@ class BaseQP():
         cost_fields = ['Q', 'R', 'S', 'q', 'r']
         constraints_fields = ['C', 'D', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
 
+        # Get the actual padding length
+        pad_len = 2
+        for key in data:
+            if key.startswith("A_"):
+                pad_len = len(key.split('_')[-1])
+                break
+
         def extract_sequence(prefix):
             seq = []
-
-            # Get the actual padding length
-            pad_len = 2
-            for key in data:
-                if key.startswith(f"{prefix}_"):
-                    pad_len = len(key.split('_')[-1])
-                    break
 
             if prefix in cost_fields + dynamics_fields:
                 i = 0
@@ -117,10 +117,10 @@ class BaseQP():
         self.Q = extract_sequence("Q")[:-1]
         self.R = extract_sequence("R")
         self.S = extract_sequence("S")
-        self.q = extract_sequence("q")
+        self.q = extract_sequence("q")[:-1]
         self.r = extract_sequence("r")
-        self.Q_e = np.array(data[ f"Q_{self.N:02d}"])
-        self.q_e = np.array(data[f"q_{self.N:02d}"]).flatten()
+        self.Q_e = np.array(data[ f"Q_{self.N:0{pad_len}d}"])
+        self.q_e = np.array(data[f"q_{self.N:0{pad_len}d}"]).flatten()
 
         # Populate constraints
         # boundary for x and u, represented as Jbx*x and Jbu*u
@@ -132,14 +132,20 @@ class BaseQP():
                 idxb_k = idxb[k]
                 if idxb_k.size == 0:
                     continue
-                idxb_u = idxb_k[idxb_k < self.nu]
-                idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
-                Jbu_k = np.zeros((len(idxb_u), self.nu))
-                Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
-                Jbx_k = np.zeros((len(idxb_x), self.nx))
-                Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
-                self.Jbu[k] = Jbu_k
-                self.Jbx[k] = Jbx_k
+                if k < self.N:
+                    idxb_u = idxb_k[idxb_k < self.nu]
+                    idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
+                    Jbu_k = np.zeros((len(idxb_u), self.nu))
+                    Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
+                    Jbx_k = np.zeros((len(idxb_x), self.nx))
+                    Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
+                    self.Jbu[k] = Jbu_k
+                    self.Jbx[k] = Jbx_k
+                else:
+                    idxb_x = idxb_k
+                    Jbx_k = np.zeros((len(idxb_x), self.nx))
+                    Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
+                    self.Jbx[k] = Jbx_k
 
         if self.x0_elimination:
             # ad-hoc fix for x0 elimination
