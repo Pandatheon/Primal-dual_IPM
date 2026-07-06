@@ -5,7 +5,7 @@ from solvers.Regularization import regularize_QP
 from solvers.Regularization_config import Regularizations_config, Block_Hessian_reg
 import numpy as np
 import copy
-
+from utils.modified_Cholesky import modified_cholesky_SE, modified_cholesky_GMW, modified_cholesky_SE99
 
 
 class Riccati_IPM():
@@ -18,8 +18,8 @@ class Riccati_IPM():
         self.stat_dict = stat_dict
 
         self.reg = False
-        self.reg_config.delta = 0.0 if self.reg_config.method in ['INERTIAL_LM', 'INERTIAL_LM_RE'] else self.reg_config.delta
-        self.rho = ((self.qp.nx + self.qp.nu)/self.qp.nu)**3
+        self.reg_config.delta = 0.0 if self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE'] else self.reg_config.delta
+        self.rho = ((self.qp.nx[1] + self.qp.nu)/self.qp.nu)**3
         self.coeff = 27
 
         if self.reg_config.method == 'PRECOMPUTE':
@@ -31,7 +31,7 @@ class Riccati_IPM():
         lam_i = prev_sol.lam
         s_i = prev_sol.s
 
-        delta_x[0] = np.zeros((self.qp.nx,))
+        delta_x[0] = -np.linalg.solve(feedback.P[0], feedback.p[0])
         delta_pi[0] = feedback.P[0] @ delta_x[0] + feedback.p[0]
 
         for k in range(self.qp.N+1):
@@ -79,20 +79,24 @@ class Riccati_IPM():
 
     def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
         horizon = self.qp.N
-        nx = self.qp.nx
+
         coeff = self.coeff
         self.reg = False
         positive_flag = True   # only used by the 'PRECOMPUTE' branch
 
-        if self.reg_config.method in ['INERTIAL_LM', 'INERTIAL_LM_RE']:
+        if self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE']:
             # --- Inertia Correction (IC) constants ---
             delta_w_0      = 1e-4    # delta_w^0
-            delta_w_min    = 1e-20   # delta_w^min
-            delta_w_max    = 1e40    # delta_w^max
+            delta_w_min    = 1e-16   # delta_w^min
+            delta_w_max    = 1e16    # delta_w^max
             kappa_minus    = 1/3     # kappa_w^-
             kappa_plus     = 8       # kappa_w^+
             kappa_plus_bar = 1e2     # kappa_w^+_bar.
             LM_delta = 0.0           # IC-1: start by attempting the unmodified matrix
+
+        if self.reg_config.method == 'iterative_increasing':
+            self.reg_config.delta = 1e-4
+            inreasing_factor = 1e2
 
         while True:
             if self.reg_config.method == 'PRECOMPUTE':
@@ -106,18 +110,18 @@ class Riccati_IPM():
                     modified_qp = regularize_QP(modified_qp, self.reg_config)
                     self.stat_dict['decomp_flop'] += horizon*coeff*self.rho/2
 
-            elif self.reg_config.method == 'INERTIAL_LM':
+            elif self.reg_config.method == 'INERTIA_LM':
                 self.rhs_kkt = copy.deepcopy(rhs)
                 modified_qp = self.modify_QP(self.qp, prev_sol, LM_delta)
 
-            elif self.reg_config.method == 'INERTIAL_LM_RE':
+            elif self.reg_config.method == 'INERTIA_LM_RE':
                 self.rhs_kkt = copy.deepcopy(rhs)
                 modified_qp = self.modify_QP(self.qp, prev_sol)
 
             else:
                 self.rhs_kkt = copy.deepcopy(rhs)
                 modified_qp = self.modify_QP(self.qp, prev_sol)
-            reduced_delta = LM_delta if  self.reg_config.method == 'INERTIAL_LM_RE' else 0.0
+            reduced_delta = LM_delta if self.reg_config.method == 'INERTIA_LM_RE' or self.reg_config.method == 'INERTIA_SE' else 0.0
 
             feedback = Feedback(
                 P = [None]*(horizon+1),
@@ -125,12 +129,13 @@ class Riccati_IPM():
                 K = [None]*(horizon),
                 k = [None]*(horizon),
             )
-            feedback.P[horizon] = modified_qp.Q_e + reduced_delta * np.eye(nx)
-            feedback.p[horizon] = self.rhs_kkt.rg[-1][:nx]
+            feedback.P[horizon] = modified_qp.Q_e + reduced_delta * np.eye(self.qp.nx[horizon])
+            feedback.p[horizon] = self.rhs_kkt.rg[-1][:self.qp.nx[horizon]]
 
             factorization_ok = True
             for step in range(self.qp.N):
                 k = modified_qp.N - 1 - step
+                nx = self.qp.nx[k]
                 A_k = modified_qp.A[k]
                 B_k = modified_qp.B[k]
                 Q_k = modified_qp.Q[k]
@@ -166,7 +171,7 @@ class Riccati_IPM():
                     break
 
             if factorization_ok:
-                if self.reg_config.method == 'INERTIAL_LM' or self.reg_config.method == 'INERTIAL_LM_RE':
+                if self.reg_config.method == 'INERTIA_LM' or self.reg_config.method == 'INERTIA_LM_RE':
                     # IC-4: set delta_w^last <- delta_w used for this successful factorization
                     self.reg_config.delta = LM_delta
                     self.reg = (LM_delta > 0.0)
@@ -188,7 +193,7 @@ class Riccati_IPM():
                     print(f"Regularization method " + self.reg_config.method + " failed to yield a positive definite reduced Hessian.")
                     return None
 
-            elif self.reg_config.method in ['INERTIAL_LM', 'INERTIAL_LM_RE']:
+            elif self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE']:
                 if LM_delta == 0.0:
                     # IC-3: first regularization of this iteration
                     if self.reg_config.delta == 0.0:
@@ -237,15 +242,15 @@ class Riccati_IPM():
                 lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
                 rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
 
-                Q_tilt = lhs_modification[:qp.nx, :qp.nx]
-                R_tilt = lhs_modification[qp.nx:, qp.nx:]
-                S_tilt = lhs_modification[qp.nx:, :qp.nx]
-                modified_QP.Q[k] = qp.Q[k] + Q_tilt + LM_delta * np.eye(qp.nx)
+                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
+                R_tilt = lhs_modification[qp.nx[k]:, qp.nx[k]:]
+                S_tilt = lhs_modification[qp.nx[k]:, :qp.nx[k]]
+                modified_QP.Q[k] = qp.Q[k] + Q_tilt + LM_delta * np.eye(qp.nx[k])
                 modified_QP.R[k] = qp.R[k] + R_tilt + LM_delta * np.eye(qp.nu)
                 modified_QP.S[k] = qp.S[k] + S_tilt
 
-                self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
-                self.rhs_kkt.rg[k][qp.nx:] = self.rhs_kkt.rg[k][qp.nx:] + rhs_modification[qp.nx:]
+                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
+                self.rhs_kkt.rg[k][qp.nx[k]:] = self.rhs_kkt.rg[k][qp.nx[k]:] + rhs_modification[qp.nx[k]:]
             else:
                 s_k = prev_sol.s[k]
                 lam_k = prev_sol.lam[k]
@@ -262,10 +267,10 @@ class Riccati_IPM():
                 lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
                 rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
 
-                Q_tilt = lhs_modification[:qp.nx, :qp.nx]
+                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
                 # primal regularization delta_w*I must also be added to the terminal Hessian
-                modified_QP.Q_e = qp.Q_e + Q_tilt + LM_delta * np.eye(qp.nx)
+                modified_QP.Q_e = qp.Q_e + Q_tilt + LM_delta * np.eye(qp.nx[k])
 
-                self.rhs_kkt.rg[k][:qp.nx] = self.rhs_kkt.rg[k][:qp.nx] + rhs_modification[:qp.nx]
+                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
 
         return modified_QP

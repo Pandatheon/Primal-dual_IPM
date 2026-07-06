@@ -5,9 +5,9 @@ no_reg = ['NO_REGULARIZE']
 
 Block_Hessian_reg = ['PROJECT_H', 'MIRROR_H']
 
-Block_reduced_Hessian_reg = ['PM_STAGE_MIRROR', 'PM_STAGE_SE', 'PM_STAGE_GMW']
+Block_reduced_Hessian_reg = ['PM_STAGE_MIRROR', 'PM_STAGE_GMW']
 
-Iteration_based_reg = ['INERTIAL_LM', 'PRECOMPUTE']
+Iteration_based_reg = ['INERTIA_LM', 'PRECOMPUTE']
 
 reg_list = no_reg + Block_Hessian_reg + Block_reduced_Hessian_reg
 

@@ -43,7 +43,7 @@ class Condensed_IPM():
         delta_u_bar = np.linalg.solve(Hc_chol.T, y1)
         delta_u = delta_u_bar.reshape((self.qp.N, self.qp.nu))
 
-        delta_x[0] = np.zeros(self.qp.nx)
+        delta_x[0] = np.zeros(self.qp.nx[k])
         for k in range(self.qp.N):
             C_k = self.qp.C[k]
             D_k = self.qp.D[k]
@@ -61,13 +61,13 @@ class Condensed_IPM():
             rhs_m_modified = -rhs_m - (lam_i[k] * delta_s[k])
             delta_lam[k] = (rhs_m_modified/s_i[k]).flatten()
 
-        delta_pi[self.qp.N] = self.rhs_kkt.rg[-1][:self.qp.nx] + self.qp.Q_e @ delta_x[self.qp.N]
+        delta_pi[self.qp.N] = self.rhs_kkt.rg[-1][:self.qp.nx[k]] + self.qp.Q_e @ delta_x[self.qp.N]
         for k in reversed(range(self.qp.N)):
             A_k = self.qp.A[k]
             C_k = self.qp.C[k]
             Q_k = self.qp.Q[k]
             S_k = self.qp.S[k]
-            delta_pi[k] = Q_k @ delta_x[k] + S_k.T @ delta_u[k] + A_k.T @ delta_pi[k+1] + C_k.T @ delta_lam[k] + self.rhs_kkt.rg[k][:self.qp.nx]
+            delta_pi[k] = Q_k @ delta_x[k] + S_k.T @ delta_u[k] + A_k.T @ delta_pi[k+1] + C_k.T @ delta_lam[k] + self.rhs_kkt.rg[k][:self.qp.nx[k]]
 
         delta_dict = {
             'delta_x': delta_x,
@@ -79,7 +79,7 @@ class Condensed_IPM():
         return delta_dict
 
     def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
-        x0 = np.zeros(self.qp.nx)
+        x0 = np.zeros(self.qp.nx[k])
         self.rhs_kkt = copy.deepcopy(rhs)
 
         modified_qp = self.modify_QP(self.qp, prev_sol)

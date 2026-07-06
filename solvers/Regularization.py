@@ -205,6 +205,22 @@ def stage_regularization(qp, feedback, reduced_hessian, reg_config, stage) -> np
         #  EM modified M next
         reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="MIRROR")
 
+    elif reg_config.method == 'PM_STAGE_MINPROJECT':
+        # EM P first
+        P_reg = do_regularization(P_prev, reg_config.delta, method="MINPROJECT")
+        reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
+
+        #  EM modified M next
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="MINPROJECT")
+
+    elif reg_config.method == 'PM_STAGE_TUNEDMIRROR':
+        # EM P first
+        P_reg = do_regularization(P_prev, reg_config.delta, method="TUNEDMIRROR")
+        reduced_hessian_P_reg = R_k + B_k.T@P_reg@B_k
+
+        #  EM modified M next
+        reduced_hessian_reg = do_regularization(reduced_hessian_P_reg, reg_config.delta, method="TUNEDMIRROR")
+
     return reduced_hessian_reg, P_reg
 
 def do_regularization(mat: np.ndarray,
@@ -215,6 +231,14 @@ def do_regularization(mat: np.ndarray,
         eigvals_reg = np.maximum(eigvals, delta)
     elif method == 'MIRROR':
         eigvals_reg = np.maximum(np.abs(eigvals), delta)
+    elif method == 'MINPROJECT':
+        min_pos_eigval = np.min(eigvals[eigvals > 0]) if np.any(eigvals > 0) else delta
+        min_pos_eigval = max(min_pos_eigval, delta)
+        eigvals_reg = np.maximum(eigvals, min_pos_eigval)
+    elif method == 'TUNEDMIRROR':
+        eigvals_scaled = np.where(eigvals < 0, 0.1 *eigvals, eigvals)
+        eigvals_reg = np.maximum(np.abs(eigvals_scaled), delta)
+
     mat_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
     mat_reg = _to_real(mat_reg)
     return mat_reg
@@ -240,9 +264,9 @@ def regularize_QP(
             raise ValueError(f"Unknown regularization method: {reg_config.method}, set reg_config.method to 'PROJECT_H', 'MIRROR_H' or 'CHOLESKY_H'")
 
         if k < qp.N:
-            regularized_QP.Q[k] = H_reg[:qp.nx, :qp.nx]
-            regularized_QP.R[k] = H_reg[qp.nx:, qp.nx:]
-            regularized_QP.S[k] = H_reg[qp.nx:, :qp.nx]
+            regularized_QP.Q[k] = H_reg[:qp.nx[k], :qp.nx[k]]
+            regularized_QP.R[k] = H_reg[qp.nx[k]:, qp.nx[k]:]
+            regularized_QP.S[k] = H_reg[qp.nx[k]:, :qp.nx[k]]
         else:
             regularized_QP.Q_e = H_reg
 

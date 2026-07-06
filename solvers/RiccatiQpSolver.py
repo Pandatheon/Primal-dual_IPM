@@ -37,7 +37,7 @@ class QpSolver:
             'alpha_list' : [],
             'duality_measure_list' : [],
             'obj' : [],
-            'ls' : [],
+            'ls' : ['--'],
             'iter_count' : 0,
             'decomp_flop' : 0,
         }
@@ -59,9 +59,9 @@ class QpSolver:
             duality_measure = 10.0,
         )
         self.backup_rm = None
-        self.alpha_prim = 1.0
-        self.alpha_dual = 1.0
-        self.alpha = 1.0
+        self.alpha_prim = 0.0
+        self.alpha_dual = 0.0
+        self.alpha = 0.0
         self.theta_max = 0.0
 
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
@@ -87,12 +87,9 @@ class QpSolver:
 
 
     def _initilize_solution(self, x0:np.ndarray):
-        if x0 is None:
-            x0 = np.zeros((self.qp.nx,))
-        x_0 = np.zeros((self.qp.nx,))
-        self.solution.x = [np.zeros(self.qp.nx) for _ in range(self.qp.N + 1)]
+        self.solution.x = [np.zeros(self.qp.nx[k]) for k in range(self.qp.N+1)]
         self.solution.u = [np.zeros(self.qp.nu) for _ in range(self.qp.N)]
-        self.solution.pi = [np.zeros((self.qp.nx,)) for _ in range(self.qp.N+1)]
+        self.solution.pi = [np.zeros((self.qp.nx[k],)) for k in range(self.qp.N+1)]
         self._initialize_lam_and_s()
 
         if self.globalization:
@@ -160,7 +157,6 @@ class QpSolver:
 
 
     def compute_rhs(self, prev_sol:iterate_sol)-> np.ndarray:
-        nx = self.qp.nx
         nu = self.qp.nu
 
         res_stat = []
@@ -171,6 +167,7 @@ class QpSolver:
 
         for k in range(self.qp.N+1):
             x, u, pi, lam, s = prev_sol
+            nx = self.qp.nx[k]
             if k < self.qp.N:
                 Q_k = self.qp.Q[k]
                 R_k = self.qp.R[k]
@@ -224,14 +221,13 @@ class QpSolver:
         self.rhs.rd = res_ineq
         self.rhs.rm = res_comp
 
-        # if self.stat_dict['iter_count'] == 9:
-        #     print("rg:")
-        #     for k in range(self.qp.N+1):
-        #         print(f"== Stage {k} ==")
-        #         row_str = "  ".join(f"{x:>13.5e}" for x in self.rhs.rg[k])
-        #         print(row_str)
-        #         print()
-        #     exit()
+        # print("rg:")
+        # for k in range(self.qp.N+1):
+        #     print(f"== Stage {k} ==")
+        #     row_str = "  ".join(f"{x:>13.5e}" for x in self.rhs.rg[k])
+        #     print(row_str)
+        #     print()
+        # exit()
 
         # print("b:")
         # for k in range(self.qp.N):
@@ -239,6 +235,14 @@ class QpSolver:
         #     row_str = "  ".join(f"{x:>13.5e}" for x in self.qp.b[k])
         #     print(row_str)
         #     print()
+
+        # print("rq")
+        # for k in range(self.qp.N+1):
+        #     rq_k = np.concatenate((self.qp.r[k] if k < self.qp.N else np.empty(0), self.qp.q[k] if k < self.qp.N else self.qp.q_e))
+        #     row_str = "  ".join(f"{x:>13.5e}" for x in rq_k)
+        #     print(row_str)
+        #     print()
+        # exit()
 
         # print("rb:")
         # for k in range(self.qp.N):
@@ -269,33 +273,67 @@ class QpSolver:
 
 
     def _recover_solution(self):
-        # enforce x0 constraint
-        self.solution.x[0] = self.qp.x0
-        # recover the lam at stage 0
         k = 0
-        nx = self.qp.nx
-        nu = self.qp.nu
-        nb = self.qp.nb_0
-        nh = self.qp.nh_0
+        nx  = self.qp.nx[1]
         nbu = self.qp.nbu_0
         nbx = self.qp.nbx_0
-        Q_k = self.qp.Q[k]
-        S_k = self.qp.S[k]
-        A_k = self.qp.A[k]
-        q_k = self.qp.q[k]
-        x, u, pi, lam, s = self.solution
+        nh  = self.qp.nh_0
+        elim = self.qp.idxe_0
+        free = self.qp.free_idx_0
 
-        lam_lbx = np.zeros((nx,))
-        lam_ubx = np.zeros((nx,))
+        x, u, pi, lam, s = self.solution
         lam_0 = self.solution.lam[0]
-        # stationarity residual
-        temp_res_stat_x = np.zeros(nx)
-        temp_res_stat_x = Q_k @ x[k] + S_k.T @ u[k] + q_k + A_k.T @ pi[k+1]
-        lam_lbx = np.maximum(temp_res_stat_x, 1e-16)
-        lam_ubx = np.maximum(-temp_res_stat_x, 1e-16)
-        end_lower = nb + nh
-        self.solution.lam[0] = np.concatenate((lam_0[:nbu], lam_lbx, lam_0[nbu+nx:nbu+nx+nbx],
-                                                lam_0[end_lower:end_lower+nbu], lam_ubx, lam_0[end_lower+nbu+nx+nbx:]))
+
+        x0_full = np.zeros(nx)
+        x0_full[free] = x[k]
+        x0_full[elim] = self.qp.x0
+        self.solution.x[0] = x0_full
+
+        res_e = (self.qp.Q0e @ x0_full + self.qp.S0e.T @ u[k]
+                + self.qp.q0e + self.qp.A0e.T @ pi[k+1])
+        lam_lbx = np.zeros(nx); lam_ubx = np.zeros(nx)
+        lam_lbx[elim] = np.maximum( res_e, 1e-16)
+        lam_ubx[elim] = np.maximum(-res_e, 1e-16)
+
+        end_lower = nbu + nbx + nh
+        lam_lbx[free] = lam_0[nbu:nbu+nbx]
+        lam_ubx[free] = lam_0[end_lower+nbu:end_lower+nbu+nbx]
+
+        self.solution.lam[0] = np.concatenate((
+            lam_0[:nbu],
+            lam_lbx,
+            lam_0[nbu+nbx:nbu+nbx+nh],
+            lam_0[end_lower:end_lower+nbu],
+            lam_ubx,
+            lam_0[end_lower+nbu+nbx+nh:],
+        ))
+        # recover matrix by block concatenation
+        Q_0 = np.zeros((nx, nx))
+        Q_0[np.ix_(free, free)] = self.qp.Q[k]
+        Q_0[np.ix_(elim, free)] = self.qp.Q0e[:, free]
+        Q_0[np.ix_(free, elim)] = self.qp.Q0e[:, free].T
+        Q_0[np.ix_(elim, elim)] = self.qp.Q0e[:, elim]
+        self.qp.Q[k] = Q_0
+
+        A_0 = np.zeros((nx, nx))
+        A_0[:, free] = self.qp.A[k]
+        A_0[:, elim] = self.qp.A0e
+        self.qp.A[k] = A_0
+
+        S_0 = np.zeros((self.qp.nu, nx))
+        S_0[:, free] = self.qp.S[k]
+        S_0[:, elim] = self.qp.S0e
+        self.qp.S[k] = S_0
+
+        q_0 = np.zeros(nx)
+        q_0[free] = self.qp.q[k] - self.qp.Q0e[:, free].T @ self.qp.x0
+        q_0[elim] = self.qp.q0e
+        self.qp.q[k] = q_0
+
+        self.qp.r[k] = self.qp.r[k] - self.qp.S0e @ self.qp.x0
+        self.qp.b[k] = self.qp.b[k] - self.qp.A0e @ self.qp.x0
+        
+        self.qp.nx[k] = nx
 
 
     def solve(self, x0:np.ndarray=None, max_iter:int=100)-> iterate_sol:
@@ -308,7 +346,7 @@ class QpSolver:
 
         prev_sol = copy.deepcopy(self.solution)
 
-        # print ux
+        # # print ux
         # print("Initial primal variables (u concatenated with x):")
         # for k in range(self.qp.N+1):
         #     ux = np.concatenate((self.solution.u[k] if k < self.qp.N else np.empty(0), self.solution.x[k]))
@@ -316,6 +354,7 @@ class QpSolver:
         #     row_str = "  ".join(f"{x:>9.5f}" for x in ux)
         #     print(row_str)
         #     print()
+        # exit()
         # print lam
         # print("Initial Lagrange multipliers:")
         # for k in range(self.qp.N+1):
@@ -327,6 +366,11 @@ class QpSolver:
 
 
         while True:
+
+            self.stat_dict['alpha_pri_list'].append(self.alpha_prim)
+            self.stat_dict['alpha_dual_list'].append(self.alpha_dual)
+            self.stat_dict['alpha_list'].append(self.alpha)
+            self.stat_dict['ls'].append('--')
 
             self.compute_rhs(prev_sol=prev_sol)
             # exit()
@@ -366,7 +410,9 @@ class QpSolver:
             # for k in range(self.qp.N):
             #     dux = np.concatenate((self.delta_aff_dict['delta_u'][k], self.delta_aff_dict['delta_x'][k]))
             #     print(f"Stage {k}: {dux}")
-            # breakpoint()
+            # dux = self.delta_aff_dict['delta_x'][k]
+            # print(f"Stage {k+1}: {dux}")
+            # exit()
 
             # print(f"Iter {self.stat_dict['iter_count']}: alpha_aff_pri = {self.alpha_prim:.6f}, alpha_aff_dual = {self.alpha_dual:.6f}, alpha_aff = {self.alpha:.6f}")
             # print(f"Iter {self.stat_dict['iter_count']}: mu_aff = {mu_aff:.6e}")
@@ -391,10 +437,6 @@ class QpSolver:
                 self.update_rhs_comp(step_type='centering')
                 self.delta_dict = self._compute_step(prev_sol)
                 self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
-
-            self.stat_dict['alpha_pri_list'].append(self.alpha_prim)
-            self.stat_dict['alpha_dual_list'].append(self.alpha_dual)
-            self.stat_dict['alpha_list'].append(self.alpha)
 
             self.update_solution(prev_sol)
             prev_sol = copy.deepcopy(self.solution)
@@ -479,6 +521,7 @@ class QpSolver:
         if self.globalization:
             objective, norm_c = self._compute_objective_and_constraints(prev_sol)
             obj_grad = self._compute_objective_grad(prev_sol)
+            ls = 0
 
             direction_prim = np.concatenate(
                 delta_dict['delta_x'] +
@@ -488,6 +531,7 @@ class QpSolver:
             grad_direc_prod = obj_grad.T @ direction_prim
 
             for i in range(max_ls):
+                ls += 1
 
                 cand = iterate_sol(
                     x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
@@ -503,20 +547,29 @@ class QpSolver:
                     # check f type condition
                     if alpha_p*(-grad_direc_prod)>1e-4*norm_c**2:
                         # check Armijo condition
-                        if objective_cand <= objective + 1e-8*alpha_p*grad_direc_prod:
+                        if objective_cand <= objective + 1e-4*alpha_p*grad_direc_prod:
+                            self.stat_dict['ls'][-1] = str(ls)+"f"
                             break
                         else:
                             alpha_p *= beta
+                            if i == max_ls - 1:
+                                self.stat_dict['ls'][-1] = '5x'
                     else:
                         # check theta type condition
                         if norm_c_cand <= 0.9999*self.theta_max:
                             # update theta_max
                             self.theta_max = max((1-0.5)*self.theta_max + 0.5*norm_c_cand, self.theta_max*0.9999)
+                            self.stat_dict['ls'][-1] = str(ls)+"h"
                             break
                         else:
                             alpha_p *= beta
+                            if i == max_ls - 1:
+                                self.stat_dict['ls'][-1] = '5x'
                 else:
                     alpha_p *= beta
+                    if i == max_ls - 1:
+                        self.stat_dict['ls'][-1] = '5x'
+
         else:
             pass
 
@@ -533,8 +586,11 @@ class QpSolver:
 
         for k in range(self.qp.N+1):
             if k < self.qp.N:
-                Q_k = self.qp.Q[k];  R_k = self.qp.R[k];  S_k = self.qp.S[k]
-                q_k = self.qp.q[k];  r_k = self.qp.r[k]
+                Q_k = self.qp.Q[k]
+                R_k = self.qp.R[k]
+                S_k = self.qp.S[k]
+                q_k = self.qp.q[k]
+                r_k = self.qp.r[k]
 
                 # Gradient of the actual objective function f(x, u)
                 grad_x_k = Q_k @ x[k] + S_k.T @ u[k] + q_k
@@ -601,10 +657,25 @@ class QpSolver:
 
     def _convergence_check(self, relative_tol:float=0)-> bool:
         '''Check convergence based on KKT residuals.'''
-        return ((self.stat_dict['res_stat_list'][-1] < self.res_max['res_stat'] + relative_tol*self.res_max['res_stat']) and
-                (self.stat_dict['res_eq_list'][-1] < self.res_max['res_eq'] + relative_tol*self.res_max['res_eq']) and
-                (self.stat_dict['res_ineq_list'][-1] < self.res_max['res_ineq'] + relative_tol*self.res_max['res_ineq']) and
-                (self.stat_dict['res_comp_list'][-1] < self.res_max['res_comp'] + relative_tol*self.res_max['res_comp']))
+        # s_max = 100.0
+        # lam = np.concatenate(self.solution.pi)
+        # z = np.concatenate(self.solution.lam)
+        # m, n = lam.size, z.size
+
+        # lam_l1, z_l1 = np.abs(lam).sum(), np.abs(z).sum()
+        # s_d = max(s_max, (lam_l1 + z_l1) / (m + n)) / s_max
+        # s_c = max(s_max, z_l1 / n) / s_max
+        s_d = 1.0
+        s_c = 1.0
+
+        stat = self.stat_dict['res_stat_list'][-1] / s_d
+        comp = self.stat_dict['res_comp_list'][-1] / s_c
+        eq = self.stat_dict['res_eq_list'][-1]
+        ineq = self.stat_dict['res_ineq_list'][-1]
+        return (stat < self.res_max['res_stat'] * (1 + relative_tol) and
+                eq   < self.res_max['res_eq']   * (1 + relative_tol) and
+                ineq < self.res_max['res_ineq'] * (1 + relative_tol) and
+                comp < self.res_max['res_comp'] * (1 + relative_tol))
 
 
     def _inf_check(self):
@@ -616,18 +687,21 @@ class QpSolver:
 
 
     def _quit(self):
-        res = max(self.stat_dict['res_stat_list'][-1],
-                  self.stat_dict['res_eq_list'][-1],
-                  self.stat_dict['res_ineq_list'][-1],
-                  self.stat_dict['res_comp_list'][-1])
+        res_dict = {
+            'stat': self.stat_dict['res_stat_list'][-1],
+            'eq': self.stat_dict['res_eq_list'][-1],
+            'ineq': self.stat_dict['res_ineq_list'][-1],
+            'comp': self.stat_dict['res_comp_list'][-1]
+        }
+        max_name, res = max(res_dict.items(), key=lambda item: item[1])
         if self.status == 0:
-            print(f"\033[32mConverged!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
+            print(f"\033[32mConverged!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} (from {max_name}) and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
             return
         if self.status == 1:
             print(f"\033[31mUnregularized!\033[0m after {self.stat_dict['iter_count']} iterations.")
             return
         if self.stat_dict['iter_count'] >= self.max_iter:
-            print(f"\033[31mMax iters!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
+            print(f"\033[31mMax iters!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} (from {max_name}) and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
             self.status = 2
             return
         if self.status == 3:
@@ -662,12 +736,14 @@ class QpSolver:
         else:
             raise ValueError(f"Invalid field {field}. Valid fields are 'x', 'u', 'pi', 'lam', 's'.")
 
+
     def get_stats(self, field:str):
         if field == 'iter':
             return self.stat_dict['iter_count']
 
+
     def print_statistics(self):
-        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_measure\talpha_prim\talpha_dual\tobj')
+        print('\niter\tres_stat\tres_eq\t\tres_ineq\tres_comp\tduality_gap\talpha_prim\talpha_dual\tobj\t\tls')
         for i in range(self.stat_dict['iter_count']+1):
             res_stat_norm = self.stat_dict['res_stat_list'][i] if i < len(self.stat_dict['res_stat_list']) else 0.0
             res_eq_norm = self.stat_dict['res_eq_list'][i] if i < len(self.stat_dict['res_eq_list']) else 0.0
@@ -677,4 +753,5 @@ class QpSolver:
             alpha_pri = self.stat_dict['alpha_pri_list'][i] if i < len(self.stat_dict['alpha_pri_list']) else 0.0
             alpha_dual = self.stat_dict['alpha_dual_list'][i] if i < len(self.stat_dict['alpha_dual_list']) else 0.0
             cost = self.stat_dict['obj'][i] if i < len(self.stat_dict['obj']) else 0.0
-            print(f"{i}\t{res_stat_norm:.6e}\t{res_eq_norm:.6e}\t{res_ineq_norm:.6e}\t{res_comp_norm:.6e}\t{duality_measure:.6e}\t{alpha_pri:.6e}\t{alpha_dual:.6e}\t{cost:.6e}")
+            ls = self.stat_dict['ls'][i] if i < len(self.stat_dict['ls']) else "--"
+            print(f"{i}\t{res_stat_norm:.6e}\t{res_eq_norm:.6e}\t{res_ineq_norm:.6e}\t{res_comp_norm:.6e}\t{duality_measure:.6e}\t{alpha_pri:.6e}\t{alpha_dual:.6e}\t{cost:.6e}\t{ls}")
