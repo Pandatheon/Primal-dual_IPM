@@ -16,7 +16,7 @@ class BaseQP():
 
         # Core QP data structures
         self.N = 0
-        self.nx = 0
+        self.nx = [None] * (self.N + 1)
         self.nu = 0
         self.nb_0 = 0
         self.nbx_0 = 0
@@ -60,7 +60,7 @@ class BaseQP():
         # Use filename as the QP name
         self.name = os.path.splitext(os.path.basename(json_filepath))[0]
         matrix_fields = ['Q', 'R', 'S', 'A', 'B', 'C', 'D']
-        vector_fields = ['q', 'r', 'b', 'd', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
+        vector_fields = ['q', 'r', 'b', 'd', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug', 'idxe']
 
         dynamics_fields = ['A', 'B', 'b']
         cost_fields = ['Q', 'R', 'S', 'q', 'r']
@@ -99,7 +99,7 @@ class BaseQP():
                         elif prefix in vector_fields:
                             seq.append(np.array(data[key]).flatten())
                     else:
-                        seq.append(np.zeros((0, self.nx if prefix in ['C'] else self.nu)))
+                        seq.append(np.zeros((0, self.nx[k] if prefix in ['C'] else self.nu)))
 
             return seq if seq else None
 
@@ -110,7 +110,7 @@ class BaseQP():
 
         # Determine horizon and dimensions
         self.N = len(self.A) if self.A else 0
-        self.nx = self.A[0].shape[0] if self.A else 0
+        self.nx = [self.A[0].shape[0] if self.A else 0 for _ in range(self.N + 1)]
         self.nu = self.B[0].shape[1] if self.B else 0
 
         # Populate cost matrices and vectors
@@ -125,7 +125,7 @@ class BaseQP():
         # Populate constraints
         # boundary for x and u, represented as Jbx*x and Jbu*u
         idxb = extract_sequence("idxb")
-        self.Jbx = [np.zeros((0, self.nx))] * (self.N + 1)
+        self.Jbx = [np.zeros((0, self.nx[k])) for k in range(self.N + 1)]
         self.Jbu = [np.zeros((0, self.nu))] * (self.N + 1)
         if idxb is not None:
             for k in range(len(idxb)):
@@ -137,19 +137,28 @@ class BaseQP():
                     idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
                     Jbu_k = np.zeros((len(idxb_u), self.nu))
                     Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
-                    Jbx_k = np.zeros((len(idxb_x), self.nx))
+                    Jbx_k = np.zeros((len(idxb_x), self.nx[k]))
                     Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
                     self.Jbu[k] = Jbu_k
                     self.Jbx[k] = Jbx_k
                 else:
                     idxb_x = idxb_k
-                    Jbx_k = np.zeros((len(idxb_x), self.nx))
+                    Jbx_k = np.zeros((len(idxb_x), self.nx[k]))
                     Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
                     self.Jbx[k] = Jbx_k
 
         if self.x0_elimination:
             # ad-hoc fix for x0 elimination
-            self.Jbx[0] = np.zeros((0, self.nx))
+            self.idxe_0 = extract_sequence("idxe")[0] - self.Jbu[0].shape[0]
+            self.free_idx_0 = np.delete(np.arange(self.nx[0]), self.idxe_0)
+            self.A0e = self.A[0][:, self.idxe_0].copy()
+            self.S0e = self.S[0][:, self.idxe_0].copy()
+            self.Q0e = self.Q[0][self.idxe_0, :].copy()
+            self.q0e = self.q[0][self.idxe_0].copy()
+            # eliminate dimension corresponding to idexe_0 in Jbx[0]
+            if self.idxe_0.size > 0:
+                Jbx_0_new = np.delete(self.Jbx[0], self.idxe_0, axis=0)
+                self.Jbx[0] = Jbx_0_new
 
         self.nbx_0 = self.Jbx[0].shape[0]
         self.nbu_0 = self.Jbu[0].shape[0]
@@ -170,7 +179,7 @@ class BaseQP():
         D_list = extract_sequence("D")
 
         for k in range(self.N+1):
-            C_k = C_list[k] if (C_list and k < len(C_list)) else np.zeros((0, self.nx))
+            C_k = C_list[k] if (C_list and k < len(C_list)) else np.zeros((0, self.nx[k]))
             D_k = D_list[k] if (D_list and k < len(D_list)) else np.zeros((0, self.nu))
             self.C.append(C_k)
             self.D.append(D_k)
@@ -181,8 +190,8 @@ class BaseQP():
 
         # concatanate Jbx, Jbu with C, D to form the full constraint matrices for each stage
         for k in range(self.N+1):
-            C_lower = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx)), -self.Jbx[k], -self.C[k]))
-            C_upper = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx)), self.Jbx[k], self.C[k]))
+            C_lower = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx[k])), -self.Jbx[k], -self.C[k]))
+            C_upper = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx[k])), self.Jbx[k], self.C[k]))
             self.C[k] = np.vstack((C_lower, C_upper))
             D_lower = np.vstack((-self.Jbu[k], np.zeros((self.Jbx[k].shape[0], self.nu)), -self.D[k]))
             D_upper = np.vstack((self.Jbu[k], np.zeros((self.Jbx[k].shape[0], self.nu)), self.D[k]))
@@ -196,30 +205,39 @@ class BaseQP():
             lb_k = []
             ub_k = []
             for i, (lb, ub) in enumerate([(lbu, ubu), (lbx, ubx), (lg, ug)]):
-                if k == 0 and i ==1 and self.x0_elimination:
-                    self.x0 = np.array(lb[0])
-                    # ad-hoc fix for x0 elimination
-                    b_0_remove = self.b[0] + self.A[0] @ np.array(lb[0])
-                    self.b[0] = b_0_remove
-                    r_0_remove = self.r[0] + self.S[0] @ np.array(lb[0])
-                    self.r[0] = r_0_remove
+                if k == 0 and i == 1 and self.x0_elimination:
+                    self.x0 = lb[0].flatten()[self.idxe_0]
+                    self.b[0] = self.b[0] + self.A[0][:, self.idxe_0] @ self.x0
+                    self.r[0] = self.r[0] + self.S[0][:, self.idxe_0] @ self.x0
+                    self.q[0] = self.q[0][self.free_idx_0] + self.Q[0][np.ix_(self.free_idx_0, self.idxe_0)] @ self.x0
+                    self.A[0] = self.A[0][:, self.free_idx_0]
+                    self.S[0] = self.S[0][:, self.free_idx_0]
+                    self.Q[0] = self.Q[0][np.ix_(self.free_idx_0, self.free_idx_0)]
+                    lb_k.append(-lb[0].flatten()[self.free_idx_0])
+                    ub_k.append( ub[0].flatten()[self.free_idx_0])
                     continue
 
                 if (lb is not None and k < len(lb)) and (ub is not None and k < len(ub)):
                     lb_k.append(-lb[k].flatten())
                     ub_k.append(ub[k].flatten())
+
             if lb_k and ub_k:
                 d_k = lb_k + ub_k
                 self.d.append(np.concatenate(d_k))
             else:
                 self.d.append(np.array([]))
 
+        if self.x0_elimination:
+            self.d[0] = self.d[0] - self.C[0][:, self.idxe_0] @ self.x0
+            self.C[0] = self.C[0][:, self.free_idx_0]
+            self.nx[0] = len(self.free_idx_0)
+
         return self
 
     def _A_power_transpose(self, start_stage, end_stage):
         if end_stage <= start_stage:
-            return np.eye(self.nx)
-        A_prod = np.eye(self.nx)
+            return np.eye(self.nx[k])
+        A_prod = np.eye(self.nx[k])
         for k in range(start_stage, end_stage):
             A_prod = self.A[k].T @ A_prod
         return A_prod
@@ -231,6 +249,42 @@ class BaseQP():
         ])
         return H_block
 
+    def Riccati_recursion(self):
+        """
+        Perform Riccati recursion to compute the feedback gains and cost-to-go matrices.
+        This method computes the optimal control law for the QP using dynamic programming.
+        """
+        # Initialize storage for feedback gains and cost-to-go matrices
+        M_list = [None] * self.N
+        K_list = [None] * self.N
+        P_list = [None] * (self.N + 1)
+
+        # Terminal cost
+        P_list[self.N] = self.Q_e
+
+        for k in range(self.N - 1, -1, -1):
+            # Compute the Riccati recursion matrices
+            A_k = self.A[k]
+            B_k = self.B[k]
+            Q_k = self.Q[k]
+            R_k = self.R[k]
+            S_k = self.S[k]
+
+            # Compute the cost-to-go matrix P_k
+            P_next = P_list[k + 1]
+            M_k = R_k + B_k.T @ P_next @ B_k
+            M_k = 0.5*(M_k + M_k.T)
+            G_k = S_k + B_k.T @ P_next @ A_k
+            K_k = np.linalg.solve(M_k, G_k)  # Feedback gain
+            P_curr = Q_k + A_k.T @ P_next @ A_k - K_k.T @ (R_k + B_k.T @ P_next @ B_k) @ K_k
+            P_curr = 0.5*(P_curr + P_curr.T)  # Ensure symmetry
+            P_list[k] = P_curr
+
+            # Store feedback gain and cross-coupling matrix
+            M_list[k] = M_k
+            K_list[k] = K_k
+
+        return P_list, K_list, M_list
 
     def condense_Hessian(self):
         """
@@ -239,15 +293,15 @@ class BaseQP():
         preventing condition number explosion and reducing complexity.
         """
         # 1. Compute state-input mapping matrix Gamma
-        Gamma = np.zeros((self.N * self.nx, self.N * self.nu))
+        Gamma = np.zeros((self.N * self.nx[k], self.N * self.nu))
         for i in range(self.N):
-            idx_x = slice(i * self.nx, (i + 1) * self.nx)
+            idx_x = slice(i * self.nx[k], (i + 1) * self.nx[k])
             for j in range(i + 1):
                 idx_u = slice(j * self.nu, (j + 1) * self.nu)
                 if i == j:
                     Gamma[idx_x, idx_u] = self.B[j]
                 else:
-                    prev_x = slice((i - 1) * self.nx, i * self.nx)
+                    prev_x = slice((i - 1) * self.nx[k], i * self.nx[k])
                     Gamma[idx_x, idx_u] = self.A[i] @ Gamma[prev_x, idx_u]
 
         # 2. Initialize dense Hessian and terminal cost matrix
@@ -275,7 +329,7 @@ class BaseQP():
 
             # Compute off-diagonal blocks using the mapping Gamma
             if i > 0:
-                idx_x_prev = slice((i - 1) * self.nx, i * self.nx)
+                idx_x_prev = slice((i - 1) * self.nx[k], i * self.nx[k])
 
                 for j in range(i):
                     idx_u_j = slice(j * self.nu, (j + 1) * self.nu)
@@ -302,7 +356,7 @@ class BaseQP():
         """
         # 1. Forward Pass: Simulate state trajectory with zero control input
         # Complexity: O(N)
-        X_sim = np.zeros((self.N + 1, self.nx))
+        X_sim = np.zeros((self.N + 1, self.nx[k]))
         X_sim[0] = x0
         for k in range(self.N):
             X_sim[k+1] = self.A[k] @ X_sim[k] + rhs_kkt.rb[k]
@@ -312,15 +366,15 @@ class BaseQP():
         gc = np.zeros(self.N * self.nu)
 
         # Terminal condition for the adjoint variable (costate p_N)
-        q_N = rhs_kkt.rg[-1][:self.nx]
+        q_N = rhs_kkt.rg[-1][:self.nx[k]]
         p_next = q_N + self.Q_e @ X_sim[self.N]
 
         for k in range(self.N - 1, -1, -1):
             idx_u = slice(k * self.nu, (k + 1) * self.nu)
 
             # Extract stage-wise linear penalties
-            q_k = rhs_kkt.rg[k][:self.nx]
-            r_k = rhs_kkt.rg[k][self.nx:]
+            q_k = rhs_kkt.rg[k][:self.nx[k]]
+            r_k = rhs_kkt.rg[k][self.nx[k]:]
 
             # Compute condensed gradient block for step k
             gc[idx_u] = r_k + self.S[k] @ X_sim[k] + self.B[k].T @ p_next
@@ -342,15 +396,15 @@ class BaseQP():
         # Calculate block size based on the specified range
         Nc = end_idx - start_idx + 1
 
-        Gamma_x = np.zeros((Nc * self.nx, self.nx))
-        Gamma_u = np.zeros((Nc * self.nx, Nc * self.nu))
+        Gamma_x = np.zeros((Nc * self.nx[k], self.nx[k]))
+        Gamma_u = np.zeros((Nc * self.nx[k], Nc * self.nu))
 
         # 1. Iteratively build Gamma_x and Gamma_u
-        Gamma_x[0:self.nx, :] = np.eye(self.nx)
+        Gamma_x[0:self.nx[k], :] = np.eye(self.nx[k])
 
         for i in range(1, Nc):
-            idx_x = slice(i * self.nx, (i + 1) * self.nx)
-            prev_x = slice((i - 1) * self.nx, i * self.nx)
+            idx_x = slice(i * self.nx[k], (i + 1) * self.nx[k])
+            prev_x = slice((i - 1) * self.nx[k], i * self.nx[k])
             stage = start_idx + i - 1
             A_stage = self.A[stage]
 
@@ -371,10 +425,10 @@ class BaseQP():
         R_list = [self.R[k] for k in range(start_idx, end_idx + 1)]
         Q_bar = block_diag(*Q_list)
         R_bar = block_diag(*R_list)
-        S_bar = np.zeros((Nc * self.nu, Nc * self.nx))
+        S_bar = np.zeros((Nc * self.nu, Nc * self.nx[k]))
         for k in range(start_idx, end_idx + 1):
             row_idx_u = slice((k - start_idx) * self.nu, (k - start_idx + 1) * self.nu)
-            col_idx_x = slice((k - start_idx) * self.nx, (k - start_idx + 1) * self.nx)
+            col_idx_x = slice((k - start_idx) * self.nx[k], (k - start_idx + 1) * self.nx[k])
             S_bar[row_idx_u, col_idx_x] = self.S[k]
 
         # 3. Compute condensed cost matrices
@@ -383,20 +437,20 @@ class BaseQP():
         S_cond = Gamma_u.T @ Q_bar @ Gamma_x + S_bar @ Gamma_x
 
         # 4. Compute condensed dynamics matrices for the transition
-        A_cond = self.A[end_idx] @ Gamma_x[-self.nx:, :]
+        A_cond = self.A[end_idx] @ Gamma_x[-self.nx[k]:, :]
 
-        B_cond = np.zeros((self.nx, Nc * self.nu))
+        B_cond = np.zeros((self.nx[k], Nc * self.nu))
         B_cond[:, -self.nu:] = self.B[end_idx]
         for j in range(Nc - 1):
             idx_u = slice(j * self.nu, (j + 1) * self.nu)
-            B_cond[:, idx_u] = self.A[end_idx] @ Gamma_u[-self.nx:, idx_u]
+            B_cond[:, idx_u] = self.A[end_idx] @ Gamma_u[-self.nx[k]:, idx_u]
 
         QP_condensed.A = A_cond
         QP_condensed.B = B_cond
         QP_condensed.Q = Q_cond
         QP_condensed.R = R_cond
         QP_condensed.S = S_cond
-        QP_condensed.nx = self.nx
+        QP_condensed.nx = self.nx[k]
         QP_condensed.nu = Nc * self.nu
 
         return QP_condensed
