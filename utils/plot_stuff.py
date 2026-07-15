@@ -471,7 +471,11 @@ def plot_indefiniteness_coverage(csv_path, save_path=None):
     # Figure 3: depth histogram (single colour, log x)
     # ------------------------------------------------------------------
     fig_d, axd = plt.subplots(figsize=(9, 4))
-    logbins = np.logspace(np.log10(sev.min()), np.log10(sev.max()), 20)
+    # Set a lower bound to prevent log10(0)
+    min_val = max(sev.min(), 1e-8)
+    max_val = sev.max()
+    # Generate log bins with the lower bound
+    logbins = np.logspace(np.log10(min_val), np.log10(max_val), 20)
     axd.hist(sev, bins=logbins,
              color=HIST_FILL, edgecolor=HIST_EDGE, linewidth=0.6)
     axd.set_xscale('log')
@@ -609,10 +613,12 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
 if __name__ == "__main__":
     set_ieee_style()
 
-    plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-    # plot_charts('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
-    plot_geometric_mean_cost('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-    plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-
-    # plot_indefiniteness_coverage('qp_diagonstics.csv', save_path='indefiniteness_coverage.pdf') if Path('qp_diagonstics.csv').exists() else print("qp_diagonstics.csv not found, skipping.")
-    # plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf') if Path('qp_stage_diagnostics.csv').exists() else print("qp_stage_diagnostics.csv not found, skipping.")
+    iter = 0
+    if iter:
+        plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        # plot_charts('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
+        plot_geometric_mean_cost('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+    else:
+        plot_indefiniteness_coverage('qp_diagonstics.csv', save_path='indefiniteness_coverage.pdf') if Path('qp_diagonstics.csv').exists() else print("qp_diagonstics.csv not found, skipping.")
+        plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf') if Path('qp_stage_diagnostics.csv').exists() else print("qp_stage_diagnostics.csv not found, skipping.")

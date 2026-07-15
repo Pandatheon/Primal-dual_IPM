@@ -1,0 +1,66 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: proof.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: references.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in frisonAlgorithmsMethodsHighPerformance
+Warning--empty year in frisonAlgorithmsMethodsHighPerformance
+Warning--empty journal in verschuerenSparsityPreservingConvexification2017
+Warning--empty year in verschuerenSparsityPreservingConvexification2017
+Warning--empty journal in fangModifiedCholeskyAlgorithms2007
+Warning--empty year in fangModifiedCholeskyAlgorithms2007
+Warning--empty journal in absilNewtonKKTInteriorpointMethods2007
+Warning--empty year in absilNewtonKKTInteriorpointMethods2007
+Warning--empty year in titsSimpleQuadraticallyConvergent1994
+
+Done.
+You've used 5 entries,
+            4087 wiz_defined-function locations,
+            853 strings with 8656 characters,
+and the built_in function-call counts, 3579 in all, are:
+= -- 274
+> -- 84
+< -- 30
++ -- 44
+- -- 14
+* -- 208
+:= -- 569
+add.period$ -- 11
+call.type$ -- 5
+change.case$ -- 7
+chr.to.int$ -- 69
+cite$ -- 14
+duplicate$ -- 244
+empty$ -- 259
+format.name$ -- 19
+if$ -- 782
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 41
+newline$ -- 46
+num.names$ -- 7
+pop$ -- 106
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 258
+stack$ -- 0
+substring$ -- 165
+swap$ -- 191
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 5
+warning$ -- 9
+while$ -- 18
+width$ -- 6
+write$ -- 74
+(There were 9 warnings)

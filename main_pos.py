@@ -4,7 +4,7 @@ from pathlib import Path
 
 from QP_template.QP_base import BaseQP
 from solvers.RiccatiQpSolver import QpSolver
-from solvers.Regularization_config import reg_list, Hessian_reg, condensed_Hessian_reg, stage_reg, no_reg, refer_list
+from solvers.Regularization_config import reg_list, Block_Hessian_reg, condensed_Hessian_reg, Block_reduced_Hessian_reg, no_reg, Refer_list
 
 from solvers.SqpQpSolver import SqpQpSolver
 from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp
@@ -43,7 +43,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
 
-    methods = ['Riccati'] + refer_list
+    methods = ['Riccati'] + Refer_list
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
@@ -60,7 +60,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             else:
                 qp = BaseQP()
                 qp.populate_from_json(str(qp_path))
-                qp_solver = QpSolver(qp, reg='NO_REG', type=method, mehrotra=False)
+                qp_solver = QpSolver(qp, reg='NO_REG', type=method, mehrotra=False, globalization=True)
 
             cost = None
             iter = None

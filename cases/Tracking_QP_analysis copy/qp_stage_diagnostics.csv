@@ -1,0 +1,1217 @@
+QP_stage_name                                                        , R_min_eig             , P_min_eig            , M_min_eig
+Furuta_FU_INDE_RE_INDE_status_4_iter_0_stage_3                       , 11.264211552          , -172.84519005346255  , -755.6710121501585
+Furuta_FU_INDE_RE_INDE_status_4_iter_0_stage_7                       , 232.47074734          , -21177.590134629758  , -23477.416676016026
+Furuta_FU_INDE_RE_INDE_status_4_iter_0_stage_16                      , -140.69085133         , -996.1479957295634   , -1784.7395267932422
+Furuta_FU_INDE_RE_INDE_status_4_iter_10_stage_6                      , 705.81292584          , -900.9356734023439   , -2727.2488870845186
+Furuta_FU_INDE_RE_INDE_status_4_iter_11_stage_6                      , 349.43651281          , -426.1055628139911   , -1622.6799855833776
+Furuta_FU_INDE_RE_INDE_status_4_iter_12_stage_6                      , 202.17183355          , -250.8795772580818   , -670.1959558025521
+Furuta_FU_INDE_RE_INDE_status_4_iter_13_stage_5                      , 289.20395344          , -823.2286565824033   , -2595.797226168982
+Furuta_FU_INDE_RE_INDE_status_4_iter_14_stage_4                      , 278.03766563          , -2.2454541281073284  , -165.52588739526288
+Furuta_FU_INDE_RE_INDE_status_4_iter_14_stage_5                      , 210.15350362          , -33.840395115833886  , -572.7851867873936
+Furuta_FU_INDE_RE_INDE_status_4_iter_16_stage_4                      , 265.69756055          , -370.60509299467697  , -1638.4163272123262
+Furuta_FU_INDE_RE_INDE_status_4_iter_17_stage_4                      , 160.57151784          , -170.43181397303206  , -485.2201884142608
+Furuta_FU_INDE_RE_INDE_status_4_iter_18_stage_3                      , 120.66868692          , -356.24966001270803  , -1771.5020044365808
+Furuta_FU_INDE_RE_INDE_status_4_iter_2_stage_6                       , 59.798649325          , -2376.6151639536947  , -839.1054190995819
+Furuta_FU_INDE_RE_INDE_status_4_iter_2_stage_9                       , 24.127647141          , -6.188627539991861   , -62.39235014319317
+Furuta_FU_INDE_RE_INDE_status_4_iter_2_stage_14                      , -8.3233175732         , -3366.6728699854707  , -363.4500848843212
+Furuta_FU_INDE_RE_INDE_status_4_iter_20_stage_2                      , -151.72425427         , -2.6925038100444754  , -724.5817097784525
+Furuta_FU_INDE_RE_INDE_status_4_iter_21_stage_3                      , 115.24839588          , -59.45239811871316   , -258.2391070776122
+Furuta_FU_INDE_RE_INDE_status_4_iter_24_stage_1                      , 303.51414692          , -299.8952263432909   , -1732.1675075797332
+Furuta_FU_INDE_RE_INDE_status_4_iter_28_stage_2                      , 150.26828622          , -199.21380757455725  , -472.5602824104223
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_1                       , -554.41398084         , -1297.3887481241338  , -6159.170445123074
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_2                       , -978.43306382         , -2308.458985815124   , -2572.397586060676
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_4                       , -450.24438588         , -1363.894644854338   , -929.3636890778093
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_5                       , -494.42501215         , -2234.0871306200333  , -1864.1526941089032
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_7                       , 688.88048923          , -11212.249515730673  , -3341.034990292066
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_10                      , 30.102714701          , -3127.0671245277617  , -1048.7097995154904
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_11                      , -25.923869314         , -2500.4233512892365  , -87.10411948555688
+Furuta_FU_INDE_RE_INDE_status_4_iter_3_stage_12                      , 79.909210531          , -1171.401257525223   , -917.6133036318286
+Furuta_FU_INDE_RE_INDE_status_4_iter_31_stage_2                      , 150.271961            , -199.32113783331178  , -472.5366522570454
+Furuta_FU_INDE_RE_INDE_status_4_iter_33_stage_2                      , 150.27167322          , -199.3127288514741   , -472.5385065794097
+Furuta_FU_INDE_RE_INDE_status_4_iter_4_stage_1                       , -34.330908701         , -30.510752032467565  , -386.2990459074464
+Furuta_FU_INDE_RE_INDE_status_4_iter_4_stage_6                       , 79.646901138          , -5.4449081669136925  , -97.36480892996408
+Furuta_FU_INDE_RE_INDE_status_4_iter_4_stage_8                       , 677.89372907          , -204.6872682143003   , -1199.788877808949
+Furuta_FU_INDE_RE_INDE_status_4_iter_6_stage_7                       , 374.1305728           , -241.29322246692692  , -1251.56540714774
+Furuta_FU_INDE_RE_INDE_status_4_iter_7_stage_6                       , 159.13764103          , -46.69760131716583   , -570.559689059626
+Furuta_FU_INDE_RE_INDE_status_4_iter_8_stage_7                       , 138.68656804          , -158.02664504775095  , -241.31468996540036
+Furuta_FU_INDE_RE_INDE_status_4_iter_9_stage_6                       , 397.60985207          , -3382.3118162561077  , -8649.048470384529
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0_stage_11                    , 0.20013150791         , -1701.0313838167458  , -0.050151040115100964
+Pendulum_FU_INDE_RE_INDE_status_4_iter_11_stage_3                    , 0.19227837186         , -22745.635074057438  , -0.7194284008923623
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12_stage_2                    , 0.29918237341         , -282.252929808806    , -0.2662049232465714
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12_stage_4                    , 0.4101193271          , -24051.58982113459   , -0.13755075293493702
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12_stage_5                    , 0.36247323764         , -60876.16106722519   , -0.8688377311997073
+Pendulum_FU_INDE_RE_INDE_status_4_iter_14_stage_2                    , 0.29870595098         , -287.2388271311691   , -0.28738648041845233
+Pendulum_FU_INDE_RE_INDE_status_4_iter_14_stage_4                    , 0.41070820703         , -24132.169384036446  , -0.15988582062651613
+Pendulum_FU_INDE_RE_INDE_status_4_iter_14_stage_5                    , 0.36358935389         , -61539.23227835699   , -0.9225184673580807
+Pendulum_FU_INDE_RE_INDE_status_4_iter_15_stage_2                    , 0.29827131092         , -291.04366178137195  , -0.3051729993973831
+Pendulum_FU_INDE_RE_INDE_status_4_iter_15_stage_4                    , 0.41114491642         , -24169.701662862204  , -0.1785725070974365
+Pendulum_FU_INDE_RE_INDE_status_4_iter_15_stage_5                    , 0.36452764482         , -62174.869238839354  , -0.9737241887179507
+Pendulum_FU_INDE_RE_INDE_status_4_iter_16_stage_2                    , 0.30086416388         , -335.177645791749    , -0.4105697040098572
+Pendulum_FU_INDE_RE_INDE_status_4_iter_16_stage_4                    , 0.4187006041          , -25873.84095214044   , -0.234656620860468
+Pendulum_FU_INDE_RE_INDE_status_4_iter_16_stage_5                    , 0.36965621235         , -65825.85287315681   , -1.0617734576812023
+Pendulum_FU_INDE_RE_INDE_status_4_iter_17_stage_6                    , 0.24171573129         , -1228.473479989357   , -0.07926473637803605
+Pendulum_FU_INDE_RE_INDE_status_4_iter_17_stage_8                    , 0.28018859306         , -13965.698639321428  , -0.16142815165398539
+Pendulum_FU_INDE_RE_INDE_status_4_iter_18_stage_2                    , 0.20043533272         , -7474.0839344240885  , -0.8664796151950497
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2_stage_10                    , 0.22552946057         , -10516.092159845579  , -1.9779346565398106
+Pendulum_FU_INDE_RE_INDE_status_4_iter_20_stage_2                    , 0.20137769085         , -4190.961228719892   , -0.2752368090529951
+Pendulum_FU_INDE_RE_INDE_status_4_iter_21_stage_1                    , 0.2125786927          , -1506.1723847413643  , -0.08376778599928089
+Pendulum_FU_INDE_RE_INDE_status_4_iter_22_stage_0                    , 0.27978868229         , -252.10091567844836  , -0.3526240203676245
+Pendulum_FU_INDE_RE_INDE_status_4_iter_22_stage_2                    , 0.5047701527          , -11516.125305036197  , -0.25072093648320937
+Pendulum_FU_INDE_RE_INDE_status_4_iter_22_stage_3                    , 0.47698724331         , -47403.38798778558   , -0.5757993850006307
+Pendulum_FU_INDE_RE_INDE_status_4_iter_22_stage_4                    , 0.37864605005         , -422876.30180975515  , -21.053484959042507
+Pendulum_FU_INDE_RE_INDE_status_4_iter_28_stage_2                    , 0.19963248926         , -777.8742780680693   , -0.11995565746197556
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3_stage_9                     , 0.18532392287         , -12793.33873221457   , -0.6504825439073925
+Pendulum_FU_INDE_RE_INDE_status_4_iter_33_stage_1                    , 0.21220019143         , -24260.57696096691   , -0.6302374996739508
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4_stage_4                     , 0.22109747897         , -6440.63983088241    , -3.5999520184174796
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4_stage_8                     , 0.24373689537         , -10699.782529678618  , -0.24092073081526996
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5_stage_9                     , 0.23997418603         , -7112.259269387452   , -0.009952577651602457
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6_stage_3                     , 0.35563803144         , -18398.316272889737  , -0.7200834478226459
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6_stage_5                     , 0.31724124668         , -43434.59297687051   , -0.20283117022901498
+Pendulum_FU_INDE_RE_INDE_status_4_iter_7_stage_3                     , 0.37378728123         , -16847.484367922763  , -0.7547651893316236
+Pendulum_FU_INDE_RE_INDE_status_4_iter_7_stage_5                     , 0.32548967186         , -46244.80168716706   , -0.22056860516831855
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_3                     , 0.3727637283          , -16788.983491003262  , -0.7225241854126967
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_5                     , 0.32420921536         , -45195.74599215129   , -0.2031427613968042
+Pendulum_FU_INDE_RE_INDE_status_4_iter_9_stage_2                     , 0.30597831005         , -195.73004444442572  , -0.03473625130013491
+Pendulum_FU_INDE_RE_INDE_status_4_iter_9_stage_3                     , 0.39138107134         , -19111.567315577267  , -2.2620302364689002
+Pendulum_FU_INDE_RE_INDE_status_4_iter_9_stage_5                     , 0.34964704655         , -56520.53810413892   , -0.46576500796360154
+acrobot_FU_INDE_RE_INDE_status_2_iter_19_stage_1                     , 0.016316972566        , -15.115273904183343  , -0.020760056633782876
+acrobot_FU_INDE_RE_INDE_status_2_iter_19_stage_2                     , 0.017452519795        , -21.383439487942315  , -0.017394059944494184
+acrobot_FU_INDE_RE_INDE_status_2_iter_19_stage_3                     , 0.0093533825194       , -112.39743066820114  , -0.019742344863711646
+acrobot_FU_INDE_RE_INDE_status_2_iter_19_stage_9                     , 0.0039576071894       , -89.58841989807382   , -0.023316182021576818
+acrobot_FU_INDE_RE_INDE_status_2_iter_19_stage_14                    , 0.0071926110618       , -81.32080329006756   , -0.027238748558016283
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_0                     , 0.012760891332        , -7.976786488583081   , -0.004408522140000572
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_1                     , 0.031159199651        , -39.2966492381635    , -0.007521176322012355
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_2                     , 0.030830614993        , -32.60741735727418   , -0.019048462322446863
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_3                     , 0.014756911753        , -71.4784564740319    , -0.004846229982474866
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_4                     , 0.0051016063137       , -72.65861970947077   , -0.015760265195848513
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_13                    , 0.0034913446344       , -17.221432385168594  , -0.015186974213979453
+acrobot_FU_INDE_RE_INDE_status_2_iter_22_stage_14                    , 0.01196373443         , -653.0134395520721   , -0.19025981555667
+acrobot_FU_INDE_RE_INDE_status_2_iter_24_stage_8                     , 0.0018512140261       , -48.677736900390855  , -0.015764936985648292
+acrobot_FU_INDE_RE_INDE_status_2_iter_26_stage_8                     , 0.0018412268955       , -263.99590471349615  , -0.08805913987282409
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_1                      , 0.031026142432        , -447.3440018392293   , -0.052007227701214256
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_2                      , 0.026798652972        , -345.51175011807965  , -0.014120126008097117
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_7                      , -0.022806731849       , -6763.831118587214   , -0.25400341913595564
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_16                     , -0.27230730454        , -371.7394126678702   , -0.1060318947652586
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_21                     , -0.031173271695       , -4.885281255796381   , -0.05033972603204418
+acrobot_FU_INDE_RE_INDE_status_2_iter_3_stage_22                     , 0.1748108632          , -234.90581101353877  , -0.06118931710822412
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_2                      , 0.004417215171        , -112047.25443297545  , -0.47443930629066
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_4                      , -0.027716674401       , -231.9394864671354   , -0.0006449368725271395
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_5                      , -0.030412094006       , -195.19197895262673  , -0.021187481282204094
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_6                      , -0.023245128431       , -110.22759842028515  , -0.0068377074022334915
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_8                      , -0.01977051983        , -272.56962843454176  , -0.03357400179520599
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_10                     , -0.00024964046972     , -10266.355814356224  , -0.025056133935186818
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_14                     , 0.029100877582        , -3417.4021101157487  , -0.032579294700920365
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_18                     , -0.0081715161042      , -38650.46367113448   , -0.840961814380426
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_21                     , 0.033295466794        , -367.6917889320449   , -0.018185425335202808
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_stage_22                     , -0.06322424801        , -126.33154632861877  , -0.011879840221657695
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_1                     , 0.73698151785         , -20872.923376353734  , -0.35005825518754763
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_2                     , 0.50262029792         , -21734.027306506523  , -0.22132839171005636
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_5                     , 0.50759280307         , -11315.016858341412  , -0.909248381861124
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_6                     , 1.3645159431          , -12331.784491748587  , -0.46493266253984733
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_13                    , 0.10758391513         , -5377.798972200421   , -5.610380188712126
+acrobot_FU_INDE_RE_INDE_status_4_iter_10_stage_20                    , 1.499134975           , -1038066.6313646394  , -6.608071754310391
+acrobot_FU_INDE_RE_INDE_status_4_iter_11_stage_5                     , -0.013774690505       , -2441.95006626849    , -0.13485986474615272
+acrobot_FU_INDE_RE_INDE_status_4_iter_11_stage_13                    , -0.019550151582       , -139.55934754192828  , -0.24573809127779825
+acrobot_FU_INDE_RE_INDE_status_4_iter_11_stage_15                    , -0.015858180239       , -98.79614076084052   , -0.034041318956476066
+acrobot_FU_INDE_RE_INDE_status_4_iter_11_stage_20                    , 0.029901068871        , -19283.278902789774  , -0.1607319370080604
+acrobot_FU_INDE_RE_INDE_status_4_iter_12_stage_10                    , 0.0013818720553       , -59.86980161487536   , -0.01422124112322935
+acrobot_FU_INDE_RE_INDE_status_4_iter_14_stage_12                    , 0.002759359086        , -147.08308311319746  , -0.0026176776563697473
+acrobot_FU_INDE_RE_INDE_status_4_iter_16_stage_10                    , 0.0018936976451       , -4323.535198360891   , -0.2406600140662099
+acrobot_FU_INDE_RE_INDE_status_4_iter_17_stage_10                    , 0.0019698523958       , -331.1351137442479   , -0.005203273471191849
+acrobot_FU_INDE_RE_INDE_status_4_iter_18_stage_9                     , 0.0017220993351       , -754.4846785630693   , -0.10912609706748645
+acrobot_FU_INDE_RE_INDE_status_4_iter_20_stage_9                     , 0.0017335399155       , -282.91925154879414  , -0.02657242111941438
+acrobot_FU_INDE_RE_INDE_status_4_iter_27_stage_9                     , 0.0017607881144       , -109.81940331912868  , -0.0024970370208432678
+acrobot_FU_INDE_RE_INDE_status_4_iter_28_stage_9                     , 0.001762775762        , -99.03201594202757   , -0.0014520620211342708
+acrobot_FU_INDE_RE_INDE_status_4_iter_32_stage_8                     , 0.0018196799083       , -1454.1824185024304  , -0.475557920080155
+acrobot_FU_INDE_RE_INDE_status_4_iter_8_stage_6                      , 0.017408034196        , -30020.581928490807  , -0.5967371335879313
+acrobot_FU_INDE_RE_INDE_status_4_iter_8_stage_9                      , -0.41577183489        , -5836.848525670429   , -0.08031210317418436
+acrobot_FU_INDE_RE_INDE_status_4_iter_8_stage_14                     , -0.5337015604         , -2618.393632513978   , -7.1525225722796275
+acrobot_FU_INDE_RE_INDE_status_4_iter_8_stage_15                     , -0.046113988863       , -138382.34717861674  , -9.58296954872934
+acrobot_FU_INDE_RE_INDE_status_4_iter_8_stage_20                     , 0.80016624851         , -1677032.5097863511  , -26.444612121075505
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_10_stage_12        , 0.07330814193547164   , -12.658762347891004  , -0.04951380527677938
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_10_stage_14        , 0.0807881728378159    , -202.38959512366938  , -5.326300489278248
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_10_stage_19        , 0.06570355291499999   , -5.268725524422321   , -0.03787175290608641
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_10_stage_22        , 0.043014036983526294  , -4.863764860213038   , -0.04086363400894271
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_16_stage_22        , 0.0719170636402452    , -14.126430158738389  , -0.05860714328593308
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_16_stage_25        , 0.07012644105002401   , -4.377155184019055   , -0.037697530517136535
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_17_stage_22        , 0.07197947970771337   , -13.953491652627836  , -0.056687663313483516
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_17_stage_25        , 0.07019796921688674   , -4.358583387518113   , -0.03719431233163917
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_18_stage_22        , 0.0720221310748526    , -13.88562665406209   , -0.056114688881159586
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_18_stage_25        , 0.07024460539432234   , -4.348519039630961   , -0.03692041797105425
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_19_stage_22        , 0.0720467244115211    , -13.845192909726014  , -0.05577605665313689
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_19_stage_25        , 0.0702759312154892    , -4.342021753328394   , -0.03674318314480918
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_31_stage_22        , 0.07227421412375198   , -13.241040731120682  , -0.0490827135705426
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_31_stage_25        , 0.07064031044333241   , -4.262498379522868   , -0.0345688528133056
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_33_stage_22        , 0.07231856219262725   , -13.115715408275051  , -0.04764526546343534
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_33_stage_25        , 0.07071495266467898   , -4.246465996499216   , -0.03413050756789829
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_34_stage_22        , 0.07234127718806571   , -13.051382117567279  , -0.046904596132694744
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_34_stage_25        , 0.07075353160908388   , -4.238241154981845   , -0.03390563023217599
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_36_stage_22        , 0.07238744077802353   , -12.920285967979982  , -0.04538944673885257
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_36_stage_25        , 0.07083276383287093   , -4.221484476208286   , -0.0334474744940324
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_38_stage_22        , 0.07243401308786959   , -12.78725723392267   , -0.043843535980762564
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_38_stage_25        , 0.07091408940838555   , -4.204478471905939   , -0.032982477870602295
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_40_stage_22        , 0.07248024706014403   , -12.653777107628889  , -0.04228278955676649
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_40_stage_25        , 0.07099669470410293   , -4.187408224393984   , -0.03251567959689919
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_41_stage_22        , 0.07250310740947742   , -12.587148807713234  , -0.0414999355944832
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_41_stage_25        , 0.07103831001152638   , -4.178885793032696   , -0.03228260586493309
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_42_stage_22        , 0.0725258026407315    , -12.520667586734787  , -0.04071642899294546
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_42_stage_25        , 0.07108009137272099   , -4.170381444453981   , -0.0320500119162376
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_56_stage_22        , 0.07281622204768448   , -11.678980641135537  , -0.03065963045224165
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_56_stage_25        , 0.07163864986309809   , -4.0621791897424835  , -0.029089320909984617
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_57_stage_22        , 0.07283340527881843   , -11.630830218145244  , -0.030078555126148408
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_57_stage_25        , 0.07167275410156031   , -4.0559335620016315  , -0.02891832077089887
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_59_stage_22        , 0.0728658514625064    , -11.540607582780853  , -0.028988278631230515
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_59_stage_25        , 0.07173741132928126   , -4.044210318102508   , -0.028597306864779376
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_61_stage_22        , 0.07289559266920353   , -11.458801267189912  , -0.027998413663323257
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_61_stage_25        , 0.07179707333920879   , -4.033548940836439   , -0.02830531727655955
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_62_stage_22        , 0.07290946989853309   , -11.420889886746542  , -0.027539195856964963
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_62_stage_25        , 0.07182502334655136   , -4.028600268496431   , -0.02816976500651086
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_66_stage_22        , 0.07295850659752319   , -11.288591055898449  , -0.025934736919718617
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_66_stage_25        , 0.07192433084841424   , -4.01128112019715    , -0.02769526770012598
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_69_stage_22        , 0.07298889252770463   , -11.207840063906465  , -0.024953849432940177
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_69_stage_25        , 0.07198627799874449   , -4.000676923899591   , -0.027404651603261138
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_4          , 0.06522348719800766   , -397.5113666999048   , -0.4415213247011598
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_7          , -0.025616811543100165 , -19.366130854180305  , -0.5099278128823003
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_9          , -0.24705286937793616  , -14.17282601326643   , -0.004198947134356423
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_10         , -0.4215123910286371   , -20.771292202564602  , -0.1831807063384452
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_11         , -0.6338579407666134   , -27.231546463638225  , -0.3019335602614426
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_12         , -0.7331850170776711   , -41.770013833407084  , -0.2222433076738004
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_13         , -0.7517443839861265   , -351.54776565713274  , -2.0077685425945404
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_14         , -0.9291377561052074   , -261.3255409788399   , -7.291004153584298
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_15         , -4.220926747293395    , -15.410614098432388  , -3.7782993567580445
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_16         , -3.0926851874674997   , -15.596140018067704  , -2.844321727869564
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_17         , -1.3038847350674998   , -15.766136024898252  , -1.2590639362076057
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_18         , -0.6582401515474999   , -15.845746254008693  , -0.5327910891155483
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_19         , -1.6451673474674997   , -16.201123523790013  , -0.02370157362294867
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_20         , -0.3849246075375001   , -16.08248911486155   , -0.47117862050943593
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_21         , -1.5767600902675      , -16.854227665270354  , -0.09913039086837294
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_22         , -3.2986538962675005   , -16.996580880331784  , -0.6277627397128889
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_23         , -4.189689574067       , -17.233441106030096  , -0.8444877903734991
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_24         , -4.0293384968674495   , -17.382560650241118  , -0.6935498385909931
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_25         , -2.355531755243989    , -17.461866720820368  , -0.9145517931802267
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_26         , -0.7181200769145775   , 1.1865991490903536   , -0.24706324433039484
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_27         , -0.17553788414560123  , 0.9312036338910086   , -0.07079395215529605
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8_stage_29         , -10.354332029959792   , 1.0                  , -10.32696377434597
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_1          , 0.02573437658872956   , -10.064626448789067  , -0.09177734092691689
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_5          , 0.026159041284774982  , -4.147946957110097   , -0.012906522244399728
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_7          , 0.027988672583178824  , -5.392507702494724   , -0.011411101228092763
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_15         , 0.023146726995860234  , -9.61950094653306    , -0.1710621029366006
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_16         , -0.060816716687862246 , -63.80129428814303   , -1.543234606901148
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_18         , -0.10434710022849998  , -6.005577618338666   , -0.10775119503100643
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_19         , -0.09508696617800001  , -94.25586220820803   , -2.409934234667822
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_21         , -0.1251183495526877   , -0.9042763586907836  , -0.04458451164638946
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_22         , -0.08678310140755245  , -7.373338918752385   , -0.12467813896032659
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_24         , 0.0660635200831942    , -62.42781961443046   , -1.6016932409384375
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_26         , -0.10946902387129201  , -24.925426995022214  , -0.5849901283180338
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_28         , -0.17089811629093554  , 1.141939803248488    , -0.02224097922540924
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9_stage_29         , -0.17189550604413012  , 1.0                  , -0.14388005313140892
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_0 , -0.02688751735470959  , -9.666846402241022   , -0.030826296932316862
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_3 , -0.014833633322649687 , -1.7118847876263819  , -0.006670400543134704
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_4 , -0.015545523457689388 , -103.29565007930772  , -0.39330094788287123
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_6 , -0.017820336716349684 , -2.7974820369572866  , -0.014362778677335238
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_7 , -0.018928031378345516 , -300.64522539418255  , -2.123375884583934
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_9 , -0.021857332493739622 , -2.625809806663442   , -0.033389482996316625
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_10, -0.0238740456602148   , -152.29624826533492  , -1.9006294040284544
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_12, -0.033035087572874974 , -4.509914472748451   , -0.017532352744353805
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_13, -0.04366639981024704  , -7.1306137994282635  , -0.05910142447519136
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_14, -0.06547098365318016  , -27.731679945223835  , -0.2437641289512203
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_15, -0.0675797451565749   , -40.31833155841842   , -0.34899679966032715
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_17, -0.0630745128902929   , -8.814243619428831   , -0.051793793730734825
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_18, -0.07167980663064005  , -14.043030317812622  , -0.10602804060982673
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_19, -0.08325153313467845  , -20.495516368890495  , -0.20181398580560592
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_20, -0.09529096264596547  , -119.06693425936676  , -1.6078080316641732
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_21, -0.09661571071892827  , -26.27120294960912   , -0.2481630190237636
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12_stage_23, -0.11394785562582314  , -77.79112461288096   , -0.9667657281354864
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_0  , -0.5229424152488038   , 7.515774815492888    , -0.2685662759993729
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_1  , -0.17518542338324208  , -51.20301030655466   , -0.5599557333693029
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_3  , -0.06731223294547063  , -16.18006418408266   , -0.16238764275970563
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_5  , -0.03329890571575337  , -18.261569002189223  , -0.22661553653763059
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_11 , -0.015836987294686165 , -3.00169000023786    , -0.012710746472546514
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_12 , -0.016933508879887055 , -1.9561205389269563  , -0.006836689848436419
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_14 , -0.009740639798117255 , -20.714478487152114  , -0.014614906940462762
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_17 , -0.019363110292358317 , -2.1882540944838733  , -0.006269231893528727
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_18 , -0.03136169106017342  , -4.051520974895188   , -0.028393361428324288
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_19 , -0.04095057078441334  , -7.949999853717462   , -0.07172211703199124
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_20 , -0.05670702868329633  , -18.53949520465795   , -0.20671466432216465
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_21 , -0.08061997740669964  , -245.98852289489247  , -3.4578960572691253
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_23 , -0.20978485321614862  , 9.563983532029377    , -0.07185085152562312
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2_stage_24 , -0.618934212381037    , 10.0                 , -0.47518983462851494
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_0 , -0.026870249407531705 , 0.5259489296727435   , -0.008594158156267333
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_1 , -0.027005103820001562 , -1.121411068948106   , -0.023276844882476003
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_2 , -0.026107483471288714 , -4.860420282642656   , -0.01896968947311435
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_3 , -0.027200218390322745 , -70.43356337747262   , -0.7591098406387325
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_5 , -0.028925981695462125 , -5.11813691357566    , -0.03994855268661198
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_6 , -0.030378120660262825 , -6.816172687338387   , -0.05617982090399018
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_8 , -0.034424935238799186 , -46.05263431688188   , -0.27159525335291995
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_10, -0.040556650617204405 , -9.539582161835357   , -0.006661082464125143
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_11, -0.042382899818179026 , -9.357853300971263   , -0.01247361409983118
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_12, -0.04678184184231071  , -10.868924469647139  , -0.04807847997655888
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_13, -0.0546318392958481   , -17.74259643728093   , -0.07375740884936563
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_14, -0.06823583821094856  , -88.30326211044533   , -0.6737384676173704
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_16, -0.09119370997007381  , -11.287936134727726  , -0.005282707167309747
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_17, -0.08430043436473178  , -13.79173373601084   , -0.08823829474313186
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_18, -0.09219821905284101  , -25.84033313032908   , -0.2521617123553419
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_19, -0.10740762743232218  , -52.52134614031901   , -0.6413756162140954
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_21, -0.1316519040150202   , 8.197855415313047    , -0.010733275555335098
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_22, -0.17656086686298647  , 11.396529448348216   , -0.007175334837458275
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_23, -0.34104784995062537  , 8.672592881469773    , -0.21594760197544224
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39_stage_24, -0.34939526360981304  , 10.0                 , -0.20436625383804247
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_0  , -2.8326168754267123   , 37.379252533232226   , -1.5582180455136898
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_1  , -2.73589745628428     , 36.48056353486555    , -1.4375382422147482
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_2  , -2.7765848627471374   , 34.355786063467356   , -1.5969538594702009
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_3  , -2.772179475727602    , 33.85154061122946    , -1.5040440068438823
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_4  , -2.6906269693190823   , 31.93591026718913    , -1.574894374654436
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_5  , -2.570676709043626    , 31.4360288412133     , -1.3774344734826847
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_6  , -2.4753154482419744   , 29.74293996747432    , -1.4341689278890626
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_7  , -2.2999579476192205   , 29.35586807760761    , -1.1449655955368518
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_8  , -2.015505129465013    , 27.480817500516974   , -1.1296971540066019
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_9  , -1.8021382152923404   , 26.95755210056521    , -0.8536419820912684
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_10 , -1.6839006226691846   , 25.11330726119802    , -1.0103437077753652
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_11 , -0.8609803966191283   , 24.068962055742727   , -0.32468520555488345
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_12 , -0.8566642094368004   , 23.368758556865952   , -0.37896844800121743
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_13 , -1.0181212312391996   , 22.34742249662503    , -0.5854393476442157
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_14 , -1.151817403799341    , 21.395980524271412   , -0.7571161270372198
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_15 , -1.3739912041410693   , 20.3107010194691     , -1.0135330273443703
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_16 , -1.5185389917520247   , 19.243177234977768   , -1.2093968517742546
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_17 , -1.622912875625552    , 17.59774035105903    , -1.3649613985757083
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_18 , -1.8061037445554655   , 16.262145237364763   , -1.5717642448057054
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_19 , -1.647885769030968    , 14.952877421482661   , -1.4319313946647074
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_20 , -1.5532085959749076   , 14.485415390479359   , -1.340475872400674
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_21 , -1.5049927866014459   , 13.077359682062946   , -1.3114119477123336
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_22 , -1.5058119296617174   , 12.334667270880095   , -1.319750529967643
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_23 , -1.5305152840486125   , 10.503623705189545   , -1.3787841030347547
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4_stage_24 , -1.562320507767135    , 10.0                 , -1.4183403125978207
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_0 , -0.02981840528672619  , -1.6889496518271856  , -0.03779216403618155
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_1 , -0.029970162767846822 , -4.635264776144086   , -0.07951858582436064
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_2 , -0.02946178214627097  , -13.845357569428023  , -0.08146251738794393
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_4 , -0.030215497547102333 , -2.7935881632321204  , -0.00850190009332756
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_5 , -0.03161292500130368  , -7.663784344509748   , -0.07161384429228906
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_6 , -0.033420580644899285 , -12.867736998192026  , -0.12267298692411292
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_8 , -0.03797954901337369  , -5.182498895071553   , -0.02939070122412138
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_9 , -0.04075770397919584  , -9.17004032376342    , -0.0014271166932577125
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_10, -0.04441685000185704  , -11.822020517486719  , -0.010707339080563611
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_11, -0.04579751664524441  , -11.07779512887637   , -0.01583686568977803
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_12, -0.04991332289808441  , -12.466868277747585  , -0.052938658879661246
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_13, -0.057509089773796526 , -18.923632955136227  , -0.07952161479041853
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_14, -0.07068460474872969  , -92.21429145056814   , -0.6692797495179375
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_16, -0.0952878574392918   , -12.251851765124105  , -0.006581275430380951
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_17, -0.08696933912518169  , -14.460342264378932  , -0.09169364739182331
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_18, -0.094468326206793    , -28.076987761666715  , -0.2805984616681607
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_19, -0.11049713712188852  , -60.01919539723494   , -0.7459026153159214
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_21, -0.13611284837884322  , 8.295604859672988    , -0.013766018266799573
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_22, -0.18286279550369353  , 11.475200457197163   , -0.01215008365591791
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_23, -0.3656353453434991   , 8.821354551190876    , -0.23832838728447328
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42_stage_24, -0.3736400187204419   , 10.0                 , -0.22861085205004772
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_0  , -0.03293539665783092  , -0.1051211171769544  , -0.01879639953957963
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_1  , -0.03298843353440569  , -1.803238208510876   , -0.0123677619119078
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_2  , -0.03350574677558843  , -7.637595185045241   , -0.10066025738659849
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_3  , -0.0334685932891859   , -356.2633882443257   , -5.144912969599901
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_5  , -0.03475165445938137  , -3.0492656081143217  , -0.013714953506045596
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_6  , -0.03486577420834557  , -3.9618234234430423  , -0.02701555103158601
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_7  , -0.03596542640085443  , -6.326827634622491   , -0.059576298591910576
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_8  , -0.03698496249007216  , -9.67970047371888    , -0.10981192002732082
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_10 , -0.0404923953324857   , -1.403051129589211   , -0.004943118844606716
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_11 , -0.04652306714988492  , -2.8926777548823774  , -0.018122524832655723
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_12 , -0.05779354501800536  , -6.156385899603319   , -0.07138664909513871
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_13 , -0.05496965509544918  , -9.16505551363468    , -0.09457021837178402
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_15 , -0.04417348857893409  , -4.195927902947961   , -0.004062996881957659
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_16 , -0.05266340125656058  , -8.015698824272686   , -0.043937190833702004
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_17 , -0.0671538461972639   , -12.089165984922513  , -0.09713692911179604
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_18 , -0.08227653879787505  , -40.38989662140366   , -0.49348455309317313
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_19 , -0.09697004847028612  , -22.966390775451696  , -0.2007163529723538
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_21 , -0.11623330933447938  , -55.61537560759384   , -0.663203531497715
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_23 , -0.14205644210373441  , 6.60629346938373     , -0.046020155667043205
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6_stage_24 , -0.15366030151843957  , 10.0                 , -0.008300675260836943
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_2 , -0.012816337435280257 , -0.9513312588295914  , -0.011354164841736422
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_4 , -0.013500639735623887 , -2.0636525183667187  , -0.010463818000099101
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_5 , -0.01407605452886076  , -132.41759153650844  , -0.2539570779490213
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_7 , -0.01630243020911492  , -10.468495228830605  , -0.10461614243146604
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_9 , -0.01910214517895642  , -2.369275619371263   , -0.028765252955616306
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_10, -0.021330819230482086 , -44.46826578729307   , -0.6285107021340929
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_12, -0.032304870426914385 , -5.643670845331318   , -0.025249346053340643
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_13, -0.04555703824188079  , -9.375109899237492   , -0.06962730148325877
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_14, -0.06605431550849167  , -44.87156875582548   , -0.43837025405435687
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_16, -0.062250459229673635 , -6.9030021848662955  , -0.001172696465424311
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_17, -0.06755524487340754  , -9.629007281939003   , -0.06273066315775935
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_18, -0.0776104596188898   , -20.230033633782885  , -0.19208847405352758
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_19, -0.08802226440719776  , -16.570614827471758  , -0.13805252984932687
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_20, -0.08881599492096272  , -63.004647932826934  , -0.8082209789577544
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_21, -0.09365679557981904  , -25.403666810548415  , -0.2460710182766171
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10_stage_23, -0.11427672301217068  , -69.90760527403438   , -0.8735914889635015
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_1 , -0.017332400030743055 , -2.1386538976426186  , -0.010719408192894991
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_2 , -0.017768157655744722 , -2.145887801719123   , -0.009454371520635123
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_4 , -0.01848619460485621  , -1.2857126741111466  , -0.017439620677600368
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_5 , -0.019088364926731362 , -2.052522037478286   , -0.02135490921425852
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_7 , -0.0211133663289325   , -1.9457222207657314  , -0.0034021410399730986
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_8 , -0.02240544282828534  , -2.390919672327612   , -0.0168647122354807
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_9 , -0.024985191262043092 , -8.255361015061991   , -0.09803718676491684
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_11, -0.029986122837132628 , -5.6523341189320595  , -0.0007302927861469188
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_12, -0.03441698869630969  , -7.2406273208485565  , -0.02670440293230899
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_13, -0.04203168783643399  , -14.528923227024253  , -0.0514588965847077
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_14, -0.05565010603792691  , -79.88886980326464   , -0.6321291392081285
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_16, -0.08036765492764489  , -9.24207191455417    , -0.005390320438054402
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_17, -0.07854335047796841  , -12.230505517919022  , -0.08176297311932705
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_18, -0.08697586999655733  , -21.51383211047191   , -0.19688847918885535
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_19, -0.09849523987529417  , -33.182336239872505  , -0.37392875329544634
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_21, -0.12157015034259443  , -350.1358313214763   , -4.703900893193877
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_23, -0.2851719028978383   , 8.276988115016872    , -0.1658961966405249
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18_stage_24, -0.2942982062353145   , 10.0                 , -0.14926964865730694
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_1 , -0.01764660878905316  , -2.6114323171173295  , -0.017054411436396057
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_2 , -0.018046869159524394 , -2.624709185138136   , -0.013480267734035992
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_4 , -0.018837170411606707 , -1.6298267461932578  , -0.02361543197051795
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_5 , -0.019529481275074496 , -2.2922762081964048  , -0.027765004867732673
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_7 , -0.02192317315383832  , -2.300023226854747   , -0.004408087489238162
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_8 , -0.023754837105819715 , -2.4769707898561206  , -0.018358809913604245
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_9 , -0.025656388368177088 , -8.717320120790554   , -0.10660346330129583
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_11, -0.030109754650082005 , -5.671488831579223   , -0.0006303869948629109
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_12, -0.03448204585276741  , -7.257779946133468   , -0.026746011573802644
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_13, -0.04210472402810168  , -14.467582952070494  , -0.05118130537228267
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_14, -0.05571163346777399  , -78.58130408464392   , -0.6207025881536514
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_16, -0.08039141173271615  , -9.239371431225369   , -0.004925587148498112
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_17, -0.07847062033811388  , -12.195340207131837  , -0.08122310027497279
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_18, -0.08687414576870739  , -21.46759818251788   , -0.19626015050198806
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_19, -0.0984533297968904   , -33.07364578793839   , -0.37238090061445306
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_21, -0.12138376565047623  , -307.36971457449897  , -4.113614717182654
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_23, -0.28488519024726067  , 8.274715677105364    , -0.16564279696538248
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19_stage_24, -0.2940154908281543   , 10.0                 , -0.14898693600527782
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_1 , -0.01835731209305194  , -4.247172755657422   , -0.04001898949404953
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_2 , -0.01880485407931315  , -3.473027493880446   , -0.02252755644951546
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_4 , -0.019496942763578155 , -3.021612484988475   , -0.0443786918138047
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_5 , -0.020107973651395016 , -3.1414411075077733  , -0.045546961413337826
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_7 , -0.02232849812046863  , -3.0183713290046836  , -0.008817318088736599
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_8 , -0.023534215035396294 , -2.8982939385188553  , -0.018693062627282823
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_9 , -0.025943424930540256 , -10.041766521130949  , -0.11634769807713784
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_11, -0.030799607397915072 , -5.831979455514808   , -0.001373742729284446
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_12, -0.03514445227687604  , -7.444199018737958   , -0.028056813219645482
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_13, -0.0427895878127103   , -14.81175689855743   , -0.05317479092082278
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_14, -0.056437113144718866 , -83.47140474589332   , -0.6594472602339155
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_16, -0.080965048804796    , -9.355601268119756   , -0.0058272834252479505
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_17, -0.07898084624755174  , -12.37303082926205   , -0.08308041913758163
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_18, -0.08747480089956851  , -21.855037687035413  , -0.20107461769507734
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_19, -0.09917383985738246  , -34.05670274734178   , -0.3857578938724059
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_21, -0.12223779807998715  , -396.5094043684015   , -5.344839916599359
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_23, -0.2894408177182935   , 8.310497162933029    , -0.1696737197993731
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20_stage_24, -0.29850761712545043  , 10.0                 , -0.15347901914044615
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_1 , -0.019181157059551725 , -8.758978845959135   , -0.10034108027570597
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_2 , -0.019617085506099377 , -6.270025016985661   , -0.049741609731292075
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_4 , -0.02028201977466627  , -6.103550921652967   , -0.08592837643375903
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_5 , -0.020956898159981394 , -5.879828222626991   , -0.09056340478467101
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_7 , -0.02352498931519401  , -4.194176365671837   , -0.013689871657576631
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_8 , -0.025036632259241024 , -3.2884237263804135  , -0.020872168944547343
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_9 , -0.027059386970234616 , -10.594406923860477  , -0.12333844713066465
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_11, -0.030956788068198026 , -5.8649261412909715  , -0.0015901264299513617
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_12, -0.03531997345969671  , -7.487923289459947   , -0.028446033424374968
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_13, -0.04296653657755086  , -14.910835511334147  , -0.05375141113887825
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_14, -0.056626264988171526 , -85.71020366722777   , -0.6777896416289451
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_16, -0.08110492888345205  , -9.383204032962665   , -0.0061176011223242205
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_17, -0.07914041299213     , -12.430835421335717  , -0.08379198379986665
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_18, -0.08767513585894149  , -21.97212045428849   , -0.20244292971503072
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_19, -0.09938936204002075  , -34.25469748310759   , -0.3884061520850634
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_21, -0.12232824712239046  , -387.98622292721836  , -5.227486856201641
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_23, -0.29081369908271804  , 8.321145770101998    , -0.1708903800194866
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21_stage_24, -0.29986138895181746  , 10.0                 , -0.1548327782149987
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_0 , -0.03056862279768527  , -2.940951142396514   , -0.008392124355389583
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_2 , -0.021469968851659586 , 0.5371210253696436   , -0.005301748156680164
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_3 , -0.021601353973417555 , -0.8531590411103681  , -0.0047010548828952305
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_5 , -0.022529891436407382 , -2.1235626004485897  , -0.003487104675722247
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_6 , -0.02348180008999304  , -2.4384708943098463  , -0.005023797819223148
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_7 , -0.025760561151929023 , -13.119846917904345  , -0.07279468399584929
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_8 , -0.026902127078438108 , -6.590634014404349   , -0.033033237443401364
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_9 , -0.028980479514398787 , -21.300677226450183  , -0.22366022400633326
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_11, -0.033114033115810994 , -7.575221838583737   , -0.004769798041380811
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_12, -0.03773148628972936  , -9.263718776038974   , -0.03385826051655419
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_13, -0.045786113654459316 , -17.760427674463973  , -0.06291633199833659
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_14, -0.06009633169165109  , -123.31684327331496  , -0.9441059308394346
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_16, -0.08605217789483569  , -10.492407314708673  , -0.011370455743712302
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_17, -0.08329749574516984  , -13.671293996318155  , -0.09504279925726167
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_18, -0.0917696262371418   , -24.858425568360364  , -0.23833686739944063
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_19, -0.10392607029037189  , -40.57845875732433   , -0.4747927121755619
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_21, -0.12817587956981372  , 8.132416953051838    , -0.008226232538349976
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_22, -0.17194768365817265  , 11.317195408631088   , -0.0038564882600188033
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_23, -0.3191619968214451   , 8.528059219065524    , -0.19619618441618683
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24_stage_24, -0.32781449388809253  , 10.0                 , -0.18278564320921106
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_0 , -0.026937732217072824 , -3.998944912168749   , -0.027322178457782998
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_2 , -0.022387321320233487 , 0.04769203544856157  , -0.008219175828281706
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_3 , -0.022578532658471595 , -1.1555247884015405  , -0.01079548448403574
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_5 , -0.02341584515499486  , -2.4163123918342464  , -0.006876980188074672
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_6 , -0.02435715352184165  , -2.7096866666978996  , -0.007954461025576575
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_7 , -0.025971543649725932 , -18.291994525704638  , -0.10272454846693499
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_8 , -0.02637096689858631  , -7.914570489534662   , -0.0388886229217463
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_9 , -0.028809955824439126 , -36.823069257532254  , -0.3590371160088167
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_11, -0.034162613075381466 , -7.736810786988524   , -0.0057604015351955355
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_12, -0.038828230185548145 , -9.433070986081844   , -0.03565273562537734
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_13, -0.046873833550034584 , -17.77062912612623   , -0.06445028461360411
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_14, -0.0611038447373943   , -120.14301950989187  , -0.9190007957824073
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_16, -0.0865094719527295   , -10.557116484668684  , -0.01079830296989176
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_17, -0.08335637386616983  , -13.693383253507578  , -0.09465356508113279
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_18, -0.0918496313190365   , -25.00525244772524   , -0.24033837344654108
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_19, -0.10437232192420753  , -41.74549677724676   , -0.4909247419689964
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_21, -0.12865386143552238  , 8.139160666955668    , -0.008602340889095839
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_22, -0.17246740379846243  , 11.327887009109842   , -0.004204112749860156
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_23, -0.3219613976063738   , 8.547239007707722    , -0.19871282114615393
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25_stage_24, -0.3305748717882454   , 10.0                 , -0.18554599960670823
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_0 , -0.02174976157430468  , -2.9067569505391053  , -0.016714859103325454
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_2 , -0.021386130979413616 , 0.6777321828539142   , -0.0014036518157706998
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_3 , -0.021565439666296142 , -0.7655345375038655  , -0.005387363361540911
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_5 , -0.02258262776919953  , -2.1026490115411898  , -0.00401197838265227
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_6 , -0.023341483177126685 , -2.3918944228438637  , -0.0051509304620648046
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_7 , -0.02499675280489774  , -16.499617873293165  , -0.09273779004699391
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_8 , -0.02541739392681826  , -7.749926569780601   , -0.033390863842321955
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_9 , -0.027950775907483405 , -27.499611826887026  , -0.25188321076430137
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_11, -0.03354764043452454  , -7.328771779445444   , -0.004520762447310934
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_12, -0.038210952040227626 , -8.952449882087924   , -0.033424351014152615
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_13, -0.04616846304027917  , -16.42089836048806   , -0.05942000108528704
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_14, -0.06012352948933205  , -90.06385296518798   , -0.6873550575896965
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_16, -0.08514323551006044  , -10.20703505102646   , -0.0065958858751482274
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_17, -0.08160554363789134  , -13.068645619915221  , -0.08695612744911989
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_18, -0.08981719715711883  , -23.602641823031938  , -0.2231098121692149
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_19, -0.1025043808671626   , -39.52177898035765   , -0.46056601126873303
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_21, -0.12633489499785716  , 8.067791842301457    , -0.007309979044482162
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_22, -0.16832683719761823  , 11.28142010898432    , -0.0008136249228763437
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_23, -0.3101047442283823   , 8.464523154224914    , -0.18807467897957508
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26_stage_24, -0.3188834966030015   , 10.0                 , -0.1738547180342524
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_0 , -0.02168604063140363  , -3.8745583601879297  , -0.030786686976625538
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_2 , -0.021949091471327505 , 0.35158118563638985  , -0.0007199831757630018
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_3 , -0.022188314104130778 , -1.0274030056722796  , -0.011265182293126544
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_5 , -0.023038360670834958 , -2.3372858381292514  , -0.007278644104011592
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_6 , -0.02402107373341255  , -2.7509848948474827  , -0.009294278467441228
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_7 , -0.02580928567791552  , -25.619433105210028  , -0.15581411924711192
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_8 , -0.02653221601911614  , -9.508297246254847   , -0.043107279633488135
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_9 , -0.029079976387087553 , -53.427900690049846  , -0.46991061819507995
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_11, -0.034736362692982074 , -7.575012011348447   , -0.005403736764118382
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_12, -0.039392102940422766 , -9.17456138639636    , -0.03506832894481474
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_13, -0.04734217402213002  , -16.363412304443397  , -0.06045602054848637
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_14, -0.06119814087597014  , -84.2031132418366    , -0.6406359806672269
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_16, -0.08581716681726469  , -10.312292900100973  , -0.005424907832000864
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_17, -0.08165185726235857  , -13.043839733751794  , -0.08535743252681656
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_18, -0.08974762699561095  , -23.676900520103803  , -0.22434126959142647
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_19, -0.1028853468276353   , -40.8072001714653    , -0.47838323151902684
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_21, -0.1269645225181625   , 8.086604340663493    , -0.007669869639068239
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_22, -0.16935356974032287  , 11.290867660859611   , -0.0016880698223054325
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_23, -0.31245154699951233  , 8.481207306356039    , -0.19017589849024233
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27_stage_24, -0.3211975854048946   , 10.0                 , -0.1761687877678988
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_0 , -0.04328504138741884  , 0.6468304284700326   , -0.011534499125454702
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_1 , -0.02785287962539406  , -1.02298426107813    , -0.019935545056144626
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_2 , -0.027923804799461834 , -4.578959061895685   , -0.032064733914489864
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_3 , -0.028261689622657047 , -24.171533188865606  , -0.2943822478514831
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_5 , -0.028586259784069885 , -4.94386488611482    , -0.03774418523161193
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_6 , -0.030004788136859417 , -5.965850367560565   , -0.04390249584093401
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_8 , -0.03232859969784162  , -26.37542629106364   , -0.14920551838826698
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_10, -0.03843723558368442  , -9.484516807033073   , -0.005474430368935711
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_11, -0.04049776540524997  , -9.800929375194594   , -0.012565105485171809
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_12, -0.04512063226742905  , -11.572910403275198  , -0.04852125816588555
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_13, -0.053318269960671766 , -20.634178536146845  , -0.08042856997120712
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_14, -0.06773032873659085  , -181.91931674202635  , -1.3749205917460274
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_16, -0.09218841553294935  , -11.76601174099223   , -0.01494510483810016
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_17, -0.08727662585470577  , -15.000630217037243  , -0.10598481290672343
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_18, -0.09597687183277817  , -28.712073368910424  , -0.28729526894580015
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_19, -0.11003151922341559  , -53.5412931199194    , -0.6544410155458863
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_21, -0.13517701002837704  , 8.281335906996794    , -0.013046744474005223
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_22, -0.18166406028161133  , 11.450670862468286   , -0.011367323879248853
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_23, -0.35762375351310766  , 8.77434991680653     , -0.23101525944568643
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31_stage_24, -0.36574010413260827  , 10.0                 , -0.2207109863056067
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_0 , -0.06779289653736663  , -1.0555683956152242  , -0.046226167704146386
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_1 , -0.030217384503061363 , -2.8570417525707965  , -0.047712666813085176
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_2 , -0.03017911539432028  , -9.140240995041967   , -0.06052703554924013
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_4 , -0.02963795969208995  , -2.34687857476058    , -0.0033607751486123827
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_5 , -0.030837484336632196 , -6.6721051523319845  , -0.057938020158193486
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_6 , -0.032456410774546016 , -8.545709123836122   , -0.07232614517544439
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_8 , -0.03464680997947051  , -55.390866144341736  , -0.33301518750295733
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_10, -0.04084103249827772  , -11.260740276356419  , -0.008871595188974957
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_11, -0.042819842489059075 , -11.345950979087586  , -0.016231844771171663
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_12, -0.04750749031812406  , -13.240870388632516  , -0.05540983165426364
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_13, -0.05593585708680379  , -23.916264469150377  , -0.09283285628517365
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_14, -0.07084202295782446  , -470.25878155272693  , -3.5017729736951835
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_16, -0.09596406325785517  , -12.729987084745561  , -0.022039771518971893
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_17, -0.09091763422543121  , -16.404247607019865  , -0.1214283444295561
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_18, -0.09991683016995657  , -32.23339180257725   , -0.33198475416095863
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_19, -0.11419135536508251  , -63.80710034034171   , -0.7982537105338163
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_21, -0.13940027947101577  , 8.391566502469319    , -0.0156688498938784
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_22, -0.18875893603204785  , 11.527369167858394   , -0.01713604108142644
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_23, -0.383847566923319    , 8.923330084150638    , -0.2550210069134935
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34_stage_24, -0.39159835302256824  , 10.0                 , -0.24656908261001612
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_0 , -0.08061282301343639  , 0.4912891175427997   , -0.04951352891002102
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_1 , -0.027894333257172287 , -1.1442839294055824  , -0.01984801150942629
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_2 , -0.027586778075390138 , -4.451180940657229   , -0.020533785451389026
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_3 , -0.02813673245340667  , -23.052336369477782  , -0.2646117316608885
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_5 , -0.02879488776955814  , -4.977231028199625   , -0.036691131951271994
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_6 , -0.03025651199937411  , -6.165452596281075   , -0.04620122860108673
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_8 , -0.03255845519202663  , -27.372601180792568  , -0.15834624290988866
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_10, -0.03860253758163684  , -9.621975804377911   , -0.005741533780763343
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_11, -0.04065764405819841  , -9.949234038327877   , -0.012976551477660948
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_12, -0.04529070347190699  , -11.747474042117664  , -0.049211930201929946
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_13, -0.05352165610567423  , -21.103137696156196  , -0.08220723019304779
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_14, -0.06801628976382129  , -204.50958072822664  , -1.5435740347321418
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_16, -0.09258621964328104  , -11.875658381252334  , -0.01626541095545156
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_17, -0.0877706440581385   , -15.20520146507358   , -0.10843971840928211
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_18, -0.09654819125138617  , -29.165665179194654  , -0.29309474313535366
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_19, -0.11056643607727915  , -54.87194621821193   , -0.6730968851007748
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_21, -0.1358740237986127   , 8.311454945589631    , -0.013315163296688581
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_22, -0.1833586527431811   , 11.46115190325487    , -0.012881097175736766
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_23, -0.3610064103236661   , 8.794362928927503    , -0.23410067713557922
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35_stage_24, -0.3690756086945958   , 10.0                 , -0.2240464699944496
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_0 , -0.0212825182900488   , -4.680027004578016   , -0.04132548619155054
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_1 , -0.021409348984183917 , -8.419041968812905   , -0.009881887580685044
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_3 , -0.021893887150955364 , -1.4918547414403     , -0.01560145388665549
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_5 , -0.023432244338673823 , -2.5821878917999546  , -0.00930169262606892
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_6 , -0.024885357339418632 , -3.2773573018405275  , -0.015400147285529527
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_7 , -0.026875481970672205 , -53.7822977718802    , -0.3603766761308154
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_8 , -0.028297926464025278 , -12.438384092814877  , -0.06200580363529362
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_9 , -0.03078514763048976  , -427.79324592971227  , -3.654017434168312
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_11, -0.036462908315007925 , -7.888994864248431   , -0.006506271230699858
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_12, -0.04107947852674325  , -9.423856396554491   , -0.03708914201081629
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_13, -0.04897940425595743  , -16.03807292131406   , -0.06115755165970957
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_14, -0.06262874828848038  , -73.41630659272825   , -0.556732838444945
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_16, -0.08669880937489102  , -10.420594318340639  , -0.002880608484054664
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_17, -0.08149184312141926  , -12.92004125685359   , -0.08164739337599287
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_18, -0.08930716559024218  , -23.47804412916185   , -0.22232224013251747
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_19, -0.10313445489492801  , -42.64709173525044   , -0.5041467309791129
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_21, -0.1270195107417898   , 8.08967988647838     , -0.007679759390615715
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_22, -0.16960738333300995  , 11.296813326748742   , -0.0018471456513074191
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_23, -0.3139447810015469   , 8.4917416727369      , -0.1915140215729039
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37_stage_24, -0.3226700043489203   , 10.0                 , -0.17764119472156448
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_1 , -0.02434986207329172  , 0.11330007904765989  , -0.003990457438813516
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_2 , -0.023762490589075837 , -1.9936885521095995  , -0.0014214598727177088
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_3 , -0.024720519700518348 , -6.147394100881498   , -0.06952540650622875
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_5 , -0.026497818100489415 , -3.714519259965325   , -0.022694348167188343
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_6 , -0.02787318654302903  , -4.805176250920062   , -0.03254616066917933
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_8 , -0.03164652436400365  , -22.282680682603285  , -0.12454138013841773
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_10, -0.037636297481418085 , -8.521578357742321   , -0.0033695128227105853
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_11, -0.03970543579094579  , -8.643119765391658   , -0.009662345217641385
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_12, -0.04420692796960399  , -10.167684983522618  , -0.04293088953454476
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_13, -0.05207689998005585  , -16.88912901401573   , -0.06774452842560819
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_14, -0.06568210926436745  , -80.13673707372254   , -0.6102861762631142
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_16, -0.0890685795154869   , -10.872631402678461  , -0.003970641455369295
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_17, -0.08292452593304075  , -13.35233091724096   , -0.08473988056213919
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_18, -0.09078358526714189  , -24.707102906934434  , -0.23784793787118133
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_19, -0.10538764427981602  , -47.462249393945584  , -0.5708271483904751
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_21, -0.12965985877644248  , 8.151427667049235    , -0.009420228991628754
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_22, -0.17349249471815215  , 11.351231332272228   , -0.004851701610236403
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_23, -0.3282301692157534   , 8.589433081360848    , -0.2043590374284735
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38_stage_24, -0.3367562584522341   , 10.0                 , -0.19172733939199785
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_1  , -0.014201173984125678 , -2.5536338878374103  , -0.016878076870186803
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_2  , -0.014270092143324174 , -1.743151429622563   , -0.006912671653317191
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_10 , -0.013010666914511837 , -17.081425777565418  , -0.0010402969512084935
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_11 , -0.025473358870960625 , -27.852999890701213  , -0.14119034033283007
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_12 , -0.08151972986875283  , -135.78087709023208  , -0.8980070562656048
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_14 , -0.10190404090856958  , -14.01672245811623   , -0.047507965133873245
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_15 , -0.10422693987198034  , -15.25067476914611   , -0.10250009725561389
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_16 , -0.10541635763331784  , -22.444969693786994  , -0.21068776434414918
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_17 , -0.10470978040758395  , -21.092010235333497  , -0.206567182821555
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_18 , -0.10053365020811021  , -34.73849492157921   , -0.40056402507801325
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_19 , -0.10660310641087035  , -55.61462683883854   , -0.6801558019001963
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_21 , -0.16266859253065416  , 9.912113373339313    , -0.019082777022849717
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_22 , -0.2748411900730709   , 11.558922661229753   , -0.10321623653874024
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_23 , -0.4862289487693835   , 10.061144890397072   , -0.3384339567710951
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5_stage_24 , -0.6649892678480447   , 10.0                 , -0.5197172271758214
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_1  , -0.014009209261087317 , -5.708440151233937   , -0.021841309407548276
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_3  , -0.014973757864504805 , -11.803255585570936  , -0.15243074012377006
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_5  , -0.016429763682565053 , -1.6037345624418462  , -0.015582223723340165
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_6  , -0.016749128057012563 , -47.290806143128464  , -0.39206883286654154
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_8  , -0.019757528359318793 , -2.207181302837566   , -0.028189602928230147
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_10 , -0.025508293412323597 , -2.4792604748705016  , -0.0032392337623971326
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_11 , -0.03174788658183363  , -6.900011223087723   , -0.01700318481711007
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_12 , -0.04315230729341064  , -13.175520803925147  , -0.10806888042633482
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_13 , -0.06749528579513545  , -44.22121323321855   , -0.3475487944596754
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_15 , -0.06512696503089418  , -7.0663593262393505  , -0.019956985701477553
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_16 , -0.07167334586782814  , -11.539414432626858  , -0.08091459191279453
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_17 , -0.08094971300398851  , -14.490434158031398  , -0.12102296582207184
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_18 , -0.08969003288309146  , -27.572644557764452  , -0.3054211270904894
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_19 , -0.09676988126769709  , -27.574703996136513  , -0.2888397015917179
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_20 , -0.09624795717030526  , -54.87448489843864   , -0.6637786388175553
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_21 , -0.10105735737627705  , -141.34129541782187  , -1.9069435892864584
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_23 , -0.12264140476916224  , 7.145817035271743    , -0.019929624666033374
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7_stage_24 , -0.20127298735640095  , 10.0                 , -0.05626634262864208
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10_stage_0           , 10.495170786813283    , -1470.3719999749649  , -3.1173388275605767
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10_stage_31          , 16.36642809669947     , -2365.9078017827424  , -30.10769273674364
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11_stage_0           , 10.471261732765148    , -1511.3420143737026  , -2.601561214607937
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11_stage_31          , 16.393943564879486    , -2005.5457624943751  , -22.68448657362827
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_12_stage_0           , 10.481870151994121    , -1490.2394650994372  , -0.7987439804005447
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_12_stage_31          , 16.396972261599505    , -1959.7704634625538  , -21.740214757262812
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13_stage_0           , 10.467974728489327    , -1516.417784022529   , -0.769140125452374
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13_stage_31          , 16.41249632113951     , -1793.7084994429053  , -18.323949746208726
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14_stage_31          , 16.413192101329518    , -1781.6823327565062  , -18.075583462632775
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_15_stage_0           , 10.466100290184379    , -1522.4710223283546  , -0.03634523423355418
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_15_stage_31          , 16.421527213229513    , -1700.6871086134745  , -16.41044694180215
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16_stage_31          , 16.421416867319515    , -1699.2571244115225  , -16.380507447338477
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_17_stage_31          , 16.42590338761951     , -1657.6766516494981  , -15.525971969421796
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_18_stage_31          , 16.425579006909516    , -1659.3772426997766  , -15.560631787607399
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_2_stage_0            , 9.241845408280742     , -1432.249149882546   , -15.583036383305611
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20_stage_31          , 16.427692912909514    , -1639.5830964259576  , -15.153757882747314
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_21_stage_31          , 16.42902789288952     , -1627.6754930245418  , -14.909113211996566
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22_stage_31          , 16.428772873419526    , -1629.5959900646242  , -14.948489291967075
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23_stage_31          , 16.429511755079513    , -1623.0601463530684  , -14.814218500725747
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_24_stage_31          , 16.429327859229513    , -1624.5015589445368  , -14.843787776305135
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25_stage_31          , 16.429740239339516    , -1620.8742897615823  , -14.769273985361771
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_26_stage_31          , 16.429614723399528    , -1621.8814355636255  , -14.789940937812958
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27_stage_31          , 16.429846536919516    , -1619.8509562546778  , -14.748231236066236
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_28_stage_31          , 16.429763836729517    , -1620.5247785480403  , -14.762060951583244
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29_stage_31          , 16.429894991479514    , -1619.3798331507999  , -14.738542551640649
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_6_stage_32           , 15.914296006728271    , -1759.89049066914    , -4.274992264591701
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7_stage_0            , 10.428318147119573    , -2916.415282188606   , -91.11461924378908
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7_stage_31           , 16.339388915118924    , -3038.3936305168972  , -44.01302630023092
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8_stage_0            , 10.501569339068878    , -1614.5173692518078  , -18.108724374221737
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8_stage_31           , 16.3527989674993      , -2658.5537713726067  , -36.15465437394862
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_9_stage_0            , 10.474547831146038    , -1521.9188913189332  , -7.650562760531027
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_9_stage_31           , 16.353868881109356    , -2584.812246047893   , -34.625140831480444
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_0                  , 0.08420434823344064   , -273.7092082615273   , -0.37253602111831113
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_1                  , 0.07073788840695028   , -298.20588728507687  , -1.1233240905991135
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_3                  , 0.03502908831642132   , -668.659248374333    , -2.118133191719551
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_5                  , 0.023171893759060036  , -369.1372141532091   , -0.3910434764169896
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_6                  , 0.046678617081725104  , -254.46411248430772  , -0.74166721552912
+moonlander_FU_INDE_RE_INDE_status_2_iter_10_stage_14                 , 0.19624927523892313   , -61.71767363596694   , -1.2431370170197669
+moonlander_FU_INDE_RE_INDE_status_2_iter_11_stage_0                  , 0.0896768666008477    , -233.71361988885394  , -1.0219953451516717
+moonlander_FU_INDE_RE_INDE_status_2_iter_11_stage_2                  , 0.04311300637318222   , -870.3342477199537   , -3.3301853876863534
+moonlander_FU_INDE_RE_INDE_status_2_iter_11_stage_4                  , 0.01920948766600772   , -394.3136111483082   , -0.5806990013225171
+moonlander_FU_INDE_RE_INDE_status_2_iter_11_stage_5                  , 0.042377554635750936  , -275.9277817008177   , -0.9515903540434942
+moonlander_FU_INDE_RE_INDE_status_2_iter_11_stage_13                 , 0.19849979291676312   , -26.240726091918525  , -0.4238262142886019
+moonlander_FU_INDE_RE_INDE_status_2_iter_13_stage_2                  , 0.023325303984393198  , -401.92261286845735  , -0.05942574027740899
+moonlander_FU_INDE_RE_INDE_status_2_iter_13_stage_3                  , 0.012212499336778981  , -617.222060622634    , -1.4844937765121744
+moonlander_FU_INDE_RE_INDE_status_2_iter_13_stage_4                  , 0.032307708389195444  , -555.4447283258811   , -3.437393316534304
+moonlander_FU_INDE_RE_INDE_status_2_iter_15_stage_2                  , 0.03260722108471387   , -393.5185305028964   , -0.24875558376754825
+moonlander_FU_INDE_RE_INDE_status_2_iter_15_stage_3                  , 0.017647626826894136  , -404.89802148039433  , -0.9892087767111621
+moonlander_FU_INDE_RE_INDE_status_2_iter_15_stage_4                  , 0.03414878199765642   , -635.0016121105921   , -6.768946676925033
+moonlander_FU_INDE_RE_INDE_status_2_iter_15_stage_11                 , 0.19872685015382122   , -26.286455019743684  , -0.11755220792227922
+moonlander_FU_INDE_RE_INDE_status_2_iter_18_stage_2                  , 0.020339049643557483  , -406.83012286944916  , -0.10489811753207229
+moonlander_FU_INDE_RE_INDE_status_2_iter_18_stage_3                  , 0.012192309513551935  , -557.8620407987378   , -1.3302938296898996
+moonlander_FU_INDE_RE_INDE_status_2_iter_18_stage_4                  , 0.032187341200829445  , -597.4643650915489   , -4.298798040333066
+moonlander_FU_INDE_RE_INDE_status_2_iter_19_stage_2                  , 0.02158778713895393   , -402.2224205632069   , -0.07138562361204132
+moonlander_FU_INDE_RE_INDE_status_2_iter_19_stage_3                  , 0.01250430821434212   , -570.9476460928515   , -1.348133271375184
+moonlander_FU_INDE_RE_INDE_status_2_iter_19_stage_4                  , 0.03261939462966712   , -568.5608020231799   , -3.8016294637577714
+moonlander_FU_INDE_RE_INDE_status_2_iter_20_stage_2                  , 0.019480221105230233  , -410.19539038357874  , -0.12548881403038692
+moonlander_FU_INDE_RE_INDE_status_2_iter_20_stage_3                  , 0.011953397865483606  , -554.5086511944826   , -1.3317528665309961
+moonlander_FU_INDE_RE_INDE_status_2_iter_20_stage_4                  , 0.03192910599979365   , -622.3326177881154   , -4.664271506613
+moonlander_FU_INDE_RE_INDE_status_2_iter_22_stage_1                  , 0.06188593054833502   , -3092.485993586224   , -16.470676204245784
+moonlander_FU_INDE_RE_INDE_status_2_iter_22_stage_3                  , 0.016139315006238164  , -396.54262311999616  , -0.7989691422089358
+moonlander_FU_INDE_RE_INDE_status_2_iter_22_stage_4                  , 0.036234462170745274  , -307.66877784483677  , -1.6294411047743425
+moonlander_FU_INDE_RE_INDE_status_2_iter_22_stage_11                 , 0.1960462320868044    , -51.92481093159277   , -0.5807060681139129
+moonlander_FU_INDE_RE_INDE_status_4_iter_12_stage_0                  , 0.0661650063468937    , -271.5441847702645   , -0.825495750137084
+moonlander_FU_INDE_RE_INDE_status_4_iter_12_stage_2                  , 0.024829832156570697  , -605.1382380484752   , -1.6290406856759452
+moonlander_FU_INDE_RE_INDE_status_4_iter_12_stage_4                  , 0.02408965601514451   , -319.6048632430504   , -0.10893868632576151
+moonlander_FU_INDE_RE_INDE_status_4_iter_12_stage_5                  , 0.05494267004501391   , -208.42636491769002  , -0.5168659143527132
+moonlander_FU_INDE_RE_INDE_status_4_iter_12_stage_13                 , 0.19647813409384932   , -84.63938811425581   , -0.5374532939860879
+moonlander_FU_INDE_RE_INDE_status_4_iter_14_stage_1                  , 0.050878909302084885  , -1071.7634108077507  , -4.599929135267748
+moonlander_FU_INDE_RE_INDE_status_4_iter_14_stage_3                  , 0.015710469935936555  , -212.96543176367746  , -0.41422255065416014
+moonlander_FU_INDE_RE_INDE_status_4_iter_14_stage_4                  , 0.035731906401626656  , -162.46887567281172  , -1.046556550092749
+moonlander_FU_INDE_RE_INDE_status_4_iter_14_stage_7                  , 0.1577408193282418    , -123.86686127405304  , -0.3387039714781006
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_0                   , -0.39074391216000004  , -698.4385404848363   , -2.1968392893981763
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_1                   , -0.35969363904000007  , -631.1161279493931   , -1.7230602654689848
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_2                   , -0.32947670543000007  , -640.1899255249302   , -1.684647781643637
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_3                   , -0.3000931174900001   , -546.4090088584155   , -1.018579774614312
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_4                   , -0.27154288139000005  , -568.0582936453802   , -1.0504834135065235
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_5                   , -0.24442175720028148  , -493.7513104620457   , -0.7009852075890178
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_6                   , -0.21928099554636715  , -509.79417201890703  , -0.8382832119129383
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_7                   , -0.19636731280421493  , -464.54090105112584  , -0.7229876947185213
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_8                   , -0.17536699354161223  , -480.46496046117204  , -0.9151647159674264
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_9                   , -0.15542512651488338  , -450.20865073868345  , -0.9265853399060111
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_10                  , -0.13552355380000003  , -493.07442583563113  , -1.446942366344404
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_11                  , -0.11885265165123626  , -572.4244937856091   , -3.614798818607845
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_13                  , -0.08293480792800001  , -391.81208666638236  , -0.5058452991779893
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_14                  , -0.06166840986699984  , -401.81488314232365  , -0.9689792590429374
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_15                  , -0.03815995082200002  , -786.6218837569521   , -6.3529048123493626
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_17                  , 0.012440771083000013  , -316.01877533170966  , -0.7529344317469199
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_19                  , 0.06314102559000001   , -180.08524566903063  , -0.0650121324881031
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_21                  , 0.10933737901000001   , -129.39281144965744  , -0.043208359965643775
+moonlander_FU_INDE_RE_INDE_status_4_iter_2_stage_23                  , 0.14778213271         , -51.716936041889724  , -0.04031363363312737
+moonlander_FU_INDE_RE_INDE_status_4_iter_23_stage_1                  , 0.05039359342129274   , -5658.137340340341   , -30.969828505045136
+moonlander_FU_INDE_RE_INDE_status_4_iter_23_stage_3                  , 0.012219721414917784  , -589.9733199089992   , -1.2972480784894533
+moonlander_FU_INDE_RE_INDE_status_4_iter_23_stage_4                  , 0.03500906675882126   , -472.3027286184948   , -2.4549959920702698
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_0                   , -0.23732185648276716  , -606.056370855926    , -1.0764238517375602
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_1                   , -0.211065386324513    , -488.2941111891315   , -0.6180195449622502
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_2                   , -0.18601178635842897  , -561.7557244125092   , -1.0477057144251258
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_3                   , -0.16211906650317698  , -473.9976242389906   , -0.7929597423801462
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_4                   , -0.13920700261758367  , -574.336193020491    , -1.5077475949027297
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_5                   , -0.11758809309344875  , -472.8360095279162   , -1.478212887428642
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_7                   , -0.07907798084535361  , -439.36273587303873  , -0.4867793827919779
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_8                   , -0.061921951536224096 , -378.6522114091814   , -0.6288768021260153
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_9                   , -0.045308937960701956 , -852.792568910151    , -4.333977579333183
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_11                  , -0.015625942796867354 , -318.18122018535075  , -0.3363941771469232
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_12                  , -0.0026892057077270715, -659.6008775518613   , -3.0340708148714564
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_14                  , 0.024168341420001516  , -305.45882696581856  , -0.46223941381721445
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_16                  , 0.05553482188858294   , -230.46354629961616  , -0.012973321986391687
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_17                  , 0.07265421653690535   , -477.46540626382125  , -2.7412456351493795
+moonlander_FU_INDE_RE_INDE_status_4_iter_3_stage_19                  , 0.11040742665244396   , -171.1450475858348   , -0.8947459342461881
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_0                   , -0.15135555581000004  , -514.5407442196054   , -1.8334480441949086
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_2                   , -0.10498913194602122  , -487.6238603921843   , -0.6913173387989832
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_3                   , -0.08388570813905649  , -389.40141757665623  , -0.5981081385059017
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_4                   , -0.06413509933778666  , -805.8185300757159   , -3.463202088266826
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_6                   , -0.029504284696373007 , -301.7226085781486   , -0.14944311749985267
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_7                   , -0.014684363580163118 , -586.8587291112763   , -2.071148552735572
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_9                   , 0.011898736387831732  , -272.7477432752894   , -0.1023964362125917
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_10                  , 0.0249408663439577    , -720.6987386585037   , -3.3052135711707162
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_12                  , 0.045835808868625316  , -308.929955609868    , -0.5490039994956137
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_14                  , 0.06764531169382315   , -256.21208411999856  , -0.23203976531096313
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_16                  , 0.09413974868883512   , -229.29812321228832  , -0.22610920034464352
+moonlander_FU_INDE_RE_INDE_status_4_iter_4_stage_17                  , 0.10966755412451867   , -263.8450970891294   , -2.2347964342130937
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_0                   , -0.11248944478919876  , -995.7337126374873   , -4.358239214408352
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_2                   , -0.07109122119478156  , -309.99467396879436  , -0.071286867223963
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_3                   , -0.053281901201718385 , -531.7746275693743   , -1.4064749652710054
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_4                   , -0.03723155836335368  , -390.10901396453744  , -1.417477295879924
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_6                   , -0.010350043503529527 , -465.83647086431904  , -1.0513006716763837
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_7                   , 0.0008252118329984959 , -379.4490411064784   , -1.4311236156720128
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_9                   , 0.021093325768610893  , -460.17333091624056  , -1.2011023384021624
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_10                  , 0.031607807889147965  , -1724.171944597384   , -18.20195112539953
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_12                  , 0.05128347644899672   , -536.9102111249417   , -2.3927376246751724
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_14                  , 0.07593666831556606   , -328.16582536001437  , -1.1437810807525
+moonlander_FU_INDE_RE_INDE_status_4_iter_5_stage_16                  , 0.11019287112672316   , -128.03952600971795  , -0.278911886601324
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_0                   , -0.07160648735862135  , -387.32291970237765  , -0.8336028772246303
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_2                   , -0.038546486730934526 , -429.39422267120904  , -0.4753914746257788
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_3                   , -0.025877459548476534 , -330.87869173906563  , -0.4931447121320145
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_5                   , -0.00558858848970567  , -394.7056844332288   , -0.20342143306117477
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_6                   , 0.002775526248589011  , -332.8822973765751   , -0.5109310492159261
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_8                   , 0.018209683344666105  , -374.87755264198813  , -0.2742780007696858
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_9                   , 0.026628325085829074  , -390.31181031634844  , -1.0248992876926843
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_11                  , 0.04706459466512525   , -319.95794920431575  , -0.47320763996616994
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_13                  , 0.07576856740904525   , -245.72012667363052  , -0.1854838368999492
+moonlander_FU_INDE_RE_INDE_status_4_iter_6_stage_14                  , 0.09516146715711937   , -208.96059782836505  , -1.1689772309536837
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_0                   , -0.03488912322274079  , -594.0929595448899   , -2.002225899572424
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_1                   , -0.021590279748247176 , -846.7464152610653   , -7.30217706002399
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_3                   , -0.005671091527032157 , -562.8109074688488   , -1.6828509983218796
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_5                   , 0.004861260314211913  , -349.90237649868703  , -0.0659524890109873
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_6                   , 0.01014154647063159   , -565.6911057683016   , -1.6200299811217018
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_8                   , 0.023778780394066334  , -640.3225998202483   , -1.2632947824527683
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_9                   , 0.033508059772815624  , -514.7609931213962   , -1.6487541816070879
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_12                  , 0.08147424394433933   , -403.46739126121463  , -0.8424327893497552
+moonlander_FU_INDE_RE_INDE_status_4_iter_7_stage_13                  , 0.10608655886272206   , -110.9171342871107   , -0.07581539561481979
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_1                   , 0.003990986802222374  , -929.2385369677636   , -4.030611649039371
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_3                   , 0.006784562200123634  , -276.18882826943167  , -0.08500750891211425
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_4                   , 0.00722814317041276   , -2587.0210797560594  , -13.371676677586157
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_6                   , 0.01293946716809835   , -294.34129341859887  , -0.23043939178988604
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_8                   , 0.03031008034570265   , -297.02111338331696  , -0.004950031732780746
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_9                   , 0.04526621584481533   , -231.5815115196873   , -0.46266736697240785
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_11                  , 0.09152013340016701   , -134.9190901790578   , -0.2230438631957188
+moonlander_FU_INDE_RE_INDE_status_4_iter_8_stage_14                  , 0.1765704294066761    , -126.22525508558573  , -0.233976492700332
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_1                   , 0.02787589060481721   , -276.0310486438602   , -0.33832207933037756
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_3                   , 0.01672109679194561   , -473.2449054308887   , -0.6367377576767639
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_4                   , 0.013146017568293533  , -424.2073857624233   , -0.9774074781975486
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_6                   , 0.019458281471108563  , -396.05218442328396  , -0.5348488841580963
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_7                   , 0.03149226194362492   , -545.5083872108451   , -2.5887457315084
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_9                   , 0.07844392991065335   , -170.97504631152142  , -0.3943007403409662
+moonlander_FU_INDE_RE_INDE_status_4_iter_9_stage_17                  , 0.19104391385547992   , -28.40758932797589   , -0.017712660977012025
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38_stage_11             , 0.011029824197529374  , -2424.8480344557906  , -1.1469686561367303
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43_stage_14             , 0.01000966941632504   , -3262.5272125667616  , -2.065004939158384
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46_stage_14             , 0.011396769598730556  , -1558.3428636584601  , -0.9376812718974764
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10_stage_9              , 0.013788078914098726  , -340.5110792451508   , -0.11876409278573884
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10_stage_28             , 0.012609385253016013  , -1731.1695941262992  , -0.8037612562101941
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10_stage_29             , 0.009219299003096097  , -24294.704619095057  , -12.202353990307756
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10_stage_32             , -0.002540011411506988 , -127.24031388201101  , -0.03347065804018712
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19_stage_9              , 0.013931541989330406  , -339.6218428911538   , -0.11735593662739532
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19_stage_29             , 0.009683489843984334  , -166.84862163517798  , -0.005397993192673312
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19_stage_30             , -0.0581713474840789   , -5156.438879899879   , -2.1816923849222682
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19_stage_33             , -0.08390614837762474  , -149.12187845144624  , -0.008948034519562498
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_15              , 0.011511412779276189  , -209.24933057388608  , -0.013805073884875913
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_27              , -0.02328834631021496  , -1708.8057940891892  , -3.4115890535314843
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_28              , -0.06277011011138457  , -1150.0879089715963  , -22.071704239544715
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_29              , -234.386557037273     , -1091.0841607857508  , -364.72373157335323
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_30              , -102.53454438721029   , -998.0246932882405   , -151.52761381545113
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_31              , -0.24095257453404556  , -679.2255346011132   , -0.14474408065697708
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2_stage_32              , -0.054642161106027314 , -598.1018723496958   , -0.004376100664255478
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_20_stage_9              , 0.01393165007139561   , -343.25846070655075  , -0.11916347031815656
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_20_stage_30             , 0.01393755976754291   , -840.3458674165053   , -0.2793823210965556
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_20_stage_33             , -0.08717324146090834  , -158.76880339942076  , -0.0039346471457974985
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22_stage_9              , 0.013931706967816577  , -339.57157429506367  , -0.11733702656579342
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22_stage_29             , 0.006805457963742941  , -182.3652050005997   , -738.6374583756649
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22_stage_30             , 0.01280301894613265   , -20.101215704846588  , -6.359003974213479
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22_stage_33             , -0.08694420510345174  , -162.70835317233136  , -0.006546539651026251
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_28_stage_9              , 0.013969854763326827  , -3051.6341954221507  , -1.4050912594464253
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_28_stage_30             , 0.007295057794381991  , -110.22836172582845  , -284.60668279638355
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_28_stage_32             , -0.18103839126120505  , -38745.75642212671   , -18.251256757881492
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29_stage_9              , 0.013968419044579967  , -821.3199531661583   , -0.3425852220778008
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29_stage_27             , 0.013151486358483268  , -966.7174198850989   , -10.002621004569095
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29_stage_31             , 0.010603061295936755  , -128.6142377311743   , -0.2273945374873969
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29_stage_32             , -0.016007565891160806 , -3091.4443448026223  , -4.032217085361481
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_30_stage_10             , 0.011644950489182855  , -119.98515130631098  , -0.006455485651048593
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_30_stage_32             , 0.008527053386135158  , -296.99285690867885  , -0.7230193013383541
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36_stage_10             , 0.011833492272157117  , -714.9936732485163   , -0.2917536668344535
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36_stage_32             , -0.009080087804369981 , -5.773139551828737   , -0.34064608934625085
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36_stage_33             , -3.8912773423877534   , -5120.320229507553   , -776.2083492488471
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_39_stage_11             , 0.010101479591613893  , -222.01485195967865  , -0.052743925937121294
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44_stage_14             , 0.009420952161559915  , -168.1808224791735   , -0.013281883480964624
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_45_stage_14             , 0.009485927280898206  , -161.08846840225124  , -0.010693628230833226
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_47_stage_14             , 0.00960259155683273   , -305.01790601985846  , -0.11065568079167565
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49_stage_14             , 0.009602560366484204  , -308.630149973973    , -0.11307347800036291
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_50_stage_14             , 0.009602558011671952  , -308.77897809836753  , -0.1131730796682867
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7_stage_10              , 0.01243507210806053   , -105.23372415801586  , -0.00397003275537126
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7_stage_27              , -0.004201449018766073 , -82.370239767908     , -0.08825936701910919
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7_stage_28              , 0.003009836434407505  , -4843.833660471877   , -702.4078160407377
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7_stage_29              , -0.1498877646358557   , -76.08180886648326   , -78.26393429289121
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7_stage_34              , -0.7682752859949741   , 1.999999999899979    , -0.019458869394838985
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9_stage_10              , 0.012145275166960647  , -100.1899819104037   , -0.0002636646465144629
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9_stage_26              , 0.013167120455642936  , -97.05393588566646   , -0.08061960835834614
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9_stage_29              , -0.022294630765943416 , -266.9200341332934   , -0.13526171817909471
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9_stage_32              , -0.1364674883018485   , -1013.4368864925042  , -0.21533349431092574
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_0                        , -4.166007188866522    , -127.76525994572663  , -3.3882003109102308
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_1                        , -3.693387616328971    , -107.70492042091833  , -3.005350685803532
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_2                        , -3.2509639318567847   , -89.30321402465566   , -2.662573164174334
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_3                        , -2.8386908681874545   , -72.59633882748997   , -2.339936928821724
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_4                        , -2.456390069575693    , -57.6176668961224    , -2.031560716109242
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_5                        , -2.103750681979096    , -44.375017039767904  , -1.7388807846507335
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_6                        , -1.780330231168369    , -32.84340773247956   , -1.4653209367798208
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_7                        , -1.4855557812177467   , -22.96892196981573   , -1.2139294181463978
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_8                        , -1.218725371705337    , -14.688188842761324  , -0.9866339201209204
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_9                        , -0.9790097261685762   , -7.975867790464949   , -0.7841107785760064
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_10                       , -0.7654542264639118   , -2.965379983063546   , -0.6058912121793498
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_11                       , -0.5769811443726137   , -0.281114040453756   , -0.45063021529492997
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_12                       , -0.4123921233142505   , 0.38213994409883256  , -0.316509867694978
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_13                       , -0.27037089985717555  , 0.0033947793590995046, -0.20169513830230146
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_14                       , -0.1494862557239697   , -0.9116439284620523  , -0.10481234210527136
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_15                       , -0.04823292227234968  , -2.1199128912619374  , -0.026462215641616965
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_17                       , 0.030739356472185585  , -749.5708376611753   , -1.4845210572089862
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_19                       , -0.06346848552657483  , -11.383731181830386  , -0.05437310973841801
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_20                       , -0.09353937985523914  , -16.031743795392057  , -0.09750337814421589
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_21                       , -0.11426613656741155  , -21.61050106494271   , -0.13127410502529255
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_22                       , -0.12703326199813342  , -28.26066177157273   , -0.15865676366749182
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_23                       , -0.1331301292309427   , -36.577158588205904  , -0.18329758431882037
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_24                       , -0.13375484956496037  , -48.26507829451561   , -0.21134441503184975
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_25                       , -0.13001712249790248  , -68.49397483337356   , -0.25751311647652153
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_26                       , -0.12293112892420366  , -119.84545753110102  , -0.3796811660298437
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_27                       , -0.11341462896591685  , -562.3312156167522   , -1.4710806106860896
+robot_FU_INDE_RE_INDE_status_4_iter_1_stage_29                       , -0.09030112094987904  , 20.0                 , -0.04144447512530499
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_0                       , -0.44714012357526034  , -6.86116593576351    , -0.25747186438232145
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_1                       , -0.16525895387732728  , -8.186150639191727   , -0.14535655793037175
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_4                       , 0.005931275428664353  , -48.61874633811561   , -0.15463833991947656
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_6                       , -0.02158144278324499  , -5.595127277787587   , -0.0394499488412398
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_7                       , -0.02520460576384742  , -23.77488757803532   , -0.1416820942184049
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_9                       , -0.019360099255644872 , -3.4757808348299117  , -0.014786890118520885
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_10                      , -0.015723172246263538 , -7.366129286000212   , -0.035562331857935586
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_11                      , -0.0145479375041335   , -22.644186017933635  , -0.05104690652335232
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_12                      , -0.016245385464958684 , -53.861262094160416  , -0.04229334090707622
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_13                      , -0.020245593489131512 , -52.27332893832912   , -0.036327598385243215
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_14                      , -0.0257502481712285   , -43.92035514360336   , -0.04542643796472419
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_15                      , -0.03206732222684065  , -40.22986883768809   , -0.06345269171557626
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_16                      , -0.03855989841413204  , -51.744348638367995  , -0.10263839272525468
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_17                      , -0.044836303591504645 , -205.32411889645522  , -0.28300370390638196
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_19                      , -0.0567256148177694   , -12.214969939557845  , -0.07462679238106866
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_20                      , -0.05448572741772383  , -14.646898590269895  , -0.02941996868724891
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_21                      , -0.0500272005716941   , -16.176870512712565  , -0.052997533932055335
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_22                      , -0.04405256662783899  , -18.72893927043316   , -0.07260165218350087
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_23                      , -0.03789420788649878  , -25.59161859109558   , -0.08193722188446514
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_24                      , -0.0326597738862745   , -47.86172666037449   , -0.10696673260404602
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_25                      , -0.028915478936475517 , -245.64949538114018  , -0.4133636947141782
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_27                      , -0.02684437549854027  , -13.288479865421534  , -0.03177299555534904
+robot_FU_INDE_RE_INDE_status_4_iter_10_stage_28                      , -0.028775847621961337 , -84.43395047580941   , -0.2683438348654964
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_0                       , -0.4469604353236917   , -9.417430063937925   , -0.26395354994377074
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_1                       , -0.1666458874127075   , -8.575709049312058   , -0.14438027795589337
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_6                       , 0.009839959429639184  , -107.47950873976555  , -0.12397433153105347
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_8                       , -0.014681319901791084 , -8.468735929640879   , -0.04399970996667335
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_9                       , -0.0345297905816776   , -22.03230472514417   , -0.1596234894867452
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_10                      , -0.053489300152270054 , -194.9493652395123   , -1.4643089845963853
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_12                      , -0.07479600298756717  , -0.08311245265577048 , -0.03226478875872742
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_13                      , -0.07499732435937573  , -1.0193809388271946  , -0.05763193862034216
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_14                      , -0.06969505069293548  , -3.544525153765818   , -0.06993813951141228
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_15                      , -0.06118364474457892  , -7.917979908046616   , -0.07460338817190343
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_16                      , -0.05181159901724731  , -14.925723884247395  , -0.07906912146440576
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_17                      , -0.04353799902401455  , -39.56132897182144   , -0.10035616370388595
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_18                      , -0.03708891785937916  , -1673.818329305451   , -0.8802560304323774
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_19                      , -0.034612374107210644 , -429.5274970840552   , -0.09591316739525797
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_21                      , -0.02804939311625205  , -8.082144752135298   , -0.008197159313906929
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_22                      , -0.025822040790965152 , -9.550092328815612   , -0.037560489931438526
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_23                      , -0.023389438822788905 , -13.568346407539673  , -0.04845184472918254
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_24                      , -0.021534869091044406 , -25.241193461617378  , -0.06254287589313798
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_25                      , -0.020673841531967135 , -81.33652227879912   , -0.13745044856267336
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_27                      , -0.02281571807973018  , -11.29276800086785   , -0.014135713720769029
+robot_FU_INDE_RE_INDE_status_4_iter_11_stage_28                      , -0.026207850892603468 , -57.331413209191446  , -0.17507991166586603
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_0                       , -0.44441539578990286  , -9.402551292975948   , -0.24764297448392797
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_1                       , -0.16324587564669626  , -9.598873818396426   , -0.14034945209205998
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_4                       , 0.006268881620711073  , -7.067591292535212   , -0.0011340499436544825
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_5                       , -0.009745401940673887 , -47.526389431306455  , -0.41175896024140446
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_7                       , -0.020595202806683928 , -3.9115285907640174  , -0.03007373278394219
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_8                       , -0.019115947914608564 , -15.602956161981233  , -0.06887173666599815
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_9                       , -0.01588299047739397  , -16304.95715212243   , -16.641599688594823
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_11                      , -0.013446704468339316 , -5.720022291906939   , -0.022174103709771062
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_12                      , -0.01592423969263536  , -10.760493155269714  , -0.046998825316876186
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_13                      , -0.020144829516454757 , -24.236925715646215  , -0.1067974496905081
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_14                      , -0.02502359223283126  , -145.5830638221823   , -0.7591860498912582
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_16                      , -0.033586111152426934 , -5.789294940782553   , -0.017632257436474022
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_17                      , -0.03689375176989921  , -9.082069144629374   , -0.037204206038473006
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_18                      , -0.039729413846841796 , -18.949895431469283  , -0.060483896160043585
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_19                      , -0.043972448098195435 , -25.56027112362586   , -0.08048481603669672
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_20                      , -0.04140002169236027  , -233.00903468362617  , -0.5696944392606148
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_22                      , -0.033280239207649234 , -6.625550363100346   , -0.039599163725860476
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_23                      , -0.027361720608631124 , -9.228123292882907   , -0.0455056692196249
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_24                      , -0.02284300388368618  , -15.744913663579299  , -0.04822647798728197
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_25                      , -0.0201211847485359   , -38.18326627494311   , -0.07568821465677128
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_26                      , -0.019171266216693322 , -347.0621135207224   , -0.5388848817090022
+robot_FU_INDE_RE_INDE_status_4_iter_12_stage_28                      , -0.022707610096580358 , -29.3356574964288    , -0.07244150425529952
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_0                       , -0.44328655711402914  , -9.174452599021336   , -0.24720356530216914
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_1                       , -0.1628645354673542   , -8.378341104343363   , -0.13591251087252226
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_6                       , 0.008766769579776679  , -65.765047539989     , -0.1266588811625122
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_8                       , -0.014450962199579295 , -7.632227924902306   , -0.039067050213125704
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_9                       , -0.03240507603545299  , -20.868044779250564  , -0.129644991028272
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_10                      , -0.04904997250612092  , -183.75598357073432  , -0.8018049036580883
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_12                      , -0.06657378525019086  , 0.036167677227290834 , -0.029535689983928894
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_13                      , -0.06601757089612519  , -1.16638964574629    , -0.054725721818221995
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_14                      , -0.06069049233313531  , -3.533868043087664   , -0.06671816418688517
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_15                      , -0.052511840746443515 , -6.638893488351497   , -0.07140910238264694
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_16                      , -0.043418881012722337 , -11.870558351685345  , -0.07684693878227696
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_17                      , -0.03511637440643227  , -33.621495200020085  , -0.11487398513458413
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_19                      , -0.026946149625562014 , -5.024375270802217   , -0.04253426696042745
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_20                      , -0.022353887874140964 , -18.779633695479557  , -0.0914869838097021
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_22                      , -0.01735337495184925  , -1.9182052834933108  , -0.012923450225982852
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_23                      , -0.013815773110532614 , -3.5976364849468565  , -0.015065488074661876
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_24                      , -0.011757921084958524 , -6.850767718348132   , -0.016117401344192983
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_25                      , -0.011296040525603818 , -16.538934873702388  , -0.031157987041531332
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_26                      , -0.012275936536980378 , -73.00065887198743   , -0.10424715669349943
+robot_FU_INDE_RE_INDE_status_4_iter_13_stage_28                      , -0.0187451025830173   , -17.937940199462357  , -0.02860110571070068
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_0                       , -0.4431969407100373   , -9.487687642606911   , -0.2501786511341528
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_1                       , -0.16280083378417576  , -9.095012878880045   , -0.1404205065754871
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_4                       , 0.006821317256365744  , -12.859120593499975  , -0.02685461013662291
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_6                       , -0.01541938967964291  , -4.44592704143986    , -0.023455254236654517
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_7                       , -0.01811193354284144  , -16.05896985704425   , -0.09543742624512755
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_9                       , -0.015648428098937867 , -2.8739693766633327  , -0.009044299508910308
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_10                      , -0.014757421821020376 , -6.396447972298503   , -0.03481351443108044
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_11                      , -0.015906853484584052 , -24.273286854989205  , -0.11656929697113744
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_13                      , -0.02321642570227387  , 0.30382582915180045  , -0.010747227331124955
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_14                      , -0.02739979237954733  , -1.9057086960402019  , -0.02800246527597389
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_15                      , -0.030645831419455177 , -4.559632125650339   , -0.04216094787246172
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_16                      , -0.03247219485315646  , -8.691436642746838   , -0.05787491351111761
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_17                      , -0.032948199916861216 , -21.523372300585045  , -0.09311378726909675
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_19                      , -0.03374536782941256  , -6.425551853084708   , -0.05510497688278701
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_20                      , -0.030263219135431514 , -21.180625732107814  , -0.07158165646190529
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_21                      , -0.02765009374792715  , -153.517937254394    , -0.04364474840196873
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_22                      , -0.02155509527651031  , -106.65327197286784  , -0.020178995686635205
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_23                      , -0.01506956601155756  , -306.53340121986275  , -0.14565401657166643
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_25                      , -0.008996033340592804 , -7.280683484655535   , -0.007417871235356893
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_26                      , -0.008777175826537933 , -24.18773887010176   , -0.033069563292399934
+robot_FU_INDE_RE_INDE_status_4_iter_14_stage_27                      , -0.010196170077995031 , -762.0863810860733   , -0.9908946056619484
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_0                       , -0.44239848549430616  , -9.594516792232337   , -0.24923648696974898
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_1                       , -0.1623629813097041   , -9.210324361475163   , -0.13890634762666879
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_5                       , -0.00685415948156942  , -4.062884299643605   , -0.000448319959981883
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_6                       , -0.013744060080910591 , -8.964307571645472   , -0.049318695831410464
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_7                       , -0.017084999099680368 , -307.5769857561736   , -0.6796434805970122
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_9                       , -0.018170026746339336 , -4.552690347963883   , -0.028729536397236632
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_10                      , -0.01904587133108477  , -11.636271255068827  , -0.07812422116415474
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_12                      , -0.02484202671511644  , 0.26567622323045575  , -0.0009772822106692723
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_13                      , -0.02870543457000236  , -1.4625894645134219  , -0.022279518507632885
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_14                      , -0.0319770983836207   , -4.254171360004757   , -0.037178784433653696
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_15                      , -0.03389677319250187  , -8.745704181030426   , -0.050521122114710694
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_16                      , -0.03409496988274954  , -21.027157189646793  , -0.06858895273302518
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_17                      , -0.032665645449605624 , -173.22434606633882  , -0.15668400528576193
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_19                      , -0.028550316529235675 , -4.612767622344597   , -0.04330662809441298
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_20                      , -0.02406774662625443  , -12.314059120807427  , -0.06902897062749601
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_22                      , -0.013141499585287174 , -2.4975725397547195  , -0.005758599438482227
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_23                      , -0.006239787271719699 , -4.2624846924418645  , -0.013397158158866562
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_24                      , -0.002630323157995121 , -13.133845360606067  , -0.015270682880888287
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_25                      , -0.0012211600156133498, -200.92520186484217  , -0.07768294782175397
+robot_FU_INDE_RE_INDE_status_4_iter_16_stage_27                      , -0.003095544729590602 , -36.653089298495864  , -0.03331523566229916
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_0                       , -0.4415740089760635   , -5.289393926571886   , -0.22826642132122082
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_1                       , -0.16145739033826526  , -5.371421899055607   , -0.13259906529673127
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_4                       , 0.010766905119098865  , -5.83738358813023    , -0.0008234752170980866
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_6                       , 0.003613147295206391  , -41.23757518778828   , -0.10836981272447899
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_8                       , -0.016123217450920727 , -5.62726015002606    , -0.030661475836507357
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_9                       , -0.030218197590535047 , -13.693454302816322  , -0.09760759014996478
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_10                      , -0.04300145453616243  , -64.64971352984617   , -0.39297861205420326
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_12                      , -0.05668463390304698  , 0.600272858392109    , -0.01990206740464572
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_13                      , -0.056811907600488466 , -0.4304274961887296  , -0.043964835707178074
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_14                      , -0.05343651518877102  , -2.864343045652899   , -0.05657407916737012
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_15                      , -0.04770833769502531  , -5.895328417606752   , -0.06319682651954214
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_16                      , -0.040724770947118266 , -10.661410572637111  , -0.07021918416042605
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_17                      , -0.03342437764136353  , -26.589986945147164  , -0.10329595480475379
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_19                      , -0.021556403695831304 , -2.4642765670473175  , -0.026715217634697988
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_20                      , -0.015236496253877713 , -5.73375049954259    , -0.03049553125445006
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_21                      , -0.011085507019904572 , -223.91800957062975  , -0.15050823832047072
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_22                      , -0.004397327215295316 , -349.50713615628445  , -0.00045601738245161505
+robot_FU_INDE_RE_INDE_status_4_iter_17_stage_27                      , -0.0010974262134688106, -22.018520954200056  , -0.017144147082379768
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_0                       , -0.4416448309948693   , -9.546912709659384   , -0.24625581110513947
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_1                       , -0.16176397342968082  , -9.250904793526786   , -0.13683562218734424
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_5                       , -0.005394099433200825 , -6.967215407435327   , -0.027764758731991496
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_7                       , -0.015908509601143754 , -2.1262410112258245  , -0.001023244719632263
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_8                       , -0.0184005368817488   , -5.155927328304038   , -0.03889693480281259
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_9                       , -0.020365339097756875 , -18.76488079860142   , -0.12628040405788704
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_11                      , -0.02589155692955253  , -1.0287674661119857  , -0.010816173484036809
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_12                      , -0.029521050158432892 , -3.364797737568154   , -0.03222612031221719
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_13                      , -0.03293731199342227  , -6.655207410707997   , -0.049473064487988896
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_14                      , -0.035385527883514845 , -12.459616837514968  , -0.06745315811685813
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_15                      , -0.036303002871680076 , -27.542097534837136  , -0.09746285587703515
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_16                      , -0.035453243615405666 , -175.1806344203249   , -0.3212638091037321
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_18                      , -0.029292907356547167 , -2.3944760199406145  , -0.014854218136026255
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_19                      , -0.026332506290544677 , -3.876752760712759   , -0.03839346870900384
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_20                      , -0.021100683618522964 , -9.229412431813968   , -0.05869158480359908
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_22                      , -0.00806011049076577  , -40.18581660533321   , -0.04353718675959697
+robot_FU_INDE_RE_INDE_status_4_iter_18_stage_26                      , 0.0023822763448093087 , -638.1132761953252   , -0.16681981415519093
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_0                        , -2.727022327560387    , -60.26489018190951   , -1.8833081613513851
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_1                        , -2.350573092073341    , -49.746937217381834  , -1.7697625518703612
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_2                        , -2.0207976122845377   , -40.287947337487175  , -1.616208853870875
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_3                        , -1.7252579537762556   , -31.807768425453748  , -1.4373925790826738
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_4                        , -1.4554745318448006   , -24.224475266750662  , -1.2468145232712773
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_5                        , -1.206001192980968    , -17.46534766603721   , -1.0527048611739591
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_6                        , -0.9737047056265339   , -11.500686927965702  , -0.8602354824081364
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_7                        , -0.7572507933417267   , -6.415927368433898   , -0.6730828468991135
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_8                        , -0.5567295815290013   , -2.5153571070323446  , -0.49444600809984346
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_9                        , -0.37335962129657285  , -0.5313036917463941  , -0.32767820501693146
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_10                       , -0.20920522434125238  , -1.2874679164920213  , -0.1767451181486706
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_11                       , -0.06727764810905651  , -2.416519962423849   , -0.048383106932867764
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_13                       , -0.005727468893929222 , -26.56908699610028   , -0.04479684024805078
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_14                       , -0.06909915305602937  , -46.6064431924363    , -0.13498699854844243
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_15                       , -0.10719450349493756  , -78.32924973138758   , -0.20989194506845177
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_16                       , -0.12409888318192899  , -175.87358332956325  , -0.3149099171313242
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_17                       , -0.12510199019693832  , -3370.3427024376506  , -2.6736393284134703
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_19                       , -0.09990817713326976  , 0.40521703485183247  , -0.04964759933609653
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_20                       , -0.0818445499815762   , 0.5695568663270875   , -0.05819629820296435
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_21                       , -0.06375518972310491  , 0.4269819612683605   , -0.052782853974313454
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_22                       , -0.04714322951907228  , 0.11524485846579045  , -0.04291810138532748
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_23                       , -0.032803024127451674 , -0.2851633487331138  , -0.03226240084488369
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_24                       , -0.02104847392464336  , -0.6825078622460254  , -0.02244138703546969
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_25                       , -0.011911932003226336 , -1.0292688360333322  , -0.014202152016249248
+robot_FU_INDE_RE_INDE_status_4_iter_2_stage_26                       , -0.005262579956655494 , -1.515729552092818   , -0.00796352741063075
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_0                        , -0.6607492140762263   , -404.83956999899146  , -3.656439568860982
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_2                        , -0.11029243910513684  , -49.934191237401805  , -0.030458334279056858
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_5                        , -0.05630501646064042  , -6.789515973818243   , -0.0765772283005095
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_6                        , -0.04453444905859537  , -46.755407991974565  , -0.3757899145159419
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_10                       , 0.04462296000357014   , -199.93658154954792  , -0.01174962817317858
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_15                       , -0.012682532726855995 , -8.611787329155947   , -0.01976675815385156
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_16                       , -0.030763271043425806 , -12.988106854194408  , -0.04081373235283571
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_17                       , -0.04737089112140924  , -17.178424387413585  , -0.06696658464445943
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_18                       , -0.06054489664371044  , -21.70381465433848   , -0.09443221210596683
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_19                       , -0.06943064916883399  , -27.05724495451494   , -0.11518803374582945
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_20                       , -0.07414439116689564  , -34.115618980404044  , -0.13231459119694644
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_21                       , -0.07519201466200945  , -45.16418716357544   , -0.1509342386073974
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_22                       , -0.07332766468840068  , -67.93162552411975   , -0.18338364971710824
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_23                       , -0.06939277369750814  , -149.86486421654342  , -0.30359797777369824
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_25                       , -0.058449190340642804 , -7.306599968738509   , -0.013189203211708241
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_26                       , -0.05274404267427761  , -12.340352771885827  , -0.05555115444394326
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_27                       , -0.04755485216959836  , -25.47566414055138   , -0.10792320120643989
+robot_FU_INDE_RE_INDE_status_4_iter_4_stage_28                       , -0.043251708062114494 , -327.88855760622414  , -1.0464800997393102
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_0                        , -0.5478536763662216   , -45.94095161034503   , -0.9636359606680299
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_2                        , -0.068670016234461    , -4.308525445470935   , -0.0017448060293755632
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_9                        , -0.007097286750293929 , -3.9137737754271145  , -0.011890601072407626
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_10                       , -0.05008112625838652  , -7.54446774986543    , -0.07028708663624855
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_11                       , -0.08911579067475718  , -12.555873541394334  , -0.13559758312893705
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_12                       , -0.11911554751306747  , -20.799761689807077  , -0.21061892276967897
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_13                       , -0.13654965943007719  , -40.79528268115214   , -0.3162198870367275
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_14                       , -0.14004762992394404  , -181.83788460620252  , -0.7459197072609346
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_16                       , -0.11291720070072869  , 0.7388684398145752   , -0.024389242833676793
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_17                       , -0.088535946684495    , 0.6183649409811457   , -0.06515151408205264
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_18                       , -0.0658872740575657   , 0.3563557915452614   , -0.06095677851490092
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_19                       , -0.0471632143337759   , -0.08432923374421403 , -0.0440864822149472
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_20                       , -0.03240066638689031  , -0.6244044977542185  , -0.031484143727177734
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_21                       , -0.02115210618811382  , -1.1117018387440187  , -0.02239020091365794
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_22                       , -0.012917464025162362 , -1.516039565311221   , -0.01546535306319785
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_23                       , -0.007220313517457687 , -1.952783575928745   , -0.010372955188968198
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_24                       , -0.0036785463103079924, -2.859059828131146   , -0.007397078576287627
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_25                       , -0.0020472971354528746, -6.609382020556217   , -0.008271810792517875
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_26                       , -0.0022062663972021446, -28.69353803179483   , -0.022092366583417455
+robot_FU_INDE_RE_INDE_status_4_iter_5_stage_28                       , -0.007720538174236513 , -8.329949500116001   , -0.004339798206984519
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_0                        , -0.4757281887796629   , -12.268581501952633  , -0.39699679582081016
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_1                        , -0.19453083237632351  , -11.898692217465276  , -0.24386635033461285
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_4                        , 0.021561951091239213  , -52.69755750774084   , -0.09721728931255846
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_6                        , -0.03028124035022458  , -5.33007467336062    , -0.05335877792209971
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_7                        , -0.035891583761201065 , -25.806818390100307  , -0.20361076783651247
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_9                        , -0.011660291005500156 , -2.888685810500008   , -0.013955376895768722
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_15                       , -0.007884777762958692 , -5.479734217908687   , -0.00474694620259794
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_16                       , -0.021557912674669014 , -9.25761504573105    , -0.025502461188410347
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_17                       , -0.03752132677613723  , -12.709984245846998  , -0.046431100797798316
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_18                       , -0.05217099882284689  , -15.720163918256747  , -0.07081936468178553
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_19                       , -0.06161628804814395  , -18.803542398888606  , -0.09457254112353186
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_20                       , -0.06471772499890688  , -22.228953693149855  , -0.10303666920480037
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_21                       , -0.06326826212182284  , -26.707347161662153  , -0.10862307492819315
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_22                       , -0.05911434292925996  , -34.152533588580354  , -0.11589598373132357
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_23                       , -0.05361418023141434  , -50.690098048596326  , -0.1329027536729986
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_24                       , -0.04773191016794032  , -111.93752813492881  , -0.20767478049498792
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_26                       , -0.03758864051685831  , -7.384139090127123   , -0.008327572529928514
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_27                       , -0.03433770923927977  , -15.09848686573866   , -0.054473255971995066
+robot_FU_INDE_RE_INDE_status_4_iter_6_stage_28                       , -0.03275351344477828  , -98.49158222930174   , -0.35103356517042567
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_0                        , -0.48938306736451564  , -9.466798403296664   , -0.4329151889421762
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_1                        , -0.20821573870754279  , -10.918481487557617  , -0.2659686257314907
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_8                        , -0.0034170699390769846, -9.782024059223717   , -0.028627516780643875
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_9                        , -0.03228758192377898  , -19.717276639449135  , -0.10302238090382485
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_10                       , -0.06324008242489976  , -30.50521948476632   , -0.15765435179233606
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_11                       , -0.08935808354935199  , -40.335544135337116  , -0.19650166993513152
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_12                       , -0.10593032214299616  , -54.37502254164947   , -0.24210222266528456
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_13                       , -0.11160934295989772  , -92.20186699405176   , -0.3261309635494508
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_14                       , -0.1081723288764106   , -470.1402201434162   , -0.9400644667570145
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_16                       , -0.0887131241662193   , -6.967720602359144   , -0.010373298804603146
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_17                       , -0.07619153846396837  , -7.700879330989664   , -0.04157098341174047
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_18                       , -0.06322324906099475  , -8.30250142613007    , -0.06274406401645762
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_19                       , -0.05154769736079092  , -9.360432293556281   , -0.06962045299137498
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_20                       , -0.04235245260045111  , -10.906915341825929  , -0.061251810575642496
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_21                       , -0.03576500187082755  , -13.154777347143868  , -0.05827012873928842
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_22                       , -0.031341876756756905 , -17.0040428387295    , -0.05998399330452832
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_23                       , -0.028423636857468224 , -25.305743523163283  , -0.06775641542980704
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_24                       , -0.026521399538221496 , -50.66104518440949   , -0.0951573747641653
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_25                       , -0.025455634343504313 , -335.98597710088563  , -0.4705951459304293
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_27                       , -0.02620711178503249  , -12.614468857830326  , -0.03804950913976829
+robot_FU_INDE_RE_INDE_status_4_iter_7_stage_28                       , -0.028396395713053496 , -84.1425975243767    , -0.3023651063636433
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_0                        , -0.45464669810731045  , -8.895470749841468   , -0.29096596690141585
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_1                        , -0.17223718830745255  , -9.080576802431585   , -0.16318280196383475
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_5                        , -0.011555898737418824 , -4.616428783474252   , -0.008199105256549155
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_6                        , -0.025225718027949498 , -9.644103090011823   , -0.06972866360424373
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_7                        , -0.031218950987874805 , -152.8835345382129   , -0.5191213308628678
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_9                        , -0.022691882948735365 , -4.403154639495413   , -0.027052832593534734
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_10                       , -0.016118772677090974 , -10.038492270674965  , -0.046440515931986184
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_11                       , -0.012691141877598719 , -43.50394268105006   , -0.09617548342114993
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_12                       , -0.013585898362427865 , -192.43711437929085  , -0.2617334143077582
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_13                       , -0.018605590087401647 , -345.86325423865827  , -0.3825040929865766
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_14                       , -0.027075849913627353 , -1104.32922505765    , -1.16461833773188
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_16                       , -0.04628629713598585  , -11.25296787529605   , -0.0034075219382026165
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_17                       , -0.05593813754164083  , -13.476033414349429  , -0.03447464712860601
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_18                       , -0.06481417377633748  , -14.88216539422871   , -0.0566146239432455
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_19                       , -0.06932739215777001  , -17.14646774780415   , -0.10042339552249936
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_20                       , -0.06704663751118065  , -19.85166504121238   , -0.09423079841060866
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_21                       , -0.061230364386891445 , -23.0259726758274    , -0.09559200382982494
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_22                       , -0.05411553573464396  , -28.259859953591597  , -0.10037689816478745
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_23                       , -0.04696407490048861  , -40.34220803331329   , -0.11073720097580109
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_24                       , -0.04054133722999097  , -83.26359499656199   , -0.159881509167276
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_26                       , -0.03186139394462005  , -6.855103717967085   , -0.001544605130052001
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_27                       , -0.03026647579803783  , -14.620274903055595  , -0.04709152332287553
+robot_FU_INDE_RE_INDE_status_4_iter_8_stage_28                       , -0.030765782286234153 , -107.83813406228091  , -0.3649632329792055
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_0                        , -0.45651362447079435  , -18.303109587867276  , -0.3070018856642469
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_1                        , -0.17632977074928696  , -14.741810036045855  , -0.16781023563762282
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_7                        , 0.0032031391082889514 , -12.062159491758806  , -0.03178543287088681
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_9                        , -0.03677830890676821  , -4.683770958730995   , -0.015032438131775417
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_10                       , -0.05901961630670763  , -8.322009391144242   , -0.05875335967598319
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_11                       , -0.07609990795554307  , -13.517047742406877  , -0.09245320162475322
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_12                       , -0.08531222238589678  , -19.35867719438647   , -0.11523307481226398
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_13                       , -0.08659382808333939  , -25.438727634319555  , -0.12837714032978215
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_14                       , -0.08209021313274162  , -33.5831693455165    , -0.1378304095470006
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_15                       , -0.07477876471181744  , -48.9384658550735    , -0.14871646420075715
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_16                       , -0.06647746831732226  , -120.18536180005736  , -0.20758896485035086
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_17                       , -0.058928524430329844 , -1442.6696855765524  , -1.009117037411437
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_19                       , -0.04396085145200789  , -8.588445881115598   , -0.060678450628779974
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_20                       , -0.037656685741044506 , -10.73353401346452   , -0.04558949971136535
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_21                       , -0.03354904206983018  , -13.129435944547673  , -0.04906162083156732
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_22                       , -0.030656638155209713 , -16.741270691199286  , -0.057614952607564704
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_23                       , -0.02837606604119565  , -24.87953690284233   , -0.0685951581428075
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_24                       , -0.02660476796054216  , -51.415426523777946  , -0.10077809551265132
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_25                       , -0.025529378262245286 , -458.08721777509805  , -0.7201960637829736
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_27                       , -0.026635731603521035 , -14.05131492194011   , -0.040340634731242525
+robot_FU_INDE_RE_INDE_status_4_iter_9_stage_28                       , -0.029337593110576016 , -108.03256365487627  , -0.3625194549914341
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_11_stage_19            , 0.1168474326          , -324.46483735162434  , -0.6727567506640864
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_11_stage_31            , 0.11675718143         , -793.6569409058517   , -2.8166532829850444
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_12_stage_19            , 0.1167602351          , -651.6959611847675   , -2.167577004612975
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_12_stage_31            , 0.11668365764         , -1763.370687875395   , -7.266977358705721
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_13_stage_19            , 0.11676006541         , -652.9547634099719   , -2.1733278875533966
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_13_stage_31            , 0.11668351424         , -1767.5370844799384  , -7.286098798286583
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_21_stage_20            , 0.11624732717         , -561.6018541418341   , -1.751857290951162
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_21_stage_32            , 0.11658188686         , -276.3745742723999   , -0.4402483344593004
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_28_stage_19            , 0.11672859158         , -1012.6059713537575  , -3.816464743156313
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_28_stage_31            , 0.1166569615          , -3126.2843581012144  , -13.522051859748561
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_32_stage_19            , 0.11676005966         , -652.9974437293853   , -2.1735228741198616
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_32_stage_31            , 0.11668350938         , -1767.678274708157   , -7.286746782176343
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_41_stage_19            , 0.11678964738         , -487.93686799666557  , -1.4194628879647797
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_41_stage_31            , 0.11670846983         , -1251.665756775635   , -4.918558868922144
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_50_stage_19            , 0.1169033593          , -243.03068528601065  , -0.3008742472093061
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_50_stage_31            , 0.11680438843         , -582.8895721100486   , -1.849468818648677
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_10_stage_17            , 0.11743653849         , -14328.26202828672   , -64.67585547982434
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_10_stage_30            , 0.11697768456         , -3843.68834746111    , -16.819432266204053
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_16_stage_19            , 0.11676007539         , -652.8765026075863   , -2.1729703462957346
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_16_stage_31            , 0.11668352319         , -1767.272364188494   , -7.28488387788292
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_17_stage_19            , 0.11676007485         , -652.8839580734591   , -2.173004410432825
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_17_stage_31            , 0.11668352238         , -1767.3043078266326  , -7.285030485242432
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_23_stage_19            , 0.11676007479         , -652.8849065269294   , -2.1730087438951164
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_23_stage_31            , 0.11668352228         , -1767.3083721206706  , -7.285049139338911
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_26_stage_19            , 0.11676007479         , -652.8849064452085   , -2.173008743522372
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_26_stage_31            , 0.11668352228         , -1767.3083715263206  , -7.285049136610886
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_30_stage_19            , 0.11676007479         , -652.8849066942108   , -2.1730087446609705
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_30_stage_31            , 0.11668352228         , -1767.3083720600307  , -7.28504913906236
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_38_stage_19            , 0.11676007479         , -652.8849069238066   , -2.173008745710165
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_38_stage_31            , 0.11668352228         , -1767.308373190118   , -7.28504914424875
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_18             , 0.11843215038         , -253.43761703659186  , -0.35310790329801467
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_26             , 0.099224682829        , -255.479071214644    , -0.25403926356044937
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_30             , 0.078117558547        , -449.17345360944825  , -1.0176106340166609
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_33             , 0.05713185698         , -1549.9106273744517  , -5.659267572286511
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_36             , 0.032289014329        , -847.9042927339398   , -2.550163013267017
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_39             , 0.0058746727119       , -377.36557997987705  , -0.5143450216142725
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_41             , -0.0090802716335      , -753.5472334356      , -2.0447857855234037
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_43             , -0.01501619282        , -4087.2877175539434  , -15.824623697010818
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8_stage_46             , 0.026269343995        , -388.0235509236174   , -0.6506751737144241

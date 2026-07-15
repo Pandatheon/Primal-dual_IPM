@@ -239,7 +239,7 @@ On the one hand, the backward pass of the Riccati recursion can be concluded as 
 
 Where the $M_k$ is the reduced Hessian block obtained by Riccati recursion. 
 
-On the other hand, the block $\mathrm{L}^\top \mathrm{DL}$ factorization of the reduced Hessian $\tilde{M}^i$ can be expressed as:
+The block $\mathrm{L}^\top \mathrm{DL}$ factorization of the reduced Hessian $\tilde{M}^i$ can be expressed as:
 \begin{align*}
     \tilde{M}^i &= L^\top 
     \begin{bmatrix}
@@ -361,6 +361,25 @@ This issue reveals two insights in stage regularization:
     as the severity of propagation depends on the coupling structure between stages, 
     which a purely local scheme cannot capture.
 \end{itemize}
+
+\subsection{Numerical issue of stage-wise full Hessian regularization}
+In this section, I will briefly explain the numerical issue of stage-wise full Hessian regularization.
+
+As the full Hessian in stage regularization can be expressed as:
+\begin{equation}
+    \tilde{H}^i = H + G^\top T_i^{-1} \Lambda_i G,
+\end{equation}
+when the iterates approach the optimal solution, the $T_i^{-1} \Lambda_i$ will have some very large entries,
+resulting an ill-conditioned $\tilde{H}^i$, which prevents the modification from ensuring the positive definiteness of $\tilde{H}^i$.
+Thus resulting in the failure of the algorithm.
+
+But for the reduced Hessian in stage regularization, as the reduced Hessian can be expressed as:
+\begin{equation}
+    \tilde{M}^i = Z^\top H Z + Z^\top G^\top T_i^{-1} \Lambda_i G Z,
+\end{equation}
+if we take an active set perspective, the null space $Z$ is the basis for the tangent space of the active constraints, so we have $G Z = 0$.
+Therefore, the reduced Hessian $\tilde{M}^i$ will not be affected by the ill-conditioning of $T_i^{-1} \Lambda_i$,
+and the regularization can still ensure the positive definiteness of $\tilde{M}^i$.
 
 \section{Local quadratic convergence rate}
 In this section, 

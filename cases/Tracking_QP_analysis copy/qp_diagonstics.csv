@@ -1,0 +1,201 @@
+QP_name                                                     , Horizon, Inde Stage Rate    , Min Negative Eigenvalue
+Furuta_FU_INDE_RE_INDE_status_4_iter_0                      ,      20, 0.15               , -23477.416676016026
+Furuta_FU_INDE_RE_INDE_status_4_iter_10                     ,      20, 0.05               , -2727.2488870845186
+Furuta_FU_INDE_RE_INDE_status_4_iter_11                     ,      20, 0.05               , -1622.6799855833776
+Furuta_FU_INDE_RE_INDE_status_4_iter_12                     ,      20, 0.05               , -670.1959558025521
+Furuta_FU_INDE_RE_INDE_status_4_iter_13                     ,      20, 0.05               , -2595.797226168982
+Furuta_FU_INDE_RE_INDE_status_4_iter_14                     ,      20, 0.1                , -572.7851867873936
+Furuta_FU_INDE_RE_INDE_status_4_iter_16                     ,      20, 0.05               , -1638.4163272123262
+Furuta_FU_INDE_RE_INDE_status_4_iter_17                     ,      20, 0.05               , -485.2201884142608
+Furuta_FU_INDE_RE_INDE_status_4_iter_18                     ,      20, 0.05               , -1771.5020044365808
+Furuta_FU_INDE_RE_INDE_status_4_iter_2                      ,      20, 0.15               , -839.1054190995819
+Furuta_FU_INDE_RE_INDE_status_4_iter_20                     ,      20, 0.05               , -724.5817097784525
+Furuta_FU_INDE_RE_INDE_status_4_iter_21                     ,      20, 0.05               , -258.2391070776122
+Furuta_FU_INDE_RE_INDE_status_4_iter_24                     ,      20, 0.05               , -1732.1675075797332
+Furuta_FU_INDE_RE_INDE_status_4_iter_28                     ,      20, 0.05               , -472.5602824104223
+Furuta_FU_INDE_RE_INDE_status_4_iter_3                      ,      20, 0.4                , -6159.170445123074
+Furuta_FU_INDE_RE_INDE_status_4_iter_31                     ,      20, 0.05               , -472.5366522570454
+Furuta_FU_INDE_RE_INDE_status_4_iter_33                     ,      20, 0.05               , -472.5385065794097
+Furuta_FU_INDE_RE_INDE_status_4_iter_4                      ,      20, 0.15               , -1199.788877808949
+Furuta_FU_INDE_RE_INDE_status_4_iter_6                      ,      20, 0.05               , -1251.56540714774
+Furuta_FU_INDE_RE_INDE_status_4_iter_7                      ,      20, 0.05               , -570.559689059626
+Furuta_FU_INDE_RE_INDE_status_4_iter_8                      ,      20, 0.05               , -241.31468996540036
+Furuta_FU_INDE_RE_INDE_status_4_iter_9                      ,      20, 0.05               , -8649.048470384529
+Pendulum_FU_INDE_RE_INDE_status_4_iter_0                    ,      20, 0.05               , -0.050151040115100964
+Pendulum_FU_INDE_RE_INDE_status_4_iter_11                   ,      20, 0.05               , -0.7194284008923623
+Pendulum_FU_INDE_RE_INDE_status_4_iter_12                   ,      20, 0.15               , -0.8688377311997073
+Pendulum_FU_INDE_RE_INDE_status_4_iter_14                   ,      20, 0.15               , -0.9225184673580807
+Pendulum_FU_INDE_RE_INDE_status_4_iter_15                   ,      20, 0.15               , -0.9737241887179507
+Pendulum_FU_INDE_RE_INDE_status_4_iter_16                   ,      20, 0.15               , -1.0617734576812023
+Pendulum_FU_INDE_RE_INDE_status_4_iter_17                   ,      20, 0.1                , -0.16142815165398539
+Pendulum_FU_INDE_RE_INDE_status_4_iter_18                   ,      20, 0.05               , -0.8664796151950497
+Pendulum_FU_INDE_RE_INDE_status_4_iter_2                    ,      20, 0.05               , -1.9779346565398106
+Pendulum_FU_INDE_RE_INDE_status_4_iter_20                   ,      20, 0.05               , -0.2752368090529951
+Pendulum_FU_INDE_RE_INDE_status_4_iter_21                   ,      20, 0.05               , -0.08376778599928089
+Pendulum_FU_INDE_RE_INDE_status_4_iter_22                   ,      20, 0.2                , -21.053484959042507
+Pendulum_FU_INDE_RE_INDE_status_4_iter_28                   ,      20, 0.05               , -0.11995565746197556
+Pendulum_FU_INDE_RE_INDE_status_4_iter_3                    ,      20, 0.05               , -0.6504825439073925
+Pendulum_FU_INDE_RE_INDE_status_4_iter_33                   ,      20, 0.05               , -0.6302374996739508
+Pendulum_FU_INDE_RE_INDE_status_4_iter_4                    ,      20, 0.1                , -3.5999520184174796
+Pendulum_FU_INDE_RE_INDE_status_4_iter_5                    ,      20, 0.05               , -0.009952577651602457
+Pendulum_FU_INDE_RE_INDE_status_4_iter_6                    ,      20, 0.1                , -0.7200834478226459
+Pendulum_FU_INDE_RE_INDE_status_4_iter_7                    ,      20, 0.1                , -0.7547651893316236
+Pendulum_FU_INDE_RE_INDE_status_4_iter_8                    ,      20, 0.1                , -0.7225241854126967
+Pendulum_FU_INDE_RE_INDE_status_4_iter_9                    ,      20, 0.15               , -2.2620302364689002
+acrobot_FU_INDE_RE_INDE_status_2_iter_19                    ,      25, 0.2                , -0.027238748558016283
+acrobot_FU_INDE_RE_INDE_status_2_iter_22                    ,      25, 0.28               , -0.19025981555667
+acrobot_FU_INDE_RE_INDE_status_2_iter_24                    ,      25, 0.04               , -0.015764936985648292
+acrobot_FU_INDE_RE_INDE_status_2_iter_26                    ,      25, 0.04               , -0.08805913987282409
+acrobot_FU_INDE_RE_INDE_status_2_iter_3                     ,      25, 0.24               , -0.25400341913595564
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     ,      25, 0.4                , -0.840961814380426
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    ,      25, 0.24               , -6.608071754310391
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    ,      25, 0.16               , -0.24573809127779825
+acrobot_FU_INDE_RE_INDE_status_4_iter_12                    ,      25, 0.04               , -0.01422124112322935
+acrobot_FU_INDE_RE_INDE_status_4_iter_14                    ,      25, 0.04               , -0.0026176776563697473
+acrobot_FU_INDE_RE_INDE_status_4_iter_16                    ,      25, 0.04               , -0.2406600140662099
+acrobot_FU_INDE_RE_INDE_status_4_iter_17                    ,      25, 0.04               , -0.005203273471191849
+acrobot_FU_INDE_RE_INDE_status_4_iter_18                    ,      25, 0.04               , -0.10912609706748645
+acrobot_FU_INDE_RE_INDE_status_4_iter_20                    ,      25, 0.04               , -0.02657242111941438
+acrobot_FU_INDE_RE_INDE_status_4_iter_27                    ,      25, 0.04               , -0.0024970370208432678
+acrobot_FU_INDE_RE_INDE_status_4_iter_28                    ,      25, 0.04               , -0.0014520620211342708
+acrobot_FU_INDE_RE_INDE_status_4_iter_32                    ,      25, 0.04               , -0.475557920080155
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     ,      25, 0.2                , -26.444612121075505
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_10        ,      30, 0.13333333333333333, -5.326300489278248
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_16        ,      30, 0.06666666666666667, -0.05860714328593308
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_17        ,      30, 0.06666666666666667, -0.056687663313483516
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_18        ,      30, 0.06666666666666667, -0.056114688881159586
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_19        ,      30, 0.06666666666666667, -0.05577605665313689
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_31        ,      30, 0.06666666666666667, -0.0490827135705426
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_33        ,      30, 0.06666666666666667, -0.04764526546343534
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_34        ,      30, 0.06666666666666667, -0.046904596132694744
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_36        ,      30, 0.06666666666666667, -0.04538944673885257
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_38        ,      30, 0.06666666666666667, -0.043843535980762564
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_40        ,      30, 0.06666666666666667, -0.04228278955676649
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_41        ,      30, 0.06666666666666667, -0.0414999355944832
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_42        ,      30, 0.06666666666666667, -0.04071642899294546
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_56        ,      30, 0.06666666666666667, -0.03065963045224165
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_57        ,      30, 0.06666666666666667, -0.030078555126148408
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_59        ,      30, 0.06666666666666667, -0.028988278631230515
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_61        ,      30, 0.06666666666666667, -0.02830531727655955
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_62        ,      30, 0.06666666666666667, -0.02816976500651086
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_66        ,      30, 0.06666666666666667, -0.02769526770012598
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_69        ,      30, 0.06666666666666667, -0.027404651603261138
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8         ,      30, 0.7333333333333333 , -10.32696377434597
+dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9         ,      30, 0.43333333333333335, -2.409934234667822
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12,      25, 0.68               , -2.123375884583934
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 ,      25, 0.56               , -3.4578960572691253
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39,      25, 0.8                , -0.7591098406387325
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 ,      25, 1.0                , -1.5969538594702009
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42,      25, 0.84               , -0.7459026153159214
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 ,      25, 0.8                , -5.144912969599901
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10,      25, 0.64               , -0.8735914889635015
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18,      25, 0.72               , -4.703900893193877
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19,      25, 0.72               , -4.113614717182654
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20,      25, 0.72               , -5.344839916599359
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21,      25, 0.72               , -5.227486856201641
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24,      25, 0.8                , -0.9441059308394346
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25,      25, 0.8                , -0.9190007957824073
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26,      25, 0.8                , -0.6873550575896965
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27,      25, 0.8                , -0.6406359806672269
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31,      25, 0.8                , -1.3749205917460274
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34,      25, 0.8                , -3.5017729736951835
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35,      25, 0.8                , -1.5435740347321418
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37,      25, 0.8                , -3.654017434168312
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38,      25, 0.76               , -0.6102861762631142
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 ,      25, 0.6                , -0.8980070562656048
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 ,      25, 0.72               , -1.9069435892864584
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          ,      35, 0.05714285714285714, -30.10769273674364
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          ,      35, 0.05714285714285714, -22.68448657362827
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_12          ,      35, 0.05714285714285714, -21.740214757262812
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          ,      35, 0.05714285714285714, -18.323949746208726
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          ,      35, 0.02857142857142857, -18.075583462632775
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_15          ,      35, 0.05714285714285714, -16.41044694180215
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          ,      35, 0.02857142857142857, -16.380507447338477
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_17          ,      35, 0.02857142857142857, -15.525971969421796
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_18          ,      35, 0.02857142857142857, -15.560631787607399
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_2           ,      35, 0.02857142857142857, -15.583036383305611
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          ,      35, 0.02857142857142857, -15.153757882747314
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_21          ,      35, 0.02857142857142857, -14.909113211996566
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          ,      35, 0.02857142857142857, -14.948489291967075
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          ,      35, 0.02857142857142857, -14.814218500725747
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_24          ,      35, 0.02857142857142857, -14.843787776305135
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          ,      35, 0.02857142857142857, -14.769273985361771
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_26          ,      35, 0.02857142857142857, -14.789940937812958
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          ,      35, 0.02857142857142857, -14.748231236066236
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_28          ,      35, 0.02857142857142857, -14.762060951583244
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          ,      35, 0.02857142857142857, -14.738542551640649
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_6           ,      35, 0.02857142857142857, -4.274992264591701
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           ,      35, 0.05714285714285714, -91.11461924378908
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           ,      35, 0.05714285714285714, -36.15465437394862
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_9           ,      35, 0.05714285714285714, -34.625140831480444
+moonlander_FU_INDE_RE_INDE_status_2_iter_10                 ,      50, 0.12               , -2.118133191719551
+moonlander_FU_INDE_RE_INDE_status_2_iter_11                 ,      50, 0.1                , -3.3301853876863534
+moonlander_FU_INDE_RE_INDE_status_2_iter_13                 ,      50, 0.06               , -3.437393316534304
+moonlander_FU_INDE_RE_INDE_status_2_iter_15                 ,      50, 0.08               , -6.768946676925033
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 ,      50, 0.06               , -4.298798040333066
+moonlander_FU_INDE_RE_INDE_status_2_iter_19                 ,      50, 0.06               , -3.8016294637577714
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 ,      50, 0.06               , -4.664271506613
+moonlander_FU_INDE_RE_INDE_status_2_iter_22                 ,      50, 0.08               , -16.470676204245784
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 ,      50, 0.1                , -1.6290406856759452
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 ,      50, 0.08               , -4.599929135267748
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  ,      50, 0.38               , -6.3529048123493626
+moonlander_FU_INDE_RE_INDE_status_4_iter_23                 ,      50, 0.06               , -30.969828505045136
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  ,      50, 0.3                , -4.333977579333183
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  ,      50, 0.24               , -3.463202088266826
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  ,      50, 0.22               , -18.20195112539953
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  ,      50, 0.2                , -1.1689772309536837
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  ,      50, 0.18               , -7.30217706002399
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  ,      50, 0.16               , -13.371676677586157
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  ,      50, 0.14               , -2.5887457315084
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             ,      35, 0.02857142857142857, -1.1469686561367303
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             ,      35, 0.02857142857142857, -2.065004939158384
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             ,      35, 0.02857142857142857, -0.9376812718974764
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             ,      35, 0.11428571428571428, -12.202353990307756
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             ,      35, 0.11428571428571428, -2.1816923849222682
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              ,      35, 0.2                , -364.72373157335323
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_20             ,      35, 0.08571428571428572, -0.2793823210965556
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             ,      35, 0.11428571428571428, -738.6374583756649
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_28             ,      35, 0.08571428571428572, -284.60668279638355
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             ,      35, 0.11428571428571428, -10.002621004569095
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_30             ,      35, 0.05714285714285714, -0.7230193013383541
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             ,      35, 0.08571428571428572, -776.2083492488471
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_39             ,      35, 0.02857142857142857, -0.052743925937121294
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             ,      35, 0.02857142857142857, -0.013281883480964624
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_45             ,      35, 0.02857142857142857, -0.010693628230833226
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_47             ,      35, 0.02857142857142857, -0.11065568079167565
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             ,      35, 0.02857142857142857, -0.11307347800036291
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_50             ,      35, 0.02857142857142857, -0.1131730796682867
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              ,      35, 0.14285714285714285, -702.4078160407377
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              ,      35, 0.11428571428571428, -0.21533349431092574
+robot_FU_INDE_RE_INDE_status_4_iter_1                       ,      30, 0.9                , -3.3882003109102308
+robot_FU_INDE_RE_INDE_status_4_iter_10                      ,      30, 0.7666666666666667 , -0.4133636947141782
+robot_FU_INDE_RE_INDE_status_4_iter_11                      ,      30, 0.7                , -1.4643089845963853
+robot_FU_INDE_RE_INDE_status_4_iter_12                      ,      30, 0.7333333333333333 , -16.641599688594823
+robot_FU_INDE_RE_INDE_status_4_iter_13                      ,      30, 0.6666666666666666 , -0.8018049036580883
+robot_FU_INDE_RE_INDE_status_4_iter_14                      ,      30, 0.7                , -0.9908946056619484
+robot_FU_INDE_RE_INDE_status_4_iter_16                      ,      30, 0.6666666666666666 , -0.6796434805970122
+robot_FU_INDE_RE_INDE_status_4_iter_17                      ,      30, 0.6                , -0.39297861205420326
+robot_FU_INDE_RE_INDE_status_4_iter_18                      ,      30, 0.5666666666666667 , -0.3212638091037321
+robot_FU_INDE_RE_INDE_status_4_iter_2                       ,      30, 0.8333333333333334 , -2.6736393284134703
+robot_FU_INDE_RE_INDE_status_4_iter_4                       ,      30, 0.6                , -3.656439568860982
+robot_FU_INDE_RE_INDE_status_4_iter_5                       ,      30, 0.6666666666666666 , -0.9636359606680299
+robot_FU_INDE_RE_INDE_status_4_iter_6                       ,      30, 0.6333333333333333 , -0.39699679582081016
+robot_FU_INDE_RE_INDE_status_4_iter_7                       ,      30, 0.7                , -0.9400644667570145
+robot_FU_INDE_RE_INDE_status_4_iter_8                       ,      30, 0.7666666666666667 , -1.16461833773188
+robot_FU_INDE_RE_INDE_status_4_iter_9                       ,      30, 0.7                , -1.009117037411437
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_11            ,      50, 0.04               , -2.8166532829850444
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_12            ,      50, 0.04               , -7.266977358705721
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_13            ,      50, 0.04               , -7.286098798286583
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_21            ,      50, 0.04               , -1.751857290951162
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_28            ,      50, 0.04               , -13.522051859748561
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_32            ,      50, 0.04               , -7.286746782176343
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_41            ,      50, 0.04               , -4.918558868922144
+simple_pendulum_FU_INDE_RE_INDE_status_2_iter_50            ,      50, 0.04               , -1.849468818648677
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_10            ,      50, 0.04               , -64.67585547982434
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_16            ,      50, 0.04               , -7.28488387788292
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_17            ,      50, 0.04               , -7.285030485242432
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_23            ,      50, 0.04               , -7.285049139338911
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_26            ,      50, 0.04               , -7.285049136610886
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_30            ,      50, 0.04               , -7.28504913906236
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_38            ,      50, 0.04               , -7.28504914424875
+simple_pendulum_FU_INDE_RE_INDE_status_4_iter_8             ,      50, 0.18               , -15.824623697010818

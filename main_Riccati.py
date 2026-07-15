@@ -4,7 +4,7 @@ from pathlib import Path
 
 from QP_template.QP_base import BaseQP
 from solvers.RiccatiQpSolver import QpSolver
-from solvers.Regularization_config import reg_list, Hessian_reg, condensed_Hessian_reg, stage_reg, no_reg, refer_list
+from solvers.Regularization_config import reg_list, Block_Hessian_reg, Iteration_based_reg, Block_reduced_Hessian_reg, no_reg, Refer_list
 
 from solvers.SqpQpSolver import SqpQpSolver
 from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp
@@ -14,6 +14,7 @@ CSV_COLUMNS = [
     "Regularization",
     "Iteration",
     "Cost",
+    "Decomp_Flop",
     "Status",
 ]
 
@@ -43,7 +44,8 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
 
-    methods = no_reg + Hessian_reg + stage_reg + refer_list
+    methods = no_reg + Block_Hessian_reg + Block_reduced_Hessian_reg + Iteration_based_reg + Refer_list
+    iter_max = 200
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
@@ -52,29 +54,37 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             print(f"Method: {method}")
             if method == 'SQP_PROJECT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
-                qp_solver = SqpQpSolver(qp, reg='PROJECT')
+                qp_solver = SqpQpSolver(qp, nlp_max_iter=60, mode='nonconvex')
             elif method == 'IPOPT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
-                opts = {'ipopt': {'print_level': 0, 'max_iter': 300, 'sb': 'yes'}}
+                opts = {'ipopt': {'print_level': 0, 'max_iter': iter_max, 'sb': 'yes'}}
                 qp_solver = AcadosCasadiOcpQpSolver(qp, solver='ipopt', solver_opts=opts)
             else:
                 qp = BaseQP()
                 qp.populate_from_json(str(qp_path))
-                qp_solver = QpSolver(qp, reg=method, type='Riccati', mehrotra=False)
+                qp_solver = QpSolver(qp, reg=method, type='Riccati', mehrotra=False, globalization=True)
 
             cost = None
             iter = None
+            decomp_flop = None
             try:
-                qp_solver.solve()
+                if method in Refer_list:
+                    qp_solver.solve()
+                else:
+                    qp_solver.solve(max_iter=iter_max)
                 cost = qp_solver.get_cost()
                 if method == 'SQP_PROJECT':
                     iter = sum(qp_solver.get_stats('qp_iter'))
                 else:
                     iter = qp_solver.get_stats("iter")
+                if method not in Refer_list:
+                    decomp_flop = qp_solver.stat_dict.get('decomp_flop', 'N/A')
             except Exception as exc:
                 print(f"Method {method} failed on {qp_path.name}: {exc}")
             if cost is not None:
                 print(f"Optimal cost: {cost}")
+            if decomp_flop is None:
+                decomp_flop = 'N/A'
             write_csv_row(
                 output_path,
                 {
@@ -82,12 +92,14 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
                     "Regularization": method,
                     "Iteration": iter,
                     "Cost": cost,
+                    'Decomp_Flop': decomp_flop,
                     "Status": qp_solver.status,
                 },
             )
 
 def main() -> None:
-    qp_root = Path(__file__).resolve().parent / "cases" / "QP_json"
+    # qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
+    qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_results_riccati.csv"
     run_benchmark(qp_json_paths, reg_list, output_path)
