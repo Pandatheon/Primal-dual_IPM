@@ -17,16 +17,24 @@
 % Useful packages
 %--------------------------------------------------
 
-\usepackage{mathtools}
-\usepackage{mathdots}
+\usepackage{amsthm}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
 \usepackage{optidef}
+\usepackage{makecell}
 \usepackage{booktabs}
-\usepackage{diagbox}
 \usepackage{multirow}
-\usepackage{geometry}
-\usepackage{subcaption}
+\usepackage{diagbox}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{nicematrix}
+\usepackage{acronym}
+\usepackage{hyperref}
 
 \begin{document}
 
@@ -46,22 +54,299 @@
 
 % Ensure \usepackage{amsmath} is included in your document preamble
 \begin{frame}
-    \frametitle{Riccati-based primal regularizations}
+    \frametitle{Schur complement reduced KKT system}
+    Suppose an OCP QP problem solved by IPM.\\
+    After Shur complement, the KKT system can be written as:
+    \begin{equation}
+        \begin{bmatrix}
+        \tilde{H}^i & F^\top \\
+        F & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+        \Delta y \\
+        \Delta \pi
+        \end{bmatrix} = -
+        \begin{bmatrix}
+        \tilde{r}_{\mathrm{stat}}^i \\
+        r_{\mathrm{eq}}^i
+        \end{bmatrix},
+        \label{eq:schur_comp_KKT}
+    \end{equation}
+    where the $\tilde{H}^i = H + G^\top T_i^{-1}\Lambda_i G$ 
+    and $\tilde{r}_{\mathrm{stat}}^i = r_{\mathrm{stat}}^i - G^\top T_i^{-1} ( \Lambda_i r_{\mathrm{ineq}}^i - r_{\mathrm{comp}}^i )$. \\
+    \vspace{0.5cm}
+    With the null space method as the $\Delta y = Y\Delta y_y + Z\Delta y_z$, 
+    the Schur complement reduced KKT system follows as:
+    \begin{equation}
+        \tilde{M}^i \Delta y_z = - (Z^\top \tilde{r}_{\mathrm{stat}}^i - Z^\top \tilde{H}^i Y \Delta y_y)
+        \label{eq:schur_comp_KKT_reduced}
+    \end{equation}
+    where $\tilde{M}^i = Z^\top \tilde{H}^i Z$ is the reduced Hessian. $\Delta y_y = (FY)^{-1}r_{\mathrm{eq}}^i$.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Riccati recursion as explicit L$^\top$DL decomposition}
+    Riccati recursion can be regarded as an explicit L$^\top$DL decomposition of reduced Hessian $\tilde{M}^i$\\
+    \begin{algorithm}[H]
+    \caption{Backward Pass of Riccati Recursion}
+    \label{alg:riccati_recursion}
+    \begin{algorithmic}[1]
+    \State\textbf{Initialize:} $P_N \gets \tilde{Q}_N$, $p_N \gets \tilde{r}_{\mathrm{stat}, x}^N$
+    \Statex 
+    \For{$k = N-1$ \textbf{down to} $0$}
+        \State $\tilde{M}_k \gets \tilde{R}_k + B_k^\top P_{k+1} B_k$
+        \State $\Gamma_k \gets \tilde{S}_k + B_k^\top P_{k+1} A_k$
+        \State $K_k \gets -\tilde{M}_k^{-1} \Gamma_k$
+        \State $k_k \gets -\tilde{M}_k^{-1} \left(\tilde{r}_{\mathrm{stat}, u}^k + B_k^\top (P_{k+1} r_{\mathrm{eq}}^k + p_{k+1})\right)$
+        \State $P_k \gets \tilde{Q}_k + A_k^\top P_{k+1} A_k - \Gamma_k^\top K_k$
+        \State $p_k \gets \tilde{r}_{\mathrm{stat}, x}^k + A_k^\top (P_{k+1} r_{\mathrm{eq}}^k + p_{k+1}) + \Gamma_k^\top k_k$
+    \EndFor
+    \end{algorithmic}
+    \end{algorithm}
+    Where $\tilde{M}_k$ is the block reduced Hessian at stage $k$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Failing of minimal perturbation on block reduced Hessian 1/2}
+    Assume $\tilde{M}_k$ has only one negative eigenvalue $\lambda_j$, and the corresponding eigenvector is $v_j$.
+
+    The minimum perturbation strategy is applied as:
+    \begin{equation}
+        E_k = (-\lambda_{j}+\epsilon) v_j v_j^\top,
+    \end{equation}
+    where the $\epsilon$ is a positive value to ensure the positive definiteness of the regularized reduced Hessian block. 
+
+    \vspace{0.5cm}
+
+    By Sherman-Morrison formula, the inverse of the regularized reduced Hessian block can be expressed as:
+    \begin{align*}
+        (\tilde{M}_k + E_k)^{-1} &= \tilde{M}_k^{-1} + \frac{\lambda_j-\epsilon}{\epsilon \lambda_j} v_j v_j^\top \\
+                                &= \tilde{M}_k^{-1} + (\frac{1}{\epsilon} - \frac{1}{\lambda_j}) v_j v_j^\top,
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Failing of minimal perturbation on block reduced Hessian 2/2}
+    the update of cost-to-go matrix $P_k$ follows as:
+    \begin{align}
+        P_k &= \tilde{Q}_k + A_k^\top P_{k+1} A_k - \Gamma_k^\top K_k \notag \\
+            &=\tilde{Q}_k + A_k^\top P_{k+1} A_k - \Gamma_k^\top \tilde{M}_k^{-1} \Gamma_k - (\frac{1}{\epsilon} - \frac{1}{\lambda_j}) \Gamma_k^\top v_j v_j^\top \Gamma_k \notag \\
+            &= P_k^{\mathrm{unmod}} - (\frac{1}{\epsilon} - \frac{1}{\lambda_j}) \Gamma_k^\top v_j v_j^\top \Gamma_k,
+    \end{align}
+    Consequently, the reduced Hessian block $\tilde{M}_{k-1}$ at the previous stage as:
+    \begin{equation}
+        \tilde{M}_{k-1} = \tilde{M}_{k-1}^{\mathrm{unmod}} - (\frac{1}{\epsilon} - \frac{1}{\lambda_j}) z_j z_j^\top,
+    \end{equation}
+    where $z_j = B_{k-1}^\top \Gamma_k^\top v_j$ is a column vector.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Proposed Riccati-based primal regularization}
+    This issue reveals two insights in Riccati-based regularization:
+    \begin{itemize}
+        \item Avoid minimum perturbation on block reduced Hessian.
+        \item The cost-to-go matrix $P_k$ should also be considered for regularization.
+    \end{itemize}
+
+    \vspace{0.5cm}
+
+    We have proposed/attempted following Riccati-based primal regularizations:
+    \begin{itemize}
+        \item PM\_STAGE\_MIRROR: 
+
+        Mirror cost-to-go matrix $P_k$, then the block reduced Hessian $\tilde{M}_{k-1} = R_k + B^\top_kP_k^{reg}B_k$.
+        \item PM\_STAGE\_GMW: 
+
+        GMW instead of mirror
+        \item INERTIA\_CORRECTION: 
+
+        similar in IPOPT
+    \end{itemize}
 
 \end{frame}
 
 \begin{frame}
     \frametitle{Mehrotra probing}
+    According to the paper \cite{nocedalAdaptiveBarrierUpdate2009a} from Nocedal et al.
+    Mehrotra probing could be a better strategy than predictor-corrector to update the barrier parameter $\tau$ in indefinite cases.
 
+    \vspace{0.2cm}
+
+    The residuals are defined as:
+    \begin{equation}
+        \begin{bmatrix}
+		r_{\mathrm{stat}}^i \\
+		r_{\mathrm{eq}}^i \\
+		r_{\mathrm{ineq}}^i \\
+		r_{\mathrm{comp}}^i
+		\end{bmatrix}
+        =
+		\begin{bmatrix}
+            Hy_i + g + F^\top \pi_i + G^\top \lambda_i \\
+            Fy_i - b \\
+            Gy_i + t_i - d \\
+            T_i \Lambda_i \mathbf{1} - \sigma_i \mu_i \mathbf{1}
+        \end{bmatrix}
+        ,
+\end{equation}
+With $\sigma_i = \left( \frac{\mu_i^{\mathrm{aff}}}{\mu_i} \right)^3$, and the $\mu_i$ and $\mu_{\mathrm{aff}}^i$ are defined as:
+\begin{equation}
+    \mu_i = \frac{t_i^\top \lambda_i}{m},
+\end{equation}
+
+\begin{equation}
+    \mu_i^{\mathrm{aff}} = \frac{(t_i + \alpha_{p,\mathrm{aff}}^i \Delta t_{\mathrm{aff}}^i)^\top (\lambda_i + \alpha_{d,\mathrm{aff}}^i \Delta \lambda_{\mathrm{aff}}^i)}{m},
+\end{equation}
+
+where $m$ is the number of inequality constraints.
 \end{frame}
 
 \begin{frame}
-    \frametitle{Indefinite QP dataset}
+    \frametitle{Local quadratic convergence rate}
+    The Riccati-based primal regularization will not modify the Hessian when converging to the local solution, i.e. LHS coincides with that of Newton step,
+    \begin{lemma}
+    Under isolated minimizers, LICQ and strict complementarity, given the sequence $\{W^i\}$ constructed by the algorithm, as \{$(y^i, \lambda^i)$\} $\rightarrow$ $(y^*, \lambda^*)$,
+    $W^i = \tilde{M}^i = Z^\top \tilde{H}^i Z \succ 0$ for all $i$ sufficiently large.
+    \end{lemma}
+    Mehrotra probing will still guarantee the $\sigma_i$ $\mu_i$ = O($||\delta^N||^4$), i.e. RHS will approach that of Newton step.
+
+    \vspace{0.2cm}
+
+    With appropriate step size selection, the local quadratic convergence rate is proved.
 \end{frame}
 
 \begin{frame}
-    \frametitle{Numerical results}
+    \frametitle{Indefinite QP dataset: Generate and Collect}
+    The indefinite QPs refers to QPs with indefinite reduced Hessian.
 
+    \vspace{0.5cm}
+
+    We generate a dataset of indefinite sub QPs from tracking OCPs (regulators) with acados, with two steps:
+    \begin{enumerate}
+        \item Generate: Applying PROJECT, MIRROR or Gauss-Newton approximation to generate iterates on an OCP problem;
+        \item Collect: Loading the generated iterates for linearization in SQP and collecting the indefinite sub QPs.
+    \end{enumerate}
+
+    \vspace{0.3cm}
+
+    We apply this pipeline on 8 different OCP problems, and collect 155 indefinite QPs in total.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Indefinite QP dataset: quick overview of OCP problems}
+    \centering
+    % Table for OCP datasets overview
+    \begin{tabular}{l l c c c}
+        \hline
+        \textbf{Problem} & $n_x$ & $n_u$ & $N$ \\
+        \hline
+        Pendulum     & 4  & 1 & 20 \\
+        Acrobot      & 4  & 2 & 15 \\
+        Dubins car   & 3  & 2 & 25 \\
+        Furuta       & 4  & 1 & 20 \\
+        Flying robot & 6  & 4 & 30 \\
+        robot arm    & 6  & 3 & 30 \\
+        crane        & 6  & 2 & 35 \\
+        moonlander   & 6  & 2 & 30 \\
+        \hline
+    \end{tabular}
+
+    \vspace{0.5cm}
+
+    All the OCP problems are formulated as regulators.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Scatter plot of indefiniteness and coverage}
+    \begin{figure}[H]
+        \includegraphics[width=0.65\textwidth]{results/indefiniteness_coverage_scatter.pdf}
+        \label{fig:indefinite_qp_dataset_analysis}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Distribution of indefiniteness and coverage}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{results/indefiniteness_coverage_depth.pdf}
+      \small How indefinite: $|\lambda_{\min}|$ of the reduced Hessian
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{results/indefiniteness_coverage_breadth.pdf}
+      \small How often: fraction of stages that are indefinite
+    \end{column}
+  \end{columns}
+  \vspace{1em}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stage indefiniteness source}
+    \begin{figure}[H]
+        \includegraphics[width=0.65\textwidth]{results/stage_indefiniteness_signature.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Numerical results: Setup}
+    We implemented a Riccati-based IPM solver in python, which produces similar iteration behavior as HPIPM in convex QPs\\
+
+    \vspace{0.2cm}
+
+    We compare the following regularizations on the indefinite QP dataset:
+    \begin{itemize}
+        \item PROJECT\_H: Do Project on full Hessian when reduced Hessian is indefinite
+        \item MIRROR\_H: Do Mirror on full Hessian when reduced Hessian is indefinite
+        \item PM\_STAGE\_MIRROR
+        \item PM\_STAGE\_GMW
+        \item INERTIA\_CORRECTION
+        \item Precompute: Precompute the regularization with PROJECT on the full Hessian before schur complement, and use it for indefinite reduced Hessian
+    \end{itemize}
+
+    \vspace{0.2cm}
+
+    We also use IPOPT as a reference solver for indefinite QPs.
+
+    \vspace{0.2cm}
+
+    For tolerance, we set tolerance for $r_{\mathrm{stat}}$ and $r_{\mathrm{comp}}$ to $10^{-6}$, $r_{\mathrm{eq}}$ and $r_{\mathrm{ineq}}$ to $10^{-8}$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Numerical results: performance profile}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/iteration_qp_results_riccati.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Numerical results: geometric mean of cost}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/geo_mean_cost_qp_results_riccati.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Numerical results: flop proxy}
+    In order to estimate the flop counting, we take one modified Cholesky factorization on block reduced Hessian as the unit, i.e.
+    \begin{equation*}
+        \mathrm{unit} \approx \frac{1}{3} n_u^3 \mathrm{,}
+    \end{equation*}
+    where $n_u$ is the control dimension.
+    \vspace{0.2cm}
+
+    The flops of eigenvalue decomposition is usually regarded as $9n^3$ \cite{verschuerenTimeoptimalRaceCar2016b}, 
+    which is 27 units if modifying the block reduced Hessian.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Numerical results: box plot of flops with proxy}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/decomp_flop_worstcase_qp_results_riccati.pdf}
+    \end{figure}
 \end{frame}
 
 \begin{frame}

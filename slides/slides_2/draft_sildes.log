@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  15 JUL 2026 15:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  17 JUL 2026 13:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -548,7 +548,19 @@ Package textpos Info: choosing support for LaTeX3 on input line 60.
 Grid set 16 x 16 = 28.45274pt x 17.78296pt
 \TPboxrulesize=\dimen308
 \TP@tbargs=\toks46
-) Excluding 'comment' comment. (/usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamerfontthemeserif.sty)) (/usr/local/texlive/2025/texmf-dist/tex/latex/mathtools/mathtools.sty
+) Excluding 'comment' comment. (/usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamerfontthemeserif.sty)) (/usr/local/texlive/2025/texmf-dist/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/optidef/optidef.sty
+Package: optidef 2019/04/23 - version=3.1, Package for defining optimization problems
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/environ/environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+)) (/usr/local/texlive/2025/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2024/10/04 v1.31 mathematical typesetting tools
  (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
@@ -576,20 +588,7 @@ Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 \l_MT_below_shortintertext_sep=\dimen317
 \xmathstrut@box=\box79
 \xmathstrut@dim=\dimen318
-) (/usr/local/texlive/2025/texmf-dist/tex/generic/mathdots/mathdots.sty
-Package: mathdots 2014/06/11 v0.9 Improve and add various macros for dots in math.
-\MDo@unit=\dimen319
-\MDo@dotsbox=\box80
-\MDoprekern=\muskip19
-\MDopostkern=\muskip20
-\MDodotkern=\muskip21
-) (/usr/local/texlive/2025/texmf-dist/tex/latex/optidef/optidef.sty
-Package: optidef 2019/04/23 - version=3.1, Package for defining optimization problems
- (/usr/local/texlive/2025/texmf-dist/tex/latex/environ/environ.sty
-Package: environ 2014/05/04 v0.3 A new way to define environments
- (/usr/local/texlive/2025/texmf-dist/tex/latex/trimspaces/trimspaces.sty
-Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
-)) (/usr/local/texlive/2025/texmf-dist/tex/latex/xifthen/xifthen.sty
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/xifthen/xifthen.sty
 Package: xifthen 2015/11/05 v1.4.0 Extended ifthen features
  (/usr/local/texlive/2025/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
@@ -604,25 +603,46 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 Package: xparse 2025-10-09 L3 Experimental document command parser
 )
 \widthInit=\skip71
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen319
+\ar@mcellbox=\box80
+\extrarowheight=\dimen320
+\NC@list=\toks47
+\extratabsurround=\skip72
+\backup@length=\skip73
+\ar@cellbox=\box81
+)
+\rotheadsize=\dimen321
+\c@nlinenum=\count363
+\TeXr@lab=\toks48
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen320
-\lightrulewidth=\dimen321
-\cmidrulewidth=\dimen322
-\belowrulesep=\dimen323
-\belowbottomsep=\dimen324
-\aboverulesep=\dimen325
-\abovetopsep=\dimen326
-\cmidrulesep=\dimen327
-\cmidrulekern=\dimen328
-\defaultaddspace=\dimen329
-\@cmidla=\count363
-\@cmidlb=\count364
-\@aboverulesep=\dimen330
-\@belowrulesep=\dimen331
-\@thisruleclass=\count365
-\@lastruleclass=\count366
-\@thisrulewidth=\dimen332
+\heavyrulewidth=\dimen322
+\lightrulewidth=\dimen323
+\cmidrulewidth=\dimen324
+\belowrulesep=\dimen325
+\belowbottomsep=\dimen326
+\aboverulesep=\dimen327
+\abovetopsep=\dimen328
+\cmidrulesep=\dimen329
+\cmidrulekern=\dimen330
+\defaultaddspace=\dimen331
+\@cmidla=\count364
+\@cmidlb=\count365
+\@aboverulesep=\dimen332
+\@belowrulesep=\dimen333
+\@thisruleclass=\count366
+\@lastruleclass=\count367
+\@thisrulewidth=\dimen334
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip74
+\multirow@cntb=\count368
+\multirow@dima=\skip75
+\bigstrutjot=\dimen335
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/diagbox/diagbox.sty
 Package: diagbox 2020/02/09 v2.3 Making table heads with diagonal lines
  (/usr/local/texlive/2025/texmf-dist/tex/latex/pict2e/pict2e.sty
@@ -635,176 +655,175 @@ Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 114.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
 File: p2e-pdftex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
 )
-\pIIe@GRAPH=\toks47
-\@arclen=\dimen333
-\@arcrad=\dimen334
-\pIIe@tempdima=\dimen335
-\pIIe@tempdimb=\dimen336
-\pIIe@tempdimc=\dimen337
-\pIIe@tempdimd=\dimen338
-\pIIe@tempdime=\dimen339
-\pIIe@tempdimf=\dimen340
-) (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/array.sty
-Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
-\col@sep=\dimen341
-\ar@mcellbox=\box81
-\extrarowheight=\dimen342
-\NC@list=\toks48
-\extratabsurround=\skip72
-\backup@length=\skip73
-\ar@cellbox=\box82
+\pIIe@GRAPH=\toks49
+\@arclen=\dimen336
+\@arcrad=\dimen337
+\pIIe@tempdima=\dimen338
+\pIIe@tempdimb=\dimen339
+\pIIe@tempdimc=\dimen340
+\pIIe@tempdimd=\dimen341
+\pIIe@tempdime=\dimen342
+\pIIe@tempdimf=\dimen343
 )
-\diagbox@boxa=\box83
-\diagbox@boxb=\box84
-\diagbox@boxm=\box85
-\diagbox@wd=\dimen343
-\diagbox@ht=\dimen344
-\diagbox@insepl=\dimen345
-\diagbox@insepr=\dimen346
-\diagbox@outsepl=\dimen347
-\diagbox@outsepr=\dimen348
-) (/usr/local/texlive/2025/texmf-dist/tex/latex/multirow/multirow.sty
-Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
-\multirow@colwidth=\skip74
-\multirow@cntb=\count367
-\multirow@dima=\skip75
-\bigstrutjot=\dimen349
-) (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/subcaption.sty
-Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
- (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2023/08/05 v3.6o Customizing captions (AR)
- (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen350
-\captionmargin=\dimen351
-\caption@leftmargin=\dimen352
-\caption@rightmargin=\dimen353
-\caption@width=\dimen354
-\caption@indent=\dimen355
-\caption@parindent=\dimen356
-\caption@hangindent=\dimen357
-Package caption Info: beamer document class detected.
- (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/caption-beamer.sto
-File: caption-beamer.sto 2022/01/06 v2.0c Adaption of the caption package to the beamer document classes (AR)
-))
-\c@caption@flags=\count368
-\c@continuedfloat=\count369
-Package caption Info: hyperref package is loaded.
-Package caption Info: Hyperref support is turned off
-(caption)             because hyperref has stopped early.
+\diagbox@boxa=\box82
+\diagbox@boxb=\box83
+\diagbox@boxm=\box84
+\diagbox@wd=\dimen344
+\diagbox@ht=\dimen345
+\diagbox@insepl=\dimen346
+\diagbox@insepr=\dimen347
+\diagbox@outsepl=\dimen348
+\diagbox@outsepr=\dimen349
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/indentfirst.sty
+Package: indentfirst 2023/07/02 v1.03 Indent first paragraph (DPC)
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count369
+\float@exts=\toks50
+\float@box=\box85
+\@float@everytoks=\toks51
+\@floatcapt=\box86
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
+\@float@every@algorithm=\toks52
+\c@algorithm=\count370
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count371
+\c@ALG@rem=\count372
+\c@ALG@nested=\count373
+\ALG@tlm=\skip76
+\ALG@thistlm=\skip77
+\c@ALG@Lnr=\count374
+\c@ALG@blocknr=\count375
+\c@ALG@storecount=\count376
+\c@ALG@tmpcounter=\count377
+\ALG@tmplength=\skip78
 )
-Package caption Info: New subtype `subfigure' on input line 238.
-\c@subfigure=\count370
-Package caption Info: New subtype `subtable' on input line 238.
-\c@subtable=\count371
+Document Style - pseudocode environments for use with the `algorithmicx' style
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/nicematrix/nicematrix.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodeparttextbox=\box86
+\pgfnodeparttextbox=\box87
 )
 Package: nicematrix 2025/10/23 v7.4 Enhanced arrays with the help of PGF/TikZ
-\l__nicematrix_tmpc_dim=\dimen358
-\l__nicematrix_tmpd_dim=\dimen359
-\l__nicematrix_tmpc_int=\count372
-\g__nicematrix_env_int=\count373
-\l__nicematrix_the_array_box=\box87
-\g__nicematrix_NiceMatrixBlock_int=\count374
-\g__nicematrix_notes_caption_int=\count375
-\l__nicematrix_columns_width_dim=\dimen360
-\l__nicematrix_col_width_dim=\dimen361
-\g__nicematrix_row_total_int=\count376
-\g__nicematrix_col_total_int=\count377
-\g__nicematrix_last_row_node_int=\count378
-\l__nicematrix_key_nb_rows_int=\count379
-\g__nicematrix_blocks_wd_dim=\dimen362
-\g__nicematrix_blocks_ht_dim=\dimen363
-\g__nicematrix_blocks_dp_dim=\dimen364
-\l__nicematrix_width_dim=\dimen365
-\l__nicematrix_tabular_width_dim=\dimen366
-\l__nicematrix_rule_width_dim=\dimen367
-\l__nicematrix_old_iRow_int=\count380
-\l__nicematrix_old_jCol_int=\count381
-\l__nicematrix_X_columns_dim=\dimen368
-\l__nicematrix_x_initial_dim=\dimen369
-\l__nicematrix_y_initial_dim=\dimen370
-\l__nicematrix_x_final_dim=\dimen371
-\l__nicematrix_y_final_dim=\dimen372
-\g__nicematrix_dp_row_zero_dim=\dimen373
-\g__nicematrix_ht_row_zero_dim=\dimen374
-\g__nicematrix_ht_row_one_dim=\dimen375
-\g__nicematrix_dp_ante_last_row_dim=\dimen376
-\g__nicematrix_ht_last_row_dim=\dimen377
-\g__nicematrix_dp_last_row_dim=\dimen378
-\g__nicematrix_width_last_col_dim=\dimen379
-\g__nicematrix_width_first_col_dim=\dimen380
-\g__nicematrix_ddots_int=\count382
-\g__nicematrix_iddots_int=\count383
-\g__nicematrix_delta_x_one_dim=\dimen381
-\g__nicematrix_delta_y_one_dim=\dimen382
-\g__nicematrix_delta_x_two_dim=\dimen383
-\g__nicematrix_delta_y_two_dim=\dimen384
-\l__nicematrix_row_min_int=\count384
-\l__nicematrix_row_max_int=\count385
-\l__nicematrix_col_min_int=\count386
-\l__nicematrix_col_max_int=\count387
-\l__nicematrix_initial_i_int=\count388
-\l__nicematrix_initial_j_int=\count389
-\l__nicematrix_final_i_int=\count390
-\l__nicematrix_final_j_int=\count391
-\l__nicematrix_start_int=\count392
-\l__nicematrix_end_int=\count393
-\l__nicematrix_local_start_int=\count394
-\l__nicematrix_local_end_int=\count395
-\g__nicematrix_static_num_of_col_int=\count396
-\l__nicematrix_rounded_corners_dim=\dimen385
-\l__nicematrix_tab_rounded_corners_dim=\dimen386
-\l__nicematrix_offset_dim=\dimen387
-\l__nicematrix_line_width_dim=\dimen388
-\g__nicematrix_block_box_int=\count397
-\l__nicematrix_submatrix_extra_height_dim=\dimen389
-\l__nicematrix_submatrix_left_xshift_dim=\dimen390
-\l__nicematrix_submatrix_right_xshift_dim=\dimen391
-\l__nicematrix_first_row_int=\count398
-\l__nicematrix_first_col_int=\count399
-\l__nicematrix_last_row_int=\count400
-\l__nicematrix_last_col_int=\count401
-\c@tabularnote=\count402
-\g__nicematrix_tabularnote_int=\count403
-\c@nicematrix_draft=\count404
-\l__nicematrix_cell_space_top_limit_dim=\dimen392
-\l__nicematrix_cell_space_bottom_limit_dim=\dimen393
-\l__nicematrix_xdots_inter_dim=\dimen394
-\l__nicematrix_xdots_shorten_start_dim=\dimen395
-\l__nicematrix_xdots_shorten_end_dim=\dimen396
-\l__nicematrix_xdots_radius_dim=\dimen397
-\l__nicematrix_left_margin_dim=\dimen398
-\l__nicematrix_right_margin_dim=\dimen399
-\l__nicematrix_extra_left_margin_dim=\dimen400
-\l__nicematrix_extra_right_margin_dim=\dimen401
-\c__nicematrix_max_l_dim=\dimen402
-\l__nicematrix_position_int=\count405
-\l__nicematrix_multiplicity_int=\count406
-\l__nicematrix_brace_yshift_dim=\dimen403
+\l__nicematrix_tmpc_dim=\dimen350
+\l__nicematrix_tmpd_dim=\dimen351
+\l__nicematrix_tmpc_int=\count378
+\g__nicematrix_env_int=\count379
+\l__nicematrix_the_array_box=\box88
+\g__nicematrix_NiceMatrixBlock_int=\count380
+\g__nicematrix_notes_caption_int=\count381
+\l__nicematrix_columns_width_dim=\dimen352
+\l__nicematrix_col_width_dim=\dimen353
+\g__nicematrix_row_total_int=\count382
+\g__nicematrix_col_total_int=\count383
+\g__nicematrix_last_row_node_int=\count384
+\l__nicematrix_key_nb_rows_int=\count385
+\g__nicematrix_blocks_wd_dim=\dimen354
+\g__nicematrix_blocks_ht_dim=\dimen355
+\g__nicematrix_blocks_dp_dim=\dimen356
+\l__nicematrix_width_dim=\dimen357
+\l__nicematrix_tabular_width_dim=\dimen358
+\l__nicematrix_rule_width_dim=\dimen359
+\l__nicematrix_old_iRow_int=\count386
+\l__nicematrix_old_jCol_int=\count387
+\l__nicematrix_X_columns_dim=\dimen360
+\l__nicematrix_x_initial_dim=\dimen361
+\l__nicematrix_y_initial_dim=\dimen362
+\l__nicematrix_x_final_dim=\dimen363
+\l__nicematrix_y_final_dim=\dimen364
+\g__nicematrix_dp_row_zero_dim=\dimen365
+\g__nicematrix_ht_row_zero_dim=\dimen366
+\g__nicematrix_ht_row_one_dim=\dimen367
+\g__nicematrix_dp_ante_last_row_dim=\dimen368
+\g__nicematrix_ht_last_row_dim=\dimen369
+\g__nicematrix_dp_last_row_dim=\dimen370
+\g__nicematrix_width_last_col_dim=\dimen371
+\g__nicematrix_width_first_col_dim=\dimen372
+\g__nicematrix_ddots_int=\count388
+\g__nicematrix_iddots_int=\count389
+\g__nicematrix_delta_x_one_dim=\dimen373
+\g__nicematrix_delta_y_one_dim=\dimen374
+\g__nicematrix_delta_x_two_dim=\dimen375
+\g__nicematrix_delta_y_two_dim=\dimen376
+\l__nicematrix_row_min_int=\count390
+\l__nicematrix_row_max_int=\count391
+\l__nicematrix_col_min_int=\count392
+\l__nicematrix_col_max_int=\count393
+\l__nicematrix_initial_i_int=\count394
+\l__nicematrix_initial_j_int=\count395
+\l__nicematrix_final_i_int=\count396
+\l__nicematrix_final_j_int=\count397
+\l__nicematrix_start_int=\count398
+\l__nicematrix_end_int=\count399
+\l__nicematrix_local_start_int=\count400
+\l__nicematrix_local_end_int=\count401
+\g__nicematrix_static_num_of_col_int=\count402
+\l__nicematrix_rounded_corners_dim=\dimen377
+\l__nicematrix_tab_rounded_corners_dim=\dimen378
+\l__nicematrix_offset_dim=\dimen379
+\l__nicematrix_line_width_dim=\dimen380
+\g__nicematrix_block_box_int=\count403
+\l__nicematrix_submatrix_extra_height_dim=\dimen381
+\l__nicematrix_submatrix_left_xshift_dim=\dimen382
+\l__nicematrix_submatrix_right_xshift_dim=\dimen383
+\l__nicematrix_first_row_int=\count404
+\l__nicematrix_first_col_int=\count405
+\l__nicematrix_last_row_int=\count406
+\l__nicematrix_last_col_int=\count407
+\c@tabularnote=\count408
+\g__nicematrix_tabularnote_int=\count409
+\c@nicematrix_draft=\count410
+\l__nicematrix_cell_space_top_limit_dim=\dimen384
+\l__nicematrix_cell_space_bottom_limit_dim=\dimen385
+\l__nicematrix_xdots_inter_dim=\dimen386
+\l__nicematrix_xdots_shorten_start_dim=\dimen387
+\l__nicematrix_xdots_shorten_end_dim=\dimen388
+\l__nicematrix_xdots_radius_dim=\dimen389
+\l__nicematrix_left_margin_dim=\dimen390
+\l__nicematrix_right_margin_dim=\dimen391
+\l__nicematrix_extra_left_margin_dim=\dimen392
+\l__nicematrix_extra_right_margin_dim=\dimen393
+\c__nicematrix_max_l_dim=\dimen394
+\l__nicematrix_position_int=\count411
+\l__nicematrix_multiplicity_int=\count412
+\l__nicematrix_brace_yshift_dim=\dimen395
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/acronym/acronym.sty
+Package: acronym 2025/01/17 v1.50 Support for acronyms (Tobias Oetiker)
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/bigfoot/suffix.sty
+Package: suffix 2006/07/15 1.5a Variant command support
+) (/usr/local/texlive/2025/texmf-dist/tex/generic/xstring/xstring.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/xstring/xstring.tex
+\xs_counta=\count413
+\xs_countb=\count414
+)
+Package: xstring 2023/08/22 v1.86 String manipulations (CT)
+)
+\AC@clearlist=\toks53
 ) (./draft_sildes.aux)
 \openout1 = `draft_sildes.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -842,24 +861,24 @@ LaTeX Font Info:    ... okay on input line 31.
 
 (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count407
-\scratchdimen=\dimen404
-\scratchbox=\box88
-\nofMPsegments=\count408
-\nofMParguments=\count409
-\everyMPshowfont=\toks49
-\MPscratchCnt=\count410
-\MPscratchDim=\dimen405
-\MPnumerator=\count411
-\makeMPintoPDFobject=\count412
-\everyMPtoPDFconversion=\toks50
+\scratchcounter=\count415
+\scratchdimen=\dimen396
+\scratchbox=\box89
+\nofMPsegments=\count416
+\nofMParguments=\count417
+\everyMPshowfont=\toks54
+\MPscratchCnt=\count418
+\MPscratchDim=\dimen397
+\MPnumerator=\count419
+\makeMPintoPDFobject=\count420
+\everyMPtoPDFconversion=\toks55
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 31.
+Package hyperref Info: Link coloring OFF on input line 39.
  (./draft_sildes.out) (./draft_sildes.out)
 \@outlinefile=\write6
 \openout6 = `draft_sildes.out'.
@@ -877,74 +896,212 @@ Dictionary: translator-numbers-dictionary, Language: English
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: End \AtBeginDocument code.
-\c__nicematrix_shift_Ldots_last_row_dim=\dimen406
-\c__nicematrix_innersep_middle_dim=\dimen407
+\c__nicematrix_shift_Ldots_last_row_dim=\dimen398
+\c__nicematrix_innersep_middle_dim=\dimen399
  (./draft_sildes.nav)
 <figures/ufr_logo_round.jpg, id=14, 1927.2pt x 1927.2pt>
 File: figures/ufr_logo_round.jpg Graphic file (type jpg)
 <use figures/ufr_logo_round.jpg>
-Package pdftex.def Info: figures/ufr_logo_round.jpg  used on input line 33.
+Package pdftex.def Info: figures/ufr_logo_round.jpg  used on input line 41.
 (pdftex.def)             Requested size: 56.90189pt x 56.90463pt.
  [1
 
 {/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./figures/ufr_logo_round.jpg>]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 45.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 45.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 <./figures/right_highres_transparent.png, id=24, 901.3675pt x 901.3675pt>
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 45.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 53.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [2
 
  <./figures/right_highres_transparent.png>]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 51.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 86.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [3
 
 ]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 56.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 108.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [4
 
 ]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 60.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 128.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [5
 
 ]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 65.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 143.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [6
 
 ]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 70.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 168.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [7
 
-] (./draft_sildes.bbl
+]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 204.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [8
 
-LaTeX Warning: Empty `thebibliography' environment on input line 23.
+]
+LaTeX Font Info:    Trying to load font information for OMS+cmss on input line 218.
+LaTeX Font Info:    No file OMScmss.fd. on input line 218.
 
-)
+
+LaTeX Font Warning: Font shape `OMS/cmss/m/it' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbraceleft' on input line 218.
+
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 218.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+[9
+
+]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 235.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [10
+
+]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 259.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [11
+
+]
+<results/indefiniteness_coverage_scatter.pdf, id=118, 576.95862pt x 510.32625pt>
+File: results/indefiniteness_coverage_scatter.pdf Graphic file (type pdf)
+<use results/indefiniteness_coverage_scatter.pdf>
+Package pdftex.def Info: results/indefiniteness_coverage_scatter.pdf  used on input line 267.
+(pdftex.def)             Requested size: 258.91765pt x 229.02173pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 267.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+
+Overfull \vbox (10.4815pt too high) detected at line 267
+ []
+
+[12
+
+ <./results/indefiniteness_coverage_scatter.pdf>]
+<results/indefiniteness_coverage_depth.pdf, id=184, 561.90236pt x 279.407pt>
+File: results/indefiniteness_coverage_depth.pdf Graphic file (type pdf)
+<use results/indefiniteness_coverage_depth.pdf>
+Package pdftex.def Info: results/indefiniteness_coverage_depth.pdf  used on input line 284.
+(pdftex.def)             Requested size: 199.1693pt x 99.03882pt.
+<results/indefiniteness_coverage_breadth.pdf, id=185, 561.90236pt x 278.81102pt>
+File: results/indefiniteness_coverage_breadth.pdf Graphic file (type pdf)
+<use results/indefiniteness_coverage_breadth.pdf>
+Package pdftex.def Info: results/indefiniteness_coverage_breadth.pdf  used on input line 284.
+(pdftex.def)             Requested size: 199.1693pt x 98.82758pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 284.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [13
+
+ <./results/indefiniteness_coverage_depth.pdf> <./results/indefiniteness_coverage_breadth.pdf>]
+<results/stage_indefiniteness_signature.pdf, id=266, 526.08104pt x 462.29996pt>
+File: results/stage_indefiniteness_signature.pdf Graphic file (type pdf)
+<use results/stage_indefiniteness_signature.pdf>
+Package pdftex.def Info: results/stage_indefiniteness_signature.pdf  used on input line 291.
+(pdftex.def)             Requested size: 258.91765pt x 227.53064pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 291.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+
+Overfull \vbox (8.99042pt too high) detected at line 291
+ []
+
+[14
+
+ <./results/stage_indefiniteness_signature.pdf>]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 316.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [15
+
+]
+<results/iteration_qp_results_riccati.pdf, id=326, 623.83246pt x 480.38597pt>
+File: results/iteration_qp_results_riccati.pdf Graphic file (type pdf)
+<use results/iteration_qp_results_riccati.pdf>
+Package pdftex.def Info: results/iteration_qp_results_riccati.pdf  used on input line 323.
+(pdftex.def)             Requested size: 278.83578pt x 214.72032pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 323.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [16
+
+ <./results/iteration_qp_results_riccati.pdf>]
+<results/geo_mean_cost_qp_results_riccati.pdf, id=382, 552.50606pt x 409.03365pt>
+File: results/geo_mean_cost_qp_results_riccati.pdf Graphic file (type pdf)
+<use results/geo_mean_cost_qp_results_riccati.pdf>
+Package pdftex.def Info: results/geo_mean_cost_qp_results_riccati.pdf  used on input line 330.
+(pdftex.def)             Requested size: 278.83578pt x 206.42616pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 330.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [17
+
+ <./results/geo_mean_cost_qp_results_riccati.pdf>]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 343.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [18
+
+]
+<results/decomp_flop_worstcase_qp_results_riccati.pdf, id=441, 552.48523pt x 409.08412pt>
+File: results/decomp_flop_worstcase_qp_results_riccati.pdf Graphic file (type pdf)
+<use results/decomp_flop_worstcase_qp_results_riccati.pdf>
+Package pdftex.def Info: results/decomp_flop_worstcase_qp_results_riccati.pdf  used on input line 350.
+(pdftex.def)             Requested size: 278.83578pt x 206.46413pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 350.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [19
+
+ <./results/decomp_flop_worstcase_qp_results_riccati.pdf>]
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 355.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [20
+
+] (./draft_sildes.bbl) [21
+
+ </usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>]
 \tf@nav=\write7
 \openout7 = `draft_sildes.nav'.
 
@@ -959,22 +1116,26 @@ LaTeX Warning: Empty `thebibliography' environment on input line 23.
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
 Package rerunfilecheck Info: File `draft_sildes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 27411 strings out of 467578
- 565311 string characters out of 5420566
- 960697 words of memory out of 5000000
- 55717 multiletter control sequences out of 15000+600000
- 631532 words of font info for 55 fonts, out of 8000000 for 9000
+ 27683 strings out of 467578
+ 565466 string characters out of 5420566
+ 967855 words of memory out of 5000000
+ 55915 multiletter control sequences out of 15000+600000
+ 638982 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,123p,450b,552s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on draft_sildes.pdf (7 pages, 239187 bytes).
+ 128i,15n,123p,450b,596s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on draft_sildes.pdf (21 pages, 545314 bytes).
 PDF statistics:
- 100 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
- 15 named destinations out of 1000 (max. 500000)
- 53 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 631 PDF objects out of 1000 (max. 8388607)
+ 248 compressed objects within 3 object streams
+ 49 named destinations out of 1000 (max. 500000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 

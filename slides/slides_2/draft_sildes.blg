@@ -2,7 +2,6 @@ This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: draft_sildes.aux
 The style file: IEEEtran.bst
-I found no \citation commands---while reading file draft_sildes.aux
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
@@ -12,47 +11,49 @@ Database file #1: references.bib
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in nocedalAdaptiveBarrierUpdate2009a
+Warning--empty year in nocedalAdaptiveBarrierUpdate2009a
 
 Done.
-You've used 0 entries,
+You've used 2 entries,
             4087 wiz_defined-function locations,
-            821 strings with 7303 characters,
-and the built_in function-call counts, 104 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 19
-:= -- 27
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 3
+            833 strings with 7827 characters,
+and the built_in function-call counts, 1465 in all, are:
+= -- 97
+> -- 38
+< -- 9
++ -- 20
+- -- 7
+* -- 89
+:= -- 224
+add.period$ -- 4
+call.type$ -- 2
+change.case$ -- 2
+chr.to.int$ -- 24
+cite$ -- 4
+duplicate$ -- 100
+empty$ -- 119
+format.name$ -- 9
+if$ -- 317
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 23
-num.names$ -- 0
-pop$ -- 0
+int.to.str$ -- 2
+missing$ -- 19
+newline$ -- 31
+num.names$ -- 2
+pop$ -- 55
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1
+skip$ -- 99
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+substring$ -- 58
+swap$ -- 72
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 0
-warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 22
-(There was 1 error message)
+type$ -- 2
+warning$ -- 2
+while$ -- 6
+width$ -- 3
+write$ -- 40
+(There were 2 warnings)
