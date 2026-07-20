@@ -45,7 +45,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         print(f"Deleted existing {output_path} to start fresh.")
 
     methods = no_reg + Block_Hessian_reg + Block_reduced_Hessian_reg + Iteration_based_reg + Refer_list
-    iter_max = 200
+    iter_max = 100
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
@@ -98,8 +98,8 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             )
 
 def main() -> None:
-    # qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
-    qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
+    qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
+    # qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_results_riccati.csv"
     run_benchmark(qp_json_paths, reg_list, output_path)

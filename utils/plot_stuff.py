@@ -32,14 +32,18 @@ def plot_charts(filename='qp_results.csv'):
     for col in df.select_dtypes(['object']).columns:
         df[col] = df[col].str.strip()
 
-    df = df[~df['Regularization'].isin(['NO_REGULARIZE'])]
-
     # Convert status to numeric
     df['Status'] = pd.to_numeric(df['Status'], errors='coerce')
 
     methods = df['Regularization'].unique()
-    method_palette = sns.color_palette("tab10", n_colors=len(methods))
-    method_colors = dict(zip(methods, method_palette))
+
+    other_methods = [m for m in methods if m != 'NO_REGULARIZE']
+
+    method_palette = sns.color_palette("tab10", n_colors=len(other_methods))
+    method_colors = dict(zip(other_methods, method_palette))
+
+    if 'NO_REGULARIZE' in methods:
+        method_colors['NO_REGULARIZE'] = 'gray'
 
     # Calculate total problems
     if 'x0_id' in df.columns:
@@ -50,9 +54,7 @@ def plot_charts(filename='qp_results.csv'):
     success_data = df[df['Status'] == 0]
     max_x_limit = success_data['Iteration'].max() * 1.05 if not success_data.empty else 100
 
-    # Use Object-Oriented API to prevent canvas clearing
     fig, ax = plt.subplots(figsize=(9, 7))
-    # axins = ax.inset_axes([0.25, 0.30, 0.20, 0.25])
 
     # Plot step functions
     for method in methods:
@@ -73,11 +75,6 @@ def plot_charts(filename='qp_results.csv'):
         ax.plot(solved_iters[-1], current_solved_count, marker='o',
                 color=method_colors[method], markersize=5)
 
-        # # Inset plot
-        # axins.step(x_plot, y_plot, where='post',
-        #            color=method_colors[method], linewidth=2.5, alpha=0.85)
-        # axins.plot(solved_iters[-1], current_solved_count, marker='o',
-        #            color=method_colors[method], markersize=5)
 
     # Format main plot
     ax.axhline(total_problems, color='black', linestyle='--', linewidth=1, alpha=0.5)
@@ -89,23 +86,10 @@ def plot_charts(filename='qp_results.csv'):
     ax.set_xlabel("Iteration Count")
     ax.set_ylabel("Solved Problems (Count)")
     # Start main plot from 1 to reveal full data path
-    ax.set_xlim(10, max_x_limit)
-    ax.set_ylim(10, total_problems * 1.2)
+    ax.set_xlim(0, max_x_limit)
+    ax.set_ylim(0, total_problems * 1.2)
     ax.set_xscale('linear')
     ax.set_yscale('linear')
-
-    # # Format inset plot with log scale
-    # axins.set_xlim(50, 100)
-    # axins.set_ylim(100, total_problems * 1.05)
-    # axins.set_xscale('linear')
-    # axins.set_yscale('linear')
-    # axins.grid(True, which="both", ls="--", alpha=0.2)
-    # axins.set_xticks([10, 100, 200, 300])
-    # axins.set_xticklabels(['10', '100','200', '300'])
-    # axins.tick_params(axis='x', which='minor', bottom=False, top=False)
-    # axins.set_yticks([100, total_problems * 1.05])
-    # axins.set_yticklabels(['150', f'{total_problems * 1.05}'])
-    # axins.xaxis.set_minor_locator(ticker.NullLocator())
 
     ax.grid(True, which="both", ls="--", alpha=0.2)
     ax.legend(loc="lower right", frameon=True)
@@ -352,7 +336,7 @@ def plot_decomp_flop_worstcase(
         width=0.5, dodge=False, legend=False
     )
     ax.set_yscale('log')
-    ax.set_ylabel('Decomp_Flop (absolute)')
+    ax.set_ylabel('Units in log')
     ax.set_xlabel('')
     ax.set_xticks(range(len(targets)))
     ax.set_xticklabels([t.replace('_', ' ') for t in targets], rotation=45, ha='right')
@@ -363,7 +347,7 @@ def plot_decomp_flop_worstcase(
         if stats.loc[m, 'n_solved'] and stats.loc[m, 'n_solved'] > 0:
             ax.annotate(f"max={stats.loc[m,'max']:.2g}\nfail={int(stats.loc[m,'n_failed'])}",
                         (i, stats.loc[m, 'max']), ha='center', va='bottom',
-                        xytext=(0, 6), textcoords='offset points', fontsize=9)
+                        xytext=(0, 6), textcoords='offset points', fontsize=11)
     ax.set_ylim(top=ymax * 3)
     sns.despine()
 
@@ -500,11 +484,11 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
             for c in ['R_min_eig', 'P_min_eig', 'M_min_eig']:
                 df[c] = pd.to_numeric(df[c], errors='coerce')
             df = df.dropna(subset=['R_min_eig', 'P_min_eig', 'M_min_eig']).copy()
-            
+
             # Match optional '_MIRROR' between iter and stage
             df['problem'] = df['QP_stage_name'].str.strip().str.replace(
                 r'_FU_INDE_RE_INDE_status_\d+_iter_\d+(?:_MIRROR)?_stage_\d+$', '', regex=True)
-                
+
             Rneg, Pneg = df['R_min_eig'] < 0, df['P_min_eig'] < 0
             df['cls'] = np.select(
                 [Rneg & ~Pneg, ~Rneg & Pneg, Rneg & Pneg],
@@ -517,7 +501,7 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
             return None, None
         if isinstance(save_path, (tuple, list)):
             return save_path[0], save_path[1]
-            
+
         # Single string -> derive two paths by inserting a suffix
         root, ext = os.path.splitext(save_path)
         ext = ext or '.pdf'
@@ -554,11 +538,11 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
                  ha='center', va='center',
                  bbox=dict(boxstyle='round,pad=0.3', fc='white',
                            ec=c, alpha=0.85, lw=0.8))
-                           
+
     xlo, xhi = axA.get_xlim()
     ylo, yhi = axA.get_ylim()
     counts = df['cls'].value_counts()
-    
+
     q(xlo * 0.18, ylo * 0.45, f"both  (R<0, P<0)\nn={counts.get('both', 0)}", col['both'])
     q(xhi * 0.30, ylo * 0.45, f"P only  (R≥0, P<0)\nn={counts.get('P only', 0)}", col['P only'])
     q(xlo * 0.18, yhi * 0.45, f"R only  (R<0, P≥0)\nn={counts.get('R only', 0)}", col['R only'])
@@ -572,12 +556,12 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
 
     order_cls = ['R only', 'both', 'P only', 'neither']
     ct = pd.crosstab(df['problem'], df['cls'])
-    
+
     # Ensure all classes present as columns
     for c in order_cls:
         if c not in ct:
             ct[c] = 0
-            
+
     ct = ct[order_cls]
     frac = ct.div(ct.sum(axis=1), axis=0)
     fam_order = frac.sort_values(['R only', 'both'], ascending=True).index.tolist()
@@ -585,7 +569,7 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
 
     y = np.arange(len(fam_order))
     left = np.zeros(len(fam_order))
-    
+
     for c in order_cls:
         axB.barh(y, frac[c].values, left=left, color=col[c],
                  edgecolor='white', lw=0.6, height=0.72)
@@ -595,11 +579,11 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
     axB.set_yticklabels([f'{f}  (n={int(tot[f])})' for f in fam_order], fontsize=8.5)
     axB.set_xlim(0, 1)
     axB.set_xlabel('share of indefinite stages')
-    
+
     axB.legend(handles=[Patch(facecolor=col[c], label=c) for c in order_cls],
                loc='lower center', bbox_to_anchor=(0.5, -0.16),
                ncol=4, fontsize=8, frameon=False)
-               
+
     for s in ['top', 'right']:
         axB.spines[s].set_visible(False)
 
@@ -613,12 +597,12 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
 if __name__ == "__main__":
     set_ieee_style()
 
-    iter = 0
+    iter = 1
     if iter:
-        plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-        # plot_charts('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
-        plot_geometric_mean_cost('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-        plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        # plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        plot_charts('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
+        # plot_geometric_mean_cost('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        # plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
     else:
         plot_indefiniteness_coverage('qp_diagonstics.csv', save_path='indefiniteness_coverage.pdf') if Path('qp_diagonstics.csv').exists() else print("qp_diagonstics.csv not found, skipping.")
         plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf') if Path('qp_stage_diagnostics.csv').exists() else print("qp_stage_diagnostics.csv not found, skipping.")

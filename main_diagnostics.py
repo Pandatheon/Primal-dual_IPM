@@ -137,5 +137,5 @@ def main_stage_diagnostics() -> None:
     # plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf')
 
 if __name__ == "__main__":
-    main()
-    # main_stage_diagnostics()
+    # main()
+    main_stage_diagnostics()

@@ -25,6 +25,11 @@
 J.~Nocedal, A.~Wächter, and R.~A. Waltz, ``Adaptive {{Barrier Update Strategies}} for {{Nonlinear Interior Methods}}.'' [Online]. Available: \url{https://sci-hub.st/10.1137/060649513}
 \BIBentrySTDinterwordspacing
 
+\bibitem{kiesslingUnifiedFunnelRestoration2025}
+\BIBentryALTinterwordspacing
+D.~Kiessling, S.~Leyffer, and C.~Vanaret, ``A unified funnel restoration {{SQP}} algorithm.'' [Online]. Available: \url{https://doi.org/10.1007/s10107-025-02284-3}
+\BIBentrySTDinterwordspacing
+
 \bibitem{verschuerenTimeoptimalRaceCar2016b}
 R.~Verschueren, M.~Zanon, R.~Quirynen, and M.~Diehl, ``Time-optimal race car driving using an online exact hessian based nonlinear {{MPC}} algorithm,'' in \emph{2016 {{European Control Conference}} ({{ECC}})}, Jun. 2016, pp. 141--147.
 

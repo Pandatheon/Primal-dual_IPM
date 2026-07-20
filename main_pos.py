@@ -4,10 +4,9 @@ from pathlib import Path
 
 from QP_template.QP_base import BaseQP
 from solvers.RiccatiQpSolver import QpSolver
-from solvers.Regularization_config import reg_list, Block_Hessian_reg, condensed_Hessian_reg, Block_reduced_Hessian_reg, no_reg, Refer_list
+from solvers.Regularization_config import reg_list, Refer_list
 
-from solvers.SqpQpSolver import SqpQpSolver
-from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp
+from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp, AcadosOcpQpSolver, AcadosOcpQpOptions
 
 CSV_COLUMNS = [
     "QP_name",
@@ -43,16 +42,29 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
 
-    methods = ['Riccati'] + Refer_list
+    methods = ['Prototype', 'HPIPM', 'IPOPT']
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
         for method in methods:
             print("-" * 50)
             print(f"Method: {method}")
-            if method == 'SQP_PROJECT':
-                qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
-                qp_solver = SqpQpSolver(qp, reg='NO_REGULARIZE', qp_max_iter=30)
+            if method == 'HPIPM':
+                opts = AcadosOcpQpOptions()
+                opts.mu0 = 1e1
+                opts.hpipm_mode = 'CUSTOMIZED'
+                opts.ric_alg = 0
+                opts.tol_stat = 1e-6
+                opts.tol_eq = 1e-8
+                opts.tol_ineq = 1e-8
+                opts.tol_comp = 1e-6
+                opts.iter_max = 100
+
+                qp = BaseQP()
+                qp.populate_from_json(str(qp_path))
+                qp_acados = AcadosOcpQp.from_json(json_file_path=str(qp_path))
+                qp_solver = AcadosOcpQpSolver(qp_acados, opts)
+
             elif method == 'IPOPT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
                 opts = {'ipopt': {'print_level': 0, 'max_iter': 300, 'sb': 'yes'}}
@@ -60,17 +72,23 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             else:
                 qp = BaseQP()
                 qp.populate_from_json(str(qp_path))
-                qp_solver = QpSolver(qp, reg='NO_REG', type=method, mehrotra=False, globalization=True)
+                qp_solver = QpSolver(qp, reg='NO_REG', type='Riccati', mehrotra=True, globalization=False)
 
             cost = None
             iter = None
             try:
-                qp_solver.solve()
-                cost = qp_solver.get_cost()
-                if method == 'SQP_PROJECT':
-                    iter = sum(qp_solver.get_stats('qp_iter'))
-                else:
+                if method == 'HPIPM':
+                    status = qp_solver.solve()
                     iter = qp_solver.get_stats("iter")
+                elif method == 'IPOPT':
+                    qp_solver.solve()
+                    iter = qp_solver.get_stats("iter")
+                    status = qp_solver.status
+                elif method == 'Prototype':
+                    qp_solver.solve()
+                    iter = qp_solver.get_stats("iter")
+                    status = qp_solver.status
+                cost = qp_solver.get_cost()
             except Exception as exc:
                 print(f"Method {method} failed on {qp_path.name}: {exc}")
             if cost is not None:
@@ -82,7 +100,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
                     "Regularization": method,
                     "Iteration": iter,
                     "Cost": cost,
-                    "Status": qp_solver.status,
+                    "Status":status,
                 },
             )
 

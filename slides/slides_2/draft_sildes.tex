@@ -156,13 +156,19 @@
     \begin{itemize}
         \item PM\_STAGE\_MIRROR: 
 
-        Mirror cost-to-go matrix $P_k$, then the block reduced Hessian $\tilde{M}_{k-1} = R_k + B^\top_kP_k^{reg}B_k$.
+        For each stage $k$, 
+        mirror $P_k$;
+        compute $\tilde{M}_{k-1} = R_k + B^\top_k P_k^{reg}B_k$; 
+        then mirror $\tilde{M}_{k-1}$.
         \item PM\_STAGE\_GMW: 
 
-        GMW instead of mirror
-        \item INERTIA\_CORRECTION: 
+        Use GMW to substitute mirror in PM\_STAGE\_MIRROR.
+        \item INERTIA\_CORRECTION: \
 
-        similar in IPOPT
+        Add constant value to full Hessian diagonally when Choleksky decomposition fails.
+
+        Iterate until it succeeds, adapting same value update strategy in IPOPT.
+
     \end{itemize}
 
 \end{frame}
@@ -203,6 +209,38 @@ With $\sigma_i = \left( \frac{\mu_i^{\mathrm{aff}}}{\mu_i} \right)^3$, and the $
 where $m$ is the number of inequality constraints.
 \end{frame}
 
+\begin{frame}{Step Size Selection: FTB and Funnel line search}
+% ---------- Top: FTB ----------
+\textbf{\textcolor{blue!60!black}{1. FTB scaling}}\quad
+$\tau=1-\min(10^{-7},\mu)$, applied to $\alpha_p,\alpha_d$ each (steps back from the boundary to keep $\lambda,s>0$):
+\[
+\alpha \leftarrow
+\begin{cases}
+\alpha\big[(1-\alpha)\,0.99+\alpha\,\tau\big], & \alpha<1\\
+\alpha, & \alpha=1
+\end{cases}
+\]
+ 
+\vspace{0.4em}
+% ---------- Bottom: acceptance ----------
+\textbf{\textcolor{blue!60!black}{2. Acceptance \cite{kiesslingUnifiedFunnelRestoration2025}}}\quad (else $\alpha_p\!\leftarrow\!\beta\alpha_p$)
+\begin{itemize}
+  \item \textbf{In funnel?}\ \ $\theta^+\le\theta_{\max}$
+  \item \textbf{Switching}\ \ $\alpha_p(-\rho)>\kappa_{s}\theta^2$\ ?
+  \begin{itemize}
+    \item[$\rightarrow$] \textbf{f-step} (Armijo): $\ f^+\le f+\gamma\alpha_p\rho$
+    \item[$\rightarrow$] \textbf{h-step} (reduce $\theta$): $\ \theta^+\le \kappa_{h}\theta_{\max}$,\quad then shrink
+    \[
+      \theta_{\max}\leftarrow\max\big(\tfrac{\theta_{\max}+\theta^+}{2},\kappa_{m}\theta_{\max}\big)
+    \]
+  \end{itemize}
+\end{itemize}
+Where $\theta=\|c\|$ (constraint violation, bound $\theta_{\max}$), $\rho=\nabla f^\top d,\ d=(\Delta x,\Delta u,\Delta s)$.
+
+\end{frame}
+
+
+
 \begin{frame}
     \frametitle{Local quadratic convergence rate}
     The Riccati-based primal regularization will not modify the Hessian when converging to the local solution, i.e. LHS coincides with that of Newton step,
@@ -237,14 +275,13 @@ where $m$ is the number of inequality constraints.
 \begin{frame}
     \frametitle{Indefinite QP dataset: quick overview of OCP problems}
     \centering
-    % Table for OCP datasets overview
     \begin{tabular}{l l c c c}
         \hline
         \textbf{Problem} & $n_x$ & $n_u$ & $N$ \\
         \hline
         Pendulum     & 4  & 1 & 20 \\
         Acrobot      & 4  & 2 & 15 \\
-        Dubins car   & 3  & 2 & 25 \\
+        Dubins car parking   & 3  & 2 & 25 \\
         Furuta       & 4  & 1 & 20 \\
         Flying robot & 6  & 4 & 30 \\
         robot arm    & 6  & 3 & 30 \\
@@ -303,7 +340,7 @@ where $m$ is the number of inequality constraints.
         \item PM\_STAGE\_MIRROR
         \item PM\_STAGE\_GMW
         \item INERTIA\_CORRECTION
-        \item Precompute: Precompute the regularization with PROJECT on the full Hessian before schur complement, and use it for indefinite reduced Hessian
+        \item PRECOMPUTE: Precompute the regularization with PROJECT on the full Hessian before schur complement, and use it for indefinite reduced Hessian
     \end{itemize}
 
     \vspace{0.2cm}
@@ -316,16 +353,9 @@ where $m$ is the number of inequality constraints.
 \end{frame}
 
 \begin{frame}
-    \frametitle{Numerical results: performance profile}
+    \frametitle{Numerical results: iteration profile}
     \begin{figure}
         \includegraphics[width=0.7\textwidth]{results/iteration_qp_results_riccati.pdf}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Numerical results: geometric mean of cost}
-    \begin{figure}
-        \includegraphics[width=0.7\textwidth]{results/geo_mean_cost_qp_results_riccati.pdf}
     \end{figure}
 \end{frame}
 
@@ -351,8 +381,83 @@ where $m$ is the number of inequality constraints.
 
 \begin{frame}
     \frametitle{Issues on time-optimal indefinite QPs}
+    The current method does not work well on time-optimal indefinite QPs.\\
+    \vspace{0.2cm}
+    We collect 4 time-optimal OCPs and corresponding 84 indefinite QPs:
 
+    \vspace{0.5cm}
+
+    \begin{tabular}{l l c c c c}
+        \hline
+        \textbf{Problem} & $n_x$ & $n_u$ & $N$ & $T_f$\\
+        \hline
+        Pedulum             & 5  & 1 & 50  & 1.0\\
+        Dubins car parking  & 4  & 2 & 50  & 3.0\\
+        Dubins car obstacle & 4  & 2 & 25  & 5.0\\
+        hangglider          & 7  & 2 & 100 & 1.0\\
+        \hline
+    \end{tabular}
 \end{frame}
+
+\begin{frame}
+    \frametitle{Issues on time-optimal indefinite QPs}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/iteration_qp_results_riccati_time_opti.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Logs in issue}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Some possible next steps}
+    \begin{itemize}
+        \item Theoretical parts for:
+        \begin{itemize}
+            \item Why Mehrotra probing works better than predictor-corrector on indefinite QPs
+            \item Why PROJECT, MIRROR, PRECOMPUTE fails
+            \item Pros and cons of PM\_STAGE\_MIRROR, PM\_STAGE\_GMW over INERTIA\_CORRECTION
+        \end{itemize}
+        \item Engineering parts on:
+        \begin{itemize}
+            \item Collecting more indefinite QPs?
+            \item More Methods?
+            \item implementations?
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{FYI: with Mehrotra predictor-corrector on convex QPs}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/iteration_qp_results_pos.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{FYI: with Mehrotra predictor-corrector on indefinite QPs}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/iteration_qp_results_riccati_pc.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{FYI: with Mehrotra predictor-corrector on indefinite QPs}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/decomp_flop_worstcase_qp_results_riccati_pc.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{FYI: without funnel line search on indefinite QPs}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf}
+    \end{figure}
+\end{frame}
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
