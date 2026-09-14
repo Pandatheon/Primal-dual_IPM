@@ -106,7 +106,6 @@ class Riccati_IPM():
             reduced_hessian = R_k + B_k.T @ P_prev @ B_k
             try:
                 self.stat_dict['decomp_flop'] += 1
-
                 R_chol = np.linalg.cholesky(reduced_hessian)
                 g1 = S_k + B_k.T@P_prev@A_k
                 g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
@@ -132,43 +131,26 @@ class Riccati_IPM():
                 elif self.reg_config.method not in Block_Hessian_reg:
 
                     try:
-                        if self.reg_config.method == 'M_STAGE_SE':
-                            reduced_hessian_reg, P_reg, flag_P = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
-                            R_chol = np.linalg.cholesky(reduced_hessian_reg)
-                            g1 = S_k + B_k.T@P_reg@A_k
-                            g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
-                            y1 = np.linalg.solve(R_chol, g1)
-                            y2 = np.linalg.solve(R_chol, g2)
-                            K_curr = -np.linalg.solve(R_chol.T, y1)
-                            k_curr = -np.linalg.solve(R_chol.T, y2)
-                            P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
-                            p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
+                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
+                        coeff = 27 if 'GMW' not in self.reg_config.method else 1
+                        self.rho = (self.qp.nx[1]/self.qp.nu)**3 if "PM" in self.reg_config.method else 0
+                        self.stat_dict['decomp_flop'] += coeff*(1+self.rho) if "GMW" in self.reg_config.method else coeff*(1+self.rho) + 1
 
-                            feedback.P[k] = P_curr
-                            feedback.p[k] = p_curr
-                            feedback.K[k] = K_curr
-                            feedback.k[k] = k_curr
+                        R_chol = np.linalg.cholesky(reduced_hessian_reg)
+                        g1 = S_k + B_k.T@P_reg@A_k
+                        g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
+                        y1 = np.linalg.solve(R_chol, g1)
+                        y2 = np.linalg.solve(R_chol, g2)
+                        K_curr = -np.linalg.solve(R_chol.T, y1)
+                        k_curr = -np.linalg.solve(R_chol.T, y2)
+                        P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
+                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
 
-                            self.stat_dict['decomp_flop'] += 2
-                        else:
-                            reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
-                            R_chol = np.linalg.cholesky(reduced_hessian_reg)
-                            g1 = S_k + B_k.T@P_reg@A_k
-                            g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
-                            y1 = np.linalg.solve(R_chol, g1)
-                            y2 = np.linalg.solve(R_chol, g2)
-                            K_curr = -np.linalg.solve(R_chol.T, y1)
-                            k_curr = -np.linalg.solve(R_chol.T, y2)
-                            P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
-                            p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
+                        feedback.P[k] = P_curr
+                        feedback.p[k] = p_curr
+                        feedback.K[k] = K_curr
+                        feedback.k[k] = k_curr
 
-                            feedback.P[k] = P_curr
-                            feedback.p[k] = p_curr
-                            feedback.K[k] = K_curr
-                            feedback.k[k] = k_curr
-
-                            coeff = 27 if 'MIRROR' in self.reg_config.method else 1
-                            self.stat_dict['decomp_flop'] += coeff*(1+self.rho)
                     except np.linalg.LinAlgError:
                         # ad-hoc handling
                         eigs = np.linalg.eigvals(reduced_hessian_reg)

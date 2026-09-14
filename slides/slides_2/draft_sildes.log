@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  20 JUL 2026 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.3)  21 JUL 2026 11:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -803,7 +803,11 @@ Package: suffix 2006/07/15 1.5a Variant command support
 Package: xstring 2023/08/22 v1.86 String manipulations (CT)
 )
 \AC@clearlist=\toks53
-) (./draft_sildes.aux)
+) (./draft_sildes.aux
+
+LaTeX Warning: Label `tab:solver-log' multiply defined.
+
+)
 \openout1 = `draft_sildes.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
@@ -1109,66 +1113,78 @@ Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input 
  <./results/iteration_qp_results_riccati_time_opti.pdf>]
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 411.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 444.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [22
 
 ]
+pdfTeX warning (ext4): destination with the same identifier (name{tab:solver-log}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.485 \end{frame}
+                 
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 430.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 485.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [23
 
 ]
-<results/iteration_qp_results_pos.pdf, id=544, 624.74591pt x 480.38597pt>
-File: results/iteration_qp_results_pos.pdf Graphic file (type pdf)
-<use results/iteration_qp_results_pos.pdf>
-Package pdftex.def Info: results/iteration_qp_results_pos.pdf  used on input line 437.
-(pdftex.def)             Requested size: 278.83578pt x 214.41246pt.
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 437.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 504.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [24
 
- <./results/iteration_qp_results_pos.pdf>]
-<results/iteration_qp_results_riccati_pc.pdf, id=592, 624.82623pt x 480.38597pt>
-File: results/iteration_qp_results_riccati_pc.pdf Graphic file (type pdf)
-<use results/iteration_qp_results_riccati_pc.pdf>
-Package pdftex.def Info: results/iteration_qp_results_riccati_pc.pdf  used on input line 444.
-(pdftex.def)             Requested size: 278.83578pt x 214.37581pt.
+]
+<results/iteration_qp_results_pos.pdf, id=553, 624.74591pt x 480.38597pt>
+File: results/iteration_qp_results_pos.pdf Graphic file (type pdf)
+<use results/iteration_qp_results_pos.pdf>
+Package pdftex.def Info: results/iteration_qp_results_pos.pdf  used on input line 511.
+(pdftex.def)             Requested size: 278.83578pt x 214.41246pt.
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 444.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 511.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [25
 
- <./results/iteration_qp_results_riccati_pc.pdf>]
-<results/decomp_flop_worstcase_qp_results_riccati_pc.pdf, id=650, 552.51218pt x 410.61815pt>
-File: results/decomp_flop_worstcase_qp_results_riccati_pc.pdf Graphic file (type pdf)
-<use results/decomp_flop_worstcase_qp_results_riccati_pc.pdf>
-Package pdftex.def Info: results/decomp_flop_worstcase_qp_results_riccati_pc.pdf  used on input line 451.
-(pdftex.def)             Requested size: 278.83578pt x 207.22581pt.
+ <./results/iteration_qp_results_pos.pdf>]
+<results/iteration_qp_results_riccati_pc.pdf, id=602, 624.82623pt x 480.38597pt>
+File: results/iteration_qp_results_riccati_pc.pdf Graphic file (type pdf)
+<use results/iteration_qp_results_riccati_pc.pdf>
+Package pdftex.def Info: results/iteration_qp_results_riccati_pc.pdf  used on input line 518.
+(pdftex.def)             Requested size: 278.83578pt x 214.37581pt.
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 451.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 518.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [26
 
- <./results/decomp_flop_worstcase_qp_results_riccati_pc.pdf>]
-<results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf, id=710, 552.51218pt x 409.74835pt>
-File: results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf Graphic file (type pdf)
-<use results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf>
-Package pdftex.def Info: results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf  used on input line 459.
-(pdftex.def)             Requested size: 278.83578pt x 206.78685pt.
+ <./results/iteration_qp_results_riccati_pc.pdf>]
+<results/decomp_flop_worstcase_qp_results_riccati_pc.pdf, id=659, 552.51218pt x 410.61815pt>
+File: results/decomp_flop_worstcase_qp_results_riccati_pc.pdf Graphic file (type pdf)
+<use results/decomp_flop_worstcase_qp_results_riccati_pc.pdf>
+Package pdftex.def Info: results/decomp_flop_worstcase_qp_results_riccati_pc.pdf  used on input line 525.
+(pdftex.def)             Requested size: 278.83578pt x 207.22581pt.
 File: ./figures/right_highres_transparent.png Graphic file (type png)
 <use ./figures/right_highres_transparent.png>
-Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 459.
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 525.
 (pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
  [27
 
- <./results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf>] (./draft_sildes.bbl) [28
+ <./results/decomp_flop_worstcase_qp_results_riccati_pc.pdf>]
+<results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf, id=720, 552.51218pt x 409.74835pt>
+File: results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf Graphic file (type pdf)
+<use results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf>
+Package pdftex.def Info: results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf  used on input line 533.
+(pdftex.def)             Requested size: 278.83578pt x 206.78685pt.
+File: ./figures/right_highres_transparent.png Graphic file (type png)
+<use ./figures/right_highres_transparent.png>
+Package pdftex.def Info: ./figures/right_highres_transparent.png  used on input line 533.
+(pdftex.def)             Requested size: 54.07971pt x 54.07971pt.
+ [28
+
+ <./results/decomp_flop_worstcase_qp_results_riccati_nosearch.pdf>] (./draft_sildes.bbl) [29
 
  </usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>]
 \tf@nav=\write7
@@ -1189,22 +1205,25 @@ L3 programming layer <2025-10-24>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `draft_sildes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 27772 strings out of 467578
- 568443 string characters out of 5420566
- 967855 words of memory out of 5000000
- 55989 multiletter control sequences out of 15000+600000
- 639276 words of font info for 83 fonts, out of 8000000 for 9000
+ 27792 strings out of 467578
+ 568677 string characters out of 5420566
+ 988855 words of memory out of 5000000
+ 56001 multiletter control sequences out of 15000+600000
+ 641128 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,123p,450b,596s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on draft_sildes.pdf (28 pages, 670466 bytes).
+Output written on draft_sildes.pdf (29 pages, 678105 bytes).
 PDF statistics:
- 900 PDF objects out of 1000 (max. 8388607)
- 318 compressed objects within 4 object streams
- 64 named destinations out of 1000 (max. 500000)
+ 910 PDF objects out of 1000 (max. 8388607)
+ 325 compressed objects within 4 object streams
+ 67 named destinations out of 1000 (max. 500000)
  108 words of extra memory for PDF output out of 10000 (max. 10000000)
 

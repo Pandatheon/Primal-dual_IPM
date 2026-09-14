@@ -183,174 +183,174 @@ time_optimal_dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9          , PM_S
 time_optimal_dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9          , INERTIA_LM     ,        29, -0.8885889020730391    , 1598       ,      0
 time_optimal_dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9          , PRECOMPUTE     ,        13, -0.8844559093895124    , 18892.0    ,      1
 time_optimal_dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9          , IPOPT          ,        23, -0.8885890294002556    , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , NO_REGULARIZE  ,        10, 0.016350914626882686   , 948        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , PROJECT_H      ,        42, -0.08829982834308323   , 369690.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , MIRROR_H       ,        75, -0.08323455887308118   , 1725030.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , PM_STAGE_MIRROR,        33, -0.08323374237349995   , 11562.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , PM_STAGE_GMW   ,        56, -0.0883001131877546    , 6248.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , INERTIA_LM     ,        27, -0.08323400446064859   , 4022       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , PRECOMPUTE     ,       200, -0.0832345589142077    , 58986.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_18 , IPOPT          ,        23, -0.08856301046843593   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , NO_REGULARIZE  ,         8, 0.1889630299972199     , 725        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , PROJECT_H      ,        73, -0.22572295339851958   , 2271200.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , MIRROR_H       ,       146, -0.2257229535652121    , 4614718.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , PM_STAGE_MIRROR,        26, -0.23029029074240737   , 4058.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , PM_STAGE_GMW   ,        31, -0.23029030078391177   , 3226.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , INERTIA_LM     ,        34, -0.23029030082651042   , 4817       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , PRECOMPUTE     ,        80, -0.22572295356887317   , 48802.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10 , IPOPT          ,        27, -0.2302901566135854    , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, NO_REGULARIZE  ,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, PROJECT_H      ,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, MIRROR_H       ,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, PM_STAGE_MIRROR,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, PM_STAGE_GMW   ,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, INERTIA_LM     ,        24, -0.0911399504778824    , 2400       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, PRECOMPUTE     ,        24, -0.0911399504778824    , 38850.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_109, IPOPT          ,        27, -0.09113985067164286   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , NO_REGULARIZE  ,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , PROJECT_H      ,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , MIRROR_H       ,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , PM_STAGE_MIRROR,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , PM_STAGE_GMW   ,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , INERTIA_LM     ,        20, -0.15872235375159355   , 2000       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , PRECOMPUTE     ,        20, -0.15872235375159355   , 38450.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_12 , IPOPT          ,        20, -0.158722202810267     , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, NO_REGULARIZE  ,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, PROJECT_H      ,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, MIRROR_H       ,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, PM_STAGE_MIRROR,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, PM_STAGE_GMW   ,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, INERTIA_LM     ,        19, -0.006658942059337977  , 1900       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, PRECOMPUTE     ,        19, -0.006658942059337977  , 38350.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_147, IPOPT          ,        23, -0.006659192540634459  , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, NO_REGULARIZE  ,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, PROJECT_H      ,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, MIRROR_H       ,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, PM_STAGE_MIRROR,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, PM_STAGE_GMW   ,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, INERTIA_LM     ,        15, -3.250915810290665e-06 , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, PRECOMPUTE     ,        15, -3.250915810290665e-06 , 37950.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_168, IPOPT          ,        21, -3.0321216831106726e-06, N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, NO_REGULARIZE  ,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, PROJECT_H      ,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, MIRROR_H       ,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, PM_STAGE_MIRROR,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, PM_STAGE_GMW   ,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, INERTIA_LM     ,        15, 1.980298204029316e-09  , 1500       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, PRECOMPUTE     ,        15, 1.980298204029316e-09  , 37950.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_175, IPOPT          ,        21, 2.1907580522909806e-07 , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , NO_REGULARIZE  ,        13, -0.03343076482464335   , 1248       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , PROJECT_H      ,        27, -0.07885773166685832   , 258522.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , MIRROR_H       ,        36, -0.07885177904197237   , 551806.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , PM_STAGE_MIRROR,        35, -0.0768606583827018    , 13220.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , PM_STAGE_GMW   ,       200, -0.07885163564009656   , 20306.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , INERTIA_LM     ,        25, -0.07885773196305168   , 3082       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , PRECOMPUTE     ,        44, -0.07885773177810709   , 41434.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_23 , IPOPT          ,        27, -0.0768604858216905    , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , NO_REGULARIZE  ,        12, -0.015609284591461181  , 1150       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , PROJECT_H      ,       200, -0.07499037676117672   , 714384.0   ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , MIRROR_H       ,       139, -0.07657696026432431   , 3046744.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , PM_STAGE_MIRROR,        24, -0.07657680721350543   , 6288.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , PM_STAGE_GMW   ,        30, -0.076576462815112     , 3252.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , INERTIA_LM     ,        31, -0.07657698425866064   , 4580       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , PRECOMPUTE     ,        93, -0.07118805653019089   , 51150.0    ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24 , IPOPT          ,        28, -0.07367149407935435   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , NO_REGULARIZE  ,        12, -0.005658911802923593  , 1150       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , PROJECT_H      ,        72, -0.07490339951891353   , 1542104.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , MIRROR_H       ,       200, -0.05711458701632927   , 860210.0   ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , PM_STAGE_MIRROR,        29, -0.07110789029347153   , 10676.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , PM_STAGE_GMW   ,        27, -0.07110789073968252   , 2826.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , INERTIA_LM     ,        29, -0.07490335721862405   , 3882       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , PRECOMPUTE     ,        68, -0.07490334386608946   , 46672.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25 , IPOPT          ,        26, -0.07110778518755011   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , NO_REGULARIZE  ,        13, -0.009860583677102405  , 1248       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , PROJECT_H      ,        27, -0.07245548296862853   , 185434.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , MIRROR_H       ,       200, -0.06858626012351351   , 604764.0   ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , PM_STAGE_MIRROR,        43, -0.06759973368264041   , 16450.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , PM_STAGE_GMW   ,        30, -0.06759974328603766   , 3216.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , INERTIA_LM     ,        26, -0.07245546775241764   , 3624       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , PRECOMPUTE     ,        28, -0.0724554842428938    , 39734.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26 , IPOPT          ,        25, -0.06759962019026165   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , NO_REGULARIZE  ,        13, 0.003088709442638074   , 1248       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , PROJECT_H      ,        37, -0.06167408261067421   , 862325.0   ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , MIRROR_H       ,       200, -0.06799089185125491   , 5172510.0  ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , PM_STAGE_MIRROR,       200, -0.06871078980186643   , 34094.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , PM_STAGE_GMW   ,        69, -0.06326188000290199   , 7620.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , INERTIA_LM     ,        29, -0.06871062623880415   , 4022       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , PRECOMPUTE     ,       130, -0.06871075861416637   , 52720.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27 , IPOPT          ,        26, -0.06326209474133332   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , NO_REGULARIZE  ,        10, 0.05675877748943145    , 950        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , PROJECT_H      ,        30, -0.04371370739070057   , 185746.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , MIRROR_H       ,        63, -0.04371381879530892   , 1102244.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , PM_STAGE_MIRROR,        25, -0.043713815959956485  , 5416.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , PM_STAGE_GMW   ,        23, -0.04371381521130249   , 2354.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , INERTIA_LM     ,        35, -0.04371381897659482   , 4100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , PRECOMPUTE     ,        33, -0.04371381900809025   , 40442.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37 , IPOPT          ,        29, -0.04371364826730358   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , NO_REGULARIZE  ,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , PROJECT_H      ,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , MIRROR_H       ,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , PM_STAGE_MIRROR,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , PM_STAGE_GMW   ,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , INERTIA_LM     ,        21, -0.041266256550051186  , 2100       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , PRECOMPUTE     ,        21, -0.041266256550051186  , 38550.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_60 , IPOPT          ,        24, -0.04126612114970067   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , NO_REGULARIZE  ,        20, -0.03765824806121458   , 1948       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , PROJECT_H      ,        24, -0.03812646480435142   , 185130.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , MIRROR_H       ,        25, -0.03812646484523438   , 221776.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , PM_STAGE_MIRROR,        35, -0.03812646599062561   , 5444.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , PM_STAGE_GMW   ,        23, -0.0381264648347513    , 2372.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , INERTIA_LM     ,        22, -0.038126390937045285  , 2488       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , PRECOMPUTE     ,        24, -0.038126464830028     , 39330.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_66 , IPOPT          ,        23, -0.038126269738606014  , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , NO_REGULARIZE  ,        15, 0.06431724523203397    , 1450       ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , PROJECT_H      ,       200, -0.022375221143336996  , 2505186.0  ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , MIRROR_H       ,        24, -0.04153053675628654   , 112042.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , PM_STAGE_MIRROR,        27, -0.041530537061077746  , 7074.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , PM_STAGE_GMW   ,        26, -0.04153053726333044   , 2744.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , INERTIA_LM     ,        22, -0.0415305270888641    , 2638       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , PRECOMPUTE     ,       198, -0.03499384817358281   , 57932.0    ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_67 , IPOPT          ,        24, -0.04153034333950384   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , NO_REGULARIZE  ,         9, 0.056321728775107875   , 848        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , PROJECT_H      ,        44, -0.035417031506187815  , 1173648.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , MIRROR_H       ,        74, -0.03541705706699299   , 2272744.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , PM_STAGE_MIRROR,        19, -0.035417061368218025  , 5302.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , PM_STAGE_GMW   ,       200, -0.035417058896302964  , 20792.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , INERTIA_LM     ,        18, -0.03541705635979254   , 2470       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , PRECOMPUTE     ,        42, -0.03541706378105311   , 43538.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_72 , IPOPT          ,        22, -0.035417037665987035  , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , NO_REGULARIZE  ,        10, 0.05116013927238717    , 950        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , PROJECT_H      ,        19, -0.03437681524299825   , 184634.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , MIRROR_H       ,        20, -0.03437681699433455   , 221280.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , PM_STAGE_MIRROR,        28, -0.03437683143200565   , 6688.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , PM_STAGE_GMW   ,       200, -0.03306335282851333   , 20918.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , INERTIA_LM     ,        18, -0.034376797953958746  , 2238       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , PRECOMPUTE     ,        21, -0.03437683220370839   , 39034.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_73 , IPOPT          ,        23, -0.03437680883181971   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , NO_REGULARIZE  ,         9, 0.07032957171887463    , 847        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , PROJECT_H      ,        41, -0.032258349295978955  , 954110.0   ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , MIRROR_H       ,        62, -0.032258305654411984  , 1796424.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , PM_STAGE_MIRROR,        27, -0.03225835106488288   , 6102.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , PM_STAGE_GMW   ,       200, -0.032258350660056126  , 20666.0    ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , INERTIA_LM     ,        21, -0.03225834650014283   , 2864       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , PRECOMPUTE     ,        45, -0.03225835249972121   , 43252.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_75 , IPOPT          ,        25, -0.03225815308064632   , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , NO_REGULARIZE  ,         5, 0.16642582424343694    , 445        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , PROJECT_H      ,       146, -3.2745142898824664    , 3079988.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , MIRROR_H       ,        49, -1.5777847466728623    , 1627388.0  ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , PM_STAGE_MIRROR,        34, -3.544698029308181     , 15550.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , PM_STAGE_GMW   ,        30, -3.5446980784433935    , 3252.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , INERTIA_LM     ,       200, -3.274514289882469     , 24770      ,      2
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , PRECOMPUTE     ,       115, -3.2745142898824704    , 51748.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_8  , IPOPT          ,        23, -3.659907831178821     , N/A        ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , NO_REGULARIZE  ,         6, -0.0065575104244722645 , 534        ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , PROJECT_H      ,       106, -0.649286412566564     , 868307.0   ,      1
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , MIRROR_H       ,       100, -0.6536897609663199    , 2711634.0  ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , PM_STAGE_MIRROR,        23, -0.6536886382131124    , 2786.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , PM_STAGE_GMW   ,        23, -0.6536886127145466    , 2318.0     ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , INERTIA_LM     ,        30, -0.6536894639703712    , 3907       ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , PRECOMPUTE     ,        67, -0.6536889918198225    , 45400.0    ,      0
-time_optimal_dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_9  , IPOPT          ,        20, -0.653689671880154     , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , NO_REGULARIZE  ,        10, 0.016350914626882686   , 948        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , PROJECT_H      ,        42, -0.08829982834308323   , 369690.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , MIRROR_H       ,        75, -0.08323455887308118   , 1725030.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , PM_STAGE_MIRROR,        33, -0.08323374237349995   , 11562.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , PM_STAGE_GMW   ,        56, -0.0883001131877546    , 6248.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , INERTIA_LM     ,        27, -0.08323400446064859   , 4022       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , PRECOMPUTE     ,       200, -0.0832345589142077    , 58986.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_2_iter_18 , IPOPT          ,        23, -0.08856301046843593   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , NO_REGULARIZE  ,         8, 0.1889630299972199     , 725        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , PROJECT_H      ,        73, -0.22572295339851958   , 2271200.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , MIRROR_H       ,       146, -0.2257229535652121    , 4614718.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , PM_STAGE_MIRROR,        26, -0.23029029074240737   , 4058.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , PM_STAGE_GMW   ,        31, -0.23029030078391177   , 3226.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , INERTIA_LM     ,        34, -0.23029030082651042   , 4817       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , PRECOMPUTE     ,        80, -0.22572295356887317   , 48802.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_10 , IPOPT          ,        27, -0.2302901566135854    , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, NO_REGULARIZE  ,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, PROJECT_H      ,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, MIRROR_H       ,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, PM_STAGE_MIRROR,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, PM_STAGE_GMW   ,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, INERTIA_LM     ,        24, -0.0911399504778824    , 2400       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, PRECOMPUTE     ,        24, -0.0911399504778824    , 38850.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_109, IPOPT          ,        27, -0.09113985067164286   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , NO_REGULARIZE  ,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , PROJECT_H      ,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , MIRROR_H       ,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , PM_STAGE_MIRROR,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , PM_STAGE_GMW   ,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , INERTIA_LM     ,        20, -0.15872235375159355   , 2000       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , PRECOMPUTE     ,        20, -0.15872235375159355   , 38450.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_12 , IPOPT          ,        20, -0.158722202810267     , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, NO_REGULARIZE  ,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, PROJECT_H      ,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, MIRROR_H       ,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, PM_STAGE_MIRROR,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, PM_STAGE_GMW   ,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, INERTIA_LM     ,        19, -0.006658942059337977  , 1900       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, PRECOMPUTE     ,        19, -0.006658942059337977  , 38350.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_147, IPOPT          ,        23, -0.006659192540634459  , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, NO_REGULARIZE  ,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, PROJECT_H      ,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, MIRROR_H       ,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, PM_STAGE_MIRROR,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, PM_STAGE_GMW   ,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, INERTIA_LM     ,        15, -3.250915810290665e-06 , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, PRECOMPUTE     ,        15, -3.250915810290665e-06 , 37950.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_168, IPOPT          ,        21, -3.0321216831106726e-06, N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, NO_REGULARIZE  ,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, PROJECT_H      ,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, MIRROR_H       ,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, PM_STAGE_MIRROR,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, PM_STAGE_GMW   ,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, INERTIA_LM     ,        15, 1.980298204029316e-09  , 1500       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, PRECOMPUTE     ,        15, 1.980298204029316e-09  , 37950.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_175, IPOPT          ,        21, 2.1907580522909806e-07 , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , NO_REGULARIZE  ,        13, -0.03343076482464335   , 1248       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , PROJECT_H      ,        27, -0.07885773166685832   , 258522.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , MIRROR_H       ,        36, -0.07885177904197237   , 551806.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , PM_STAGE_MIRROR,        35, -0.0768606583827018    , 13220.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , PM_STAGE_GMW   ,       200, -0.07885163564009656   , 20306.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , INERTIA_LM     ,        25, -0.07885773196305168   , 3082       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , PRECOMPUTE     ,        44, -0.07885773177810709   , 41434.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_23 , IPOPT          ,        27, -0.0768604858216905    , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , NO_REGULARIZE  ,        12, -0.015609284591461181  , 1150       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , PROJECT_H      ,       200, -0.07499037676117672   , 714384.0   ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , MIRROR_H       ,       139, -0.07657696026432431   , 3046744.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , PM_STAGE_MIRROR,        24, -0.07657680721350543   , 6288.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , PM_STAGE_GMW   ,        30, -0.076576462815112     , 3252.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , INERTIA_LM     ,        31, -0.07657698425866064   , 4580       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , PRECOMPUTE     ,        93, -0.07118805653019089   , 51150.0    ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_24 , IPOPT          ,        28, -0.07367149407935435   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , NO_REGULARIZE  ,        12, -0.005658911802923593  , 1150       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , PROJECT_H      ,        72, -0.07490339951891353   , 1542104.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , MIRROR_H       ,       200, -0.05711458701632927   , 860210.0   ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , PM_STAGE_MIRROR,        29, -0.07110789029347153   , 10676.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , PM_STAGE_GMW   ,        27, -0.07110789073968252   , 2826.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , INERTIA_LM     ,        29, -0.07490335721862405   , 3882       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , PRECOMPUTE     ,        68, -0.07490334386608946   , 46672.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_25 , IPOPT          ,        26, -0.07110778518755011   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , NO_REGULARIZE  ,        13, -0.009860583677102405  , 1248       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , PROJECT_H      ,        27, -0.07245548296862853   , 185434.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , MIRROR_H       ,       200, -0.06858626012351351   , 604764.0   ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , PM_STAGE_MIRROR,        43, -0.06759973368264041   , 16450.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , PM_STAGE_GMW   ,        30, -0.06759974328603766   , 3216.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , INERTIA_LM     ,        26, -0.07245546775241764   , 3624       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , PRECOMPUTE     ,        28, -0.0724554842428938    , 39734.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_26 , IPOPT          ,        25, -0.06759962019026165   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , NO_REGULARIZE  ,        13, 0.003088709442638074   , 1248       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , PROJECT_H      ,        37, -0.06167408261067421   , 862325.0   ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , MIRROR_H       ,       200, -0.06799089185125491   , 5172510.0  ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , PM_STAGE_MIRROR,       200, -0.06871078980186643   , 34094.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , PM_STAGE_GMW   ,        69, -0.06326188000290199   , 7620.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , INERTIA_LM     ,        29, -0.06871062623880415   , 4022       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , PRECOMPUTE     ,       130, -0.06871075861416637   , 52720.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_27 , IPOPT          ,        26, -0.06326209474133332   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , NO_REGULARIZE  ,        10, 0.05675877748943145    , 950        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , PROJECT_H      ,        30, -0.04371370739070057   , 185746.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , MIRROR_H       ,        63, -0.04371381879530892   , 1102244.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , PM_STAGE_MIRROR,        25, -0.043713815959956485  , 5416.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , PM_STAGE_GMW   ,        23, -0.04371381521130249   , 2354.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , INERTIA_LM     ,        35, -0.04371381897659482   , 4100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , PRECOMPUTE     ,        33, -0.04371381900809025   , 40442.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_37 , IPOPT          ,        29, -0.04371364826730358   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , NO_REGULARIZE  ,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , PROJECT_H      ,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , MIRROR_H       ,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , PM_STAGE_MIRROR,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , PM_STAGE_GMW   ,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , INERTIA_LM     ,        21, -0.041266256550051186  , 2100       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , PRECOMPUTE     ,        21, -0.041266256550051186  , 38550.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_60 , IPOPT          ,        24, -0.04126612114970067   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , NO_REGULARIZE  ,        20, -0.03765824806121458   , 1948       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , PROJECT_H      ,        24, -0.03812646480435142   , 185130.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , MIRROR_H       ,        25, -0.03812646484523438   , 221776.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , PM_STAGE_MIRROR,        35, -0.03812646599062561   , 5444.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , PM_STAGE_GMW   ,        23, -0.0381264648347513    , 2372.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , INERTIA_LM     ,        22, -0.038126390937045285  , 2488       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , PRECOMPUTE     ,        24, -0.038126464830028     , 39330.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_66 , IPOPT          ,        23, -0.038126269738606014  , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , NO_REGULARIZE  ,        15, 0.06431724523203397    , 1450       ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , PROJECT_H      ,       200, -0.022375221143336996  , 2505186.0  ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , MIRROR_H       ,        24, -0.04153053675628654   , 112042.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , PM_STAGE_MIRROR,        27, -0.041530537061077746  , 7074.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , PM_STAGE_GMW   ,        26, -0.04153053726333044   , 2744.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , INERTIA_LM     ,        22, -0.0415305270888641    , 2638       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , PRECOMPUTE     ,       198, -0.03499384817358281   , 57932.0    ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_67 , IPOPT          ,        24, -0.04153034333950384   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , NO_REGULARIZE  ,         9, 0.056321728775107875   , 848        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , PROJECT_H      ,        44, -0.035417031506187815  , 1173648.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , MIRROR_H       ,        74, -0.03541705706699299   , 2272744.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , PM_STAGE_MIRROR,        19, -0.035417061368218025  , 5302.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , PM_STAGE_GMW   ,       200, -0.035417058896302964  , 20792.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , INERTIA_LM     ,        18, -0.03541705635979254   , 2470       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , PRECOMPUTE     ,        42, -0.03541706378105311   , 43538.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_72 , IPOPT          ,        22, -0.035417037665987035  , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , NO_REGULARIZE  ,        10, 0.05116013927238717    , 950        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , PROJECT_H      ,        19, -0.03437681524299825   , 184634.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , MIRROR_H       ,        20, -0.03437681699433455   , 221280.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , PM_STAGE_MIRROR,        28, -0.03437683143200565   , 6688.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , PM_STAGE_GMW   ,       200, -0.03306335282851333   , 20918.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , INERTIA_LM     ,        18, -0.034376797953958746  , 2238       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , PRECOMPUTE     ,        21, -0.03437683220370839   , 39034.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_73 , IPOPT          ,        23, -0.03437680883181971   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , NO_REGULARIZE  ,         9, 0.07032957171887463    , 847        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , PROJECT_H      ,        41, -0.032258349295978955  , 954110.0   ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , MIRROR_H       ,        62, -0.032258305654411984  , 1796424.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , PM_STAGE_MIRROR,        27, -0.03225835106488288   , 6102.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , PM_STAGE_GMW   ,       200, -0.032258350660056126  , 20666.0    ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , INERTIA_LM     ,        21, -0.03225834650014283   , 2864       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , PRECOMPUTE     ,        45, -0.03225835249972121   , 43252.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_75 , IPOPT          ,        25, -0.03225815308064632   , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , NO_REGULARIZE  ,         5, 0.16642582424343694    , 445        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , PROJECT_H      ,       146, -3.2745142898824664    , 3079988.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , MIRROR_H       ,        49, -1.5777847466728623    , 1627388.0  ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , PM_STAGE_MIRROR,        34, -3.544698029308181     , 15550.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , PM_STAGE_GMW   ,        30, -3.5446980784433935    , 3252.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , INERTIA_LM     ,       200, -3.274514289882469     , 24770      ,      2
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , PRECOMPUTE     ,       115, -3.2745142898824704    , 51748.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_8  , IPOPT          ,        23, -3.659907831178821     , N/A        ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , NO_REGULARIZE  ,         6, -0.0065575104244722645 , 534        ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , PROJECT_H      ,       106, -0.649286412566564     , 868307.0   ,      1
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , MIRROR_H       ,       100, -0.6536897609663199    , 2711634.0  ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , PM_STAGE_MIRROR,        23, -0.6536886382131124    , 2786.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , PM_STAGE_GMW   ,        23, -0.6536886127145466    , 2318.0     ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , INERTIA_LM     ,        30, -0.6536894639703712    , 3907       ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , PRECOMPUTE     ,        67, -0.6536889918198225    , 45400.0    ,      0
+time_optimal_dubins_car_FU_INDE_RE_INDE_status_4_iter_9  , IPOPT          ,        20, -0.653689671880154     , N/A        ,      0
 time_optimal_hangglider_FU_INDE_RE_INDE_status_4_iter_1                   , NO_REGULARIZE  ,         1, 1171.5989621358435     , 21         ,      1
 time_optimal_hangglider_FU_INDE_RE_INDE_status_4_iter_1                   , PROJECT_H      ,        77, -22779.133564265732    , 38801620.0 ,      1
 time_optimal_hangglider_FU_INDE_RE_INDE_status_4_iter_1                   , MIRROR_H       ,        69, -378.0577620883059     , 25386086.0 ,      1

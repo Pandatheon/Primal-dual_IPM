@@ -3,9 +3,12 @@ from dataclasses import dataclass
 
 no_reg = ['NO_REGULARIZE']
 
-Block_Hessian_reg = ['PROJECT_H', 'MIRROR_H']
+Block_Hessian_reg = ['H_PROJECT', 'H_MIRROR', 'H_GMW']
 
-Block_reduced_Hessian_reg = ['PM_STAGE_MIRROR', 'PM_STAGE_GMW']
+Block_reduced_Hessian_reg = [
+    'M_PROJECT', 'M_MIRROR', 'M_GMW', 
+    'PM_PROJECT', 'PM_MIRROR', 'PM_GMW'
+    ]
 
 Iteration_based_reg = ['INERTIA_LM', 'PRECOMPUTE']
 

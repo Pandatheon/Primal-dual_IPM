@@ -82,28 +82,28 @@ dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_66        ,      30, 0.0666666
 dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_69        ,      30, 0.06666666666666667, -0.027404651603261138
 dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_8         ,      30, 0.7333333333333333 , -10.32696377434597
 dubins_car_obstacle_FU_INDE_RE_INDE_status_4_iter_9         ,      30, 0.43333333333333335, -2.409934234667822
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12,      25, 0.68               , -2.123375884583934
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 ,      25, 0.56               , -3.4578960572691253
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39,      25, 0.8                , -0.7591098406387325
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 ,      25, 1.0                , -1.5969538594702009
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42,      25, 0.84               , -0.7459026153159214
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 ,      25, 0.8                , -5.144912969599901
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10,      25, 0.64               , -0.8735914889635015
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18,      25, 0.72               , -4.703900893193877
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19,      25, 0.72               , -4.113614717182654
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20,      25, 0.72               , -5.344839916599359
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21,      25, 0.72               , -5.227486856201641
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24,      25, 0.8                , -0.9441059308394346
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25,      25, 0.8                , -0.9190007957824073
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26,      25, 0.8                , -0.6873550575896965
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27,      25, 0.8                , -0.6406359806672269
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31,      25, 0.8                , -1.3749205917460274
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34,      25, 0.8                , -3.5017729736951835
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35,      25, 0.8                , -1.5435740347321418
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37,      25, 0.8                , -3.654017434168312
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38,      25, 0.76               , -0.6102861762631142
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 ,      25, 0.6                , -0.8980070562656048
-dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 ,      25, 0.72               , -1.9069435892864584
+dubins_car_FU_INDE_RE_INDE_status_2_iter_12,      25, 0.68               , -2.123375884583934
+dubins_car_FU_INDE_RE_INDE_status_2_iter_2 ,      25, 0.56               , -3.4578960572691253
+dubins_car_FU_INDE_RE_INDE_status_2_iter_39,      25, 0.8                , -0.7591098406387325
+dubins_car_FU_INDE_RE_INDE_status_2_iter_4 ,      25, 1.0                , -1.5969538594702009
+dubins_car_FU_INDE_RE_INDE_status_2_iter_42,      25, 0.84               , -0.7459026153159214
+dubins_car_FU_INDE_RE_INDE_status_2_iter_6 ,      25, 0.8                , -5.144912969599901
+dubins_car_FU_INDE_RE_INDE_status_4_iter_10,      25, 0.64               , -0.8735914889635015
+dubins_car_FU_INDE_RE_INDE_status_4_iter_18,      25, 0.72               , -4.703900893193877
+dubins_car_FU_INDE_RE_INDE_status_4_iter_19,      25, 0.72               , -4.113614717182654
+dubins_car_FU_INDE_RE_INDE_status_4_iter_20,      25, 0.72               , -5.344839916599359
+dubins_car_FU_INDE_RE_INDE_status_4_iter_21,      25, 0.72               , -5.227486856201641
+dubins_car_FU_INDE_RE_INDE_status_4_iter_24,      25, 0.8                , -0.9441059308394346
+dubins_car_FU_INDE_RE_INDE_status_4_iter_25,      25, 0.8                , -0.9190007957824073
+dubins_car_FU_INDE_RE_INDE_status_4_iter_26,      25, 0.8                , -0.6873550575896965
+dubins_car_FU_INDE_RE_INDE_status_4_iter_27,      25, 0.8                , -0.6406359806672269
+dubins_car_FU_INDE_RE_INDE_status_4_iter_31,      25, 0.8                , -1.3749205917460274
+dubins_car_FU_INDE_RE_INDE_status_4_iter_34,      25, 0.8                , -3.5017729736951835
+dubins_car_FU_INDE_RE_INDE_status_4_iter_35,      25, 0.8                , -1.5435740347321418
+dubins_car_FU_INDE_RE_INDE_status_4_iter_37,      25, 0.8                , -3.654017434168312
+dubins_car_FU_INDE_RE_INDE_status_4_iter_38,      25, 0.76               , -0.6102861762631142
+dubins_car_FU_INDE_RE_INDE_status_4_iter_5 ,      25, 0.6                , -0.8980070562656048
+dubins_car_FU_INDE_RE_INDE_status_4_iter_7 ,      25, 0.72               , -1.9069435892864584
 free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          ,      35, 0.05714285714285714, -30.10769273674364
 free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          ,      35, 0.05714285714285714, -22.68448657362827
 free_flying_robot_FU_INDE_RE_INDE_status_4_iter_12          ,      35, 0.05714285714285714, -21.740214757262812

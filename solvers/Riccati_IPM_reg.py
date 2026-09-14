@@ -20,7 +20,7 @@ class Riccati_IPM():
         self.reg = False
         self.reg_config.delta = 0.0 if self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE'] else self.reg_config.delta
         self.rho = ((self.qp.nx[1] + self.qp.nu)/self.qp.nu)**3
-        self.coeff = 27
+        self.coeff = 27 if self.reg_config.method != "H_GMW" else 1
 
         if self.reg_config.method == 'PRECOMPUTE':
             self.pre_regularized_QP = regularize_QP(self.qp, self.reg_config)
@@ -82,7 +82,7 @@ class Riccati_IPM():
 
         coeff = self.coeff
         self.reg = False
-        positive_flag = True   # only used by the 'PRECOMPUTE' branch
+        positive_flag = True
 
         if self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE']:
             # --- Inertia Correction (IC) constants ---
@@ -108,7 +108,7 @@ class Riccati_IPM():
                 modified_qp = self.modify_QP(self.qp, prev_sol)
                 if not positive_flag:
                     modified_qp = regularize_QP(modified_qp, self.reg_config)
-                    self.stat_dict['decomp_flop'] += horizon*coeff*self.rho/2
+                    self.stat_dict['decomp_flop'] += horizon*coeff*self.rho
 
             elif self.reg_config.method == 'INERTIA_LM':
                 self.rhs_kkt = copy.deepcopy(rhs)

@@ -9,7 +9,8 @@ from solvers.RiccatiQpSolver import QpSolver
 from solvers.Regularization_config import Regularizations_config, no_reg, Block_Hessian_reg, Block_reduced_Hessian_reg, reg_list
 
 reg_config = Regularizations_config()
-json_path = '/home/jingtao/Mehrotra_IPM/cases/Tracking_inde_QP_json/acrobot_FU_INDE_RE_INDE_status_4_iter_17.json'
+json_path = '/home/jingtao/Mehrotra_IPM/cases/Time_optimal_inde_QP_json/time_optimal_swing_up_FU_INDE_RE_INDE_status_4_iter_46.json'
+
 def main():
 
     qp = BaseQP()
@@ -23,7 +24,7 @@ def main():
 
     method = 'PM_STAGE_MIRROR'
     qp_solver = QpSolver(qp, reg=method, type='Riccati', mehrotra=False, globalization=True)
-    qp_solver.solve(max_iter=100)
+    qp_solver.solve(max_iter=200)
 
     cost = qp_solver.get_cost()
     print(f"Optimal cost: {cost}")

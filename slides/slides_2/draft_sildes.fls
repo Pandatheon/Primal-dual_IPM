@@ -548,6 +548,16 @@ INPUT ./results/iteration_qp_results_riccati_time_opti.pdf
 INPUT ./figures/right_highres_transparent.png
 INPUT ./figures/right_highres_transparent.png
 INPUT ./figures/right_highres_transparent.png
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT ./figures/right_highres_transparent.png
+INPUT ./figures/right_highres_transparent.png
+INPUT ./figures/right_highres_transparent.png
 INPUT ./figures/right_highres_transparent.png
 INPUT ./figures/right_highres_transparent.png
 INPUT ./figures/right_highres_transparent.png

@@ -15,7 +15,7 @@ from solvers.Regularization_config import reg_list, Block_Hessian_reg, Block_red
 from solvers.SqpQpSolver import SqpQpSolver
 from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp
 
-from utils.plot_stuff import plot_charts, plot_geometric_mean_cost, plot_decomp_flop_worstcase
+from utils.plot_stuff import plot_charts_pos, plot_decomp_flop_worstcase
 
 CSV_COLUMNS = [
     "QP_name",
@@ -57,17 +57,17 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             # 'PROJECT_H',
             # 'M_STAGE_SE', 
             # 'M_STAGE_MIRROR',
-            'PM_STAGE_MIRROR',
+            'PM_MIRROR',
             # 'RP_STAGE_MIRROR',
             # 'PM_STAGE_PROJECT',
             # 'PM_STAGE_MINPROJECT',
             # 'PM_STAGE_TUNEDMIRROR',
             # 'PM_STAGE_SE',
-            'PM_STAGE_GMW',
+            'PM_GMW',
             'INERTIA_LM',
             # 'INERTIA_LM_RE',
             # 'PRECOMPUTE',
-            'IPOPT',
+            # 'IPOPT',
             ]
 
     for qp_path in qp_json_paths:
@@ -127,8 +127,7 @@ def main() -> None:
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "temp_results" / "qp_results_riccati.csv"
     run_benchmark(qp_json_paths, reg_list, output_path)
-    plot_charts(str(output_path))
-    plot_geometric_mean_cost(str(output_path))
+    plot_charts_pos(str(output_path))
     plot_decomp_flop_worstcase(str(output_path))
 
 

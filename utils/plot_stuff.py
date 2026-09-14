@@ -86,6 +86,89 @@ def plot_charts(filename='qp_results.csv'):
     ax.set_xlabel("Iteration Count")
     ax.set_ylabel("Solved Problems (Count)")
     # Start main plot from 1 to reveal full data path
+    ax.set_xlim(10, max_x_limit)
+    ax.set_ylim(10, total_problems * 1.2)
+    ax.set_xscale('linear')
+    ax.set_yscale('linear')
+
+    ax.grid(True, which="both", ls="--", alpha=0.2)
+    ax.legend(loc="lower right", frameon=True)
+
+    plt.tight_layout()
+
+    # Safely handle file paths using pathlib
+    p = Path(filename)
+    save_path = p.parent / f"iteration_{p.stem}.pdf"
+
+    # Save specific figure object before showing
+    fig.savefig(save_path, bbox_inches='tight')
+    plt.show()
+
+def plot_charts_pos(filename='qp_results.csv'):
+    # Load and clean data
+    df = pd.read_csv(filename, skipinitialspace=True)
+    df.columns = df.columns.str.strip()
+    for col in df.select_dtypes(['object']).columns:
+        df[col] = df[col].str.strip()
+
+    # Convert status to numeric
+    df['Status'] = pd.to_numeric(df['Status'], errors='coerce')
+
+    methods = df['Regularization'].unique()
+
+    other_methods = [m for m in methods if m != 'NO_REGULARIZE']
+
+    method_palette = sns.color_palette("tab10", n_colors=len(other_methods))
+    method_colors = dict(zip(other_methods, method_palette))
+
+    linestyles = ['-', '--', ':', '-.']
+    method_linestyles = {m: linestyles[i % len(linestyles)] for i, m in enumerate(methods)}
+
+    if 'NO_REGULARIZE' in methods:
+        method_colors['NO_REGULARIZE'] = 'gray'
+
+    # Calculate total problems
+    if 'x0_id' in df.columns:
+        total_problems = df[['QP_name', 'x0_id']].drop_duplicates().shape[0]
+    else:
+        total_problems = df['QP_name'].nunique()
+
+    success_data = df[df['Status'] == 0]
+    max_x_limit = success_data['Iteration'].max() * 1.05 if not success_data.empty else 100
+
+    fig, ax = plt.subplots(figsize=(9, 7))
+
+    # Plot step functions
+    for method in methods:
+        method_data = df[(df['Regularization'] == method) & (df['Status'] == 0)]
+        solved_iters = np.sort(method_data['Iteration'].values)
+
+        current_solved_count = len(solved_iters)
+        if current_solved_count == 0:
+            continue
+
+        # Change start point from 0 to 1 to avoid log(0) calculation error
+        x_plot = np.concatenate(([1], solved_iters, [max_x_limit]))
+        y_plot = np.concatenate(([0], np.arange(1, current_solved_count + 1), [current_solved_count]))
+
+        # Main plot
+        ax.step(x_plot, y_plot, where='post', label=method,
+                color=method_colors[method], linewidth=2.5, alpha=0.85,
+                linestyle=method_linestyles[method])
+        ax.plot(solved_iters[-1], current_solved_count, marker='o',
+                color=method_colors[method], markersize=5)
+
+
+    # Format main plot
+    ax.axhline(total_problems, color='black', linestyle='--', linewidth=1, alpha=0.5)
+
+    # Change text x-coordinate from 0 to 10 to match xlim and avoid log(0) error
+    ax.text(10, total_problems, f' Total Problems: {total_problems}',
+            va='bottom', ha='left', color='gray')
+
+    ax.set_xlabel("Iteration Count")
+    ax.set_ylabel("Solved Problems (Count)")
+    # Start main plot from 1 to reveal full data path
     ax.set_xlim(0, max_x_limit)
     ax.set_ylim(0, total_problems * 1.2)
     ax.set_xscale('linear')
@@ -103,6 +186,80 @@ def plot_charts(filename='qp_results.csv'):
     # Save specific figure object before showing
     fig.savefig(save_path, bbox_inches='tight')
     plt.show()
+
+def plot_decomp_flop_worstcase(
+    filename='qp_results_riccati.csv',
+    exclude=('NO_REGULARIZE', 'IPOPT', 'SQP_PROJECT'),
+    common_only=False,
+):
+
+    df = pd.read_csv(filename, skipinitialspace=True)
+    df.columns = df.columns.str.strip()
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col] = df[col].str.strip()
+    df['Decomp_Flop'] = pd.to_numeric(
+        df['Decomp_Flop'].replace('N/A', np.nan), errors='coerce'
+    )
+
+    exclude = set(exclude)
+    targets = [m for m in df['Regularization'].unique() if m not in exclude]
+    df = df[df['Regularization'].isin(targets)].copy()
+    df['solved'] = df['solved'] = df['Status'].isin([0, 2]) & df['Decomp_Flop'].notna()
+
+    P = df['QP_name'].nunique()
+    n_solved_all = (df[df['solved']].groupby('Regularization')['QP_name']
+                      .nunique().reindex(targets).fillna(0))
+    n_failed_all = (df[df['Status'] != 0].groupby('Regularization')['QP_name']
+                    .nunique().reindex(targets).fillna(0))
+
+    work = df
+    if common_only:
+        solved_by = df[df['solved']].groupby('QP_name')['Regularization'].nunique()
+        common = solved_by[solved_by == len(targets)].index
+        work = df[df['QP_name'].isin(common)]
+    solved = work[work['solved']]
+
+    g = solved.groupby('Regularization')['Decomp_Flop']
+    stats = pd.DataFrame({
+        'n_solved': g.count(),
+        'median':   g.median(),
+        'mean':     g.mean(),
+        'p95':      g.quantile(0.95),
+        'p99':      g.quantile(0.99),
+        'max':      g.max(),
+    }).reindex(targets)
+    stats['n_failed']   = n_failed_all
+    stats['solve_rate'] = n_solved_all / P
+
+    plt.figure(figsize=(8, 6))
+    ax = sns.boxplot(
+        data=solved, x='Regularization', y='Decomp_Flop',
+        order=targets, hue='Regularization', palette='deep',
+        showfliers=True, fliersize=3, linewidth=1.0,
+        width=0.5, dodge=False, legend=False
+    )
+    ax.set_yscale('log')
+    ax.set_ylabel('Units in log')
+    ax.set_xlabel('')
+    ax.set_xticks(range(len(targets)))
+    ax.set_xticklabels([t.replace('_', ' ') for t in targets], rotation=45, ha='right')
+    ax.tick_params(direction='in', length=4, width=1)
+
+    ymax = solved['Decomp_Flop'].max()
+    for i, m in enumerate(targets):
+        if stats.loc[m, 'n_solved'] and stats.loc[m, 'n_solved'] > 0:
+            ax.annotate(f"max={stats.loc[m,'max']:.2g}\nfail={int(stats.loc[m,'n_failed'])}",
+                        (i, stats.loc[m, 'max']), ha='center', va='bottom',
+                        xytext=(0, 6), textcoords='offset points', fontsize=11)
+    ax.set_ylim(top=ymax * 3)
+    sns.despine()
+
+    plt.tight_layout()
+    p = Path(filename)
+    save_path = p.parent / f"decomp_flop_worstcase_{p.stem}.pdf"
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.show()
+    return stats
 
 
 def plot_DM_charts(filename='qp_results.csv'):
@@ -194,169 +351,6 @@ def plot_DM_charts(filename='qp_results.csv'):
     save_path = p.parent / f"dolan_more_{p.stem}.pdf"
     fig.savefig(save_path, bbox_inches='tight')
     plt.show()
-
-
-def plot_geometric_mean_cost(
-    filename='qp_results_riccati.csv',
-    atol=1e-6,         # absolute tol: gaps below this count as the SAME minimum
-    rtol=1e-4,         # relative tol on |best| (handles the wide, mostly-negative cost range)
-    gap_cap=1.0,       # cap on relative gap -> a converged-but-worse run scores in [1, 1+gap_cap]
-    fail_penalty=2.0,  # fixed per-problem score for ANY non-converged run (incl. max-iter)
-):
-    """
-    Per-problem score s in [1, fail_penalty], lower is better:
-        s = 1.0                      converged AND at the best-known minimum (within tol)
-        s = 1.0 + min(rel_gap, cap)  converged but to a worse minimum  -> (1, 1+gap_cap]
-        s = fail_penalty             did NOT converge (Status != 0: max-iter or failure)
-
-    Convergence is a hard gate: a run that hits max-iter and only returns an
-    approximate minimum is treated as the worst outcome, regardless of its cost,
-    and is excluded from defining the per-problem "best" reference.
-
-    The reported value per method is the GEOMETRIC MEAN of these scores
-    (1.0 == converged to the best minimum on every problem).
-    """
-
-    df = pd.read_csv(filename, skipinitialspace=True)
-    df.columns = df.columns.str.strip()
-    for col in df.select_dtypes(include=['object']).columns:
-        df[col] = df[col].str.strip()
-
-    targets = [m for m in df['Regularization'].unique() if m != 'NO_REGULARIZE']
-    df = df[df['Regularization'].isin(targets)].copy()
-
-    df['solved'] = (df['Status'] == 0) & df['Cost'].notna()
-
-    best = df[df['solved']].groupby('QP_name')['Cost'].min()
-
-    def score_row(row):
-        qp = row['QP_name']
-        if qp not in best.index:
-            return np.nan
-        if not row['solved']:
-            return fail_penalty
-        b = best[qp]
-        tol = atol + rtol * abs(b)
-        gap = row['Cost'] - b
-        if gap <= tol:
-            return 1.0
-        rel_gap = min(gap / max(abs(b), 1.0), gap_cap)
-        return 1.0 + rel_gap
-
-    df['Score'] = df.apply(score_row, axis=1)
-    df = df.dropna(subset=['Score'])
-
-    geo_mean_cost = (
-        df.groupby('Regularization')['Score']
-          .apply(gmean)
-          .reset_index()
-          .rename(columns={'Score': 'Geo_Mean'})
-    )
-
-    plt.figure(figsize=(8, 6))
-    ax = sns.barplot(
-        data=geo_mean_cost, x='Regularization', y='Geo_Mean', hue='Regularization',
-        order=targets, palette='deep', edgecolor='black', linewidth=1.2,
-        width=0.5, dodge=False, legend=False
-    )
-    for p in ax.patches:
-        height = p.get_height()
-        if pd.notnull(height) and height > 0:
-            ax.annotate(f'{height:.3f}',
-                        (p.get_x() + p.get_width() / 2., height),
-                        ha='center', va='bottom', xytext=(0, 5),
-                        textcoords='offset points', fontsize=14)
-
-    ax.set_ylim(1.0, geo_mean_cost['Geo_Mean'].max() * 1.10)
-    ax.set_ylabel('Geometric-Mean Score')
-    ax.set_xlabel('')
-    ax.set_xticks(range(len(targets)))
-    ax.set_xticklabels([t.replace('_', ' ') for t in targets], rotation=45, ha='right')
-    ax.tick_params(direction='in', length=4, width=1)
-    ax.tick_params(axis='x', rotation=60)
-    sns.despine()
-
-    plt.tight_layout()
-    p = Path(filename)
-    save_path = p.parent / f"geo_mean_cost_{p.stem}.pdf"
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.show()
-
-    return geo_mean_cost
-
-
-def plot_decomp_flop_worstcase(
-    filename='qp_results_riccati.csv',
-    exclude=('NO_REGULARIZE', 'IPOPT', 'SQP_PROJECT'),
-    common_only=False,
-):
-
-    df = pd.read_csv(filename, skipinitialspace=True)
-    df.columns = df.columns.str.strip()
-    for col in df.select_dtypes(include=['object']).columns:
-        df[col] = df[col].str.strip()
-    df['Decomp_Flop'] = pd.to_numeric(
-        df['Decomp_Flop'].replace('N/A', np.nan), errors='coerce'
-    )
-
-    exclude = set(exclude)
-    targets = [m for m in df['Regularization'].unique() if m not in exclude]
-    df = df[df['Regularization'].isin(targets)].copy()
-    df['solved'] = (df['Status'] == 0) & df['Decomp_Flop'].notna()
-
-    P = df['QP_name'].nunique()
-    n_solved_all = (df[df['solved']].groupby('Regularization')['QP_name']
-                      .nunique().reindex(targets).fillna(0))
-    n_failed_all = P - n_solved_all
-
-    work = df
-    if common_only:
-        solved_by = df[df['solved']].groupby('QP_name')['Regularization'].nunique()
-        common = solved_by[solved_by == len(targets)].index
-        work = df[df['QP_name'].isin(common)]
-    solved = work[work['solved']]
-
-    g = solved.groupby('Regularization')['Decomp_Flop']
-    stats = pd.DataFrame({
-        'n_solved': g.count(),
-        'median':   g.median(),
-        'mean':     g.mean(),
-        'p95':      g.quantile(0.95),
-        'p99':      g.quantile(0.99),
-        'max':      g.max(),
-    }).reindex(targets)
-    stats['n_failed']   = n_failed_all
-    stats['solve_rate'] = n_solved_all / P
-
-    plt.figure(figsize=(8, 6))
-    ax = sns.boxplot(
-        data=solved, x='Regularization', y='Decomp_Flop',
-        order=targets, hue='Regularization', palette='deep',
-        showfliers=True, fliersize=3, linewidth=1.0,
-        width=0.5, dodge=False, legend=False
-    )
-    ax.set_yscale('log')
-    ax.set_ylabel('Units in log')
-    ax.set_xlabel('')
-    ax.set_xticks(range(len(targets)))
-    ax.set_xticklabels([t.replace('_', ' ') for t in targets], rotation=45, ha='right')
-    ax.tick_params(direction='in', length=4, width=1)
-
-    ymax = solved['Decomp_Flop'].max()
-    for i, m in enumerate(targets):
-        if stats.loc[m, 'n_solved'] and stats.loc[m, 'n_solved'] > 0:
-            ax.annotate(f"max={stats.loc[m,'max']:.2g}\nfail={int(stats.loc[m,'n_failed'])}",
-                        (i, stats.loc[m, 'max']), ha='center', va='bottom',
-                        xytext=(0, 6), textcoords='offset points', fontsize=11)
-    ax.set_ylim(top=ymax * 3)
-    sns.despine()
-
-    plt.tight_layout()
-    p = Path(filename)
-    save_path = p.parent / f"decomp_flop_worstcase_{p.stem}.pdf"
-    plt.savefig(save_path, dpi=300, bbox_inches='tight')
-    plt.show()
-    return stats
 
 
 def plot_indefiniteness_coverage(csv_path, save_path=None):
@@ -515,38 +509,29 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
            'both': '#8338ec', 'neither': '#9a9a9a'}
     mk = {'R only': '^', 'P only': 'v', 'both': 'o', 'neither': 'X'}
 
-    # ===================== Figure A: Quadrant scatter =====================
-    figA, axA = plt.subplots(figsize=(7.5, 7))
+    # ===================== Figure A: Indefiniteness-source histogram =====================
+    figA, axA = plt.subplots(figsize=(6.5, 5))
 
-    for c in ['both', 'P only', 'R only', 'neither']:
-        m = df['cls'] == c
-        axA.scatter(R[m], P[m], s=34, marker=mk[c], c=col[c], alpha=0.75,
-                    edgecolor='white', linewidth=0.4,
-                    label=f'{c} (n={m.sum()})', zorder=3)
-
-    axA.set_xscale('symlog', linthresh=1.0)
-    axA.set_yscale('symlog', linthresh=1.0)
-    axA.axhline(0, color='#333', lw=1)
-    axA.axvline(0, color='#333', lw=1)
-    axA.set_xlabel(r'$\lambda_{\min}(R)$')
-    axA.set_ylabel(r'$\lambda_{\min}(P)$')
-    axA.grid(True, which='major', ls='--', lw=0.4, color='#ddd', zorder=0)
-
-    # Quadrant captions (placed in matching corners)
-    def q(x, y, t, c):
-        axA.text(x, y, t, fontsize=8.6, style='italic', color=c,
-                 ha='center', va='center',
-                 bbox=dict(boxstyle='round,pad=0.3', fc='white',
-                           ec=c, alpha=0.85, lw=0.8))
-
-    xlo, xhi = axA.get_xlim()
-    ylo, yhi = axA.get_ylim()
+    hist_cls = ['R only', 'P only', 'both']
+    hist_labels = ['R only', 'P only', 'RP only']
     counts = df['cls'].value_counts()
+    freqs = [counts.get(c, 0) for c in hist_cls]
 
-    q(xlo * 0.18, ylo * 0.45, f"both  (R<0, P<0)\nn={counts.get('both', 0)}", col['both'])
-    q(xhi * 0.30, ylo * 0.45, f"P only  (R≥0, P<0)\nn={counts.get('P only', 0)}", col['P only'])
-    q(xlo * 0.18, yhi * 0.45, f"R only  (R<0, P≥0)\nn={counts.get('R only', 0)}", col['R only'])
-    q(xhi * 0.30, yhi * 0.45, f"neither (R≥0, P≥0)\nn={counts.get('neither', 0)}", col['neither'])
+    x = np.arange(len(hist_cls))
+    axA.bar(x, freqs, color=[col[c] for c in hist_cls],
+            edgecolor='white', lw=0.6, width=0.7, zorder=3)
+
+    axA.set_xticks(x)
+    axA.set_xticklabels(hist_labels)
+    axA.set_xlabel('indefiniteness source')
+    axA.set_ylabel('frequency')
+    axA.grid(True, axis='y', ls='--', lw=0.4, color='#ddd', zorder=0)
+
+    for s in ['top', 'right']:
+        axA.spines[s].set_visible(False)
+
+    for xi, f in zip(x, freqs):
+        axA.text(xi, f, str(f), ha='center', va='bottom', fontsize=9)
 
     if path_A is not None:
         figA.savefig(path_A, bbox_inches='tight')
@@ -554,7 +539,7 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
     # ===================== Figure B: Per-OCP signature =====================
     figB, axB = plt.subplots(figsize=(6.5, 7))
 
-    order_cls = ['R only', 'both', 'P only', 'neither']
+    order_cls = ['R only', 'both', 'P only']
     ct = pd.crosstab(df['problem'], df['cls'])
 
     # Ensure all classes present as columns
@@ -597,12 +582,11 @@ def plot_stage_indefiniteness_source(csv_path, save_path=None):
 if __name__ == "__main__":
     set_ieee_style()
 
-    iter = 1
+    iter = 0
     if iter:
-        # plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-        plot_charts('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
-        # plot_geometric_mean_cost('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-        # plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
+        # plot_charts_pos('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
+        plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
     else:
         plot_indefiniteness_coverage('qp_diagonstics.csv', save_path='indefiniteness_coverage.pdf') if Path('qp_diagonstics.csv').exists() else print("qp_diagonstics.csv not found, skipping.")
         plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf') if Path('qp_stage_diagnostics.csv').exists() else print("qp_stage_diagnostics.csv not found, skipping.")

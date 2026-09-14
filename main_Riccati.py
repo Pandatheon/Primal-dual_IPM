@@ -35,7 +35,7 @@ def write_csv_row(output_path: Path, row: dict) -> None:
         writer.writerow(row)
 
 
-def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Path) -> None:
+def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Path, iter_max) -> None:
     if not qp_json_paths:
         print("No QP json files found; nothing to benchmark.")
         return
@@ -43,9 +43,6 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
     if output_path.exists():
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
-
-    methods = no_reg + Block_Hessian_reg + Block_reduced_Hessian_reg + Iteration_based_reg + Refer_list
-    iter_max = 100
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
@@ -57,7 +54,10 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
                 qp_solver = SqpQpSolver(qp, nlp_max_iter=60, mode='nonconvex')
             elif method == 'IPOPT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
-                opts = {'ipopt': {'print_level': 0, 'max_iter': iter_max, 'sb': 'yes'}}
+                opts = {'ipopt': {'print_level': 0, 
+                                  'max_iter': iter_max, 
+                                  'sb': 'yes', 
+                                  'mu_init': 1e1,}}
                 qp_solver = AcadosCasadiOcpQpSolver(qp, solver='ipopt', solver_opts=opts)
             else:
                 qp = BaseQP()
@@ -99,10 +99,13 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
 
 def main() -> None:
     qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
-    # qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_results_riccati.csv"
-    run_benchmark(qp_json_paths, reg_list, output_path)
+    iter_max = 100
+    # methods = no_reg + Block_reduced_Hessian_reg
+    # methods = no_reg + ["PM_MIRROR", "PM_GMW"] + Block_Hessian_reg
+    methods = no_reg + ["PM_MIRROR", "PM_GMW", "INERTIA_LM"]
+    run_benchmark(qp_json_paths, methods, output_path, iter_max)
 
 
 if __name__ == "__main__":

@@ -511,7 +511,7 @@ class QpSolver:
         return alpha_pri_max, alpha_dual_max, alpha
 
 
-    def _funnel_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=5):
+    def _funnel_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=10):
 
         # FTB
         tau_hi = 1.0 - min(1e-7, self.rhs.duality_measure)
@@ -545,30 +545,33 @@ class QpSolver:
                 # check acceptablity
                 if norm_c_cand <= self.theta_max:
                     # check f type condition
-                    if alpha_p*(-grad_direc_prod)>1e-4*norm_c**2:
+                    if alpha_p*(-grad_direc_prod)>1e-1*norm_c**2:
                         # check Armijo condition
                         if objective_cand <= objective + 1e-4*alpha_p*grad_direc_prod:
                             self.stat_dict['ls'][-1] = str(ls)+"f"
                             break
                         else:
-                            alpha_p *= beta
                             if i == max_ls - 1:
                                 self.stat_dict['ls'][-1] = '5x'
+                            else:
+                                alpha_p *= beta
                     else:
                         # check theta type condition
-                        if norm_c_cand <= 0.9999*self.theta_max:
+                        if norm_c_cand <= 0.999*self.theta_max:
                             # update theta_max
                             self.theta_max = max((1-0.5)*self.theta_max + 0.5*norm_c_cand, self.theta_max*0.9999)
                             self.stat_dict['ls'][-1] = str(ls)+"h"
                             break
                         else:
-                            alpha_p *= beta
                             if i == max_ls - 1:
                                 self.stat_dict['ls'][-1] = '5x'
+                            else:
+                                alpha_p *= beta
                 else:
-                    alpha_p *= beta
                     if i == max_ls - 1:
                         self.stat_dict['ls'][-1] = '5x'
+                    else:
+                        alpha_p *= beta
 
         else:
             pass

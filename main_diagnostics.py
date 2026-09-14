@@ -120,8 +120,8 @@ def QP_stage_diagnostics(qp_json_paths: list[Path], output_path: Path) -> None:
 
 
 def main() -> None:
-    # qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
-    qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
+    qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
+    # qp_root = Path(__file__).resolve().parent / "cases" / "Time_optimal_inde_QP_json"
     # qp_root = Path(__file__).resolve().parent / "tests" / "QP_json" / "temp"
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_diagonstics.csv"
@@ -137,5 +137,5 @@ def main_stage_diagnostics() -> None:
     # plot_stage_indefiniteness_source('qp_stage_diagnostics.csv', save_path='stage_indefiniteness.pdf')
 
 if __name__ == "__main__":
-    # main()
-    main_stage_diagnostics()
+    main()
+    # main_stage_diagnostics()
