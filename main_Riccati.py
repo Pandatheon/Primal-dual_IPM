@@ -1,0 +1,115 @@
+import csv
+import numpy as np
+from pathlib import Path
+
+from QP_template.QP_base import BaseQP
+from solvers.RiccatiQpSolver import QpSolver
+from solvers.Regularization_config import reg_list, Block_Hessian_reg, Iteration_based_reg, Block_reduced_Hessian_reg, no_reg, Refer_list
+
+from solvers.SqpQpSolver import SqpQpSolver
+from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp
+
+CSV_COLUMNS = [
+    "QP_name",
+    "Regularization",
+    "Iteration",
+    "Cost",
+    "Decomp_Flop",
+    "Status",
+]
+
+
+def iter_qp_json_paths(root: Path) -> list[Path]:
+    if not root.exists():
+        raise FileNotFoundError(f"QP folder not found: {root}")
+    return sorted(root.glob("*.json"))
+
+
+def write_csv_row(output_path: Path, row: dict) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = output_path.exists()
+    with output_path.open("a", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CSV_COLUMNS)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
+
+
+def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Path, iter_max) -> None:
+    if not qp_json_paths:
+        print("No QP json files found; nothing to benchmark.")
+        return
+
+    if output_path.exists():
+        output_path.unlink()
+        print(f"Deleted existing {output_path} to start fresh.")
+
+    for qp_path in qp_json_paths:
+        print("*" * 50)
+        print(f"QP loaded from {qp_path}")
+        for method in methods:
+            print("-" * 50)
+            print(f"Method: {method}")
+            if method == 'SQP_PROJECT':
+                qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
+                qp_solver = SqpQpSolver(qp, nlp_max_iter=60, mode='nonconvex')
+            elif method == 'IPOPT':
+                qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
+                opts = {'ipopt': {'print_level': 0, 
+                                  "jacobian_regularization_value": 0.0,
+                                  'max_iter': iter_max, 
+                                  'sb': 'yes', 
+                                  'mu_init': 1e1,}}
+                qp_solver = AcadosCasadiOcpQpSolver(qp, solver='ipopt', solver_opts=opts)
+            else:
+                qp = BaseQP()
+                qp.populate_from_json(str(qp_path))
+                qp_solver = QpSolver(qp, reg=method, type='Riccati', mehrotra=False, globalization=True)
+
+            cost = None
+            iter = None
+            decomp_flop = None
+            try:
+                if method in Refer_list:
+                    qp_solver.solve()
+                else:
+                    qp_solver.solve(max_iter=iter_max)
+                cost = qp_solver.get_cost()
+                if method == 'SQP_PROJECT':
+                    iter = sum(qp_solver.get_stats('qp_iter'))
+                else:
+                    iter = qp_solver.get_stats("iter")
+                if method not in Refer_list:
+                    decomp_flop = qp_solver.stat_dict.get('decomp_flop', 'N/A')
+            except Exception as exc:
+                print(f"Method {method} failed on {qp_path.name}: {exc}")
+            if cost is not None:
+                print(f"Optimal cost: {cost}")
+            if decomp_flop is None:
+                decomp_flop = 'N/A'
+            write_csv_row(
+                output_path,
+                {
+                    "QP_name": qp_path.stem,
+                    "Regularization": method,
+                    "Iteration": iter,
+                    "Cost": cost,
+                    'Decomp_Flop': decomp_flop,
+                    "Status": qp_solver.status,
+                },
+            )
+
+def main() -> None:
+    qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
+    qp_json_paths = iter_qp_json_paths(qp_root)
+    output_path = Path(__file__).resolve().parent / "qp_results_riccati.csv"
+    iter_max = 120
+    # methods = no_reg + Block_reduced_Hessian_reg
+    # methods = no_reg + ["PM_MIRROR", "PM_GMW"] + Block_Hessian_reg
+    methods = no_reg + ["PM_MIRROR", "PM_GMW", "INERTIA_LM"]
+    # methods = ["IPOPT"]
+    run_benchmark(qp_json_paths, methods, output_path, iter_max)
+
+
+if __name__ == "__main__":
+    main()

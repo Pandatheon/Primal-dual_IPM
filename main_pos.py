@@ -1,0 +1,115 @@
+import csv
+import numpy as np
+from pathlib import Path
+
+from QP_template.QP_base import BaseQP
+from solvers.RiccatiQpSolver import QpSolver
+from solvers.Regularization_config import reg_list, Refer_list
+
+from acados_template import AcadosCasadiOcpQpSolver, AcadosOcpQp, AcadosOcpQpSolver, AcadosOcpQpOptions
+
+CSV_COLUMNS = [
+    "QP_name",
+    "Regularization",
+    "Iteration",
+    "Cost",
+    "Status",
+]
+
+
+def iter_qp_json_paths(root: Path) -> list[Path]:
+    if not root.exists():
+        raise FileNotFoundError(f"QP folder not found: {root}")
+    return sorted(root.glob("*.json"))
+
+
+def write_csv_row(output_path: Path, row: dict) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = output_path.exists()
+    with output_path.open("a", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CSV_COLUMNS)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
+
+
+def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Path) -> None:
+    if not qp_json_paths:
+        print("No QP json files found; nothing to benchmark.")
+        return
+
+    if output_path.exists():
+        output_path.unlink()
+        print(f"Deleted existing {output_path} to start fresh.")
+
+    methods = ['Prototype', 'HPIPM']
+
+    for qp_path in qp_json_paths:
+        print(f"QP loaded from {qp_path}")
+        for method in methods:
+            print("-" * 50)
+            print(f"Method: {method}")
+            if method == 'HPIPM':
+                opts = AcadosOcpQpOptions()
+                opts.mu0 = 1e1
+                opts.hpipm_mode = 'CUSTOMIZED'
+                opts.ric_alg = 0
+                opts.tol_stat = 1e-6
+                opts.tol_eq = 1e-8
+                opts.tol_ineq = 1e-8
+                opts.tol_comp = 1e-6
+                opts.iter_max = 100
+
+                qp = BaseQP()
+                qp.populate_from_json(str(qp_path))
+                qp_acados = AcadosOcpQp.from_json(json_file_path=str(qp_path))
+                qp_solver = AcadosOcpQpSolver(qp_acados, opts)
+
+            elif method == 'IPOPT':
+                qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
+                opts = {'ipopt': {'print_level': 0, 'max_iter': 300, 'sb': 'yes'}}
+                qp_solver = AcadosCasadiOcpQpSolver(qp, solver='ipopt', solver_opts=opts)
+            else:
+                qp = BaseQP()
+                qp.populate_from_json(str(qp_path))
+                qp_solver = QpSolver(qp, reg='NO_REG', type='Riccati', mehrotra=True, globalization=False)
+
+            cost = None
+            iter = None
+            try:
+                if method == 'HPIPM':
+                    status = qp_solver.solve()
+                    iter = qp_solver.get_stats("iter")
+                elif method == 'IPOPT':
+                    qp_solver.solve()
+                    iter = qp_solver.get_stats("iter")
+                    status = qp_solver.status
+                elif method == 'Prototype':
+                    qp_solver.solve()
+                    iter = qp_solver.get_stats("iter")
+                    status = qp_solver.status
+                cost = qp_solver.get_cost()
+            except Exception as exc:
+                print(f"Method {method} failed on {qp_path.name}: {exc}")
+            if cost is not None:
+                print(f"Optimal cost: {cost}")
+            write_csv_row(
+                output_path,
+                {
+                    "QP_name": qp_path.stem,
+                    "Regularization": method,
+                    "Iteration": iter,
+                    "Cost": cost,
+                    "Status":status,
+                },
+            )
+
+def main() -> None:
+    qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_pos_QP_json"
+    qp_json_paths = iter_qp_json_paths(qp_root)
+    output_path = Path(__file__).resolve().parent / "qp_results_pos.csv"
+    run_benchmark(qp_json_paths, reg_list, output_path)
+
+
+if __name__ == "__main__":
+    main()
