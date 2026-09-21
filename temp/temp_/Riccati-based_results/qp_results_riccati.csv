@@ -1,0 +1,1086 @@
+QP_name                                                     , Regularization, Iteration, Cost                   , Decomp_Flop, Status
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , NO_REGULARIZE ,         1, -0.00017970894423369906,        8   ,      1
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , M_PROJECT     ,         1, -0.00017970894423369906,      211   ,      1
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , M_MIRROR      ,        64, -1261.4347020415819    ,    21856   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , M_GMW         ,        64, -1261.4347020415819    ,     2632   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , PM_PROJECT    ,        55, -1261.4347020412222    ,   458210.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , PM_MIRROR     ,        49, -5698.396223647691     ,   261358.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_10_MIRROR             , PM_GMW        ,        79, -1261.4347020415728    ,    11860.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , NO_REGULARIZE ,         2, -123.96190594801249    ,       45   ,      1
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , M_PROJECT     ,        11, -304.99211557239244    ,      386   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , M_MIRROR      ,        12, -304.99211557239255    ,      416   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , M_GMW         ,        12, -304.99211557239255    ,      362   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , PM_PROJECT    ,        10, -304.99211557236464    ,     3812.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , PM_MIRROR     ,         9, -304.99211447607087    ,     3782.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_12                    , PM_GMW        ,         9, -304.992115553147      ,      400.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , NO_REGULARIZE ,         2, -22.333306650354146    ,       45   ,      1
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , M_PROJECT     ,        11, -59.960655580714274    ,      386   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , M_MIRROR      ,        11, -59.96065558070981     ,      386   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , M_GMW         ,        11, -59.96065558070981     ,      332   ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , PM_PROJECT    ,        12, -59.96065558071429     ,     3872.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , PM_MIRROR     ,        12, -59.96065558071423     ,    10896.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_13                    , PM_GMW        ,        33, -59.96065558071423     ,     4370.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , NO_REGULARIZE ,         1, 0.7817454815937738     ,        5   ,      1
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , M_MIRROR      ,       100, -488243.0703266998     ,    15880   ,      2
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , M_GMW         ,       100, -488243.0703266998     ,     3460   ,      2
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , PM_PROJECT    ,       100, -369876.4725287334     ,   754568.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , PM_MIRROR     ,        88, -490535.50982444634    ,   490808.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_2_iter_6_MIRROR              , PM_GMW        ,       100, -488243.0703266996     ,    22500.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , NO_REGULARIZE ,         1, 219.7486119931475      ,        3   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , M_PROJECT     ,         1, nan                    ,      422   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , M_MIRROR      ,        64, -25031.916589172342    ,    14632   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , M_GMW         ,        64, -25031.916589172342    ,     2374   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , PM_PROJECT    ,       100, 119.64197425057579     ,  3490416.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , PM_MIRROR     ,        72, -25031.916589171888    ,   901232.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1                     , PM_GMW        ,        70, -25031.916589171833    ,    22640.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , NO_REGULARIZE ,         1, -0.00338710800418051   ,        7   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , M_PROJECT     ,         1, nan                    ,      422   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , M_MIRROR      ,        41, -12381.814397014725    ,     7110   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , M_GMW         ,        41, -12381.814397014725    ,     1440   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , PM_PROJECT    ,       100, -57.004493643347125    ,  2050496.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , PM_MIRROR     ,        55, -12381.814397166605    ,   268562.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_10                    , PM_GMW        ,       100, -12381.814397166592    ,    15870.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , NO_REGULARIZE ,         8, -60.32849679796336     ,      221   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , M_PROJECT     ,         9, nan                    ,      942   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , M_MIRROR      ,        17, -116.52847337609553    ,     1462   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , M_GMW         ,        17, -116.52847337609553    ,      544   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , PM_PROJECT    ,        17, -116.528473376584      ,    11046.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , PM_MIRROR     ,        16, -116.52847336591518    ,     7504.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_11                    , PM_GMW        ,        16, -116.52847337624853    ,      740.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , NO_REGULARIZE ,         1, 219.7486119931475      ,        3   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , M_PROJECT     ,         1, nan                    ,      422   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , M_MIRROR      ,        64, -25031.916589172342    ,    14632   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , M_GMW         ,        64, -25031.916589172342    ,     2374   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , PM_PROJECT    ,       100, 119.64197425057579     ,  3490416.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , PM_MIRROR     ,        72, -25031.916589171888    ,   901232.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_1_MIRROR              , PM_GMW        ,        70, -25031.916589171833    ,    22640.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , NO_REGULARIZE ,         1, 279.05110961446996     ,        3   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , M_MIRROR      ,       100, -403.66829717898645    ,    61408   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , M_GMW         ,       100, -403.66829717898645    ,     5086   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , PM_PROJECT    ,       100, -2781.0919879173266    ,  2503544.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , PM_MIRROR     ,        98, -24866.86928013349     ,  1024932.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_2_MIRROR              , PM_GMW        ,        79, -24866.869280134157    ,    23560.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , NO_REGULARIZE ,         1, -0.041019049349191504  ,        5   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , M_MIRROR      ,        90, -317586.71494158776    ,    34396   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , M_GMW         ,        90, -317586.71494158776    ,     3832   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , PM_PROJECT    ,        87, -111070.31351096445    ,   483754.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , PM_MIRROR     ,        55, -111070.31350911909    ,   363386.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_3_MIRROR              , PM_GMW        ,       100, -111070.31351096442    ,    22370.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , NO_REGULARIZE ,         1, 0.025042718752090704   ,        7   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , M_MIRROR      ,        39, -67297.84175280746     ,     6602   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , M_GMW         ,        39, -67297.84175280746     ,     1364   ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , PM_PROJECT    ,        26, -67297.84175280729     ,    88580.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , PM_MIRROR     ,        45, -67297.84175280748     ,   187486.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_4                     , PM_GMW        ,        47, -67297.84175280757     ,     6350.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , NO_REGULARIZE ,         1, 0.039411355975819816   ,        6   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , M_MIRROR      ,       100, -1086.8361312143836    ,    52560   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , M_GMW         ,       100, -1086.8361312143836    ,     4770   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , PM_PROJECT    ,       100, -3922.3759628781804    ,   793200.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , PM_MIRROR     ,        41, -32109.26014178336     ,   120638.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_5                     , PM_GMW        ,       100, -27044.66344738064     ,    16000.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , NO_REGULARIZE ,         1, -0.012973362976564812  ,        5   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , M_MIRROR      ,       100, -2497.0642254744985    ,    67792   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , M_GMW         ,       100, -2497.0642254744985    ,     5314   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , PM_PROJECT    ,       100, -2123.8064793641984    ,  1263808.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , PM_MIRROR     ,        83, -50448.43921511009     ,   332618.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_6                     , PM_GMW        ,        90, -50448.4392151096      ,    15960.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , NO_REGULARIZE ,         1, 0.029100121737321585   ,        4   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , M_MIRROR      ,       100, -1004.0016588037092    ,    72888   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , M_GMW         ,       100, -1004.0016588037092    ,     5496   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , PM_PROJECT    ,       100, 61.56292402407967      ,  3167312.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , PM_MIRROR     ,        79, -142281.7142479717     ,   824178.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_8                     , PM_GMW        ,       100, -132772.30494882422    ,    36150.0 ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , NO_REGULARIZE ,         1, -0.05246438793632824   ,        5   ,      1
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , M_PROJECT     ,         1, nan                    ,      366   ,      3
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , M_MIRROR      ,       100, -67572.58147703142     ,     6584   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , M_GMW         ,       100, -67572.58147703142     ,     3128   ,      2
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , PM_PROJECT    ,        36, -67572.58147703146     ,   275016.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , PM_MIRROR     ,        62, -155802.73464856218    ,   300380.0 ,      0
+acrobot_FU_INDE_RE_INDE_status_4_iter_9                     , PM_GMW        ,       100, -155795.61597548018    ,    14570.0 ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, NO_REGULARIZE ,        14, -0.40649081017862393   ,      674   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, M_PROJECT     ,        21, -0.4075585335381973    ,     1162   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, M_MIRROR      ,        21, -0.4075585334822799    ,     1106   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, M_GMW         ,        21, -0.40755853348229765   ,     1052   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, PM_PROJECT    ,        21, -0.40755853346896254   ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, PM_MIRROR     ,        21, -0.4075585124092802    ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_12, PM_GMW        ,        21, -0.40755853347508253   ,     1058.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , NO_REGULARIZE ,        15, -4.23814797321273      ,      721   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , M_PROJECT     ,        17, -4.24296134109746      ,     1356   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , M_MIRROR      ,       100, -4.340194014575276     ,    94600   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , M_GMW         ,        36, -4.553140010849729     ,     1926   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , PM_PROJECT    ,        27, -4.54991818118748      ,     3256.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , PM_MIRROR     ,        25, -4.549918179952988     ,     2917.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_2 , PM_GMW        ,        24, -4.549918181141734     ,     1252.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, NO_REGULARIZE ,        12, 0.1836966916740051     ,      571   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, M_PROJECT     ,        24, -0.18486184407242967   ,     1872   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, M_MIRROR      ,        24, -0.18467486762730537   ,     1536   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, M_GMW         ,        23, -0.18467455503857438   ,     1162   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, PM_PROJECT    ,        24, -0.1846749177795245    ,     1914.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, PM_MIRROR     ,        30, -0.18486187385167704   ,     2929.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_39, PM_GMW        ,        35, -0.1848618738375853    ,     1863.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , NO_REGULARIZE ,         2, -2.3939998890387626    ,       71   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , M_PROJECT     ,         9, -191.2876895812229     ,     1540   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , M_MIRROR      ,        23, -240.7882087278805     ,     2718   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , M_GMW         ,        24, -240.78820873845774    ,     1274   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , PM_PROJECT    ,       100, -233.02559132626115    ,   124363.25,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , PM_MIRROR     ,        25, -240.7882087380254     ,     4585.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_4 , PM_GMW        ,        19, -240.78820873844285    ,     1002.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, NO_REGULARIZE ,        12, 0.1649455189980064     ,      567   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, M_PROJECT     ,        12, nan                    ,      992   ,      3
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, M_MIRROR      ,        30, -0.1150778765121278    ,     3180   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, M_GMW         ,        29, -0.11507789997304071   ,     1502   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, PM_PROJECT    ,        21, -0.115077591140771     ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, PM_MIRROR     ,        20, -0.11507762820786      ,     1238.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_42, PM_GMW        ,        20, -0.11507761703903714   ,     1008.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , NO_REGULARIZE ,        10, -0.6731945392332839    ,      473   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , M_PROJECT     ,        14, -0.7017908373901408    ,     2019   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , M_MIRROR      ,       100, -0.826936503383341     ,    39048   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , M_GMW         ,        46, -1.8951520198766114    ,     2480   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , PM_PROJECT    ,        40, -1.8951518239543061    ,    10338.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , PM_MIRROR     ,        46, -1.895151701169014     ,    10877.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_2_iter_6 , PM_GMW        ,        31, -1.895152019898794     ,     1655.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, NO_REGULARIZE ,        12, -0.6169270524903376    ,      573   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, M_PROJECT     ,        21, -0.7260147422318489    ,     1218   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, M_MIRROR      ,        21, -0.7260147424602046    ,     1162   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, M_GMW         ,        21, -0.7260147424612473    ,     1054   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, PM_PROJECT    ,        21, -0.7260147424886133    ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, PM_MIRROR     ,        21, -0.7260147424922093    ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_10, PM_GMW        ,        21, -0.7260147424872633    ,     1058.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, NO_REGULARIZE ,        11, 0.1298321082404449     ,      519   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, M_PROJECT     ,        11, 0.1298321082404449     ,      663   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, M_MIRROR      ,        21, -0.057057684123183974  ,     1610   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, M_GMW         ,        20, -0.057057693645713836  ,     1020   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, PM_PROJECT    ,        20, -0.05705768387219344   ,     1953.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, PM_MIRROR     ,        26, -0.05705769269862606   ,     2729.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_18, PM_GMW        ,        20, -0.05705769474420423   ,     1026.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, NO_REGULARIZE ,        13, 0.12526940587961527    ,      623   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, M_PROJECT     ,        24, -0.05558718207616138   ,     1536   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, M_MIRROR      ,        24, -0.05558718207345256   ,     1480   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, M_GMW         ,        24, -0.055587182066070655  ,     1206   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, PM_PROJECT    ,        24, -0.05558718202472346   ,     1914.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, PM_MIRROR     ,        23, -0.05558718207158839   ,     1388.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_19, PM_GMW        ,        23, -0.05558718203113139   ,     1167.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, NO_REGULARIZE ,        11, 0.1927569159574988     ,      518   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, M_PROJECT     ,        11, 0.1927569159574988     ,      662   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, M_MIRROR      ,        35, -0.0796632828762075    ,     6846   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, M_GMW         ,       100, 0.1688523760465135     ,     6582   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, PM_PROJECT    ,       100, 0.17218419761691678    ,    84813.75,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, PM_MIRROR     ,        23, -0.0970986666316315    ,     3532.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_20, PM_GMW        ,        26, -0.07966330941602806   ,     1387.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, NO_REGULARIZE ,        11, 0.2056074919245615     ,      518   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, M_PROJECT     ,       100, 0.180647793276529      ,    24432   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, M_MIRROR      ,        77, -0.09624448004441406   ,    24458   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, M_GMW         ,       100, 0.18046619648024625    ,     6350   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, PM_PROJECT    ,        33, -0.0962444701679453    ,     9035.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, PM_MIRROR     ,        24, -0.09624448237657564   ,     2867.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_21, PM_GMW        ,        21, -0.09624450504846199   ,     1093.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, NO_REGULARIZE ,        10, 0.13651238184936307    ,      472   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, M_PROJECT     ,        35, -0.14964405723371377   ,     3766   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, M_MIRROR      ,        23, -0.14964475014249615   ,     1766   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, M_GMW         ,        22, -0.14964475010741735   ,     1120   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, PM_PROJECT    ,        21, -0.14964474819012558   ,     2003.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, PM_MIRROR     ,        21, -0.14964474984251086   ,     2003.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_24, PM_GMW        ,        21, -0.14964465761957377   ,     1093.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, NO_REGULARIZE ,        11, 0.10979840150080837    ,      522   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, M_PROJECT     ,        19, -0.05832829834915847   ,     1174   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, M_MIRROR      ,        20, -0.058328633616985086  ,     1168   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, M_GMW         ,        20, -0.058328633655916555  ,     1006   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, PM_PROJECT    ,        19, -0.058328142523958085  ,     1188.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, PM_MIRROR     ,        20, -0.058328625657165026  ,     1238.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_25, PM_GMW        ,        20, -0.058328616996068235  ,     1008.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, NO_REGULARIZE ,         9, 0.32302785387438226    ,      422   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, M_PROJECT     ,        27, 0.2744670068692701     ,     6169   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, M_MIRROR      ,        58, -0.024276607023953845  ,    12980   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, M_GMW         ,       100, 0.29189984616671905    ,     6368   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, PM_PROJECT    ,        30, -0.04519672249487386   ,     5073.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, PM_MIRROR     ,        17, -0.045196712879524974  ,     1088.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_26, PM_GMW        ,        17, -0.045196706100996464  ,      858.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, NO_REGULARIZE ,        10, 0.21511861001360877    ,      471   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, M_PROJECT     ,        13, nan                    ,     1714   ,      3
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, M_MIRROR      ,        18, -0.01873787168304043   ,     1180   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, M_GMW         ,       100, 0.22338983643869353    ,     6478   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, PM_PROJECT    ,        18, -0.01873783731020881   ,     1138.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, PM_MIRROR     ,        18, -0.018737754990186015  ,     1138.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_27, PM_GMW        ,        18, -0.01873775308664144   ,      908.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, NO_REGULARIZE ,        11, 0.10398548769028176    ,      521   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, M_PROJECT     ,        19, -0.20740580202964579   ,     1230   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, M_MIRROR      ,        18, -0.20740579964884165   ,      956   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, M_GMW         ,        18, -0.2074057996515287    ,      902   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, PM_PROJECT    ,        18, -0.20740580159968994   ,     1138.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, PM_MIRROR     ,        18, -0.2074057997952572    ,     1138.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_31, PM_GMW        ,        18, -0.20740580005640816   ,      908.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, NO_REGULARIZE ,        12, 0.042778950452589865   ,      571   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, M_PROJECT     ,        21, -0.3367703450325695    ,     1610   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, M_MIRROR      ,        24, -0.2900307553405795    ,     1704   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, M_GMW         ,        25, -0.2900307583431325    ,     1270   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, PM_PROJECT    ,        21, -0.33677035154265034   ,     1764.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, PM_MIRROR     ,        22, -0.33677035219050233   ,     2053.0 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_34, PM_GMW        ,        25, -0.29003075809439705   ,     1302.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, NO_REGULARIZE ,        12, 0.09439268192244328    ,      571   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, M_PROJECT     ,        12, 0.09439268192244328    ,      715   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, M_MIRROR      ,        22, -0.3904041513812387    ,     1212   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, M_GMW         ,        22, -0.3904041513775938    ,     1104   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, PM_PROJECT    ,        22, -0.3904041512103806    ,     1576.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, PM_MIRROR     ,        22, -0.3904041556782648    ,     1338.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_35, PM_GMW        ,        22, -0.39040415559195524   ,     1108.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, NO_REGULARIZE ,        11, 0.2961449128358666     ,      523   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, M_PROJECT     ,        21, -0.03432728231233799   ,     1218   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, M_MIRROR      ,        21, -0.03432725448446066   ,     1218   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, M_GMW         ,        22, -0.034327603034282055  ,     1106   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, PM_PROJECT    ,        21, -0.03432727175081476   ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, PM_MIRROR     ,        21, -0.034327271147729446  ,     1288.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_37, PM_GMW        ,        21, -0.034327282216833226  ,     1058.75,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, NO_REGULARIZE ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, M_PROJECT     ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, M_MIRROR      ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, M_GMW         ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, PM_PROJECT    ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, PM_MIRROR     ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_38, PM_GMW        ,        21, -0.10876337174453297   ,     1050   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , NO_REGULARIZE ,         7, 3.088533251697386      ,      310   ,      1
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , M_PROJECT     ,         7, nan                    ,      742   ,      3
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , M_MIRROR      ,        79, -0.915598323671519     ,    69638   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , M_GMW         ,       100, 3.0943641695121236     ,     9290   ,      2
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , PM_PROJECT    ,        76, -0.9155984622728262    ,    41443.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , PM_MIRROR     ,        27, -0.9155984894006325    ,     3732.5 ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_5 , PM_GMW        ,        25, -0.9155983825045597    ,     1381.25,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , NO_REGULARIZE ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , M_PROJECT     ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , M_MIRROR      ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , M_GMW         ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , PM_PROJECT    ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , PM_MIRROR     ,        20, -1.012443637124548     ,     1000   ,      0
+dubins_car_parallel_parking_FU_INDE_RE_INDE_status_4_iter_7 , PM_GMW        ,        20, -1.012443637124548     ,     1000   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , NO_REGULARIZE ,        17, -9.898639286928848     ,      969   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , M_PROJECT     ,        17, -9.898639286928848     ,     1055   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , M_MIRROR      ,        21, -9.898690260599256     ,     1428   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , M_GMW         ,       100, 13.66605263861226      ,     7896   ,      2
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , PM_PROJECT    ,       100, -5.8508879522473975    ,    41737.5 ,      2
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , PM_MIRROR     ,        21, -9.898690260599302     ,     1498.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_10          , PM_GMW        ,        22, -9.8986902605992       ,     1328.75,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , NO_REGULARIZE ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , M_PROJECT     ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , M_MIRROR      ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , M_GMW         ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , PM_PROJECT    ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , PM_MIRROR     ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_11          , PM_GMW        ,        17, -39.02678285407456     ,     1020   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , NO_REGULARIZE ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , M_PROJECT     ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , M_MIRROR      ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , M_GMW         ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , PM_PROJECT    ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , PM_MIRROR     ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_13          , PM_GMW        ,        18, 93.92766165070736      ,     1080   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , NO_REGULARIZE ,         8, -24.049472310452735    ,      450   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , M_PROJECT     ,        26, -116.22910321669589    ,     2008   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , M_MIRROR      ,        24, -116.22910321669568    ,     1776   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , M_GMW         ,        24, -116.22910321669693    ,     1452   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , PM_PROJECT    ,        23, -116.22910321668206    ,     2571.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , PM_MIRROR     ,        26, -116.22910321669623    ,     3227.75,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_14          , PM_GMW        ,        34, -116.22910321669599    ,     2145.0 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , NO_REGULARIZE ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , M_PROJECT     ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , M_MIRROR      ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , M_GMW         ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , PM_PROJECT    ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , PM_MIRROR     ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_16          , PM_GMW        ,        16, 141.88320791143911     ,      960   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , NO_REGULARIZE ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , M_PROJECT     ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , M_MIRROR      ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , M_GMW         ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , PM_PROJECT    ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , PM_MIRROR     ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_19          , PM_GMW        ,        22, 143.02752718852628     ,     1320   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , NO_REGULARIZE ,         6, -18.036819220057115    ,      329   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , M_PROJECT     ,         8, -66.75599942509638     ,      898   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , M_MIRROR      ,        23, -436.6860741462167     ,     2332   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , M_GMW         ,        24, -436.68607431214946    ,     1476   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , PM_PROJECT    ,        23, -436.6860743112865     ,     2571.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , PM_MIRROR     ,        23, -436.68607420794217    ,     2571.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_20          , PM_GMW        ,        24, -436.6860743121453     ,     1483.75,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , NO_REGULARIZE ,        15, 100.48739887926494     ,      851   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , M_PROJECT     ,        15, 100.48739887926494     ,      937   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , M_MIRROR      ,        25, 100.4873937349441      ,     6652   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , M_GMW         ,       100, 100.71558252036462     ,     7400   ,      2
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , PM_PROJECT    ,       100, 130.22695569980755     ,    26251.25,      2
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , PM_MIRROR     ,        21, 100.48739373494409     ,     1974.75,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_22          , PM_GMW        ,        21, 100.48739373494413     ,     1286.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , NO_REGULARIZE ,         7, -19.917123864117706    ,      389   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , M_PROJECT     ,        22, -209.7989748346148     ,     1768   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , M_MIRROR      ,        22, -209.79897483461642    ,     1768   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , M_GMW         ,        21, -209.7989748110471     ,     1276   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , PM_PROJECT    ,        21, -209.79897483449182    ,     2213.0 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , PM_MIRROR     ,        22, -209.79897483461536    ,     2273.0 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_23          , PM_GMW        ,        22, -209.79897483461573    ,     1355.0 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , NO_REGULARIZE ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , M_PROJECT     ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , M_MIRROR      ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , M_GMW         ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , PM_PROJECT    ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , PM_MIRROR     ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_25          , PM_GMW        ,        12, 28.45331329722444      ,      720   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , NO_REGULARIZE ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , M_PROJECT     ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , M_MIRROR      ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , M_GMW         ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , PM_PROJECT    ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , PM_MIRROR     ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_27          , PM_GMW        ,        10, 0.3257244220026782     ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , NO_REGULARIZE ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , M_PROJECT     ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , M_MIRROR      ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , M_GMW         ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , PM_PROJECT    ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , PM_MIRROR     ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_29          , PM_GMW        ,        10, 0.013225740840566935   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , NO_REGULARIZE ,         7, -56.63702752405746     ,      390   ,      1
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , M_PROJECT     ,        27, -503.6269414831797     ,     2124   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , M_MIRROR      ,        24, -503.6269414831789     ,     1832   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , M_GMW         ,        25, -503.6269414831814     ,     1514   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , PM_PROJECT    ,        25, -503.6269414831812     ,     2929.5 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , PM_MIRROR     ,        27, -503.6269414831819     ,     3049.5 ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_3           , PM_GMW        ,        28, -503.62694148318184    ,     1741.25,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , NO_REGULARIZE ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , M_PROJECT     ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , M_MIRROR      ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , M_GMW         ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , PM_PROJECT    ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , PM_MIRROR     ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_30          , PM_GMW        ,        10, 0.025199671355953995   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , NO_REGULARIZE ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , M_PROJECT     ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , M_MIRROR      ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , M_GMW         ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , PM_PROJECT    ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , PM_MIRROR     ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_36          , PM_GMW        ,        10, 0.004432763632086077   ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , NO_REGULARIZE ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , M_PROJECT     ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , M_MIRROR      ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , M_GMW         ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , PM_PROJECT    ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , PM_MIRROR     ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_40          , PM_GMW        ,        10, 0.00044402467775335377 ,      600   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , NO_REGULARIZE ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , M_PROJECT     ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , M_MIRROR      ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , M_GMW         ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , PM_PROJECT    ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , PM_MIRROR     ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_5           , PM_GMW        ,        15, -36.74257008698457     ,      900   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , NO_REGULARIZE ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , M_PROJECT     ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , M_MIRROR      ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , M_GMW         ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , PM_PROJECT    ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , PM_MIRROR     ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_7           , PM_GMW        ,        21, -227.61817987061028    ,     1260   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , NO_REGULARIZE ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , M_PROJECT     ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , M_MIRROR      ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , M_GMW         ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , PM_PROJECT    ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , PM_MIRROR     ,        14, -41.354464584066925    ,      840   ,      0
+free_flying_robot_FU_INDE_RE_INDE_status_4_iter_8           , PM_GMW        ,        14, -41.354464584066925    ,      840   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , NO_REGULARIZE ,         1, 0.004129798841266518   ,       19   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , M_PROJECT     ,        10, -49.646824892482435    ,      512   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , M_MIRROR      ,        10, -49.64682504855244     ,      456   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , M_GMW         ,        10, -49.64682504855244     ,      402   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , PM_PROJECT    ,        12, -49.646825206376974    ,     7504.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , PM_MIRROR     ,        12, -49.64682517959537     ,     7504.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_10                , PM_GMW        ,        22, -49.646825208163975    ,     2180.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , NO_REGULARIZE ,         4, 0.030702991990972612   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , M_PROJECT     ,        11, -0.5737596576605049    ,      944   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , M_MIRROR      ,        12, -0.5737596710309514    ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , M_GMW         ,        12, -0.5737596710309514    ,      498   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , PM_PROJECT    ,        12, -0.5737596708747237    ,    11016.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , PM_MIRROR     ,        13, -0.5737596710382715    ,    18080.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_108               , PM_GMW        ,        16, -0.5737596678967118    ,     1420.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , NO_REGULARIZE ,         6, -2.55316855594154      ,      216   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , M_PROJECT     ,        12, -2.7744501147092286    ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , M_MIRROR      ,        11, -2.7744502261613486    ,      496   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , M_GMW         ,        11, -2.7744502261613486    ,      442   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , PM_PROJECT    ,        11, -2.7744497475619108    ,    10976.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , PM_MIRROR     ,        11, -2.7744502261614588    ,     3952.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_12                , PM_GMW        ,        11, -2.7744502261612833    ,      570.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , NO_REGULARIZE ,         6, -2.112412665460317     ,      216   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , M_PROJECT     ,        12, -2.512593710532618     ,      760   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , M_MIRROR      ,        12, -2.51259371053203      ,      536   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , M_GMW         ,        12, -2.51259371053203      ,      482   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , PM_PROJECT    ,        11, -2.5125937005740355    ,     3952.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , PM_MIRROR     ,        12, -2.512593710517924     ,     3992.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_13                , PM_GMW        ,        12, -2.512593710517874     ,      610.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , NO_REGULARIZE ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , M_PROJECT     ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , M_MIRROR      ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , M_GMW         ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , PM_PROJECT    ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , PM_MIRROR     ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_18                , PM_GMW        ,         7, -0.032031267390162     ,      280   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , NO_REGULARIZE ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , M_PROJECT     ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , M_MIRROR      ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , M_GMW         ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , PM_PROJECT    ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , PM_MIRROR     ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_19                , PM_GMW        ,        10, -0.016151106160936443  ,      400   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , NO_REGULARIZE ,         4, 0.030952197848170177   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , M_PROJECT     ,         8, -0.009942334175755569  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , M_MIRROR      ,         9, -0.009943023497660217  ,      472   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , M_GMW         ,         9, -0.009943023497660217  ,      364   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , PM_PROJECT    ,         8, -0.009942992021950977  ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , PM_MIRROR     ,         8, -0.00994302564927951   ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_20                , PM_GMW        ,         8, -0.009942595086422649  ,      450.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , NO_REGULARIZE ,         4, 0.030760741668923945   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , M_PROJECT     ,         8, -0.006843791745083255  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , M_MIRROR      ,         8, -0.006843845556787162  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , M_GMW         ,         8, -0.006843845556787162  ,      326   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , PM_PROJECT    ,         8, -0.006843910045795583  ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , PM_MIRROR     ,         8, -0.006843911739189729  ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_21                , PM_GMW        ,         7, -0.006843844066733524  ,      410.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , NO_REGULARIZE ,         4, 0.029225647642261134   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , M_PROJECT     ,         8, -0.004962486051259714  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , M_MIRROR      ,         8, -0.004962695939181631  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , M_GMW         ,         8, -0.004962695939181631  ,      326   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , PM_PROJECT    ,         8, -0.004962728524506969  ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , PM_MIRROR     ,         7, -0.0049627192134749885 ,     3792.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_22                , PM_GMW        ,         8, -0.004962727305675112  ,      450.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , NO_REGULARIZE ,         4, 0.030961276489499354   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , M_PROJECT     ,         8, -0.003655403670341961  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , M_MIRROR      ,         8, -0.003655546446482944  ,      488   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , M_GMW         ,         8, -0.003655546446482944  ,      326   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , PM_PROJECT    ,         8, -0.0036555514289744948 ,     3832.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , PM_MIRROR     ,         9, -0.003655565351809602  ,     7384.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_23                , PM_GMW        ,        11, -0.0036555658264980765 ,      830.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , NO_REGULARIZE ,         4, 0.035132842621565484   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , M_PROJECT     ,        10, -0.35999504587505377   ,      568   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , M_MIRROR      ,        11, -0.359995045763137     ,      776   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , M_GMW         ,        11, -0.359995045763137     ,      452   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , PM_PROJECT    ,        10, -0.3599950467681619    ,     3912.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , PM_MIRROR     ,        14, -0.35999504683880434   ,    21632.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_31                , PM_GMW        ,        14, -0.35999504684042877   ,     1470.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , NO_REGULARIZE ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , M_PROJECT     ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , M_MIRROR      ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , M_GMW         ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , PM_PROJECT    ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , PM_MIRROR     ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_4                 , PM_GMW        ,        11, -62.69730574495292     ,      440   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , NO_REGULARIZE ,         4, 0.03281304400726011    ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , M_PROJECT     ,        15, -0.4800083910213938    ,      992   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , M_MIRROR      ,        12, -0.480008390221487     ,      928   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , M_GMW         ,        12, -0.480008390221487     ,      496   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , PM_PROJECT    ,        14, -0.4800083908041005    ,    11096.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , PM_MIRROR     ,        14, -0.4800083909088528    ,    18120.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_41                , PM_GMW        ,        18, -0.4800083910211387    ,     1760.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , NO_REGULARIZE ,         5, -10.577425672415613    ,      172   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , M_PROJECT     ,         5, -10.577425672415613    ,      346   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , M_MIRROR      ,        10, -11.224204486776792    ,      904   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , M_GMW         ,        10, -11.224204486776792    ,      418   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , PM_PROJECT    ,        10, -11.224204486676797    ,     3912.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , PM_MIRROR     ,        10, -11.224204487149178    ,     3912.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_5                 , PM_GMW        ,        10, -11.224204487157905    ,      530.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , NO_REGULARIZE ,         4, 0.03136884764348991    ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , M_PROJECT     ,        11, -0.5472004526131895    ,      944   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , M_MIRROR      ,        12, -0.5472004516940019    ,      872   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , M_GMW         ,        12, -0.5472004516940019    ,      494   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , PM_PROJECT    ,        12, -0.5472004532550424    ,    11016.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , PM_MIRROR     ,        14, -0.5472004533011221    ,    18120.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_52                , PM_GMW        ,        16, -0.5472004521652173    ,     1420.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , NO_REGULARIZE ,         4, 0.030808896528970994   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , M_PROJECT     ,        11, -0.569684626265679     ,      944   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , M_MIRROR      ,        12, -0.5696846346470092    ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , M_GMW         ,        12, -0.5696846346470092    ,      498   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , PM_PROJECT    ,        12, -0.5696846345035561    ,    11016.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , PM_MIRROR     ,        13, -0.5696846345136554    ,    18080.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_68                , PM_GMW        ,        16, -0.5696846317216964    ,     1420.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , NO_REGULARIZE ,         4, 0.03073160545719278    ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , M_PROJECT     ,        11, -0.572663903520849     ,      944   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , M_MIRROR      ,        12, -0.5726639153861325    ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , M_GMW         ,        12, -0.5726639153861325    ,      498   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , PM_PROJECT    ,        12, -0.5726639152306168    ,    11016.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , PM_MIRROR     ,        13, -0.5726639153885198    ,    18080.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_79                , PM_GMW        ,        16, -0.5726639122876698    ,     1420.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , NO_REGULARIZE ,         2, 1.6921704718697508     ,       55   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , M_PROJECT     ,         2, nan                    ,      416   ,      3
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , M_MIRROR      ,        12, -7.243167894972854     ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , M_GMW         ,        12, -7.243167894972854     ,      498   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , PM_PROJECT    ,        12, -7.243167894972755     ,     3992.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , PM_MIRROR     ,        12, -7.243167894972842     ,     3992.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_8                 , PM_GMW        ,        12, -7.2431678949705125    ,      610.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , NO_REGULARIZE ,         1, -0.0007325178691245946 ,       19   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , M_PROJECT     ,        10, -79.31935275920313     ,      512   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , M_MIRROR      ,        10, -79.31935275934397     ,      456   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , M_GMW         ,        10, -79.31935275934397     ,      402   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , PM_PROJECT    ,        17, -79.31935260635639     ,    53360.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , PM_MIRROR     ,        33, -79.31935155231982     ,   124240.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_9                 , PM_GMW        ,        12, -79.31935261124198     ,     1130.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , NO_REGULARIZE ,         4, 0.030709262247972373   ,      138   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , M_PROJECT     ,        11, -0.5735198668855138    ,      944   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , M_MIRROR      ,        12, -0.5735198799157228    ,      984   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , M_GMW         ,        12, -0.5735198799157228    ,      498   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , PM_PROJECT    ,        12, -0.5735198797594714    ,    11016.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , PM_MIRROR     ,        13, -0.5735198799223382    ,    18080.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_2_iter_91                , PM_GMW        ,        16, -0.5735198767880536    ,     1420.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , NO_REGULARIZE ,         1, 0.0                    ,       10   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , M_PROJECT     ,         1, 0.0                    ,      184   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , M_MIRROR      ,        11, -535.8166908109172     ,     1952   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , M_GMW         ,        11, -535.8166908109172     ,      494   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , PM_PROJECT    ,        13, -622.9239089784205     ,    14568.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , PM_MIRROR     ,        19, -535.8166908111107     ,    42904.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_1                 , PM_GMW        ,        15, -622.923908978097      ,     1900.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , NO_REGULARIZE ,         2, -39.82230340120763     ,       47   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , M_PROJECT     ,         2, nan                    ,      416   ,      3
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , M_MIRROR      ,        13, -190.81909837317045    ,     1192   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , M_GMW         ,        13, -190.81909837317045    ,      544   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , PM_PROJECT    ,        13, -190.8190982857665     ,     4032.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , PM_MIRROR     ,        14, -190.81909838494005    ,     4072.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_2                 , PM_GMW        ,        14, -190.81909837901216    ,      820.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , NO_REGULARIZE ,         2, 0.718923849939959      ,       54   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , M_PROJECT     ,         2, 0.718923849939959      ,      228   ,      1
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , M_MIRROR      ,        13, -13.405657802257878    ,      800   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , M_GMW         ,        13, -13.405657802257878    ,      530   ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , PM_PROJECT    ,        12, -4.884124405389158     ,    39112.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , PM_MIRROR     ,        11, -4.331507085169087     ,    14488.0 ,      0
+furuta_cons_FU_INDE_RE_INDE_status_4_iter_6                 , PM_GMW        ,        12, -4.331507085188587     ,     1260.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , NO_REGULARIZE ,         4, -85.23114759702382     ,      208   ,      1
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , M_PROJECT     ,         5, -110.59079343604088    ,      550   ,      1
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , M_MIRROR      ,        22, -229.05683798965796    ,     1824   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , M_GMW         ,        22, -229.05683799395712    ,     1338   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , PM_PROJECT    ,        21, -229.0568379877502     ,     7316.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , PM_MIRROR     ,        22, -229.05683799642856    ,     7376.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_18                 , PM_GMW        ,        23, -229.0568379963974     ,     1772.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , NO_REGULARIZE ,         2, -21.585320744233957    ,       90   ,      1
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , M_PROJECT     ,        17, -240.76231489796555    ,     1188   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , M_MIRROR      ,        17, -240.7623149024862     ,     1132   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , M_GMW         ,        17, -240.76231490244763    ,     1024   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , PM_PROJECT    ,        17, -240.76231490084695    ,     4048.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , PM_MIRROR     ,        16, -240.76231481014938    ,     3988.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_20                 , PM_GMW        ,        16, -240.76231491683396    ,     1072.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , NO_REGULARIZE ,         4, -27.52153582051538     ,      208   ,      1
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , M_PROJECT     ,        16, -62.11624019287154     ,     1128   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , M_MIRROR      ,        17, -62.116240220821616    ,     1244   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , M_GMW         ,        17, -62.11624022079228     ,     1028   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , PM_PROJECT    ,        16, -62.11624022569746     ,     2474.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , PM_MIRROR     ,        16, -62.11624022176756     ,     2474.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_23                 , PM_GMW        ,        16, -62.11624022450989     ,     1016.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , NO_REGULARIZE ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , M_PROJECT     ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , M_MIRROR      ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , M_GMW         ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , PM_PROJECT    ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , PM_MIRROR     ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_24                 , PM_GMW        ,        13, -55.34203802669499     ,      780   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , NO_REGULARIZE ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , M_PROJECT     ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , M_MIRROR      ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , M_GMW         ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , PM_PROJECT    ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , PM_MIRROR     ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_2_iter_25                 , PM_GMW        ,        11, -25.838822278784583    ,      660   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , NO_REGULARIZE ,         3, 0.12033855691678219    ,      144   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , M_PROJECT     ,         3, 0.12033855691678219    ,      317   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , M_MIRROR      ,        38, -1707.224862610541     ,     6872   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , M_GMW         ,        35, -1707.2248619656064    ,     2248   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , PM_PROJECT    ,        36, -1707.22486238321      ,    36982.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , PM_MIRROR     ,        39, -1707.2248624907595    ,    34134.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_10                 , PM_GMW        ,        41, -1707.2248624155845    ,     3412.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , NO_REGULARIZE ,         4, -21.421986015659535    ,      204   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , M_PROJECT     ,         4, nan                    ,      576   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , M_MIRROR      ,        35, -1542.3230077926737    ,     5460   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , M_GMW         ,        32, -1542.3230079997506    ,     2026   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , PM_PROJECT    ,        36, -1542.3230080053545    ,    43038.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , PM_MIRROR     ,        34, -1542.3230078029846    ,    23236.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_11                 , PM_GMW        ,        33, -1542.323008025751     ,     2764.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , NO_REGULARIZE ,         3, -1.335517208958472     ,      145   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , M_PROJECT     ,         3, nan                    ,      516   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , M_MIRROR      ,        36, -1367.3632063130299    ,     6136   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , M_GMW         ,        38, -1367.363206430724     ,     2434   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , PM_PROJECT    ,        37, -1367.363206425488     ,    44612.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , PM_MIRROR     ,        35, -1367.3632064308529    ,    24810.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_12                 , PM_GMW        ,        37, -1367.3632057063833    ,     3116.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , NO_REGULARIZE ,         4, -21.618964708135803    ,      205   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , M_PROJECT     ,         4, -21.618964708135803    ,      378   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , M_MIRROR      ,        35, -1196.6596511704315    ,     4956   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , M_GMW         ,        35, -1196.6596511722723    ,     2198   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , PM_PROJECT    ,        32, -1196.6596511722896    ,    24630.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , PM_MIRROR     ,        33, -1196.6596511721073    ,    18634.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_13                 , PM_GMW        ,        35, -1196.659651172287     ,     2940.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , NO_REGULARIZE ,         3, -7.792071709136695     ,      145   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , M_PROJECT     ,         3, nan                    ,      516   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , M_MIRROR      ,        34, -1027.0441114840648    ,     4560   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , M_GMW         ,        34, -1027.0441114899822    ,     2134   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , PM_PROJECT    ,        32, -1027.0441114965129    ,    32200.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , PM_MIRROR     ,        30, -1027.0441114092787    ,    18454.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_14                 , PM_GMW        ,        39, -1027.044111460565     ,     3404.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , NO_REGULARIZE ,         4, -22.120201416849156    ,      205   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , M_PROJECT     ,         4, -22.120201416849156    ,      378   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , M_MIRROR      ,        27, -870.012555094632      ,     2852   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , M_GMW         ,        29, -870.0125550946326     ,     1802   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , PM_PROJECT    ,        27, -870.0125550946326     ,    15246.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , PM_MIRROR     ,        27, -870.0125550945675     ,    13732.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_15                 , PM_GMW        ,        28, -870.012555093507      ,     2184.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , NO_REGULARIZE ,         4, -17.150873983144535    ,      205   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , M_PROJECT     ,         4, -17.150873983144535    ,      378   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , M_MIRROR      ,        32, -710.2802190926517     ,     3768   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , M_GMW         ,        33, -710.2802190971734     ,     2052   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , PM_PROJECT    ,        28, -710.2802187811383     ,    21362.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , PM_MIRROR     ,        28, -710.2802190964619     ,    13792.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_16                 , PM_GMW        ,        30, -710.2802190624335     ,     2304.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , NO_REGULARIZE ,         4, -35.61226221190228     ,      207   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , M_PROJECT     ,        30, -586.136119340775      ,     3480   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , M_MIRROR      ,        26, -586.1361193234892     ,     2904   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , M_GMW         ,        25, -586.136119336861      ,     1544   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , PM_PROJECT    ,        26, -586.1361193365069     ,    16700.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , PM_MIRROR     ,        23, -586.1361191439936     ,     8950.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_17                 , PM_GMW        ,        25, -586.1361192550553     ,     1836.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , NO_REGULARIZE ,         4, -31.074639943437933    ,      207   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , M_PROJECT     ,        23, -359.9298089843829     ,     2052   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , M_MIRROR      ,        22, -359.92980898837067    ,     1880   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , M_GMW         ,        22, -359.929808987658      ,     1340   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , PM_PROJECT    ,        23, -359.9298089867451     ,    10464.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , PM_MIRROR     ,        24, -359.92980898689615    ,     7496.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_19                 , PM_GMW        ,        22, -359.92980897874844    ,     1544.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , NO_REGULARIZE ,         3, 44.210624999533366     ,      141   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , M_PROJECT     ,         3, 44.210624999533366     ,      256   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , M_MIRROR      ,       100, -434.32039383624266    ,    63792   ,      2
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , M_GMW         ,        63, -4355.823803309846     ,     4204   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , PM_PROJECT    ,        79, -4355.823803310258     ,   112234.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , PM_MIRROR     ,        48, -4355.823803304072     ,    45272.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_2                  , PM_GMW        ,        56, -4355.8238033103       ,     4928.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , NO_REGULARIZE ,         3, -8.845870335996384     ,      150   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , M_PROJECT     ,       100, -185.629901459564      ,    16528   ,      2
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , M_MIRROR      ,        22, -209.54652149980203    ,     1768   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , M_GMW         ,        22, -209.54652149824756    ,     1336   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , PM_PROJECT    ,        22, -209.546521500508      ,     8890.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , PM_MIRROR     ,        22, -209.54652148768852    ,     7376.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_21                 , PM_GMW        ,        22, -209.54652153599764    ,     1544.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , NO_REGULARIZE ,         4, -37.48348996473808     ,      208   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , M_PROJECT     ,       100, -139.61296563811177    ,    16640   ,      2
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , M_MIRROR      ,        22, -153.343412990252      ,     1880   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , M_GMW         ,        21, -153.29914758820055    ,     1276   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , PM_PROJECT    ,        20, -153.34341308796496    ,     4228.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , PM_MIRROR     ,        24, -153.3434131105212     ,    10524.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_22                 , PM_GMW        ,        21, -153.34341224908673    ,     1540.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , NO_REGULARIZE ,         3, 2.7472437648821098     ,      149   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , M_PROJECT     ,        13, -37.82972735832076     ,      892   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , M_MIRROR      ,        13, -37.82972735791125     ,      892   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , M_GMW         ,        13, -37.829727357911764    ,      784   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , PM_PROJECT    ,        13, -37.829727357136626    ,     2294.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , PM_MIRROR     ,        13, -37.82972735742435     ,     2294.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_26                 , PM_GMW        ,        13, -37.82972735703569     ,      836.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , NO_REGULARIZE ,         4, -36.302363746442644    ,      203   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , M_PROJECT     ,         4, nan                    ,      576   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , M_MIRROR      ,        42, -2697.5673384313527    ,     7448   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , M_GMW         ,        40, -2697.5673386735352    ,     2582   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , PM_PROJECT    ,        38, -2697.567338703537     ,    34074.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , PM_MIRROR     ,        44, -2697.5673387022425    ,    45032.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_3                  , PM_GMW        ,        40, -2697.5673387035376    ,     3352.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , NO_REGULARIZE ,         4, -29.78047501883077     ,      202   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , M_PROJECT     ,         4, -29.78047501883077     ,      375   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , M_MIRROR      ,        41, -3391.856073243868     ,     7668   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , M_GMW         ,        48, -3391.8560732439882    ,     3108   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , PM_PROJECT    ,        61, -3391.8560732437304    ,    88444.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , PM_MIRROR     ,        48, -3391.8560732439864    ,    45272.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_4                  , PM_GMW        ,        48, -3391.8560732439882    ,     3888.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , NO_REGULARIZE ,         3, -2.6755297565215037    ,      143   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , M_PROJECT     ,         3, nan                    ,      516   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , M_MIRROR      ,        51, -2840.618613915245     ,     9332   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , M_GMW         ,        48, -2840.6186137916447    ,     3102   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , PM_PROJECT    ,        56, -2840.618613729389     ,    51808.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , PM_MIRROR     ,        54, -2840.6186135685884    ,    54716.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_5                  , PM_GMW        ,        54, -2840.6186135730004    ,     4640.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , NO_REGULARIZE ,         4, -19.189467809155396    ,      202   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , M_PROJECT     ,         4, nan                    ,      632   ,      3
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , M_MIRROR      ,        46, -2535.0875615454097    ,     7856   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , M_GMW         ,        45, -2535.0875615689806    ,     2868   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , PM_PROJECT    ,        44, -2535.087561908238     ,    35948.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , PM_MIRROR     ,        50, -2535.087562185092     ,    40850.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_6                  , PM_GMW        ,        43, -2535.0875621614623    ,     3588.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , NO_REGULARIZE ,         4, -26.252427547004764    ,      203   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , M_PROJECT     ,         4, -26.252427547004764    ,      318   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , M_MIRROR      ,        47, -2308.111681606973     ,     9148   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , M_GMW         ,        41, -2308.111681562539     ,     2642   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , PM_PROJECT    ,        45, -2308.111681753346     ,    43578.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , PM_MIRROR     ,        47, -2308.111681753255     ,    39156.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_7                  , PM_GMW        ,        50, -2308.111681741251     ,     4400.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , NO_REGULARIZE ,         3, 2.1392703617620175     ,      143   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , M_PROJECT     ,         3, 2.1392703617620175     ,      316   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , M_MIRROR      ,        43, -2076.978642568903     ,     7452   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , M_GMW         ,        50, -2076.97864256891      ,     3210   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , PM_PROJECT    ,        39, -2076.9786425612397    ,    40190.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , PM_MIRROR     ,        45, -2076.9786425689085    ,    36008.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_8                  , PM_GMW        ,        48, -2076.9786425683355    ,     3888.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , NO_REGULARIZE ,         4, -16.8748835910349      ,      203   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , M_PROJECT     ,         4, -16.8748835910349      ,      318   ,      1
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , M_MIRROR      ,        38, -1896.9741209880076    ,     6088   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , M_GMW         ,        38, -1896.9741210064658    ,     2418   ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , PM_PROJECT    ,        37, -1896.9741208001683    ,    37042.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , PM_MIRROR     ,        34, -1896.9741210078887    ,    23236.0 ,      0
+moonlander_FU_INDE_RE_INDE_status_4_iter_9                  , PM_GMW        ,        40, -1896.9741209787671    ,     3408.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , NO_REGULARIZE ,         8, -0.1492127867874249    ,      517   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , M_PROJECT     ,         8, nan                    ,      952   ,      3
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , M_MIRROR      ,        17, -0.2773120509636574    ,     1526   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , M_GMW         ,        17, -0.2773120509616134    ,     1202   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , PM_PROJECT    ,        16, -0.277312051633435     ,     4148.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , PM_MIRROR     ,        17, -0.2773120517018506    ,     5732.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_38             , PM_GMW        ,        19, -0.27731205162245526   ,     1666.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , NO_REGULARIZE ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , M_PROJECT     ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , M_MIRROR      ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , M_GMW         ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , PM_PROJECT    ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , PM_MIRROR     ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_43             , PM_GMW        ,        11, -0.9035607962048382    ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , NO_REGULARIZE ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , M_PROJECT     ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , M_MIRROR      ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , M_GMW         ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , PM_PROJECT    ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , PM_MIRROR     ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_2_iter_46             , PM_GMW        ,        12, -0.28531578026161514   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , NO_REGULARIZE ,         4, -0.9421853765169523    ,      218   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , M_PROJECT     ,         4, -0.9421853765169523    ,      333   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , M_MIRROR      ,        46, -12.580131385971406    ,     9324   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , M_GMW         ,        28, -12.580131385970805    ,     2124   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , PM_PROJECT    ,        33, -12.580131385971317    ,     5338.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , PM_MIRROR     ,        48, -12.580131385971132    ,    16986.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_10             , PM_GMW        ,        33, -12.580131385971104    ,     2422.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , NO_REGULARIZE ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , M_PROJECT     ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , M_MIRROR      ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , M_GMW         ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , PM_PROJECT    ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , PM_MIRROR     ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_13             , PM_GMW        ,        19, -13.463630304248634    ,     1330   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , NO_REGULARIZE ,         5, -0.16980680521182456   ,      288   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , M_PROJECT     ,         5, -0.16980680521182456   ,      403   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , M_MIRROR      ,        27, -10.624317174787144    ,     7658   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , M_GMW         ,        26, -10.624317174787159    ,     2024   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , PM_PROJECT    ,        26, -10.624317174787505    ,     7876.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , PM_MIRROR     ,        27, -10.6243171747877      ,     9460.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_19             , PM_GMW        ,        27, -10.624317174787368    ,     2114.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , NO_REGULARIZE ,         2, -42.48528821162411     ,       95   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , M_PROJECT     ,         2, nan                    ,      476   ,      3
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , M_MIRROR      ,        48, -7332.147827226726     ,    13776   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , M_GMW         ,        44, -7332.147827226725     ,     3442   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , PM_PROJECT    ,        43, -7332.147827226725     ,    36318.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , PM_MIRROR     ,        47, -7332.147827226726     ,    45682.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_2              , PM_GMW        ,        44, -7332.147827226725     ,     4536.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , NO_REGULARIZE ,         9, -0.1864995434083927    ,      568   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , M_PROJECT     ,         9, -0.1864995434083927    ,      686   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , M_MIRROR      ,       100, -0.49486674685583587   ,    87976   ,      2
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , M_GMW         ,        84, -1.417458061113141     ,     7172   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , PM_PROJECT    ,       100, -1.3670137056906055    ,    79672.0 ,      2
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , PM_MIRROR     ,        49, -1.4174580611111738    ,    21598.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_22             , PM_GMW        ,        62, -1.417458061111848     ,     5404.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , NO_REGULARIZE ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , M_PROJECT     ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , M_MIRROR      ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , M_GMW         ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , PM_PROJECT    ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , PM_MIRROR     ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_27             , PM_GMW        ,        11, -0.37437310655474976   ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , NO_REGULARIZE ,         4, 0.770468527723813      ,      222   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , M_PROJECT     ,         4, 0.770468527723813      ,      337   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , M_MIRROR      ,       100, -52.74667481420231     ,    18200   ,      2
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , M_GMW         ,       100, -52.74667481420232     ,     7516   ,      2
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , PM_PROJECT    ,        55, -52.74667481420225     ,    15962.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , PM_MIRROR     ,        65, -52.746674814201896    ,    18176.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_29             , PM_GMW        ,        48, -52.74667481420116     ,     3808.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , NO_REGULARIZE ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , M_PROJECT     ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , M_MIRROR      ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , M_GMW         ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , PM_PROJECT    ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , PM_MIRROR     ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_33             , PM_GMW        ,        11, -6.624533082812671e-07 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , NO_REGULARIZE ,         3, 0.25659152470153085    ,      149   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , M_PROJECT     ,         3, 0.25659152470153085    ,      293   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , M_MIRROR      ,        17, -10.165530514764082    ,     2702   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , M_GMW         ,        17, -10.16553051476406     ,     1244   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , PM_PROJECT    ,        17, -10.165530514764136    ,     2704.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , PM_MIRROR     ,        17, -10.165530514764042    ,     2704.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_36             , PM_GMW        ,        17, -10.165530514763972    ,     1246.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , NO_REGULARIZE ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , M_PROJECT     ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , M_MIRROR      ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , M_GMW         ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , PM_PROJECT    ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , PM_MIRROR     ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_44             , PM_GMW        ,        12, -0.16316842834047748   ,      840   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , NO_REGULARIZE ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , M_PROJECT     ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , M_MIRROR      ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , M_GMW         ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , PM_PROJECT    ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , PM_MIRROR     ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_49             , PM_GMW        ,        11, -4.832567879611293e-08 ,      770   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , NO_REGULARIZE ,         2, -29.614531875043344    ,       74   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , M_PROJECT     ,         2, -29.614531875043344    ,      189   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , M_MIRROR      ,        27, -1288.8325628098219    ,     7658   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , M_GMW         ,        27, -1288.8325628098175    ,     2054   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , PM_PROJECT    ,        27, -1288.8325628098235    ,    12488.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , PM_MIRROR     ,        28, -1288.832562809792     ,    14072.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_6              , PM_GMW        ,        37, -1288.8325628098175    ,     3262.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , NO_REGULARIZE ,         3, 1.7803552470978983     ,      148   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , M_PROJECT     ,         3, 1.7803552470978983     ,      321   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , M_MIRROR      ,        29, -15.651926315029097    ,     7574   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , M_GMW         ,        33, -15.651926315029066    ,     2510   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , PM_PROJECT    ,        37, -15.651926315029092    ,    11674.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , PM_MIRROR     ,        28, -15.65192631502907     ,     8016.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_7              , PM_GMW        ,        28, -15.651926315029078    ,     2184.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , NO_REGULARIZE ,         4, -1.1313196881841352    ,      226   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , M_PROJECT     ,         4, -1.1313196881841352    ,      341   ,      1
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , M_MIRROR      ,        38, -7.168688733727615     ,     4956   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , M_GMW         ,        51, -7.168688733727601     ,     3688   ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , PM_PROJECT    ,        40, -7.1686887337275875    ,    20968.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , PM_MIRROR     ,        33, -7.168688733727603     ,    18964.0 ,      0
+overhead_crane_FU_INDE_RE_INDE_status_4_iter_9              , PM_GMW        ,        26, -7.168688733727621     ,     1932.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , NO_REGULARIZE ,         5, -0.08221245107716768   ,      259   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , M_PROJECT     ,         5, nan                    ,      692   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , M_MIRROR      ,        23, -12.21801598362071     ,     3228   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , M_GMW         ,        23, -12.21801598362071     ,     1446   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , PM_PROJECT    ,        21, -12.218015983279791    ,    29356.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , PM_MIRROR     ,        27, -12.218015983389186    ,    50788.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_4               , PM_GMW        ,        29, -12.218015980120313    ,     3690.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , NO_REGULARIZE ,         4, 0.28157609267581435    ,      199   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , M_MIRROR      ,        25, -25.399064238170865    ,     4748   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , M_GMW         ,        25, -25.399064238170865    ,     1616   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , PM_PROJECT    ,        24, -25.399064293325814    ,    47096.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , PM_MIRROR     ,        31, -25.39906430962757     ,    61564.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_5               , PM_GMW        ,        33, -25.399064309400593    ,     4450.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , NO_REGULARIZE ,         4, -0.04375401996731276   ,      199   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , M_MIRROR      ,        19, -39.981679985476156    ,     3884   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , M_GMW         ,        19, -39.981679985476156    ,     1238   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , PM_PROJECT    ,        20, -39.9816799864319      ,    32808.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , PM_MIRROR     ,        25, -39.98167998643181     ,    57692.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_2_iter_9               , PM_GMW        ,        29, -39.98167998611839     ,     3950.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , NO_REGULARIZE ,         3, 0.6467360857223761     ,      150   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , M_PROJECT     ,         4, nan                    ,      744   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , M_MIRROR      ,        21, -41.42224841161826     ,     5908   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , M_GMW         ,        21, -41.42224840620584     ,     1426   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , PM_PROJECT    ,        25, -41.422248446683284    ,    54180.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , PM_MIRROR     ,        26, -41.42224844669141     ,    54240.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_10              , PM_GMW        ,        23, -41.42224841889478     ,     2940.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , NO_REGULARIZE ,         3, 0.6354131335488438     ,      139   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , M_PROJECT     ,         3, nan                    ,      628   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , M_MIRROR      ,        23, -44.48503187198372     ,     6588   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , M_GMW         ,        23, -44.48503187198372     ,     1566   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , PM_PROJECT    ,        22, -44.48503187199527     ,    50488.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , PM_MIRROR     ,        31, -44.485031872020436    ,    79124.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_11              , PM_GMW        ,        26, -44.485017771867476    ,     3640.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , NO_REGULARIZE ,         3, 0.601368054955666      ,      139   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , M_PROJECT     ,         3, nan                    ,      628   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , M_MIRROR      ,        19, -49.752885746695824    ,     3268   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , M_GMW         ,        19, -49.752885746695824    ,     1216   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , PM_PROJECT    ,        23, -49.75288574674509     ,    47036.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , PM_MIRROR     ,        24, -49.752885738174925    ,    57632.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_12              , PM_GMW        ,        24, -49.7528857470235      ,     3520.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , NO_REGULARIZE ,         3, 0.4911736226317327     ,      139   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , M_PROJECT     ,         3, nan                    ,      628   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , M_MIRROR      ,        19, -58.28176732029993     ,     2540   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , M_GMW         ,        19, -58.28176732029993     ,     1190   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , PM_PROJECT    ,        19, -58.28176668532846     ,    25724.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , PM_MIRROR     ,        28, -58.28176716029437     ,    71920.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_13              , PM_GMW        ,        21, -58.28176732120042     ,     2560.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , NO_REGULARIZE ,         3, -0.8879455964678837    ,      139   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , M_PROJECT     ,         3, nan                    ,      628   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , M_MIRROR      ,        19, -71.62170633514714     ,     1812   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , M_GMW         ,        19, -71.62170633514714     ,     1164   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , PM_PROJECT    ,        18, -71.62170632548664     ,    18640.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , PM_MIRROR     ,        18, -71.62170631749319     ,    29176.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_14              , PM_GMW        ,        20, -71.62170631357627     ,     2370.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , NO_REGULARIZE ,         2, 0.4775776333563334     ,       79   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , M_PROJECT     ,         2, nan                    ,      568   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , M_MIRROR      ,        20, -93.18243718822737     ,     2320   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , M_GMW         ,        20, -93.18243718822737     ,     1240   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , PM_PROJECT    ,        19, -93.18243724127707     ,    18700.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , PM_MIRROR     ,        26, -93.18243733808237     ,    57752.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_15              , PM_GMW        ,        25, -93.18243734360657     ,     3710.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , NO_REGULARIZE ,         2, 0.005391558451876777   ,       79   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , M_PROJECT     ,         2, 0.005391558451876777   ,      286   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , M_MIRROR      ,        20, -135.60306233889338    ,     1984   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , M_GMW         ,        20, -135.60306233889338    ,     1228   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , PM_PROJECT    ,        19, -135.60306233932022    ,    18700.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , PM_MIRROR     ,        22, -135.60306233987885    ,    36440.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_16              , PM_GMW        ,        20, -135.60306065361942    ,     2760.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , NO_REGULARIZE ,         2, -1.5817499005621822    ,       79   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , M_PROJECT     ,         2, -1.5817499005621822    ,      312   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , M_MIRROR      ,        19, -207.86532926803278    ,     1868   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , M_GMW         ,        19, -207.86532926803278    ,     1166   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , PM_PROJECT    ,        17, -207.86532713931715    ,    22092.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , PM_MIRROR     ,        20, -207.86532927330046    ,    36320.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_17              , PM_GMW        ,        21, -207.8653290804839     ,     2820.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , NO_REGULARIZE ,         3, -25.166601115377684    ,      140   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , M_PROJECT     ,         3, nan                    ,      572   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , M_MIRROR      ,        19, -335.07859400998103    ,     1644   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , M_GMW         ,        19, -335.07859400998103    ,     1158   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , PM_PROJECT    ,        18, -335.0785940100002     ,     8104.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , PM_MIRROR     ,        19, -335.0785940100003     ,    15188.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_18              , PM_GMW        ,        20, -335.0785940099982     ,     1720.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , NO_REGULARIZE ,         1, 0.0                    ,       30   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , M_MIRROR      ,        21, -567.1568536687105     ,     2324   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , M_GMW         ,        21, -567.1568536687105     ,     1298   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , PM_PROJECT    ,        20, -567.1568538884522     ,    11736.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , PM_MIRROR     ,        21, -567.1568518479403     ,    46916.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_19              , PM_GMW        ,        20, -567.1568538799124     ,     2760.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , NO_REGULARIZE ,         1, 0.0                    ,       30   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , M_MIRROR      ,        21, -930.5166754744945     ,     1652   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , M_GMW         ,        21, -930.5166754744945     ,     1274   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , PM_PROJECT    ,        21, -930.5166754183372     ,    32868.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , PM_MIRROR     ,        24, -930.5166752583972     ,    43584.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_20              , PM_GMW        ,        21, -930.5166754489596     ,     2820.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , NO_REGULARIZE ,         1, 0.0                    ,       30   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , M_PROJECT     ,         3, nan                    ,      628   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , M_MIRROR      ,        22, -676.7105008499813     ,     1488   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , M_GMW         ,        22, -676.7105008499813     ,     1326   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , PM_PROJECT    ,        23, -676.7105008499783     ,    18940.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , PM_MIRROR     ,        25, -676.7105008498227     ,    22572.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_21              , PM_GMW        ,        27, -676.7105008499815     ,     2790.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , NO_REGULARIZE ,         4, 0.2671540519999578     ,      199   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , M_MIRROR      ,        23, -32.398707666190184    ,     4516   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , M_GMW         ,        23, -32.398707666190184    ,     1492   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , PM_PROJECT    ,        25, -32.39870766512921     ,    43644.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , PM_MIRROR     ,        29, -32.39870766186995     ,    68468.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_6               , PM_GMW        ,        27, -32.39870755664482     ,     3700.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , NO_REGULARIZE ,         4, 0.24332079329745426    ,      199   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , M_MIRROR      ,        23, -36.27906349865951     ,     4628   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , M_GMW         ,        23, -36.27906349865951     ,     1496   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , PM_PROJECT    ,        23, -36.27906361656231     ,    47036.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , PM_MIRROR     ,        27, -36.27906362384523     ,    61324.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_7               , PM_GMW        ,        24, -36.27906350129908     ,     3650.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , NO_REGULARIZE ,         4, 0.177699659526808      ,      199   ,      1
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , M_PROJECT     ,         4, nan                    ,      688   ,      3
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , M_MIRROR      ,        21, -38.53926565596278     ,     3500   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , M_GMW         ,        21, -38.53926565596278     ,     1340   ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , PM_PROJECT    ,        24, -38.539265869982565    ,    47096.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , PM_MIRROR     ,        25, -38.5392658688674      ,    43644.0 ,      0
+pendulum_cons_FU_INDE_RE_INDE_status_4_iter_8               , PM_GMW        ,        33, -38.539265869985016    ,     5100.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , NO_REGULARIZE ,         3, 13.716976743000746     ,      149   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , M_PROJECT     ,         8, 11.765528895234327     ,     1514   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , M_MIRROR      ,        39, -23.064960811755657    ,    13540   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , M_GMW         ,        26, -22.37707971050608     ,     1692   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , PM_PROJECT    ,       100, 8.904696564095188      ,   480336.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , PM_MIRROR     ,        28, -23.82592040318923     ,    22176.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_1                       , PM_GMW        ,        26, -23.609018910257035    ,     2136.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , NO_REGULARIZE ,         5, 0.2622306564299443     ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , M_PROJECT     ,         5, 0.2622306564299443     ,      474   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , M_MIRROR      ,       100, 0.22886240235482622    ,   145720   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , M_GMW         ,       100, 0.2104536656746712     ,    11032   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , PM_PROJECT    ,       100, 0.20574254418302168    ,   275376.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , PM_MIRROR     ,        16, -0.07588692584719847   ,    12184.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_10                      , PM_GMW        ,        16, -0.1194671377394912    ,     1248.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , NO_REGULARIZE ,         4, 0.5221701724770709     ,      183   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , M_PROJECT     ,         4, 0.5221701724770709     ,      327   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , M_MIRROR      ,       100, 0.5078072523211752     ,   160728   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , M_GMW         ,       100, 0.5060596639086655     ,    11608   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , PM_PROJECT    ,       100, 0.1700824171360587     ,   135320.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , PM_MIRROR     ,        34, -0.054493457939979624  ,    22048.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_11                      , PM_GMW        ,        23, -0.07956122499163595   ,     1596.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , NO_REGULARIZE ,         5, 0.229782891787678      ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , M_PROJECT     ,         5, 0.229782891787678      ,      416   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , M_MIRROR      ,       100, 0.18555109457696883    ,   144320   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , M_GMW         ,       100, 0.1821301293113323     ,    10936   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , PM_PROJECT    ,       100, 0.1924349745243972     ,   172896.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , PM_MIRROR     ,        36, -0.08300716561960199   ,    25096.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_12                      , PM_GMW        ,        26, -0.07747109984341434   ,     2028.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , NO_REGULARIZE ,         5, 0.19653657173930597    ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , M_PROJECT     ,         5, 0.19653657173930597    ,      387   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , M_MIRROR      ,       100, 0.162723238259343      ,   146896   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , M_GMW         ,       100, 0.1502884188433942     ,    10080   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , PM_PROJECT    ,       100, 0.10625921238664365    ,   144104.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , PM_MIRROR     ,        61, -0.04138116956214831   ,    79300.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_13                      , PM_GMW        ,        60, -0.044673611896129437  ,     4770.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , NO_REGULARIZE ,         5, 0.20662950909159797    ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , M_PROJECT     ,         5, 0.20662950909159797    ,      387   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , M_MIRROR      ,       100, 0.01083890705307045    ,   141240   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , M_GMW         ,       100, 0.10426331875276634    ,    10920   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , PM_PROJECT    ,       100, 0.16831510275296105    ,   227064.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , PM_MIRROR     ,        44, -0.02962756425191813   ,    29480.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_14                      , PM_GMW        ,        25, -0.029926253620903804  ,     2076.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , NO_REGULARIZE ,         5, 0.19200340603796942    ,      246   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , M_PROJECT     ,         5, 0.19200340603796942    ,      390   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , M_MIRROR      ,       100, 0.19016417672011       ,   150704   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , M_GMW         ,       100, 0.19058519626190934    ,    11170   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , PM_PROJECT    ,        22, -0.003964814147937075  ,     6200.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , PM_MIRROR     ,        18, -0.003964368962708825  ,     5472.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_16                      , PM_GMW        ,        19, -0.0037259289596944314 ,     1284.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , NO_REGULARIZE ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , M_PROJECT     ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , M_MIRROR      ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , M_GMW         ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , PM_PROJECT    ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , PM_MIRROR     ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_17                      , PM_GMW        ,        12, -0.0007289364737849673 ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , NO_REGULARIZE ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , M_PROJECT     ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , M_MIRROR      ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , M_GMW         ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , PM_PROJECT    ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , PM_MIRROR     ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_18                      , PM_GMW        ,        12, 0.0011473266703074525  ,      720   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , NO_REGULARIZE ,         5, -3.873601133563794     ,      266   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , M_PROJECT     ,         5, -3.873601133563794     ,      410   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , M_MIRROR      ,       100, -12.299373539450514    ,   115032   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , M_GMW         ,        97, -12.419004007456763    ,     9418   ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , PM_PROJECT    ,       100, -11.501596690717411    ,   506688.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , PM_MIRROR     ,        28, -12.412785412392125    ,    23152.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_2                       , PM_GMW        ,        28, -12.499253701875226    ,     2796.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , NO_REGULARIZE ,         5, 0.5664235386749403     ,      242   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , M_PROJECT     ,         5, 0.5664235386749403     ,      386   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , M_MIRROR      ,       100, 0.5489486543892276     ,   161792   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , M_GMW         ,       100, 0.19212668079990622    ,    10918   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , PM_PROJECT    ,       100, 0.4215770996694081     ,   196320.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , PM_MIRROR     ,        22, -0.16570867772843695   ,    19376.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_4                       , PM_GMW        ,        21, -0.1588347944161588    ,     1800.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , NO_REGULARIZE ,         5, 0.6928219434635757     ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , M_PROJECT     ,         5, 0.6928219434635757     ,      358   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , M_MIRROR      ,       100, 0.6266111278227194     ,   134296   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , M_GMW         ,       100, 0.6854361517500683     ,    10446   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , PM_PROJECT    ,       100, 0.6826546650954048     ,   357360.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , PM_MIRROR     ,        35, 0.34663593603080817    ,    37724.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_5                       , PM_GMW        ,        43, 0.34663593609497173    ,     4236.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , NO_REGULARIZE ,         5, 0.5816197114947389     ,      242   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , M_PROJECT     ,         5, nan                    ,      748   ,      3
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , M_MIRROR      ,       100, 0.5174870883346298     ,   155184   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , M_GMW         ,       100, 0.42850822202301053    ,    11054   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , PM_PROJECT    ,       100, 0.4703825998904331     ,   330032.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , PM_MIRROR     ,        22, 0.10997670003431402    ,    20352.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_6                       , PM_GMW        ,        25, 0.09426005940548572    ,     2616.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , NO_REGULARIZE ,         5, 0.5019740000955966     ,      246   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , M_PROJECT     ,         5, 0.5019740000955966     ,      419   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , M_MIRROR      ,       100, 0.3061757793955926     ,   140400   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , M_GMW         ,       100, 0.4892536479442521     ,    11072   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , PM_PROJECT    ,        28, 0.056583689584716906   ,    18272.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , PM_MIRROR     ,        25, 0.045246020577452      ,    18580.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_7                       , PM_GMW        ,        30, 0.04378956553860635    ,     2646.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , NO_REGULARIZE ,         5, 0.33028857701475467    ,      243   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , M_PROJECT     ,         5, 0.33028857701475467    ,      387   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , M_MIRROR      ,       100, 0.2034974859521229     ,   149976   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , M_GMW         ,       100, 0.26317418646111057    ,    11210   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , PM_PROJECT    ,       100, 0.24844790101966052    ,   365656.0 ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , PM_MIRROR     ,        26, -0.10062974482312333   ,    27912.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_8                       , PM_GMW        ,        54, -0.0860064178966038    ,     6804.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , NO_REGULARIZE ,         4, 0.5693773933223096     ,      200   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , M_PROJECT     ,         4, 0.5693773933223096     ,      315   ,      1
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , M_MIRROR      ,       100, 0.2318295480705358     ,   146896   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , M_GMW         ,       100, 0.24563807823584927    ,    11118   ,      2
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , PM_PROJECT    ,        23, -0.0696933961135008    ,    14556.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , PM_MIRROR     ,        25, -0.07317334826889164   ,    17116.0 ,      0
+robot_FU_INDE_RE_INDE_status_4_iter_9                       , PM_GMW        ,        19, -0.06916469059871443   ,     1446.0 ,      0
