@@ -552,24 +552,24 @@ class QpSolver:
                             break
                         else:
                             if i == max_ls - 1:
-                                self.stat_dict['ls'][-1] = '5x'
+                                self.stat_dict['ls'][-1] = '10x'
                             else:
                                 alpha_p *= beta
                     else:
                         # check theta type condition
                         if norm_c_cand <= 0.999*self.theta_max:
                             # update theta_max
-                            self.theta_max = max((1-0.5)*self.theta_max + 0.5*norm_c_cand, self.theta_max*0.9999)
+                            self.theta_max = (1-0.5)*norm_c_cand + 0.5*self.theta_max
                             self.stat_dict['ls'][-1] = str(ls)+"h"
                             break
                         else:
                             if i == max_ls - 1:
-                                self.stat_dict['ls'][-1] = '5x'
+                                self.stat_dict['ls'][-1] = '10x'
                             else:
                                 alpha_p *= beta
                 else:
                     if i == max_ls - 1:
-                        self.stat_dict['ls'][-1] = '5x'
+                        self.stat_dict['ls'][-1] = '10x'
                     else:
                         alpha_p *= beta
 
