@@ -45,6 +45,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         print(f"Deleted existing {output_path} to start fresh.")
 
     for qp_path in qp_json_paths:
+        print("*" * 50)
         print(f"QP loaded from {qp_path}")
         for method in methods:
             print("-" * 50)
@@ -55,6 +56,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             elif method == 'IPOPT':
                 qp = AcadosOcpQp.from_json(json_file_path=str(qp_path))
                 opts = {'ipopt': {'print_level': 0, 
+                                  "jacobian_regularization_value": 0.0,
                                   'max_iter': iter_max, 
                                   'sb': 'yes', 
                                   'mu_init': 1e1,}}
@@ -101,10 +103,11 @@ def main() -> None:
     qp_root = Path(__file__).resolve().parent / "cases" / "Tracking_inde_QP_json"
     qp_json_paths = iter_qp_json_paths(qp_root)
     output_path = Path(__file__).resolve().parent / "qp_results_riccati.csv"
-    iter_max = 100
+    iter_max = 120
     # methods = no_reg + Block_reduced_Hessian_reg
     # methods = no_reg + ["PM_MIRROR", "PM_GMW"] + Block_Hessian_reg
     methods = no_reg + ["PM_MIRROR", "PM_GMW", "INERTIA_LM"]
+    # methods = ["IPOPT"]
     run_benchmark(qp_json_paths, methods, output_path, iter_max)
 
 

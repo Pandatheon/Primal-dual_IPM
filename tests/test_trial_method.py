@@ -92,7 +92,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
             decomp_flop = None
             try:
                 if method != 'IPOPT':
-                    qp_solver.solve(max_iter=100)
+                    qp_solver.solve(max_iter=150)
                 else:
                     qp_solver.solve()
                 cost = qp_solver.get_cost()

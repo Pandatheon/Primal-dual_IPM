@@ -29,7 +29,7 @@ def run_benchmark(qp_path: list[Path]) -> None:
     opts.tol_eq = 1e-8
     opts.tol_ineq = 1e-8
     opts.tol_comp = 1e-6
-    opts.iter_max = 100
+    opts.iter_max = 30
 
     qp = BaseQP()
     qp.populate_from_json(str(qp_path))
@@ -54,7 +54,8 @@ def run_benchmark(qp_path: list[Path]) -> None:
     print(f"QP {qp_path.name} passed, diff: {diff_iter_riccati} for Riccati")
 
 def main() -> None:
-    qp_root = Path('/home/jingtao/Mehrotra_IPM/tests/QP_json/Pos_QP_json')
+    # qp_root = Path('/home/jingtao/Mehrotra_IPM/tests/QP_json/Pos_QP_json')
+    qp_root = Path('/home/jingtao/Mehrotra_IPM/tests/QP_json/temp')
     qp_json_paths = iter_qp_json_paths(qp_root)
     for qp_path in qp_json_paths:
         run_benchmark(qp_path)

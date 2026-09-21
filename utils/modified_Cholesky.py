@@ -307,7 +307,7 @@ def modified_cholesky_GMW(A):
 
     for j in range(n):
         # 1. Pivot: Find max diagonal in the remaining submatrix
-        q = j + np.argmax(np.diag(A_mod)[j:])
+        q = j + np.argmax(np.abs(np.diag(A_mod)[j:]))
 
         # 2. Perform symmetric permutation if needed
         if q != j:

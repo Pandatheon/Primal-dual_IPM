@@ -471,121 +471,141 @@ def plot_indefiniteness_coverage(csv_path, save_path=None):
 
 
 def plot_stage_indefiniteness_source(csv_path, save_path=None):
+    """Where stage-wise indefiniteness comes from, as TWO self-contained
+    figures (no titles -- use captions):
+
+        1. source    : how often the cost block R, the cost-to-go block P,
+                       or both are indefinite across all indefinite stages.
+        2. signature : per-OCP 100% stacked share of the same three classes.
+
+    Returns (fig_source, fig_signature). `save_path` acts as a stem, e.g.
+    "stage.pdf" -> stage_source.pdf / stage_signature.pdf .
+    """
+    # same muted, print-friendly family used by plot_indefiniteness_coverage
+    COL = {'R only':   '#c44e52',    # soft red
+           'both':     '#8172b3',    # soft purple
+           'P only':   '#4c72b0',    # soft blue
+           'neither':  '#8c8c8c'}
+    LABEL = {'R only': r'$R \prec 0$ only',
+             'both':   r'both',
+             'P only': r'$P \prec 0$ only'}
 
     def load_stage_diagnostics(csv_path):
-            df = pd.read_csv(csv_path)
-            df.columns = [c.strip() for c in df.columns]
-            for c in ['R_min_eig', 'P_min_eig', 'M_min_eig']:
-                df[c] = pd.to_numeric(df[c], errors='coerce')
-            df = df.dropna(subset=['R_min_eig', 'P_min_eig', 'M_min_eig']).copy()
+        df = pd.read_csv(csv_path)
+        df.columns = [c.strip() for c in df.columns]
+        for c in ['R_min_eig', 'P_min_eig', 'M_min_eig']:
+            df[c] = pd.to_numeric(df[c], errors='coerce')
+        df = df.dropna(subset=['R_min_eig', 'P_min_eig', 'M_min_eig']).copy()
 
-            # Match optional '_MIRROR' between iter and stage
-            df['problem'] = df['QP_stage_name'].str.strip().str.replace(
-                r'_FU_INDE_RE_INDE_status_\d+_iter_\d+(?:_MIRROR)?_stage_\d+$', '', regex=True)
+        # Match optional '_MIRROR' between iter and stage
+        df['problem'] = df['QP_stage_name'].str.strip().str.replace(
+            r'_FU_INDE_RE_INDE_status_\d+_iter_\d+(?:_MIRROR)?_stage_\d+$', '', regex=True)
 
-            Rneg, Pneg = df['R_min_eig'] < 0, df['P_min_eig'] < 0
-            df['cls'] = np.select(
-                [Rneg & ~Pneg, ~Rneg & Pneg, Rneg & Pneg],
-                ['R only', 'P only', 'both'], default='neither')
-            return df
+        Rneg, Pneg = df['R_min_eig'] < 0, df['P_min_eig'] < 0
+        df['cls'] = np.select(
+            [Rneg & ~Pneg, ~Rneg & Pneg, Rneg & Pneg],
+            ['R only', 'P only', 'both'], default='neither')
+        return df
 
-    # Resolve save_path into one path per figure
-    def resolve_paths(save_path):
+    def _save(fig, suffix):
         if save_path is None:
-            return None, None
-        if isinstance(save_path, (tuple, list)):
-            return save_path[0], save_path[1]
-
-        # Single string -> derive two paths by inserting a suffix
+            return
         root, ext = os.path.splitext(save_path)
         ext = ext or '.pdf'
-        return f'{root}_quadrant{ext}', f'{root}_signature{ext}'
+        fig.savefig(f'{root}_{suffix}{ext}', bbox_inches='tight')
+
+    def _despine(ax, keep=('left', 'bottom')):
+        for s in ['left', 'right', 'top', 'bottom']:
+            ax.spines[s].set_visible(s in keep)
 
     df = load_stage_diagnostics(csv_path)
-    R, P = df['R_min_eig'].values, df['P_min_eig'].values
-    path_A, path_B = resolve_paths(save_path)
+    order_cls = ['R only', 'both', 'P only']
 
-    col = {'R only': '#d1495b', 'P only': '#2e86ab',
-           'both': '#8338ec', 'neither': '#9a9a9a'}
-    mk = {'R only': '^', 'P only': 'v', 'both': 'o', 'neither': 'X'}
-
-    # ===================== Figure A: Indefiniteness-source histogram =====================
-    figA, axA = plt.subplots(figsize=(6.5, 5))
-
-    hist_cls = ['R only', 'P only', 'both']
-    hist_labels = ['R only', 'P only', 'RP only']
+    # ------------------------------------------------------------------
+    # Figure 1: indefiniteness source (counts over all indefinite stages)
+    # ------------------------------------------------------------------
     counts = df['cls'].value_counts()
-    freqs = [counts.get(c, 0) for c in hist_cls]
+    freqs = np.array([counts.get(c, 0) for c in order_cls], dtype=float)
+    total = freqs.sum()
 
-    x = np.arange(len(hist_cls))
-    axA.bar(x, freqs, color=[col[c] for c in hist_cls],
-            edgecolor='white', lw=0.6, width=0.7, zorder=3)
+    fig_s, axs = plt.subplots(figsize=(8, 6))
+    x = np.arange(len(order_cls))
+    axs.bar(x, freqs, width=0.55, color=[COL[c] for c in order_cls],
+            edgecolor='white', linewidth=0.8, zorder=3)
 
-    axA.set_xticks(x)
-    axA.set_xticklabels(hist_labels)
-    axA.set_xlabel('indefiniteness source')
-    axA.set_ylabel('frequency')
-    axA.grid(True, axis='y', ls='--', lw=0.4, color='#ddd', zorder=0)
-
-    for s in ['top', 'right']:
-        axA.spines[s].set_visible(False)
+    axs.set_xticks(x)
+    axs.set_xticklabels([LABEL[c] for c in order_cls])
+    axs.set_xlabel('Indefiniteness source')
+    axs.set_ylabel('Number of indefinite stages')
+    axs.set_xlim(-0.65, len(order_cls) - 0.35)
+    axs.set_ylim(0, freqs.max() * 1.18 if total else 1)
+    axs.grid(True, axis='y', ls='-', lw=0.5, color='#ededed', zorder=0)
+    axs.set_axisbelow(True)
+    axs.tick_params(direction='in', length=4, width=1)
+    _despine(axs)
 
     for xi, f in zip(x, freqs):
-        axA.text(xi, f, str(f), ha='center', va='bottom', fontsize=9)
+        share = f / total if total else 0.0
+        axs.annotate(f'{int(f)}\n({share:.0%})', (xi, f), ha='center', va='bottom',
+                     xytext=(0, 5), textcoords='offset points', fontsize=14)
+    _save(fig_s, 'source')
 
-    if path_A is not None:
-        figA.savefig(path_A, bbox_inches='tight')
-
-    # ===================== Figure B: Per-OCP signature =====================
-    figB, axB = plt.subplots(figsize=(6.5, 7))
-
-    order_cls = ['R only', 'both', 'P only']
+    # ------------------------------------------------------------------
+    # Figure 2: per-OCP signature (100% stacked shares)
+    # ------------------------------------------------------------------
     ct = pd.crosstab(df['problem'], df['cls'])
-
-    # Ensure all classes present as columns
     for c in order_cls:
         if c not in ct:
             ct[c] = 0
-
     ct = ct[order_cls]
+
     frac = ct.div(ct.sum(axis=1), axis=0)
     fam_order = frac.sort_values(['R only', 'both'], ascending=True).index.tolist()
     frac, tot = frac.loc[fam_order], ct.sum(axis=1).loc[fam_order]
 
+    fig_g, axg = plt.subplots(figsize=(9, max(4.0, 0.62 * len(fam_order) + 2.0)))
     y = np.arange(len(fam_order))
     left = np.zeros(len(fam_order))
 
     for c in order_cls:
-        axB.barh(y, frac[c].values, left=left, color=col[c],
-                 edgecolor='white', lw=0.6, height=0.72)
-        left = left + frac[c].values
+        w = frac[c].values
+        axg.barh(y, w, left=left, height=0.68, color=COL[c],
+                 edgecolor='white', linewidth=0.8, zorder=3)
+        # label only segments wide enough to hold the text
+        for yi, (wi, li) in enumerate(zip(w, left)):
+            if wi >= 0.14:
+                axg.text(li + wi / 2, yi, f'{wi:.0%}', ha='center', va='center',
+                         fontsize=12, color='white', zorder=4)
+        left = left + w
 
-    axB.set_yticks(y)
-    axB.set_yticklabels([f'{f}  (n={int(tot[f])})' for f in fam_order], fontsize=8.5)
-    axB.set_xlim(0, 1)
-    axB.set_xlabel('share of indefinite stages')
+    axg.set_yticks(y)
+    axg.set_yticklabels([f"{f.replace('_', ' ')}  (n={int(tot[f])})" for f in fam_order])
+    axg.set_ylim(-0.6, len(fam_order) - 0.4)
+    axg.set_xlim(0, 1)
+    axg.xaxis.set_major_formatter(ticker.PercentFormatter(xmax=1))
+    axg.set_xlabel('Share of indefinite stages')
+    axg.grid(True, axis='x', ls='-', lw=0.5, color='#ededed', zorder=0)
+    axg.set_axisbelow(True)
+    axg.tick_params(axis='x', direction='in', length=4, width=1)
+    axg.tick_params(axis='y', length=0)
+    _despine(axg, keep=('bottom',))
 
-    axB.legend(handles=[Patch(facecolor=col[c], label=c) for c in order_cls],
-               loc='lower center', bbox_to_anchor=(0.5, -0.16),
-               ncol=4, fontsize=8, frameon=False)
-
-    for s in ['top', 'right']:
-        axB.spines[s].set_visible(False)
-
-    if path_B is not None:
-        figB.savefig(path_B, bbox_inches='tight')
+    axg.legend(handles=[Patch(facecolor=COL[c], label=LABEL[c]) for c in order_cls],
+               loc='lower center', bbox_to_anchor=(0.5, 1.01), ncol=3,
+               frameon=False, columnspacing=1.4, handletextpad=0.5)
+    _save(fig_g, 'signature')
 
     plt.show()
-    return figA, figB
+    return fig_s, fig_g
 
 # Entry point
 if __name__ == "__main__":
     set_ieee_style()
 
-    iter = 0
+    iter = 1
     if iter:
         plot_charts('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
-        # plot_charts_pos('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
+        plot_charts_pos('qp_results_pos.csv') if Path('qp_results_pos.csv').exists() else print("qp_results_pos.csv not found, skipping.")
         plot_decomp_flop_worstcase('qp_results_riccati.csv') if Path('qp_results_riccati.csv').exists() else print("qp_results_riccati.csv not found, skipping.")
     else:
         plot_indefiniteness_coverage('qp_diagonstics.csv', save_path='indefiniteness_coverage.pdf') if Path('qp_diagonstics.csv').exists() else print("qp_diagonstics.csv not found, skipping.")

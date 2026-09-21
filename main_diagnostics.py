@@ -138,4 +138,4 @@ def main_stage_diagnostics() -> None:
 
 if __name__ == "__main__":
     main()
-    # main_stage_diagnostics()
+    main_stage_diagnostics()

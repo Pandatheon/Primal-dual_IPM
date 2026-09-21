@@ -8,7 +8,7 @@ import numpy as np
 from acados_template import AcadosOcpQp, AcadosOcpQpSolver, AcadosOcpQpOptions
 
 
-json_path = '/home/jingtao/Mehrotra_IPM/tests/QP_json/temp/time_optimal_swing_up_FU_INDE_RE_INDE_status_4_iter_10.json'
+json_path = '/home/jingtao/Mehrotra_IPM/tests/QP_json/temp/overhead_crane_FU_PD_RE_PD_status_2_iter_19.json'
 def main():
 
 

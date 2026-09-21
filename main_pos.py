@@ -42,7 +42,7 @@ def run_benchmark(qp_json_paths: list[Path], methods: list[str], output_path: Pa
         output_path.unlink()
         print(f"Deleted existing {output_path} to start fresh.")
 
-    methods = ['Prototype', 'HPIPM', 'IPOPT']
+    methods = ['Prototype', 'HPIPM']
 
     for qp_path in qp_json_paths:
         print(f"QP loaded from {qp_path}")
