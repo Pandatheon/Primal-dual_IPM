@@ -62,7 +62,6 @@ class QpSolver:
         self.alpha_prim = 0.0
         self.alpha_dual = 0.0
         self.alpha = 0.0
-        self.theta_max = 0.0
 
         self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
                            (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
@@ -91,10 +90,6 @@ class QpSolver:
         self.solution.u = [np.zeros(self.qp.nu) for _ in range(self.qp.N)]
         self.solution.pi = [np.zeros((self.qp.nx[k],)) for k in range(self.qp.N+1)]
         self._initialize_lam_and_s()
-
-        if self.globalization:
-            _, theta_max = self._compute_objective_and_constraints(self.solution)
-            self.theta_max = max(1.25 * theta_max, 100)
 
 
     def _initialize_lam_and_s(self):
@@ -477,7 +472,7 @@ class QpSolver:
 
     def update_solution(self, prev_sol:iterate_sol):
         tol = 1e-12
-        self.alpha_prim, self.alpha_dual, _ = self._funnel_line_search(prev_sol, self.delta_dict)
+        self.alpha_prim, self.alpha_dual, _ = self._two_phase_line_search(prev_sol, self.delta_dict)
         x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
         pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
@@ -510,71 +505,54 @@ class QpSolver:
 
         return alpha_pri_max, alpha_dual_max, alpha
 
-
-    def _funnel_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=10):
-
+    def _two_phase_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=10):
         # FTB
         tau_hi = 1.0 - min(1e-7, self.rhs.duality_measure)
         alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * tau_hi) if self.alpha_prim < 1.0 else self.alpha_prim
         alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * tau_hi) if self.alpha_dual < 1.0 else self.alpha_dual
 
-        if self.globalization:
-            objective, norm_c = self._compute_objective_and_constraints(prev_sol)
-            obj_grad = self._compute_objective_grad(prev_sol)
-            ls = 0
+        if not self.globalization:
+            return alpha_p, alpha_d, min(alpha_p, alpha_d)
 
-            direction_prim = np.concatenate(
-                delta_dict['delta_x'] +
-                delta_dict['delta_u'] +
-                delta_dict['delta_s']
+        objective, norm_c = self._compute_objective_and_constraints(prev_sol)
+        obj_grad = self._compute_objective_grad(prev_sol)
+
+        direction_prim = np.concatenate(
+            delta_dict['delta_x'] +
+            delta_dict['delta_u'] +
+            delta_dict['delta_s']
+        )
+        grad_direc_prod = obj_grad.T @ direction_prim
+
+        alpha_ftb = alpha_p
+        for ls in range(1, max_ls + 1):
+
+            # h-phase: still too infeasible to ask for objective descent
+            if alpha_p * (-grad_direc_prod) <= 1e-1 * norm_c**2:
+                self.stat_dict['ls'][-1] = str(ls) + 'h'
+                break
+
+            # f-phase: the merit reads only x, u, s -- pi/lam are passed through unchanged
+            cand = iterate_sol(
+                x   = [prev_sol.x[k] + alpha_p * delta_dict['delta_x'][k] for k in range(self.qp.N + 1)],
+                u   = [prev_sol.u[k] + alpha_p * delta_dict['delta_u'][k] for k in range(self.qp.N)],
+                pi  = prev_sol.pi,
+                lam = prev_sol.lam,
+                s   = [np.maximum(prev_sol.s[k] + alpha_p * delta_dict['delta_s'][k], 1e-12) for k in range(self.qp.N + 1)],
             )
-            grad_direc_prod = obj_grad.T @ direction_prim
+            objective_cand, _= self._compute_objective_and_constraints(cand)
 
-            for i in range(max_ls):
-                ls += 1
+            # check Armijo condition
+            if objective_cand <= objective + 1e-4 * alpha_p * grad_direc_prod:
+                self.stat_dict['ls'][-1] = str(ls) + 'f'
+                break
 
-                cand = iterate_sol(
-                    x   = [prev_sol.x[i]   + alpha_p * delta_dict['delta_x'][i]   for i in range(self.qp.N + 1)],
-                    u   = [prev_sol.u[i]   + alpha_p * delta_dict['delta_u'][i]   for i in range(self.qp.N)],
-                    pi  = [prev_sol.pi[i]  + alpha_d * delta_dict['delta_pi'][i]  for i in range(self.qp.N + 1)],
-                    lam = [np.maximum(prev_sol.lam[i] + alpha_d * delta_dict['delta_lam'][i], 1e-16) for i in range(self.qp.N+1)],
-                    s   = [np.maximum(prev_sol.s[i]   + alpha_p * delta_dict['delta_s'][i],   1e-16) for i in range(self.qp.N+1)],
-                )
-
-                objective_cand, norm_c_cand = self._compute_objective_and_constraints(cand)
-                # check acceptablity
-                if norm_c_cand <= self.theta_max:
-                    # check f type condition
-                    if alpha_p*(-grad_direc_prod)>1e-1*norm_c**2:
-                        # check Armijo condition
-                        if objective_cand <= objective + 1e-4*alpha_p*grad_direc_prod:
-                            self.stat_dict['ls'][-1] = str(ls)+"f"
-                            break
-                        else:
-                            if i == max_ls - 1:
-                                self.stat_dict['ls'][-1] = '10x'
-                            else:
-                                alpha_p *= beta
-                    else:
-                        # check theta type condition
-                        if norm_c_cand <= 0.999*self.theta_max:
-                            # update theta_max
-                            self.theta_max = (1-0.5)*norm_c_cand + 0.5*self.theta_max
-                            self.stat_dict['ls'][-1] = str(ls)+"h"
-                            break
-                        else:
-                            if i == max_ls - 1:
-                                self.stat_dict['ls'][-1] = '10x'
-                            else:
-                                alpha_p *= beta
-                else:
-                    if i == max_ls - 1:
-                        self.stat_dict['ls'][-1] = '10x'
-                    else:
-                        alpha_p *= beta
-
-        else:
-            pass
+            if ls == max_ls:
+                # every trial was rejected: fall back to the FTB step (Armijo not satisfied)
+                self.stat_dict['ls'][-1] = str(ls) + 'x'
+                alpha_p = alpha_ftb
+            else:
+                alpha_p *= beta
 
         return alpha_p, alpha_d, min(alpha_p, alpha_d)
 
