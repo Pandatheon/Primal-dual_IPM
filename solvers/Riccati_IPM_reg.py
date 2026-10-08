@@ -3,6 +3,7 @@ from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
 from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
 from solvers.Regularization_config import Regularizations_config, Block_Hessian_reg
+from solvers.Riccati_IPM import mirror_lower
 import numpy as np
 import copy
 from utils.modified_Cholesky import modified_cholesky_SE, modified_cholesky_GMW, modified_cholesky_SE99
@@ -129,7 +130,7 @@ class Riccati_IPM():
                 K = [None]*(horizon),
                 k = [None]*(horizon),
             )
-            feedback.P[horizon] = modified_qp.Q_e + reduced_delta * np.eye(self.qp.nx[horizon])
+            feedback.P[horizon] = mirror_lower(modified_qp.Q_e + reduced_delta * np.eye(self.qp.nx[horizon]))
             feedback.p[horizon] = self.rhs_kkt.rg[-1][:self.qp.nx[horizon]]
 
             factorization_ok = True
@@ -158,8 +159,8 @@ class Riccati_IPM():
                     y2 = np.linalg.solve(R_chol, g2)
                     K_curr = -np.linalg.solve(R_chol.T, y1)
                     k_curr = -np.linalg.solve(R_chol.T, y2)
-                    P_curr = Q_k + A_k.T@P_prev@A_k - (S_k.T + A_k.T@P_prev@B_k)@(-K_curr) + reduced_delta * np.eye(nx)
-                    p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - (S_k.T + A_k.T@P_prev@B_k)@(-k_curr)
+                    P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1 + reduced_delta * np.eye(nx))
+                    p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
 
                     feedback.P[k] = P_curr
                     feedback.p[k] = p_curr

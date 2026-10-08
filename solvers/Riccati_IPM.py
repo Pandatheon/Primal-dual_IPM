@@ -7,6 +7,35 @@ import numpy as np
 import copy
 
 
+def potrf_blasfeo(M: np.ndarray):
+    '''
+    Cholesky factorization as in BLASFEO (the one used by HPIPM): a non-positive pivot does not abort the
+    factorization, its column of L is set to zero instead. Solving with such a factor leaves the corresponding
+    variable at zero, i.e. the system is solved on the rows and columns of the accepted pivots only.
+    Returns L and the mask of the accepted pivots.
+    '''
+    n = M.shape[0]
+    L = np.zeros((n, n))
+    keep = np.zeros(n, dtype=bool)
+    for j in range(n):
+        pivot = M[j, j] - L[j, :j] @ L[j, :j]
+        if pivot > 0:
+            keep[j] = True
+            L[j:, j] = (M[j:, j] - L[j:, :j] @ L[j, :j]) / np.sqrt(pivot)
+    return L, keep
+
+def mirror_lower(M: np.ndarray) -> np.ndarray:
+    '''Symmetric matrix from the lower triangle of M, 
+    as HPIPM does for the Riccati matrix P (BLASFEO dtrtr_l).'''
+    return np.tril(M) + np.tril(M, -1).T
+
+def solve_blasfeo(M: np.ndarray, rhs: np.ndarray) -> np.ndarray:
+    '''Solve M sol = rhs with the factorization of potrf_blasfeo, the variables of the rejected pivots stay at zero.'''
+    L, keep = potrf_blasfeo(M)
+    L_keep = L[np.ix_(keep, keep)]
+    sol = np.zeros_like(rhs, dtype=float)
+    sol[keep] = np.linalg.solve(L_keep.T, np.linalg.solve(L_keep, rhs[keep]))
+    return sol
 
 class Riccati_IPM():
     def __init__(self, qp: BaseQP, reg_config: Regularizations_config, ineq_num:int, stat_dict: dict):
@@ -23,6 +52,8 @@ class Riccati_IPM():
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*(self.qp.N+1), [None]*(self.qp.N+1)
         lam_i = prev_sol.lam
         s_i = prev_sol.s
+        #     delta_x[0] = -solve_blasfeo(feedback.P[0], feedback.p[0])
+        #     delta_pi[0] = np.zeros(self.qp.nx[0])
 
         # recover delta_x and delta_u, delta_pi first with modified KKT system
         # then recover delta_s and delta_lam with original KKT system
@@ -113,13 +144,32 @@ class Riccati_IPM():
                 y2 = np.linalg.solve(R_chol, g2)
                 K_curr = -np.linalg.solve(R_chol.T, y1)
                 k_curr = -np.linalg.solve(R_chol.T, y2)
-                P_curr = Q_k + A_k.T@P_prev@A_k - (S_k.T + A_k.T@P_prev@B_k)@(-K_curr)
-                p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - (S_k.T + A_k.T@P_prev@B_k)@(-k_curr)
+                P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1)
+                p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
 
                 feedback.P[k] = P_curr
                 feedback.p[k] = p_curr
                 feedback.K[k] = K_curr
                 feedback.k[k] = k_curr
+
+                # self.stat_dict['decomp_flop'] += 1
+                # L, keep = potrf_blasfeo(reduced_hessian)
+                # R_chol = L[np.ix_(keep, keep)]
+                # g1 = S_k + B_k.T@P_prev@A_k
+                # g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
+                # y1 = np.linalg.solve(R_chol, g1[keep])
+                # y2 = np.linalg.solve(R_chol, g2[keep])
+                # K_curr = np.zeros_like(g1)
+                # k_curr = np.zeros_like(g2)
+                # K_curr[keep] = -np.linalg.solve(R_chol.T, y1)
+                # k_curr[keep] = -np.linalg.solve(R_chol.T, y2)
+                # P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1)
+                # p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
+
+                # feedback.P[k] = P_curr
+                # feedback.p[k] = p_curr
+                # feedback.K[k] = K_curr
+                # feedback.k[k] = k_curr
 
             except np.linalg.LinAlgError:
                 if self.reg_config.method == 'NO_REGULARIZE':
@@ -143,8 +193,8 @@ class Riccati_IPM():
                         y2 = np.linalg.solve(R_chol, g2)
                         K_curr = -np.linalg.solve(R_chol.T, y1)
                         k_curr = -np.linalg.solve(R_chol.T, y2)
-                        P_curr = Q_k + A_k.T@P_reg@A_k - (S_k.T + A_k.T@P_reg@B_k)@(-K_curr)
-                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - (S_k.T + A_k.T@P_reg@B_k)@(-k_curr)
+                        P_curr = mirror_lower(Q_k + A_k.T@P_reg@A_k - y1.T@y1)
+                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - y1.T@y2
 
                         feedback.P[k] = P_curr
                         feedback.p[k] = p_curr
