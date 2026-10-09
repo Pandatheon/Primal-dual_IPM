@@ -29,6 +29,11 @@ def mirror_lower(M: np.ndarray) -> np.ndarray:
     as HPIPM does for the Riccati matrix P (BLASFEO dtrtr_l).'''
     return np.tril(M) + np.tril(M, -1).T
 
+def average_matrix(M: np.ndarray) -> np.ndarray:
+    '''Symmetric matrix from the average of both triangles of M,
+    i.e. the nearest symmetric matrix to M in the Frobenius norm.'''
+    return (M + M.T)/2
+
 def solve_blasfeo(M: np.ndarray, rhs: np.ndarray) -> np.ndarray:
     '''Solve M sol = rhs with the factorization of potrf_blasfeo, the variables of the rejected pivots stay at zero.'''
     L, keep = potrf_blasfeo(M)

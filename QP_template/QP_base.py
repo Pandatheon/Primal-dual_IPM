@@ -4,7 +4,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__))) # Change working directory 
 import numpy as np
 from scipy.linalg import block_diag
 from copy import deepcopy
-import json
+from acados_template.acados_ocp_qp import AcadosOcpQp
 
 class BaseQP():
     """Base class providing generic QP algorithms and variable structures."""
@@ -47,109 +47,59 @@ class BaseQP():
         self.C = None
         self.D = None
         self.d = None
+        self.row_mask = None
 
         # Algorithmic variables
         self.feedback = None
         self.x0 = None
+        self.ocp_qp = None
 
     def populate_from_json(self, json_filepath):
-        """Populate the QP instance using data from a JSON file."""
-        with open(json_filepath, 'r') as f:
-            data = json.load(f)
-
-        # Use filename as the QP name
+        """Populate the QP instance using data from an acados QP JSON file."""
+        self.populate_from_ocp_qp(AcadosOcpQp.from_json(json_filepath))
         self.name = os.path.splitext(os.path.basename(json_filepath))[0]
-        matrix_fields = ['Q', 'R', 'S', 'A', 'B', 'C', 'D']
-        vector_fields = ['q', 'r', 'b', 'd', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug', 'idxe']
+        return self
 
-        dynamics_fields = ['A', 'B', 'b']
-        cost_fields = ['Q', 'R', 'S', 'q', 'r']
-        constraints_fields = ['C', 'D', 'idxb', 'lbu', 'ubu', 'lbx', 'ubx', 'lg', 'ug']
+    def populate_from_ocp_qp(self, ocp_qp: AcadosOcpQp):
+        """Populate the QP instance from an acados AcadosOcpQp. The arrays are copied, ocp_qp is left untouched."""
+        self.ocp_qp = ocp_qp
+        dims = ocp_qp.dims
 
-        # Get the actual padding length
-        pad_len = 2
-        for key in data:
-            if key.startswith("A_"):
-                pad_len = len(key.split('_')[-1])
-                break
-
-        def extract_sequence(prefix):
-            seq = []
-
-            if prefix in cost_fields + dynamics_fields:
-                i = 0
-                while True:
-                    key = f"{prefix}_{i:0{pad_len}d}"
-                    if key not in data:
-                        break
-
-                    if prefix in matrix_fields:
-                        seq.append(np.array(data[key]))
-                    elif prefix in vector_fields:
-                        seq.append(np.array(data[key]).flatten())
-                    i += 1
-            else:
-                N = len(self.A)
-                for k in range(N+1):
-                    key = f"{prefix}_{k:0{pad_len}d}"
-
-                    if key in data:
-                        if prefix in matrix_fields:
-                            seq.append(np.array(data[key]))
-                        elif prefix in vector_fields:
-                            seq.append(np.array(data[key]).flatten())
-                    else:
-                        seq.append(np.zeros((0, self.nx[k] if prefix in ['C'] else self.nu)))
-
-            return seq if seq else None
+        self.N = ocp_qp.N
+        self.nx = [int(nx_k) for nx_k in dims.nx]
+        self.nu = int(dims.nu[0])
 
         # Populate dynamics matrices
-        self.A = extract_sequence("A")
-        self.B = extract_sequence("B")
-        self.b = extract_sequence("b")
+        self.A = [A_k.copy() for A_k in ocp_qp.A]
+        self.B = [B_k.copy() for B_k in ocp_qp.B]
+        self.b = [b_k.copy() for b_k in ocp_qp.b]
 
-        # Determine horizon and dimensions
-        self.N = len(self.A) if self.A else 0
-        self.nx = [self.A[0].shape[0] if self.A else 0 for _ in range(self.N + 1)]
-        self.nu = self.B[0].shape[1] if self.B else 0
+        self.Q = [Q_k.copy() for Q_k in ocp_qp.Q[:-1]]
+        self.R = [R_k.copy() for R_k in ocp_qp.R[:-1]]
+        self.S = [S_k.copy() for S_k in ocp_qp.S[:-1]]
+        self.q = [q_k.copy() for q_k in ocp_qp.q[:-1]]
+        self.r = [r_k.copy() for r_k in ocp_qp.r[:-1]]
+        self.Q_e = ocp_qp.Q[-1].copy()
+        self.q_e = ocp_qp.q[-1].copy()
 
-        # Populate cost matrices and vectors
-        self.Q = extract_sequence("Q")[:-1]
-        self.R = extract_sequence("R")
-        self.S = extract_sequence("S")
-        self.q = extract_sequence("q")[:-1]
-        self.r = extract_sequence("r")
-        self.Q_e = np.array(data[ f"Q_{self.N:0{pad_len}d}"])
-        self.q_e = np.array(data[f"q_{self.N:0{pad_len}d}"]).flatten()
-
-        # Populate constraints
-        # boundary for x and u, represented as Jbx*x and Jbu*u
-        idxb = extract_sequence("idxb")
         self.Jbx = [np.zeros((0, self.nx[k])) for k in range(self.N + 1)]
         self.Jbu = [np.zeros((0, self.nu))] * (self.N + 1)
-        if idxb is not None:
-            for k in range(len(idxb)):
-                idxb_k = idxb[k]
-                if idxb_k.size == 0:
-                    continue
-                if k < self.N:
-                    idxb_u = idxb_k[idxb_k < self.nu]
-                    idxb_x = idxb_k[idxb_k >= self.nu] - self.nu
-                    Jbu_k = np.zeros((len(idxb_u), self.nu))
-                    Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
-                    Jbx_k = np.zeros((len(idxb_x), self.nx[k]))
-                    Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
-                    self.Jbu[k] = Jbu_k
-                    self.Jbx[k] = Jbx_k
-                else:
-                    idxb_x = idxb_k
-                    Jbx_k = np.zeros((len(idxb_x), self.nx[k]))
-                    Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
-                    self.Jbx[k] = Jbx_k
+        for k, idxb_k in enumerate(ocp_qp.idxb):
+            if idxb_k.size == 0:
+                continue
+            nu_k = dims.nu[k]
+            idxb_u = idxb_k[idxb_k < nu_k]
+            idxb_x = idxb_k[idxb_k >= nu_k] - nu_k
+            Jbu_k = np.zeros((len(idxb_u), self.nu))
+            Jbu_k[np.arange(len(idxb_u)), idxb_u] = 1.0
+            Jbx_k = np.zeros((len(idxb_x), self.nx[k]))
+            Jbx_k[np.arange(len(idxb_x)), idxb_x] = 1.0
+            self.Jbu[k] = Jbu_k
+            self.Jbx[k] = Jbx_k
 
         if self.x0_elimination:
             # ad-hoc fix for x0 elimination
-            self.idxe_0 = extract_sequence("idxe")[0] - self.Jbu[0].shape[0]
+            self.idxe_0 = ocp_qp.idxe[0] - self.Jbu[0].shape[0]
             self.free_idx_0 = np.delete(np.arange(self.nx[0]), self.idxe_0)
             self.A0e = self.A[0][:, self.idxe_0].copy()
             self.S0e = self.S[0][:, self.idxe_0].copy()
@@ -172,15 +122,12 @@ class BaseQP():
         self.nbu_e = self.Jbu[-1].shape[0]
         self.nb_e = self.nbx_e + self.nbu_e
 
-        # general linear constraints C*x + D*u <= d
         self.C = []
         self.D = []
-        C_list = extract_sequence("C")
-        D_list = extract_sequence("D")
-
         for k in range(self.N+1):
-            C_k = C_list[k] if (C_list and k < len(C_list)) else np.zeros((0, self.nx[k]))
-            D_k = D_list[k] if (D_list and k < len(D_list)) else np.zeros((0, self.nu))
+            has_g = dims.ng[k] > 0
+            C_k = ocp_qp.C[k].copy() if has_g else np.zeros((0, self.nx[k]))
+            D_k = ocp_qp.D[k].copy() if has_g and k < self.N else np.zeros((0, self.nu))
             self.C.append(C_k)
             self.D.append(D_k)
 
@@ -188,7 +135,6 @@ class BaseQP():
         self.nh = self.C[1].shape[0]
         self.nh_e = self.C[-1].shape[0]
 
-        # concatanate Jbx, Jbu with C, D to form the full constraint matrices for each stage
         for k in range(self.N+1):
             C_lower = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx[k])), -self.Jbx[k], -self.C[k]))
             C_upper = np.vstack((np.zeros((self.Jbu[k].shape[0], self.nx[k])), self.Jbx[k], self.C[k]))
@@ -197,42 +143,62 @@ class BaseQP():
             D_upper = np.vstack((self.Jbu[k], np.zeros((self.Jbx[k].shape[0], self.nu)), self.D[k]))
             self.D[k] = np.vstack((D_lower, D_upper))
 
-        lbu, ubu = extract_sequence("lbu"), extract_sequence("ubu")
-        lbx, ubx= extract_sequence("lbx"), extract_sequence("ubx")
-        lg, ug = extract_sequence("lg"), extract_sequence("ug")
+        lbu, ubu = ocp_qp.lbu, ocp_qp.ubu
+        lbx, ubx = ocp_qp.lbx, ocp_qp.ubx
+        lg, ug = ocp_qp.lg, ocp_qp.ug
+        masks = [(ocp_qp.lbu_mask, ocp_qp.ubu_mask), (ocp_qp.lbx_mask, ocp_qp.ubx_mask), (ocp_qp.lg_mask, ocp_qp.ug_mask)]
         self.d = []
+
+        self.row_mask = []
         for k in range(self.N+1):
             lb_k = []
             ub_k = []
+            lb_mask_k = []
+            ub_mask_k = []
             for i, (lb, ub) in enumerate([(lbu, ubu), (lbx, ubx), (lg, ug)]):
+                lb_mask, ub_mask = masks[i]
                 if k == 0 and i == 1 and self.x0_elimination:
-                    self.x0 = lb[0].flatten()[self.idxe_0]
+                    self.x0 = lb[0][self.idxe_0]
                     self.b[0] = self.b[0] + self.A[0][:, self.idxe_0] @ self.x0
                     self.r[0] = self.r[0] + self.S[0][:, self.idxe_0] @ self.x0
                     self.q[0] = self.q[0][self.free_idx_0] + self.Q[0][np.ix_(self.free_idx_0, self.idxe_0)] @ self.x0
                     self.A[0] = self.A[0][:, self.free_idx_0]
                     self.S[0] = self.S[0][:, self.free_idx_0]
                     self.Q[0] = self.Q[0][np.ix_(self.free_idx_0, self.free_idx_0)]
-                    lb_k.append(-lb[0].flatten()[self.free_idx_0])
-                    ub_k.append( ub[0].flatten()[self.free_idx_0])
+                    lb_k.append(-lb[0][self.free_idx_0])
+                    ub_k.append( ub[0][self.free_idx_0])
+                    lb_mask_k.append(lb_mask[0][self.free_idx_0])
+                    ub_mask_k.append(ub_mask[0][self.free_idx_0])
                     continue
 
-                if (lb is not None and k < len(lb)) and (ub is not None and k < len(ub)):
-                    lb_k.append(-lb[k].flatten())
-                    ub_k.append(ub[k].flatten())
+                lb_k.append(-lb[k])
+                ub_k.append(ub[k])
+                lb_mask_k.append(lb_mask[k])
+                ub_mask_k.append(ub_mask[k])
 
-            if lb_k and ub_k:
-                d_k = lb_k + ub_k
-                self.d.append(np.concatenate(d_k))
-            else:
-                self.d.append(np.array([]))
+            self.d.append(np.concatenate(lb_k + ub_k))
+            self.row_mask.append(np.concatenate(lb_mask_k + ub_mask_k) != 0.0)
 
         if self.x0_elimination:
             self.d[0] = self.d[0] - self.C[0][:, self.idxe_0] @ self.x0
             self.C[0] = self.C[0][:, self.free_idx_0]
             self.nx[0] = len(self.free_idx_0)
 
+        self.C_all, self.D_all, self.d_all = self.C, self.D, self.d
+        self.D_all[self.N] = np.zeros((self.d_all[self.N].size, self.nu))
+        self.C = [C_k[m] for C_k, m in zip(self.C_all, self.row_mask)]
+        self.D = [D_k[m] for D_k, m in zip(self.D_all, self.row_mask)]
+        self.d = [d_k[m] for d_k, m in zip(self.d_all, self.row_mask)]
+
         return self
+
+    def __deepcopy__(self, memo):
+        memo[id(self.ocp_qp)] = self.ocp_qp
+        QP_copy = self.__class__.__new__(self.__class__)
+        memo[id(self)] = QP_copy
+        for key, value in self.__dict__.items():
+            setattr(QP_copy, key, deepcopy(value, memo))
+        return QP_copy
 
     def _A_power_transpose(self, start_stage, end_stage):
         if end_stage <= start_stage:

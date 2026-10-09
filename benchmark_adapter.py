@@ -50,7 +50,6 @@ class RiccatiQp(ExternalQp):
         if not np.array_equal(idxbx_0, np.arange(nx_0)):
             raise NotImplementedError("the x0 elimination of BaseQP needs bounds on all initial states, in order")
         if qp.dims.nbxe[0] == 0:
-            # mark the initial states fixed by lbx == ubx as equalities, BaseQP eliminates them
             qp = copy.deepcopy(qp)
             fixed = (qp.lbx[0] == qp.ubx[0]) & (qp.lbx_mask[0] != 0) & (qp.ubx_mask[0] != 0)
             qp.set("idxe", 0, np.flatnonzero(fixed) + qp.dims.nbu[0])
@@ -120,6 +119,9 @@ class RiccatiSolver(ExternalQpSolver):
         elif field == "time_tot":
             return self._time_tot
         raise NotImplementedError(f"get_stats(): field '{field}' not implemented.")
+
+    def print_statistics(self):
+        self._solver.print_statistics()
 
     def get_iterate(self):
         # after an exception the solution is not recovered to the full layout
