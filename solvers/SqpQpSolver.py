@@ -1,133 +1,188 @@
-from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager, AcadosOcpQp
+from acados_template import AcadosOcp, AcadosOcpSolver, AcadosParam, AcadosParamManager, AcadosOcpQp, AcadosOcpQpOptions, AcadosOcpQpHpipmOptions
 
 import casadi as ca
 import numpy as np
+import hashlib
+import os
 
 
 class SqpQpSolver(AcadosOcpSolver):
+    """
+    Solve an AcadosOcpQp with the acados SQP solver.
 
-    def __init__(self, qp: AcadosOcpQp, nlp_max_iter=100, mode='nonconvex'):
+    The QP data enters a parametric OCP: A, B, b, Q, R, S, q, r, C, D are model parameters and the
+    bounds are set directly. Starting from the zero iterate, the first SQP iteration solves exactly
+    the given QP, so with the same qp_opts it reproduces a standalone AcadosOcpQpSolver (HPIPM) solve.
+    General constraints are modeled as h_0 / h / h_e, since acados only allows a stage-0 specific
+    number of constraints for h, and the QP may have e.g. ng = 0 at stage 0 but ng > 0 afterwards.
+    """
 
+    def __init__(self, qp: AcadosOcpQp, nlp_max_iter=100, mode='nonconvex', qp_opts: AcadosOcpQpOptions = None):
+
+        self.solver_created = False  # AcadosOcpSolver.__del__ needs it if the checks below raise
         self.qp = qp
         self.mode = mode
+        self.qp_opts = qp_opts if qp_opts is not None else self.default_qp_opts()
+        self._check_qp_structure()
         parametric_ocp, self.param_manager = self.formulate_parametric_OCP_QP(nlp_max_iter)
         super().__init__(parametric_ocp, verbose=False)
 
+    @staticmethod
+    def default_qp_opts() -> AcadosOcpQpHpipmOptions:
+        opts = AcadosOcpQpHpipmOptions()
+        opts.qp_solver = 'PARTIAL_CONDENSING_HPIPM'
+        opts.hpipm_mode = 'BALANCE'
+        opts.mu0 = 1e1
+        opts.t0_init = 2
+        opts.warm_start = 0
+        opts.ric_alg = 0
+        opts.cond_ric_alg = 0
+        opts.tol_stat = 1e-6
+        opts.tol_eq = 1e-8
+        opts.tol_ineq = 1e-8
+        opts.tol_comp = 1e-6
+        opts.iter_max = 30
+        return opts
+
     def solve(self):
+        # start from the zero iterate, where the first SQP iteration solves exactly the given QP
+        self.reset()
         self._populate_ocp_solver()
         status = super().solve()
         if status != 0:
             print(f"ocp_solver returned status {status}.")
         return status
 
+    def _check_qp_structure(self):
+        qp = self.qp
+        dims = qp.dims
+        N = qp.N
+
+        if len(set(dims.nx)) != 1:
+            raise ValueError(f"SqpQpSolver requires constant nx, got nx = {dims.nx}.")
+        if len(set(dims.nu[:N])) != 1 or dims.nu[N] != 0:
+            raise ValueError(f"SqpQpSolver requires constant nu for stages 0..N-1 and nu = 0 at stage N, got nu = {dims.nu}.")
+        if any(dims.ns > 0):
+            raise NotImplementedError("SqpQpSolver does not support slack variables.")
+        if qp.has_masks():
+            raise NotImplementedError("SqpQpSolver does not support masked constraints.")
+
+        idxbu_0 = qp.idxb[0][:dims.nbu[0]]
+        for i in range(1, N):
+            if not np.array_equal(qp.idxb[i][:dims.nbu[i]], idxbu_0):
+                raise ValueError(f"SqpQpSolver requires the same u bounds on stages 0..N-1, stage {i} differs from stage 0.")
+            if not np.array_equal(qp.idxb[i], qp.idxb[1]) or dims.ng[i] != dims.ng[1]:
+                raise ValueError(f"SqpQpSolver requires the same constraint structure on stages 1..N-1, stage {i} differs from stage 1.")
+            if dims.nbxe[i] > 0:
+                raise NotImplementedError(f"SqpQpSolver supports equality bounds (idxe) only at stage 0, got idxe at stage {i}.")
+        if dims.nbxe[N] > 0:
+            raise NotImplementedError(f"SqpQpSolver supports equality bounds (idxe) only at stage 0, got idxe at stage {N}.")
+
+    def _idxbx(self, stage):
+        # idxb indexes [u; x], the first nbu entries are the u bounds
+        return self.qp.idxb[stage][self.qp.dims.nbu[stage]:] - self.qp.dims.nu[stage]
+
+    def _qp_solver_options(self) -> dict:
+        # map AcadosOcpQpOptions onto the QP solver options of the OCP solver
+        opts = self.qp_opts
+        solver_options = {
+            'qp_solver': opts.qp_solver,
+            'hpipm_mode': opts.hpipm_mode,
+            'qp_solver_mu0': opts.mu0 if opts.mu0 is not None else 0.0,  # 0.0 -> HPIPM default
+            'qp_solver_t0_init': opts.t0_init,
+            'qp_solver_ric_alg': opts.ric_alg,
+            'qp_solver_cond_ric_alg': opts.cond_ric_alg,
+            'qp_solver_tol_stat': opts.tol_stat,
+            'qp_solver_tol_eq': opts.tol_eq,
+            'qp_solver_tol_ineq': opts.tol_ineq,
+            'qp_solver_tol_comp': opts.tol_comp,
+            'qp_solver_iter_max': opts.iter_max,
+            'qp_solver_warm_start': opts.warm_start,
+        }
+        if opts.cond_N is not None:
+            solver_options['qp_solver_cond_N'] = opts.cond_N
+        if opts.cond_block_size is not None:
+            solver_options['qp_solver_cond_block_size'] = opts.cond_block_size
+        return solver_options
+
+    def _model_name(self, nlp_max_iter, qp_solver_options):
+        # The generated code only depends on the QP structure and the options. Using a distinct name and
+        # export directory per structure prevents linking stale objects of a previously generated QP.
+        dims = self.qp.dims
+        signature = repr((dims.nx.tolist(), dims.nu.tolist(), dims.nbu.tolist(), dims.nbx.tolist(), dims.ng.tolist(),
+                          [idxb.tolist() for idxb in self.qp.idxb],
+                          [[] if idxe is None else idxe.tolist() for idxe in self.qp.idxe],
+                          self.mode, nlp_max_iter, sorted((k, repr(v)) for k, v in qp_solver_options.items())))
+        return 'parametric_OCP_QP_' + hashlib.md5(signature.encode()).hexdigest()[:10]
+
     def _populate_ocp_solver(self):
-        N = self.qp.N
-        nx = self.qp.A[0].shape[0]
-        nu = self.qp.B[0].shape[1]
+        qp = self.qp
+        dims = qp.dims
+        N = qp.N
+        nx = dims.nx[0]
+        nu = dims.nu[0]
+        ng_max = max(dims.ng)
 
-        nh_0 = self.qp.C[0].shape[0]
-        nh = self.qp.C[1].shape[0]
-        nh_e = self.qp.C[N].shape[0]
-
-        nbx_0 = self.qp.lbx[0].shape[0]
-        nbx = self.qp.lbx[1].shape[0]
-        nbx_e = self.qp.lbx[N].shape[0]
-
-        nbu = self.qp.lbu[0].shape[0]
-
-        # Set parameters value in param_manager
         for i in range(N+1):
-            self.param_manager.set_value(name="Q", value=self.qp.Q[i], stage=i)
-            self.param_manager.set_value(name="q", value=self.qp.q[i], stage=i)
+            ng = dims.ng[i]
+
+            # Set parameters value in param_manager
+            self.param_manager.set_value(name="Q", value=qp.Q[i], stage=i)
+            self.param_manager.set_value(name="q", value=qp.q[i].reshape((nx, 1)), stage=i)
             if i < N:
-                self.param_manager.set_value(name="A", value=self.qp.A[i], stage=i)
-                self.param_manager.set_value(name="B", value=self.qp.B[i], stage=i)
-                self.param_manager.set_value(name="b", value=self.qp.b[i], stage=i)
-                self.param_manager.set_value(name="R", value=self.qp.R[i], stage=i)
-                self.param_manager.set_value(name="S", value=self.qp.S[i], stage=i)
-                self.param_manager.set_value(name="r", value=self.qp.r[i], stage=i)
+                self.param_manager.set_value(name="A", value=qp.A[i], stage=i)
+                self.param_manager.set_value(name="B", value=qp.B[i], stage=i)
+                self.param_manager.set_value(name="b", value=qp.b[i].reshape((nx, 1)), stage=i)
+                self.param_manager.set_value(name="R", value=qp.R[i], stage=i)
+                self.param_manager.set_value(name="S", value=qp.S[i], stage=i)
+                self.param_manager.set_value(name="r", value=qp.r[i].reshape((nu, 1)), stage=i)
 
-                if nbu > 0:
-                    self.param_manager.set_value(name="lbu", value=self.qp.lbu[i], stage=i)
-                    self.param_manager.set_value(name="ubu", value=self.qp.ubu[i], stage=i)
-                else:
-                    self.param_manager.set_value(name="lbu", value=-1e4*np.ones((nu, 1)), stage=i)
-                    self.param_manager.set_value(name="ubu", value=1e4*np.ones((nu, 1)), stage=i)
-
-            nbx_ = nbx_0 if i == 0 else nbx_e if i == N else nbx
-            lbx_value = self.qp.lbx[i] if self.qp.lbx[i].shape[0] > 0 else -1e4*np.ones((nbx_, 1))
-            ubx_value = self.qp.ubx[i] if self.qp.ubx[i].shape[0] > 0 else 1e4*np.ones((nbx_, 1))
-            self.param_manager.set_value(name="lbx", value=lbx_value, stage=i)
-            self.param_manager.set_value(name="ubx", value=ubx_value, stage=i)
-
-            nh_ = nh_0 if i == 0 else nh_e if i == N else nh
-            C_value = self.qp.C[i] if self.qp.C[i].shape[0] > 0 else np.zeros((nh_, nx))
-            D_value = self.qp.D[i] if self.qp.D[i].shape[0] > 0 else np.zeros((nh_, nu))
-            lg_value = self.qp.lg[i] if self.qp.lg[i].shape[0] > 0 else -1e4*np.ones((nh_, 1))
-            ug_value = self.qp.ug[i] if self.qp.ug[i].shape[0] > 0 else 1e4*np.ones((nh_, 1))
-            self.param_manager.set_value(name="C", value=C_value, stage=i)
-            if i < N:
-                self.param_manager.set_value(name="D", value=D_value, stage=i)
-            self.param_manager.set_value(name="lg", value=lg_value, stage=i)
-            self.param_manager.set_value(name="ug", value=ug_value, stage=i)
-
-        # Set parameters value in the solver by param_manager
-        for i in range(N+1):
-            param_value = self.param_manager.get_p_stagewise_values(i)
-            param_dyna_cost_values = param_value[:self.param_manager.p_dyna_num + self.param_manager.p_cost_num]
-            param_cons_values = param_value[self.param_manager.p_dyna_num + self.param_manager.p_cost_num:]
-
-            # Set dynamic and cost parameters
-            self.set(i, 'p', param_dyna_cost_values)
-
-            # Set constraints in bu, bx, b
-            nbx_ = nbx_0 if i == 0 else nbx_e if i == N else nbx
-            lbx = param_cons_values[:nbx_].flatten()
-            ubx = param_cons_values[nbx_:2*nbx_].flatten()
-            if nbx_ > 0:
-                self.constraints_set(i, 'lbx', lbx)
-                self.constraints_set(i, 'ubx', ubx)
-
-            end_bx = 2 * nbx_
-            lbu = param_cons_values[end_bx:end_bx+nu].flatten()
-            ubu = param_cons_values[end_bx+nu:end_bx+2*nu].flatten()
-            if nbu > 0 and i < N:
-                self.constraints_set(i, 'lbu', lbu)
-                self.constraints_set(i, 'ubu', ubu)
-
-            end_nb = end_bx + 2*nu
-            nh_ = nh_0 if i == 0 else nh_e if i == N else nh
-            C_k = param_cons_values[end_nb:end_nb+nh_*nx].reshape((nh_, nx), order='F')
-            D_k = param_cons_values[end_nb+nh_*nx:end_nb+nh_*nx+nh_*nu].reshape((nh_, nu), order='F')
-            end_ng = end_nb + nh_*nx + nh_*nu
-            lg = param_cons_values[end_ng:end_ng+nh_].flatten()
-            ug = param_cons_values[end_ng+nh_:end_ng+2*nh_].flatten()
-            if nh_ > 0:
-                self.constraints_set(i, 'C', C_k)
+            # only the first ng rows of C, D enter h at this stage
+            C_value = np.zeros((ng_max, nx))
+            D_value = np.zeros((ng_max, nu))
+            if ng > 0:
+                C_value[:ng, :] = qp.C[i]
                 if i < N:
-                    self.constraints_set(i, 'D', D_k)
-                self.constraints_set(i, 'lg', lg)
-                self.constraints_set(i, 'ug', ug)
+                    D_value[:ng, :] = qp.D[i]
+            self.param_manager.set_value(name="C", value=C_value, stage=i)
+            self.param_manager.set_value(name="D", value=D_value, stage=i)
+
+            self.set(i, 'p', self.param_manager.get_p_stagewise_values(i).flatten())
+
+            # Set bounds
+            if dims.nbu[i] > 0:
+                self.constraints_set(i, 'lbu', qp.lbu[i])
+                self.constraints_set(i, 'ubu', qp.ubu[i])
+            if dims.nbx[i] > 0:
+                self.constraints_set(i, 'lbx', qp.lbx[i])
+                self.constraints_set(i, 'ubx', qp.ubx[i])
+            if ng > 0:
+                self.constraints_set(i, 'lh', qp.lg[i])
+                self.constraints_set(i, 'uh', qp.ug[i])
 
     def formulate_parametric_OCP_QP(self, nlp_max_iter):
         ocp = AcadosOcp()
-        ocp.model.name = 'parametric_OCP_QP'
+        qp_solver_options = self._qp_solver_options()
+        ocp.model.name = self._model_name(nlp_max_iter, qp_solver_options)
+        ocp.code_gen_opts.code_export_directory = os.path.join('c_generated_code', ocp.model.name)
+        ocp.code_gen_opts.json_file = os.path.join(ocp.code_gen_opts.code_export_directory, f'{ocp.model.name}_ocp.json')
+        os.makedirs(ocp.code_gen_opts.code_export_directory, exist_ok=True)
 
-        N = self.qp.N
-        nx = self.qp.A[0].shape[0]
-        nu = self.qp.B[0].shape[1]
+        qp = self.qp
+        dims = qp.dims
+        N = qp.N
+        nx = dims.nx[0]
+        nu = dims.nu[0]
 
-        nh_0 = self.qp.C[0].shape[0]
-        nh = self.qp.C[1].shape[0]
-        nh_e = self.qp.C[N].shape[0]
+        nbx_0 = dims.nbx[0]
+        nbx = dims.nbx[1] if N > 1 else 0
+        nbx_e = dims.nbx[N]
+        nbu = dims.nbu[0]
 
-        nbx_0 = self.qp.lbx[0].shape[0]
-        nbx = self.qp.lbx[1].shape[0]
-        nbx_e = self.qp.lbx[N].shape[0]
-
-        nbx_max = max(nbx_0, nbx, nbx_e)
-        nbu = self.qp.lbu[0].shape[0]
-        nh_max = max(nh_0, nh, nh_e)
+        ng_0 = dims.ng[0]
+        ng = dims.ng[1] if N > 1 else 0
+        ng_e = dims.ng[N]
+        ng_max = max(dims.ng)
 
         # params
         Q_param = AcadosParam("Q", np.zeros((nx, nx)))
@@ -138,31 +193,21 @@ class SqpQpSolver(AcadosOcpSolver):
         R_param = AcadosParam("R", np.zeros((nu, nu)))
         S_param = AcadosParam("S", np.zeros((nu, nx)))
         r_param = AcadosParam("r", np.zeros((nu, 1)))
-        lbu_param = AcadosParam("lbu", np.zeros((nbu, 1)))
-        ubu_param = AcadosParam("ubu", np.zeros((nbu, 1)))
-        lbx_param = AcadosParam("lbx", np.zeros((nbx_max, 1)))
-        ubx_param = AcadosParam("ubx", np.zeros((nbx_max, 1)))
-        C_param = AcadosParam("C", np.zeros((nh_max, nx)))
-        D_param = AcadosParam("D", np.zeros((nh_max, nu)))
-        lg_param = AcadosParam("lg", np.zeros((nh_max, 1)))
-        ug_param = AcadosParam("ug", np.zeros((nh_max, 1)))
+        C_param = AcadosParam("C", np.zeros((ng_max, nx)))
+        D_param = AcadosParam("D", np.zeros((ng_max, nu)))
 
         param_manager = AcadosParamManager([A_param, B_param, b_param,
                                             Q_param, R_param, S_param, q_param, r_param,
-                                            lbx_param, ubx_param, lbu_param, ubu_param,
-                                            C_param, D_param, lg_param, ug_param])
-
+                                            C_param, D_param])
         param_manager.N_horizon = N
-        param_manager.p_dyna_num = nx*nx + nu*nx + nx
-        param_manager.p_cost_num = nx*nx + nu*nu +  nx*nu + nx + nu
 
         # set up model
         x = ca.SX.sym("x", nx)
         u = ca.SX.sym("u", nu)
         ocp.model.x = x
         ocp.model.u = u
-        ocp.model.p = param_manager.get_p_stagewise_expression()[:param_manager.p_dyna_num + param_manager.p_cost_num]
-        ocp.parameter_values = param_manager.get_p_stagewise_values(stage=0)[:param_manager.p_dyna_num + param_manager.p_cost_num]
+        ocp.model.p = param_manager.get_p_stagewise_expression()
+        ocp.parameter_values = param_manager.get_p_stagewise_values(stage=0).flatten()
 
         # dynamics
         A_expr = param_manager.get_expression("A")
@@ -177,6 +222,8 @@ class SqpQpSolver(AcadosOcpSolver):
         S = param_manager.get_expression("S")
         q = param_manager.get_expression("q")
         r = param_manager.get_expression("r")
+        C = param_manager.get_expression("C")
+        D = param_manager.get_expression("D")
 
         # set up cost
         x_res = ocp.model.x
@@ -186,40 +233,55 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.cost.cost_type_e = "EXTERNAL"
         ocp.model.cost_expr_ext_cost_e = 0.5 * (x_res.T @ Q @ x_res) + q.T @ x_res
 
-        # constraints with placeholders
-        # initial state constraints
-        ocp.constraints.x0 = np.zeros((nx, 1))
-        ocp.constraints.idxbx_0 = self.qp.idxb[0][nbu:] - nbu if nbx_0 > 0 else []
+        # bounds with placeholders, values are set in _populate_ocp_solver
+        # initial state constraints, the equalities (idxe) index the bounds [u; x]
+        ocp.constraints.idxbx_0 = self._idxbx(0)
+        ocp.constraints.lbx_0 = -1e5*np.ones((nbx_0,))
+        ocp.constraints.ubx_0 = 1e5*np.ones((nbx_0,))
+        ocp.constraints.idxbxe_0 = qp.idxe[0] - nbu if dims.nbxe[0] > 0 else np.array([])
         # state constraints
-        ocp.constraints.lbx = -1e4*np.ones((nbx, 1))
-        ocp.constraints.ubx = 1e4*np.ones((nbx, 1))
-        ocp.constraints.idxbx = self.qp.idxb[1][nbu:] - nbu if nbx > 0 else []
+        if nbx > 0:
+            ocp.constraints.idxbx = self._idxbx(1)
+            ocp.constraints.lbx = -1e5*np.ones((nbx,))
+            ocp.constraints.ubx = 1e5*np.ones((nbx,))
         # terminal state constraints
-        ocp.constraints.lbx_e = -1e4*np.ones((nbx_e, 1))
-        ocp.constraints.ubx_e = 1e4*np.ones((nbx_e, 1))
-        ocp.constraints.idxbx_e = self.qp.idxb[N] if nbx_e > 0 else []
+        if nbx_e > 0:
+            ocp.constraints.idxbx_e = self._idxbx(N)
+            ocp.constraints.lbx_e = -1e5*np.ones((nbx_e,))
+            ocp.constraints.ubx_e = 1e5*np.ones((nbx_e,))
         # control constraints
-        ocp.constraints.lbu = -1e4*np.ones((nbu, 1))
-        ocp.constraints.ubu = 1e4*np.ones((nbu, 1))
-        ocp.constraints.idxbu = self.qp.idxb[0][:nbu] if nbu > 0 else []
+        if nbu > 0:
+            ocp.constraints.idxbu = qp.idxb[0][:nbu]
+            ocp.constraints.lbu = -1e5*np.ones((nbu,))
+            ocp.constraints.ubu = 1e5*np.ones((nbu,))
 
-        # general linear constraints
-        ocp.constraints.C = np.zeros((nh_max, nx))
-        ocp.constraints.D = np.zeros((nh_max, nu))
-        ocp.constraints.lg = -1e4*np.ones((nh_max, 1))
-        ocp.constraints.ug = 1e4*np.ones((nh_max, 1))
+        # general linear constraints lg <= C x + D u <= ug, stage-wise number of rows
+        if ng_0 > 0:
+            ocp.model.con_h_expr_0 = C[:ng_0, :] @ x + D[:ng_0, :] @ u
+            ocp.constraints.lh_0 = -1e5*np.ones((ng_0,))
+            ocp.constraints.uh_0 = 1e5*np.ones((ng_0,))
+        if ng > 0:
+            ocp.model.con_h_expr = C[:ng, :] @ x + D[:ng, :] @ u
+            ocp.constraints.lh = -1e5*np.ones((ng,))
+            ocp.constraints.uh = 1e5*np.ones((ng,))
+        if ng_e > 0:
+            ocp.model.con_h_expr_e = C[:ng_e, :] @ x
+            ocp.constraints.lh_e = -1e5*np.ones((ng_e,))
+            ocp.constraints.uh_e = 1e5*np.ones((ng_e,))
 
-        ocp.constraints.C_e = np.zeros((nh_e, nx))
-        ocp.constraints.lg_e = -1e4*np.ones((nh_e, 1))
-        ocp.constraints.ug_e = 1e4*np.ones((nh_e, 1))
+        # QP solver options, same as for a standalone AcadosOcpQpSolver with qp_opts
+        for field, value in qp_solver_options.items():
+            setattr(ocp.solver_options, field, value)
+
         # NLP solver options
         if self.mode == 'convex':
-            ocp.solver_options.globalization = 'FIXED_STEP'  # 'FIXED_STEP', 'MERIT_BACKTRACKING', 'FILTER'
             ocp.solver_options.regularize_method = "NO_REGULARIZE"  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
+            ocp.solver_options.hpipm_mode = "CUSTOMIZED"
         else:
-            ocp.solver_options.globalization = 'FUNNEL_L1PEN_LINESEARCH'  # 'FIXED_STEP', 'MERIT_BACKTRACKING', 'FILTER'
             ocp.solver_options.regularize_method = 'PROJECT'  # 'NO_REGULARIZE', 'PROJECT', 'MIRROR', 'CONVEXIFY'
+        ocp.solver_options.reg_epsilon = 1e-4
 
+        ocp.solver_options.globalization = 'FIXED_STEP'
         ocp.solver_options.tf = N
         ocp.solver_options.N_horizon = N
         ocp.solver_options.hessian_approx = 'EXACT' # 'GAUSS_NEWTON', 'EXACT'
@@ -229,17 +291,9 @@ class SqpQpSolver(AcadosOcpSolver):
         ocp.solver_options.eval_residual_at_max_iter = True
         ocp.solver_options.nlp_qp_tol_strategy = 'FIXED_QP_TOL'
 
-        # QP solver options
-        ocp.solver_options.qp_solver = 'PARTIAL_CONDENSING_HPIPM' # FULL_CONDENSING_QPOASES, PARTIAL_CONDENSING_HPIPM, FULL_CONDENSING_HPIPM
-        ocp.solver_options.qp_solver_tol_stat = 1e-6
-        ocp.solver_options.qp_solver_tol_eq = 1e-8
-        ocp.solver_options.qp_solver_tol_ineq = 1e-8
-        ocp.solver_options.qp_solver_tol_comp = 1e-6
-        ocp.solver_options.qp_solver_iter_max = 30
-        ocp.solver_options.qp_solver_ric_alg = 0
-        ocp.solver_options.qp_solver_cond_ric_alg = 0
-        ocp.solver_options.qp_solver_mu0 = 1e1
-        ocp.solver_options.tau_min = 1e-16
-        ocp.solver_options.hpipm_mode = 'CUSTOMIZED'  # 'DEFAULT', 'CUSTOMIZED'
+        ocp.solver_options.nlp_solver_tol_stat = 1e-6
+        ocp.solver_options.nlp_solver_tol_eq = 1e-8
+        ocp.solver_options.nlp_solver_tol_ineq = 1e-8
+        ocp.solver_options.nlp_solver_tol_comp = 1e-6
 
         return ocp, param_manager

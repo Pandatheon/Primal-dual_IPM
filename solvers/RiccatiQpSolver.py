@@ -20,6 +20,10 @@ class QpSolver:
         self.delta_dict = None
         self.Mehrotra_step = mehrotra
         self.globalization = globalization
+        self.lam_min = 1e-12
+        self.s_min = 1e-12
+        self.alpha_min = 0.0
+        self.tau_min = 1e-12
         self.res_max = {
             'res_stat' : 1e-6,
             'res_eq' : 1e-8,
@@ -63,9 +67,8 @@ class QpSolver:
         self.alpha_dual = 0.0
         self.alpha = 0.0
 
-        self.ineq_num = 2*(self.qp.nb_0 + self.qp.nh_0 +
-                           (self.qp.nh + self.qp.nb) * (self.qp.N - 1) +
-                           self.qp.nb_e + self.qp.nh_e)
+        self.ineq_num = sum(d_k.size for d_k in self.qp.d)
+
         if type == 'Riccati':
             if reg in Iteration_based_reg + Block_Hessian_reg:
                 self.solver = Riccati_IPM_reg(qp,
@@ -106,10 +109,11 @@ class QpSolver:
                 nb, nh = self.qp.nb, self.qp.nh
             end_lb = nb + nh
 
+            # the full layout [lbu, lbx, lg, ubu, ubx, ug], the dropped rows are removed at the end
             Jbx_k, Jbu_k = self.qp.Jbx[k], self.qp.Jbu[k]
-            d_k = self.qp.d[k]
-            C_k = self.qp.C[k][end_lb + nb:]
-            D_k = self.qp.D[k][end_lb + nb:]
+            d_k = self.qp.d_all[k]
+            C_k = self.qp.C_all[k][end_lb + nb:]
+            D_k = self.qp.D_all[k][end_lb + nb:]
             idxbu = np.nonzero(Jbu_k)[1] if Jbu_k.shape[0] > 0 else np.empty(0, dtype=int)
             idxbx = np.nonzero(Jbx_k)[1] if Jbx_k.shape[0] > 0 else np.empty(0, dtype=int)
             nbu = idxbu.size
@@ -146,7 +150,7 @@ class QpSolver:
             s_lb_gen = np.maximum(y + d_k[nb:end_lb], thr)
             s_ub_gen = np.maximum(d_k[end_lb + nb:end_lb + nb + nh] - y, thr)
 
-            s_k = np.concatenate((s_lb_box, s_lb_gen, s_ub_box, s_ub_gen))
+            s_k = np.concatenate((s_lb_box, s_lb_gen, s_ub_box, s_ub_gen))[self.qp.row_mask[k]]
             self.solution.s.append(s_k)
             self.solution.lam.append(mu0 / s_k)
 
@@ -256,15 +260,17 @@ class QpSolver:
 
 
     def update_rhs_comp(self, step_type:str='centering'):
+        # as HPIPM, the barrier target never goes below tau_min
+        sigma_mu = max(self.centering_param * self.rhs.duality_measure, self.tau_min)
         if step_type == 'centering':
             for k in range(self.qp.N+1):
-                self.rhs.rm[k] = self.backup_rm[k] - self.centering_param * self.rhs.duality_measure * np.ones(len(self.rhs.rm[k]))
+                self.rhs.rm[k] = self.backup_rm[k] - sigma_mu * np.ones(len(self.rhs.rm[k]))
         elif step_type == 'predictor-corrector':
             for k in range(self.qp.N+1):
-                self.rhs.rm[k] = self.backup_rm[k] + (self.delta_aff_dict['delta_lam'][k] * self.delta_aff_dict['delta_s'][k]) - self.centering_param * self.rhs.duality_measure * np.ones(len(self.backup_rm[k]))
+                self.rhs.rm[k] = self.backup_rm[k] + (self.delta_aff_dict['delta_lam'][k] * self.delta_aff_dict['delta_s'][k]) - sigma_mu * np.ones(len(self.backup_rm[k]))
         elif step_type == 'predictor':
             for k in range(self.qp.N+1):
-                self.rhs.rm[k] = self.backup_rm[k] - 1e-16 * np.ones(len(self.backup_rm[k]))
+                self.rhs.rm[k] = self.backup_rm[k] - self.tau_min * np.ones(len(self.backup_rm[k]))
 
 
     def _recover_solution(self):
@@ -275,6 +281,18 @@ class QpSolver:
         nh  = self.qp.nh_0
         elim = self.qp.idxe_0
         free = self.qp.free_idx_0
+
+        # back to the full layout [lbu, lbx, lg, ubu, ubx, ug]: zero multipliers and the actual slacks for the dropped rows
+        for i in range(self.qp.N + 1):
+            mask = self.qp.row_mask[i]
+            lam_full = np.zeros(mask.size)
+            lam_full[mask] = self.solution.lam[i]
+            s_full = self.qp.d_all[i] - self.qp.C_all[i] @ self.solution.x[i]
+            if i < self.qp.N:
+                s_full = s_full - self.qp.D_all[i] @ self.solution.u[i]
+            s_full[mask] = self.solution.s[i]
+            self.solution.lam[i] = lam_full
+            self.solution.s[i] = s_full
 
         x, u, pi, lam, s = self.solution
         lam_0 = self.solution.lam[0]
@@ -300,7 +318,7 @@ class QpSolver:
             lam_0[nbu+nbx:nbu+nbx+nh],
             lam_0[end_lower:end_lower+nbu],
             lam_ubx,
-            lam_0[end_lower+nbu+nbx+nh:],
+            lam_0[end_lower+nbu+nbx:],
         ))
         # recover matrix by block concatenation
         Q_0 = np.zeros((nx, nx))
@@ -385,12 +403,21 @@ class QpSolver:
                 self._quit()
                 break
 
+            if self.stat_dict['iter_count'] > 0 and self.alpha <= self.alpha_min:
+                self.status = 4
+                self._quit()
+                break
 
             self.stat_dict['iter_count'] += 1
             self.stat_dict['obj'].append(self.get_cost())
 
             ### Mehrotra predictor-corrector step
             ## predictor step
+            self.update_rhs_comp(step_type='predictor')
+            if not self.solver.factorize(prev_sol):
+                self.status = 1
+                self._quit()
+                break
             self.delta_aff_dict = self._compute_step(prev_sol)
 
             if self.delta_aff_dict is None:
@@ -417,21 +444,28 @@ class QpSolver:
                 ## predictor-corrector step
                 self.update_rhs_comp(step_type='predictor-corrector')
                 self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
-                mu_pred = self._compute_duality(prev_sol, self.delta_dict)
 
-                # print(f"Iter {self.stat_dict['iter_count']}: alpha_corr_pri = {self.alpha_prim:.6f}, alpha_corr_dual = {self.alpha_dual:.6f}, alpha_corr = {self.alpha:.6f}")
-                # print(f"Iter {self.stat_dict['iter_count']}: mu_pred = {mu_pred:.6e}")
-
-                ### Conditonal Mehrotra step
-                if mu_pred > 2*mu_aff:
-                    self.update_rhs_comp(step_type='centering')
-                    self.delta_dict = self._compute_step(prev_sol)
+                if self.delta_dict is not None:
                     self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
+                    mu_pred = self._compute_duality(prev_sol, self.delta_dict)
+
+                    # print(f"Iter {self.stat_dict['iter_count']}: alpha_corr_pri = {self.alpha_prim:.6f}, alpha_corr_dual = {self.alpha_dual:.6f}, alpha_corr = {self.alpha:.6f}")
+                    # print(f"Iter {self.stat_dict['iter_count']}: mu_pred = {mu_pred:.6e}")
+
+                    ### Conditonal Mehrotra step
+                    if mu_pred > 2*mu_aff:
+                        self.update_rhs_comp(step_type='centering')
+                        self.delta_dict = self._compute_step(prev_sol)
             else:
                 self.update_rhs_comp(step_type='centering')
                 self.delta_dict = self._compute_step(prev_sol)
-                self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
+
+            if self.delta_dict is None:
+                self.status = 1
+                self._quit()
+                break
+
+            self.alpha_prim, self.alpha_dual, self.alpha = self.step_size_to_boundary(prev_sol, self.delta_dict)
 
             self.update_solution(prev_sol)
             prev_sol = copy.deepcopy(self.solution)
@@ -457,9 +491,9 @@ class QpSolver:
 
 
     def _compute_step(self, prev_sol:iterate_sol)-> iterate_sol:
-        '''Compute the search direction by solving the KKT system with Riccati recursion.'''
-        feedback = self.solver.backward_sweep(self.rhs, prev_sol=prev_sol)
-        delta_dict = self.solver.forward_sweep(prev_sol, feedback) if feedback is not None else None
+        '''Compute the search direction for the current rhs with the Riccati factorization of this iteration.'''
+        feedback = self.solver.backward_sweep(self.rhs)
+        delta_dict = self.solver.forward_sweep(prev_sol, feedback)
         return delta_dict
 
 
@@ -471,13 +505,12 @@ class QpSolver:
 
 
     def update_solution(self, prev_sol:iterate_sol):
-        tol = 1e-12
         self.alpha_prim, self.alpha_dual, _ = self._two_phase_line_search(prev_sol, self.delta_dict)
         x_sol = [prev_sol.x[i] + self.alpha_prim * self.delta_dict['delta_x'][i] for i in range(self.qp.N+1)]
         u_sol = [prev_sol.u[i] + self.alpha_prim * self.delta_dict['delta_u'][i] for i in range(self.qp.N)]
         pi_sol = [prev_sol.pi[i] + self.alpha_dual * self.delta_dict['delta_pi'][i] for i in range(self.qp.N+1)]
-        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], tol) for i in range(self.qp.N+1)]
-        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], tol) for i in range(self.qp.N+1)]
+        lam_sol = [np.maximum(prev_sol.lam[i] + self.alpha_dual * self.delta_dict['delta_lam'][i], self.lam_min) for i in range(self.qp.N+1)]
+        s_sol = [np.maximum(prev_sol.s[i] + self.alpha_prim * self.delta_dict['delta_s'][i], self.s_min) for i in range(self.qp.N+1)]
         self.solution = iterate_sol(x=x_sol, u=u_sol, pi=pi_sol, lam=lam_sol, s=s_sol)
 
 
@@ -505,11 +538,14 @@ class QpSolver:
 
         return alpha_pri_max, alpha_dual_max, alpha
 
-    def _two_phase_line_search(self, prev_sol, delta_dict, beta=0.5, max_ls=10):
-        # FTB
-        tau_hi = 1.0 - min(1e-7, self.rhs.duality_measure)
-        alpha_p = self.alpha_prim * ((1.0 - self.alpha_prim) * 0.99 + self.alpha_prim * tau_hi) if self.alpha_prim < 1.0 else self.alpha_prim
-        alpha_d = self.alpha_dual * ((1.0 - self.alpha_dual) * 0.99 + self.alpha_dual * tau_hi) if self.alpha_dual < 1.0 else self.alpha_dual
+
+    def _two_phase_line_search(self, prev_sol, delta_dict, beta=0.4, max_ls=10):
+        # FTB, as HPIPM: both steps are shortened as soon as one of them is blocked
+        tau_hi = 1.0 - 1e-7
+        alpha_p, alpha_d = self.alpha_prim, self.alpha_dual
+        if min(alpha_p, alpha_d) < 1.0:
+            alpha_p = alpha_p * ((1.0 - alpha_p) * 0.99 + alpha_p * tau_hi)
+            alpha_d = alpha_d * ((1.0 - alpha_d) * 0.99 + alpha_d * tau_hi)
 
         if not self.globalization:
             return alpha_p, alpha_d, min(alpha_p, alpha_d)
@@ -538,7 +574,7 @@ class QpSolver:
                 u   = [prev_sol.u[k] + alpha_p * delta_dict['delta_u'][k] for k in range(self.qp.N)],
                 pi  = prev_sol.pi,
                 lam = prev_sol.lam,
-                s   = [np.maximum(prev_sol.s[k] + alpha_p * delta_dict['delta_s'][k], 1e-12) for k in range(self.qp.N + 1)],
+                s   = [np.maximum(prev_sol.s[k] + alpha_p * delta_dict['delta_s'][k], self.s_min) for k in range(self.qp.N + 1)],
             )
             objective_cand, _= self._compute_objective_and_constraints(cand)
 
@@ -680,6 +716,9 @@ class QpSolver:
             return
         if self.status == 1:
             print(f"\033[31mUnregularized!\033[0m after {self.stat_dict['iter_count']} iterations.")
+            return
+        if self.status == 4:
+            print(f"\033[31mMin step!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} (from {max_name}) and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")
             return
         if self.stat_dict['iter_count'] >= self.max_iter:
             print(f"\033[31mMax iters!\033[0m after {self.stat_dict['iter_count']} with KKT residual {res:.6e} (from {max_name}) and barrier parameter {self.stat_dict['duality_measure_list'][-1]:.6e}")

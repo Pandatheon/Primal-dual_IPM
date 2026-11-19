@@ -1,10 +1,9 @@
 from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
 from solvers.Regularization import stage_regularization
-from solvers.Regularization import regularize_QP
 from solvers.Regularization_config import Regularizations_config, Block_Hessian_reg
+from solvers.Riccati_factor import RiccatiFactor, modify_QP, modify_rhs, backward_pass
 import numpy as np
-import copy
 
 
 def potrf_blasfeo(M: np.ndarray):
@@ -60,8 +59,6 @@ class Riccati_IPM():
         #     delta_x[0] = -solve_blasfeo(feedback.P[0], feedback.p[0])
         #     delta_pi[0] = np.zeros(self.qp.nx[0])
 
-        # recover delta_x and delta_u, delta_pi first with modified KKT system
-        # then recover delta_s and delta_lam with original KKT system
         delta_x[0] = -np.linalg.solve(feedback.P[0], feedback.p[0])
         delta_pi[0] = feedback.P[0] @ delta_x[0] + feedback.p[0]
 
@@ -108,172 +105,90 @@ class Riccati_IPM():
         }
         return delta_dict
 
-    def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
+    def factorize(self, prev_sol:iterate_sol)-> bool:
         horizon = self.qp.N
-
-        self.rhs_kkt = copy.deepcopy(rhs)
         self.reg = False
 
-        modified_qp = self.modify_QP(self.qp, prev_sol)
-
-        feedback = Feedback(
+        modified_qp, CtTinv, Lam = modify_QP(self.qp, prev_sol)
+        fact = RiccatiFactor(
             P = [None]*(horizon+1),
-            p = [None]*(horizon+1),
-            K = [None]*(horizon),
-            k = [None]*(horizon),
+            P_used = [None]*horizon,
+            L = [None]*horizon,
+            y1 = [None]*horizon,
+            K = [None]*horizon,
+            CtTinv = CtTinv,
+            Lam = Lam,
         )
-        feedback.P[horizon] = modified_qp.Q_e
-        feedback.p[horizon] = self.rhs_kkt.rg[-1][:self.qp.nx[horizon]]
+        fact.P[horizon] = modified_qp.Q_e
 
-        for step in range(self.qp.N):
-            k = modified_qp.N - 1 - step
-            nx = self.qp.nx[k]
+        for k in reversed(range(horizon)):
             A_k = modified_qp.A[k]
             B_k = modified_qp.B[k]
             Q_k = modified_qp.Q[k]
             R_k = modified_qp.R[k]
             S_k = modified_qp.S[k]
-            q_k = self.rhs_kkt.rg[k][:nx]
-            r_k = self.rhs_kkt.rg[k][nx:]
-            b_k = self.rhs_kkt.rb[k]
-            P_prev = feedback.P[k+1]
-            p_prev = feedback.p[k+1]
+            P_prev = fact.P[k+1]
 
             reduced_hessian = R_k + B_k.T @ P_prev @ B_k
             try:
                 self.stat_dict['decomp_flop'] += 1
                 R_chol = np.linalg.cholesky(reduced_hessian)
-                g1 = S_k + B_k.T@P_prev@A_k
-                g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
-                y1 = np.linalg.solve(R_chol, g1)
-                y2 = np.linalg.solve(R_chol, g2)
-                K_curr = -np.linalg.solve(R_chol.T, y1)
-                k_curr = -np.linalg.solve(R_chol.T, y2)
-                P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1)
-                p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
+                P_used = P_prev
 
-                feedback.P[k] = P_curr
-                feedback.p[k] = p_curr
-                feedback.K[k] = K_curr
-                feedback.k[k] = k_curr
-
-                # self.stat_dict['decomp_flop'] += 1
+                # BLASFEO variant (written before the matrix/vector split: the backward pass would need `keep` too)
                 # L, keep = potrf_blasfeo(reduced_hessian)
                 # R_chol = L[np.ix_(keep, keep)]
-                # g1 = S_k + B_k.T@P_prev@A_k
-                # g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
                 # y1 = np.linalg.solve(R_chol, g1[keep])
-                # y2 = np.linalg.solve(R_chol, g2[keep])
                 # K_curr = np.zeros_like(g1)
-                # k_curr = np.zeros_like(g2)
                 # K_curr[keep] = -np.linalg.solve(R_chol.T, y1)
-                # k_curr[keep] = -np.linalg.solve(R_chol.T, y2)
-                # P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1)
-                # p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
-
-                # feedback.P[k] = P_curr
-                # feedback.p[k] = p_curr
-                # feedback.K[k] = K_curr
-                # feedback.k[k] = k_curr
 
             except np.linalg.LinAlgError:
                 if self.reg_config.method == 'NO_REGULARIZE':
                     eigs = np.linalg.eigvals(reduced_hessian)
                     min_eig = np.min(eigs)
                     print(f"R + B'PB is not positive definite with {min_eig} at stage {k} without regularization.")
-                    return None
+                    return False
 
                 elif self.reg_config.method not in Block_Hessian_reg:
 
                     try:
-                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, feedback, reduced_hessian, self.reg_config, k)
+                        reduced_hessian_reg, P_reg = stage_regularization(modified_qp, fact, reduced_hessian, self.reg_config, k)
                         coeff = 27 if 'GMW' not in self.reg_config.method else 1
                         self.rho = (self.qp.nx[1]/self.qp.nu)**3 if "PM" in self.reg_config.method else 0
                         self.stat_dict['decomp_flop'] += coeff*(1+self.rho) if "GMW" in self.reg_config.method else coeff*(1+self.rho) + 1
 
                         R_chol = np.linalg.cholesky(reduced_hessian_reg)
-                        g1 = S_k + B_k.T@P_reg@A_k
-                        g2 = r_k + B_k.T@(P_reg@b_k + p_prev)
-                        y1 = np.linalg.solve(R_chol, g1)
-                        y2 = np.linalg.solve(R_chol, g2)
-                        K_curr = -np.linalg.solve(R_chol.T, y1)
-                        k_curr = -np.linalg.solve(R_chol.T, y2)
-                        P_curr = mirror_lower(Q_k + A_k.T@P_reg@A_k - y1.T@y1)
-                        p_curr = q_k + A_k.T@(P_reg@b_k + p_prev) - y1.T@y2
-
-                        feedback.P[k] = P_curr
-                        feedback.p[k] = p_curr
-                        feedback.K[k] = K_curr
-                        feedback.k[k] = k_curr
+                        P_used = P_reg
 
                     except np.linalg.LinAlgError:
                         # ad-hoc handling
                         eigs = np.linalg.eigvals(reduced_hessian_reg)
                         min_eig = np.min(eigs)
                         print(f"Regularization failed with {min_eig} during method " + self.reg_config.method)
-                        return None
+                        return False
                 else:
                     # ad-hoc handling
                     eigs = np.linalg.eigvals(reduced_hessian)
                     min_eig = np.min(eigs)
                     print(f"Regularization method " + self.reg_config.method + f" failed with {min_eig} at stage {k}.")
-                    return None
+                    return False
+
+            g1 = S_k + B_k.T@P_used@A_k
+            y1 = np.linalg.solve(R_chol, g1)
+            fact.P_used[k] = P_used
+            fact.L[k] = R_chol
+            fact.y1[k] = y1
+            fact.K[k] = -np.linalg.solve(R_chol.T, y1)
+            fact.P[k] = mirror_lower(Q_k + A_k.T@P_used@A_k - y1.T@y1)
 
         # # print P for debug
         # for k in reversed(range(self.qp.N + 1)):
         #     print(f"Stage {k}:")
-        #     print(f"P[{k}] = \n{feedback.P[k]}")
+        #     print(f"P[{k}] = \n{fact.P[k]}")
 
-        return feedback
+        self.fact = fact
+        return True
 
-    def modify_QP(self, qp, prev_sol:iterate_sol):
-        modified_QP = copy.deepcopy(qp)
-
-        for k in range(qp.N+1):
-            if k < qp.N:
-                s_k = prev_sol.s[k]
-                lam_k = prev_sol.lam[k]
-                C_k = qp.C[k]
-                D_k = qp.D[k]
-
-                C_full = np.hstack((C_k, D_k))
-                T_mat = np.diag(s_k)
-                Lam_mat = np.diag(lam_k)
-                rd = self.rhs_kkt.rd[k]
-                rm = self.rhs_kkt.rm[k]
-
-                T_mat_inv = np.linalg.inv(T_mat)
-                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
-
-                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
-                R_tilt = lhs_modification[qp.nx[k]:, qp.nx[k]:]
-                S_tilt = lhs_modification[qp.nx[k]:, :qp.nx[k]]
-                modified_QP.Q[k] = qp.Q[k] + Q_tilt
-                modified_QP.R[k] = qp.R[k] + R_tilt
-                modified_QP.S[k] = qp.S[k] + S_tilt
-
-                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
-                self.rhs_kkt.rg[k][qp.nx[k]:] = self.rhs_kkt.rg[k][qp.nx[k]:] + rhs_modification[qp.nx[k]:]
-            else:
-                s_k = prev_sol.s[k]
-                lam_k = prev_sol.lam[k]
-                C_k = qp.C[k]
-                D_k = qp.D[k]
-
-                C_full = C_k
-                T_mat = np.diag(s_k)
-                Lam_mat = np.diag(lam_k)
-                rd = self.rhs_kkt.rd[k]
-                rm = self.rhs_kkt.rm[k]
-
-                T_mat_inv = np.linalg.inv(T_mat)
-                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
-
-                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
-                modified_QP.Q_e = qp.Q_e + Q_tilt
-
-                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
-
-        return modified_QP
+    def backward_sweep(self, rhs)-> Feedback:
+        self.rhs_kkt = modify_rhs(self.qp, rhs, self.fact)
+        return backward_pass(self.qp, self.fact, self.rhs_kkt)

@@ -1,13 +1,10 @@
 from QP_template.QP_base import BaseQP
 from QP_template.iterate_base import iterate_sol, iterate_rhs, Feedback
-from solvers.Regularization import stage_regularization
 from solvers.Regularization import regularize_QP
 from solvers.Regularization_config import Regularizations_config, Block_Hessian_reg
 from solvers.Riccati_IPM import mirror_lower
+from solvers.Riccati_factor import RiccatiFactor, modify_QP, modify_rhs, backward_pass
 import numpy as np
-import copy
-from utils.modified_Cholesky import modified_cholesky_SE, modified_cholesky_GMW, modified_cholesky_SE99
-
 
 class Riccati_IPM():
     def __init__(self, qp: BaseQP, reg_config: Regularizations_config, ineq_num:int, stat_dict: dict):
@@ -25,7 +22,7 @@ class Riccati_IPM():
 
         if self.reg_config.method == 'PRECOMPUTE':
             self.pre_regularized_QP = regularize_QP(self.qp, self.reg_config)
-            self.stat_dict['decomp_flop'] += self.qp.N*self.coeff*self.rho
+            self.stat_dict['decomp_flop'] += self.coeff*(self.qp.N*self.rho + (self.qp.nx[self.qp.N]/self.qp.nu)**3)
 
     def forward_sweep(self, prev_sol:iterate_sol, feedback:Feedback)-> dict:
         delta_x, delta_u, delta_pi, delta_lam, delta_s = [None]*(self.qp.N+1), [None]*self.qp.N, [None]*(self.qp.N+1), [None]*(self.qp.N+1), [None]*(self.qp.N+1)
@@ -78,7 +75,7 @@ class Riccati_IPM():
         }
         return delta_dict
 
-    def backward_sweep(self, rhs, prev_sol:iterate_sol)-> Feedback:
+    def factorize(self, prev_sol:iterate_sol)-> bool:
         horizon = self.qp.N
 
         coeff = self.coeff
@@ -101,82 +98,65 @@ class Riccati_IPM():
 
         while True:
             if self.reg_config.method == 'PRECOMPUTE':
-                self.rhs_kkt = copy.deepcopy(rhs)
-                modified_qp = self.modify_QP(self.qp, prev_sol) if positive_flag else self.modify_QP(self.pre_regularized_QP, prev_sol)
+                modified_qp, CtTinv, Lam = modify_QP(self.qp if positive_flag else self.pre_regularized_QP, prev_sol)
 
             elif self.reg_config.method in Block_Hessian_reg:
-                self.rhs_kkt = copy.deepcopy(rhs)
-                modified_qp = self.modify_QP(self.qp, prev_sol)
+                modified_qp, CtTinv, Lam = modify_QP(self.qp, prev_sol)
                 if not positive_flag:
                     modified_qp = regularize_QP(modified_qp, self.reg_config)
-                    self.stat_dict['decomp_flop'] += horizon*coeff*self.rho
+                    self.stat_dict['decomp_flop'] += coeff*(horizon*self.rho + (self.qp.nx[horizon]/self.qp.nu)**3)
 
             elif self.reg_config.method == 'INERTIA_LM':
-                self.rhs_kkt = copy.deepcopy(rhs)
-                modified_qp = self.modify_QP(self.qp, prev_sol, LM_delta)
-
-            elif self.reg_config.method == 'INERTIA_LM_RE':
-                self.rhs_kkt = copy.deepcopy(rhs)
-                modified_qp = self.modify_QP(self.qp, prev_sol)
+                modified_qp, CtTinv, Lam = modify_QP(self.qp, prev_sol, LM_delta)
 
             else:
-                self.rhs_kkt = copy.deepcopy(rhs)
-                modified_qp = self.modify_QP(self.qp, prev_sol)
+                modified_qp, CtTinv, Lam = modify_QP(self.qp, prev_sol)
             reduced_delta = LM_delta if self.reg_config.method == 'INERTIA_LM_RE' or self.reg_config.method == 'INERTIA_SE' else 0.0
 
-            feedback = Feedback(
+            fact = RiccatiFactor(
                 P = [None]*(horizon+1),
-                p = [None]*(horizon+1),
-                K = [None]*(horizon),
-                k = [None]*(horizon),
+                P_used = [None]*horizon,
+                L = [None]*horizon,
+                y1 = [None]*horizon,
+                K = [None]*horizon,
+                CtTinv = CtTinv,
+                Lam = Lam,
             )
-            feedback.P[horizon] = mirror_lower(modified_qp.Q_e + reduced_delta * np.eye(self.qp.nx[horizon]))
-            feedback.p[horizon] = self.rhs_kkt.rg[-1][:self.qp.nx[horizon]]
+            fact.P[horizon] = mirror_lower(modified_qp.Q_e + reduced_delta * np.eye(self.qp.nx[horizon]))
 
             factorization_ok = True
-            for step in range(self.qp.N):
-                k = modified_qp.N - 1 - step
+            for k in reversed(range(horizon)):
                 nx = self.qp.nx[k]
                 A_k = modified_qp.A[k]
                 B_k = modified_qp.B[k]
                 Q_k = modified_qp.Q[k]
                 R_k = modified_qp.R[k]
                 S_k = modified_qp.S[k]
-                q_k = self.rhs_kkt.rg[k][:nx]
-                r_k = self.rhs_kkt.rg[k][nx:]
-                b_k = self.rhs_kkt.rb[k]
-                P_prev = feedback.P[k+1]
-                p_prev = feedback.p[k+1]
+                P_prev = fact.P[k+1]
 
                 reduced_hessian = R_k + B_k.T @ P_prev @ B_k + reduced_delta * np.eye(B_k.shape[1])
                 try:
                     self.stat_dict['decomp_flop'] += 1
-
                     R_chol = np.linalg.cholesky(reduced_hessian)
-                    g1 = S_k + B_k.T@P_prev@A_k
-                    g2 = r_k + B_k.T@(P_prev@b_k + p_prev)
-                    y1 = np.linalg.solve(R_chol, g1)
-                    y2 = np.linalg.solve(R_chol, g2)
-                    K_curr = -np.linalg.solve(R_chol.T, y1)
-                    k_curr = -np.linalg.solve(R_chol.T, y2)
-                    P_curr = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1 + reduced_delta * np.eye(nx))
-                    p_curr = q_k + A_k.T@(P_prev@b_k + p_prev) - y1.T@y2
-
-                    feedback.P[k] = P_curr
-                    feedback.p[k] = p_curr
-                    feedback.K[k] = K_curr
-                    feedback.k[k] = k_curr
-
                 except np.linalg.LinAlgError:
                     factorization_ok = False
                     break
+
+                g1 = S_k + B_k.T@P_prev@A_k
+                y1 = np.linalg.solve(R_chol, g1)
+                fact.P_used[k] = P_prev
+                fact.L[k] = R_chol
+                fact.y1[k] = y1
+                fact.K[k] = -np.linalg.solve(R_chol.T, y1)
+                fact.P[k] = mirror_lower(Q_k + A_k.T@P_prev@A_k - y1.T@y1 + reduced_delta * np.eye(nx))
 
             if factorization_ok:
                 if self.reg_config.method == 'INERTIA_LM' or self.reg_config.method == 'INERTIA_LM_RE':
                     # IC-4: set delta_w^last <- delta_w used for this successful factorization
                     self.reg_config.delta = LM_delta
                     self.reg = (LM_delta > 0.0)
-                break
+                self.fact = fact
+                return True
 
             if self.reg_config.method == 'PRECOMPUTE':
                 if positive_flag:
@@ -184,7 +164,7 @@ class Riccati_IPM():
                     continue
                 else:
                     print("Hessian projection (PRECOMPUTE) failed to give a positive definite reduced Hessian.")
-                    return None
+                    return False
 
             elif self.reg_config.method in Block_Hessian_reg:
                 if positive_flag:
@@ -192,7 +172,7 @@ class Riccati_IPM():
                     continue
                 else:
                     print(f"Regularization method " + self.reg_config.method + " failed to yield a positive definite reduced Hessian.")
-                    return None
+                    return False
 
             elif self.reg_config.method in ['INERTIA_LM', 'INERTIA_LM_RE']:
                 if LM_delta == 0.0:
@@ -213,65 +193,14 @@ class Riccati_IPM():
                     print(
                         "Reduced Hessian is not positive definite even after maximal "
                         "regularization (delta_w > delta_w_max); restoration phase required.")
-                    return None
+                    return False
                 continue
 
             else:
                 print(f"R + B'PB is not positive definite with {np.linalg.eigvals(reduced_hessian)} "
                       f"at stage {k} with regularization method {self.reg_config.method}.")
-                return None
+                return False
 
-        return feedback
-
-    def modify_QP(self, qp, prev_sol:iterate_sol, LM_delta=0.0):
-        modified_QP = copy.deepcopy(qp)
-
-        for k in range(qp.N+1):
-            if k < qp.N:
-                s_k = prev_sol.s[k]
-                lam_k = prev_sol.lam[k]
-                C_k = qp.C[k]
-                D_k = qp.D[k]
-
-                C_full = np.hstack((C_k, D_k))
-                T_mat = np.diag(s_k)
-                Lam_mat = np.diag(lam_k)
-                rd = self.rhs_kkt.rd[k]
-                rm = self.rhs_kkt.rm[k]
-
-                T_mat_inv = np.linalg.inv(T_mat)
-                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
-
-                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
-                R_tilt = lhs_modification[qp.nx[k]:, qp.nx[k]:]
-                S_tilt = lhs_modification[qp.nx[k]:, :qp.nx[k]]
-                modified_QP.Q[k] = qp.Q[k] + Q_tilt + LM_delta * np.eye(qp.nx[k])
-                modified_QP.R[k] = qp.R[k] + R_tilt + LM_delta * np.eye(qp.nu)
-                modified_QP.S[k] = qp.S[k] + S_tilt
-
-                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
-                self.rhs_kkt.rg[k][qp.nx[k]:] = self.rhs_kkt.rg[k][qp.nx[k]:] + rhs_modification[qp.nx[k]:]
-            else:
-                s_k = prev_sol.s[k]
-                lam_k = prev_sol.lam[k]
-                C_k = qp.C[k]
-                D_k = qp.D[k]
-
-                C_full = C_k
-                T_mat = np.diag(s_k)
-                Lam_mat = np.diag(lam_k)
-                rd = self.rhs_kkt.rd[k]
-                rm = self.rhs_kkt.rm[k]
-
-                T_mat_inv = np.linalg.inv(T_mat)
-                lhs_modification = C_full.T @ T_mat_inv @ Lam_mat @ C_full
-                rhs_modification = C_full.T @ T_mat_inv @ (Lam_mat @ rd - rm)
-
-                Q_tilt = lhs_modification[:qp.nx[k], :qp.nx[k]]
-                # primal regularization delta_w*I must also be added to the terminal Hessian
-                modified_QP.Q_e = qp.Q_e + Q_tilt + LM_delta * np.eye(qp.nx[k])
-
-                self.rhs_kkt.rg[k][:qp.nx[k]] = self.rhs_kkt.rg[k][:qp.nx[k]] + rhs_modification[:qp.nx[k]]
-
-        return modified_QP
+    def backward_sweep(self, rhs)-> Feedback:
+        self.rhs_kkt = modify_rhs(self.qp, rhs, self.fact)
+        return backward_pass(self.qp, self.fact, self.rhs_kkt)

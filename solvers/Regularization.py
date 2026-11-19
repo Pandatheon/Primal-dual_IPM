@@ -265,7 +265,7 @@ def do_regularization(mat: np.ndarray,
         eigvals_scaled = np.where(eigvals < 0, 0.1 *eigvals, eigvals)
         eigvals_reg = np.maximum(np.abs(eigvals_scaled), delta)
 
-    mat_reg = eigvecs @ np.diag(eigvals_reg) @ eigvecs.conj().T
+    mat_reg = eigvecs @ np.diag(eigvals_reg) @ np.linalg.inv(eigvecs)
     mat_reg = _to_real(mat_reg)
     return mat_reg
 
